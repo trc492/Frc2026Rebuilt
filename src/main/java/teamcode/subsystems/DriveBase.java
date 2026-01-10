@@ -116,7 +116,7 @@ public class DriveBase extends TrcSubsystem
                     new String[] {"flDriveMotor", "frDriveMotor", "blDriveMotor", "brDriveMotor"},
                     new int[] {
                         HwConfig.CANID_FLDRIVE_MOTOR, HwConfig.CANID_FRDRIVE_MOTOR,
-                         HwConfig.CANID_BLDRIVE_MOTOR, HwConfig.CANID_BRDRIVE_MOTOR},
+                        HwConfig.CANID_BLDRIVE_MOTOR, HwConfig.CANID_BRDRIVE_MOTOR},
                     new boolean[] {false, false, false, false})
                 .setDriveMotorCurrentLimits(40.0, 45.0, 0.2, 55.0)
                 .setWpiOdometry(DRIVE_WHEEL_DIAMETER * Math.PI / DRIVE_MOTOR_GEAR_RATIO)

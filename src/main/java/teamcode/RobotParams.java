@@ -76,6 +76,10 @@ public class RobotParams
         public static final boolean useGyroAssist               = false;
         public static final boolean useAntiTipping              = false;
         // Other Subsystems
+        public static final boolean useShooter                  = true;
+        public static final boolean showShooterStatus           = true;
+        public static final boolean showShooterGraphs           = true;
+        public static final boolean useRegression               = true;
         // Auto Tasks
     }   //class Preferences
 
@@ -102,6 +106,12 @@ public class RobotParams
         public static final int CANID_FRSTEER_ENCODER           = 24;   //Yellow
         public static final int CANID_BLSTEER_ENCODER           = 25;   //Green
         public static final int CANID_BRSTEER_ENCODER           = 26;   //Blue
+        // Subsystem CAN IDs.
+        public static final int CANID_SHOOTER_MOTOR1            = 7;    //Purple
+        public static final int CANID_SHOOTER_MOTOR2            = 8;    //Gray
+        public static final int CANID_PAN_MOTOR                 = 9;    //White
+        public static final int CANID_TILT_MOTOR                = 17;   //Purple
+
         // Miscellaneous CAN IDs.
         public static final int CANID_PDP                       = 30;
         public static final int CANID_PCM                       = 31;
@@ -157,7 +167,7 @@ public class RobotParams
         public static final String LOG_FOLDER_PATH              = TEAM_FOLDER_PATH + "/tracelogs";
         public static final String STEER_ZERO_CAL_FILE          = TEAM_FOLDER_PATH + "/SteerZeroCalibration.txt";
         public static final String FIELD_ZERO_CAL_FILE          = TEAM_FOLDER_PATH + "/FieldZeroCalibration.txt";
-        public static final String ROBOT_CODEBASE               = "Robot2025";
+        public static final String ROBOT_CODEBASE               = "2026Rebuilt";
         public static final double ROBOT_LENGTH                 = 35.5;
         public static final double ROBOT_WIDTH                  = 35.5;
     }   //class Robot
