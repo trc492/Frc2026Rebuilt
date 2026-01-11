@@ -1,6 +1,6 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2025.3.2"
+    id "edu.wpi.first.GradleRIO" version "2026.1.1"
 }
 
 java {
@@ -43,7 +43,8 @@ deploy {
 
 def deployArtifact = deploy.targets.roborio.artifacts.frcJava
 
-// Set to true to use debug for JNI.
+// Set to true to use debug for all targets including JNI, which will drastically impact
+// performance.
 wpi.java.debugJni = false
 
 // Set this to true to enable desktop support.
@@ -89,7 +90,9 @@ wpi.sim.addDriverstation()
 // knows where to look for our Robot Class.
 jar {
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
-    from sourceSets.main.allSource
+    from('src') { into 'backup/src' }
+    from('vendordeps') { into 'backup/vendordeps' }
+    from('build.gradle') { into 'backup' }
     manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
@@ -102,53 +105,4 @@ wpi.java.configureTestTasks(test)
 // Configure string concat to always inline compile
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
-}
-
-def getGitBranch() {
-    def branch = ''
-    def command = "git rev-parse --abbrev-ref HEAD"
-    def process = command.execute()
-    process.in.eachLine { line -> branch = line }
-    process.err.eachLine { line -> println "Error: " + line } // Optional: print errors
-    process.waitFor()
-    return branch.trim()
-}
-
-import java.text.SimpleDateFormat
-
-task generateProperties {
-    def outputDir = file("$buildDir/generated-resources/main")
-
-    // Explicitly declare the output directory for the task
-    outputs.dir outputDir
-
-    // Define local variables to hold the values, and also register them as inputs
-    def buildHostValue = System.getenv('COMPUTERNAME')
-    def buildUserValue = System.getProperty('user.name')
-    def buildTimestampValue = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())
-    def gitBranchValue = getGitBranch() // Assuming getGitBranch() is defined elsewhere
-
-    inputs.property('buildHost', buildHostValue)
-    inputs.property('buildUser', buildUserValue)
-    inputs.property('buildTimestamp', buildTimestampValue)
-    inputs.property('gitBranch', gitBranchValue)
-
-    doLast {
-        outputDir.mkdirs() // Ensure the directory exists
-        def buildInfoFile = file("$outputDir/buildInfo.properties")
-
-        buildInfoFile.text = """
-            build.host=${buildHostValue}
-            build.user=${buildUserValue}
-            build.timestamp=${buildTimestampValue}
-            build.branch=${gitBranchValue}
-        """.stripIndent()
-    }
-}
-
-// Ensure this task is run before processing resources
-sourceSets {
-    main {
-        output.dir generateProperties.outputs.files, builtBy: generateProperties
-    }
 }
