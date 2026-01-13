@@ -28,10 +28,10 @@ import frclib.motor.FrcMotorActuator.MotorType;
 import frclib.subsystem.FrcShooter;
 import teamcode.Robot;
 import teamcode.RobotParams;
+import trclib.dataprocessor.TrcLookupTable;
 import trclib.motor.TrcMotor;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcEvent;
-import trclib.subsystem.TrcShootParams;
 import trclib.subsystem.TrcShooter;
 import trclib.subsystem.TrcSubsystem;
 
@@ -63,46 +63,46 @@ public class Shooter extends TrcSubsystem
     public static final String GOAL_ZONE_SHOOT_POINT            = "GoalZoneShootPoint";
     public static final String FAR_ZONE_SHOOT_POINT             = "FarZoneShootPoint";
 
-    public static final TrcShootParams.Region[] shootRegions    =
+    public static final TrcLookupTable.Region[] shootRegions    =
     {
         // Region 1: tilt 26°, y = 15.42211x + 3116.30051
-        new TrcShootParams.Region(26.0, new double[][] {{3116.30051, 15.42211}}),
+        new TrcLookupTable.Region(26.0, new double[][] {{3116.30051, 15.42211}}),
         // Region 2: tilt 30°, y = 5.71429x + 3398.57143
-        new TrcShootParams.Region(30.0, new double[][] {{3398.57143, 5.71429}}),
+        new TrcLookupTable.Region(30.0, new double[][] {{3398.57143, 5.71429}}),
         // Region 3: tilt 33°, y = 19.71941x + 2858.83725
-        new TrcShootParams.Region(33.0, new double[][] {{2858.83725, 19.71941}}),
+        new TrcLookupTable.Region(33.0, new double[][] {{2858.83725, 19.71941}}),
         // Region 4: tilt 38°, y = 16.3593x + 2943.18711
-        new TrcShootParams.Region(38.0, new double[][] {{2943.18711, 16.3593}}),
+        new TrcLookupTable.Region(38.0, new double[][] {{2943.18711, 16.3593}}),
         // Region 5: tilt 45°, y = 14.80364x + 3288.15202
-        new TrcShootParams.Region(45.0, new double[][] {{3288.15202, 14.80364}})
+        new TrcLookupTable.Region(45.0, new double[][] {{3288.15202, 14.80364}})
     };
 
-    public static final TrcShootParams shootParamsTable         = new TrcShootParams()
+    public static final TrcLookupTable shootParamsTable         = new TrcLookupTable()
         //        name,                     distance,   region,             shooterVel
         // Region 1: tilt 26°
-        .addEntry("Target_2.14ft",          25.7,       shootRegions[0],    3500.0)
-        .addEntry("Target_2.49ft",          29.9,       shootRegions[0],    3600.0)
-        .addEntry("Target_2.93ft_1",        35.25,      shootRegions[0],    3650.0)
+        .addEntry(null,                     25.7,       shootRegions[0],    3500.0)
+        .addEntry(null,                     29.9,       shootRegions[0],    3600.0)
+        .addEntry(null,                     35.25,      shootRegions[0],    3650.0)
         // Region 2: tilt 30°
         .addEntry(GOAL_ZONE_SHOOT_POINT,    35.2500001, shootRegions[1],    3600.0)
-        .addEntry("Target_3.67ft_1",        44.0,       shootRegions[1],    3650.0)
+        .addEntry(null,                     44.0,       shootRegions[1],    3650.0)
         // Region 3: tilt 33°
-        .addEntry("Target_3.67ft_2",        44.0000001, shootRegions[2],    3700.0)
-        .addEntry("Target_4.42ft",          53.0,       shootRegions[2],    3950.0)
-        .addEntry("Target_5.43ft_1",        65.2,       shootRegions[2],    4125.0)
+        .addEntry(null,                     44.0000001, shootRegions[2],    3700.0)
+        .addEntry(null,                     53.0,       shootRegions[2],    3950.0)
+        .addEntry(null,                     65.2,       shootRegions[2],    4125.0)
         // Region 4: tilt 38°
-        .addEntry("Target_5.43ft_2",        65.2000001, shootRegions[3],    4025.0)
-        .addEntry("Target_7.12ft",          85.4,       shootRegions[3],    4300.0)
-        .addEntry("Target_7.59ft_1",        91.1,       shootRegions[3],    4433.51934)
+        .addEntry(null,                     65.2000001, shootRegions[3],    4025.0)
+        .addEntry(null,                     85.4,       shootRegions[3],    4300.0)
+        .addEntry(null,                     91.1,       shootRegions[3],    4433.51934)
         // Region 5: tilt 45°
-        .addEntry("Target_7.59ft_2",        91.1000001, shootRegions[4],    4636.76363)
-        .addEntry("Target_8.40ft",          100.8,      shootRegions[4],    4780.35893)
+        .addEntry(null,                     91.1000001, shootRegions[4],    4636.76363)
+        .addEntry(null,                     100.8,      shootRegions[4],    4780.35893)
         .addEntry(FAR_ZONE_SHOOT_POINT,     110.7,      shootRegions[4],    4926.91497)
-        .addEntry("Target_10.31ft",         123.8,      shootRegions[4],    5120.84265)
-        .addEntry("Target_11.12ft",         133.5,      shootRegions[4],    5264.43796)
-        .addEntry("Target_12.02ft",         144.3,      shootRegions[4],    5424.31727)
-        .addEntry("Target_12.76ft",         153.2,      shootRegions[4],    5556.06967)
-        .addEntry("Target_14.36ft",         172.4,      shootRegions[4],    5840.29956);
+        .addEntry(null,                     123.8,      shootRegions[4],    5120.84265)
+        .addEntry(null,                     133.5,      shootRegions[4],    5264.43796)
+        .addEntry(null,                     144.3,      shootRegions[4],    5424.31727)
+        .addEntry(null,                     153.2,      shootRegions[4],    5556.06967)
+        .addEntry(null,                     172.4,      shootRegions[4],    5840.29956);
 
     public static final class Params
     {
