@@ -31,6 +31,7 @@ import frclib.drivebase.FrcRobotBase;
 import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcUserChoices;
 import frclib.driverio.FrcXboxController;
+import teamcode.subsystems.Shooter;
 import teamcode.vision.OpenCvVision.ObjectType;
 import teamcode.vision.PhotonVision.PipelineType;
 import trclib.command.CmdDriveMotorsTest;
@@ -828,6 +829,29 @@ public class FrcTest extends FrcTeleOp
         switch (button)
         {
             case A:
+                if (testChoices.getTest() == Test.SUBSYSTEMS_TEST)
+                {
+                    if (pressed)
+                    {
+                        String subsystemName = testChoices.getSubsystemName();
+                        if (subsystemName.startsWith(Shooter.Params.SUBSYSTEM_NAME) && robot.shooter != null)
+                        {
+                            // Toggle shooter flywheel ON/OFF with velocity specified in Dashboard.
+                            if (robot.shooter.getShooterMotor1Power() != 0.0)
+                            {
+                                robot.shooter.stopShooter();
+                            }
+                            else
+                            {
+                                double[] tuneParams = testChoices.getSubsystemTuneParams();
+                                robot.shooter.setShooterMotorRPM(tuneParams[0], null);
+                            }
+                        }
+                    }
+                    passToTeleOp = false;
+                }
+                break;
+
             case B:
             case X:
             case Y:

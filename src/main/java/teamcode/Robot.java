@@ -50,6 +50,7 @@ import frclib.vision.FrcPhotonVision;
 import frclib.vision.FrcPhotonVision.DetectedObject;
 import teamcode.indicators.LEDIndicator;
 import teamcode.subsystems.DriveBase;
+import teamcode.subsystems.Shooter;
 import teamcode.vision.OpenCvVision;
 import teamcode.vision.PhotonVision;
 import trclib.dataprocessor.TrcUtil;
@@ -60,6 +61,7 @@ import trclib.robotcore.TrcDbgTrace;
 import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcRobot.RunMode;
 import trclib.sensor.TrcRobotBattery;
+import trclib.subsystem.TrcShooter;
 import trclib.subsystem.TrcSubsystem;
 import trclib.vision.TrcVisionRelocalize;
 
@@ -98,6 +100,8 @@ public class Robot extends FrcRobot
     // Hybrid mode objects.
     public Command m_autonomousCommand;
     // Other subsystems.
+    public Shooter shooterSubsystem;
+    public TrcShooter shooter;
 
     // Auto Tasks.
 
@@ -205,6 +209,11 @@ public class Robot extends FrcRobot
             if (RobotParams.Preferences.useSubsystems)
             {
                 // Create subsystems.
+                if (RobotParams.Preferences.useShooter)
+                {
+                    shooterSubsystem = new Shooter(this);
+                    shooter = shooterSubsystem.getShooter();
+                }
 
                 // Create autotasks.
 
