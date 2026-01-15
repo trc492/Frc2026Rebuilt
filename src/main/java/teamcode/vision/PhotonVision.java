@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Titan Robotics Club (http://www.titanrobotics.com)
+ * Copyright (c) 2026 Titan Robotics Club (http://www.titanrobotics.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -41,12 +41,21 @@ import trclib.vision.TrcVision;
  */
 public class PhotonVision extends FrcPhotonVision
 {
-    // Front camera info
-    public static final TrcVision.CameraInfo frontCamInfo = new TrcVision.CameraInfo()
+    // Rebuilt Front camera info
+    public static final TrcVision.CameraInfo rebuiltFrontCamInfo = new TrcVision.CameraInfo()
         .setCameraInfo("FrontOV9782", 1280, 800)
         .setCameraPose(-0.25, 5.75, 7.0, 0.0, 21.8346, 0.0);
-    // Back camera info
-    public static final TrcVision.CameraInfo backCamInfo = new TrcVision.CameraInfo()
+    // Rebuilt Back camera info
+    public static final TrcVision.CameraInfo rebuiltBackCamInfo = new TrcVision.CameraInfo()
+        .setCameraInfo("BackOV9782", 1280, 800)
+        .setCameraPose(0.0, -1.563, 41.374, 180.0, 9.1241, 0.0);
+
+    // Reefscape Front camera info
+    public static final TrcVision.CameraInfo reefscapeFrontCamInfo = new TrcVision.CameraInfo()
+        .setCameraInfo("FrontOV9782", 1280, 800)
+        .setCameraPose(-0.25, 5.75, 7.0, 0.0, 21.8346, 0.0);
+    // Reefscape Back camera info
+    public static final TrcVision.CameraInfo reefscapeBackCamInfo = new TrcVision.CameraInfo()
         .setCameraInfo("BackOV9782", 1280, 800)
         .setCameraPose(0.0, -1.563, 41.374, 180.0, 9.1241, 0.0);
 
