@@ -25,8 +25,6 @@ package teamcode.subsystems;
 import com.ctre.phoenix6.StatusCode;
 import com.studica.frc.AHRS.NavXComType;
 
-import frclib.drivebase.FrcDifferentialBase;
-import frclib.drivebase.FrcMecanumBase;
 import frclib.drivebase.FrcRobotBase;
 import frclib.drivebase.FrcRobotBase.LEDInfo;
 import frclib.drivebase.FrcSwerveBase;
@@ -37,7 +35,6 @@ import frclib.sensor.FrcEncoder.EncoderType;
 import teamcode.Dashboard;
 import teamcode.RobotParams;
 import teamcode.RobotParams.HwConfig;
-import teamcode.vision.OpenCvVision;
 import teamcode.vision.PhotonVision;
 import trclib.controller.TrcPidController;
 import trclib.drivebase.TrcDriveBase;
@@ -63,19 +60,15 @@ public class DriveBase extends TrcSubsystem
     public enum RobotType
     {
         // Generic Swerve Drive Base Robot
-        SwerveRobot,
-        // Generic Mecanum Drive Base Robot
-        MecanumRobot,
-        // Generic Differential Drive Base Robot
-        DifferentialRobot,
-        // This is useful for developing Vision code where all you need is a Robot Controller and camera.
+        RebuiltRobot,
+        ReefscapeRobot,
         VisionOnly
     }   //enum RobotType
 
     /**
-     * This class contains the Swerve Robot Parameters.
+     * This class contains the Rebuilt Robot Parameters.
      */
-    public static class SwerveRobotInfo extends FrcSwerveBase.SwerveInfo
+    public static class RebuiltRobotInfo extends FrcSwerveBase.SwerveInfo
     {
         public final double FALCON_MAX_RPM                      = 6380.0;
         public final double DRIVE_MOTOR_GEAR_RATIO              = 5.6;
@@ -87,7 +80,7 @@ public class DriveBase extends TrcSubsystem
         private static final TrcPidController.PidCoefficients turnPidCoeffs =
             new TrcPidController.PidCoefficients(0.0078, 0.0, 0.0, 0.0, 0.0);
         private static final TrcPidController.PidCoefficients velPidCoeffs =
-            new TrcPidController.PidCoefficients(0.0, 0.0, 0.0, 0.0125, 0.0);
+            new TrcPidController.PidCoefficients(0.0, 0.0, 0.0, 0.00909090909090909090909090909091, 0.0);
         private static final TrcPidController.PidCoefficients steerPidCoeffs =
             new TrcPidController.PidCoefficients(3.0, 0.0, 0.0, 0.0, 0.0);
 
@@ -104,13 +97,13 @@ public class DriveBase extends TrcSubsystem
                     .setPidCoefficients(steerPidCoeffs)
                     .setPidControlParams(0.5, false));
 
-        public SwerveRobotInfo()
+        public RebuiltRobotInfo()
         {
             this.setBaseParams(baseParams)
                 .setRobotInfo(
-                    RobotType.SwerveRobot.toString(), RobotParams.Robot.ROBOT_LENGTH, RobotParams.Robot.ROBOT_WIDTH,
+                    RobotType.RebuiltRobot.toString(), RobotParams.Robot.ROBOT_LENGTH, RobotParams.Robot.ROBOT_WIDTH,
                     23.2, 23.2)
-                .setNavXImuInfo("NavX", NavXComType.kMXP_SPI)
+                .setPigeon2ImuInfo("Pigeon2", RobotParams.HwConfig.CANID_PIGEON2, "Canivore")
                 .setDriveMotorInfo(
                     MotorType.CanTalonFx, null,
                     new String[] {"flDriveMotor", "frDriveMotor", "blDriveMotor", "brDriveMotor"},
@@ -125,7 +118,7 @@ public class DriveBase extends TrcSubsystem
                 .setPidStallDetectionEnabled(true)
                 .setPidDriveParams(false)
                 .setPurePursuitDriveParams(10.0, true, false)
-                .setVisionInfo(PhotonVision.frontCamInfo, PhotonVision.backCamInfo)
+                .setVisionInfo(PhotonVision.rebuiltFrontCamInfo, PhotonVision.rebuiltBackCamInfo)
                 .setIndicators(
                     new LEDInfo("LED", HwConfig.PWM_CHANNEL_LED, HwConfig.NUM_LEDS));
             this.setSwerveParams(swerveParams)
@@ -148,36 +141,46 @@ public class DriveBase extends TrcSubsystem
                 .setSwerveBaseCharacteristics(
                     23.2, 23.2, DRIVE_MOTOR_GEAR_RATIO, STEER_MOTOR_GEAR_RATIO, 360.0 / steerGearRatio)
                 .setSwerveModuleNames(new String[] {"flWheel", "frWheel", "blWheel", "brWheel"});
-        }   //SwerveRobotInfo
-    }   //class SwerveRobotInfo
+        }   //RebuiltRobotInfo
+    }   //class RebuiltRobotInfo
 
     /**
-     * This class contains the Mecanum Robot Parameters.
+     * This class contains the Reefscape Robot Parameters.
      */
-    public static class MecanumRobotInfo extends FrcRobotBase.RobotInfo
+    public static class ReefscapeRobotInfo extends FrcSwerveBase.SwerveInfo
     {
-        private static final TrcPidController.PidCoefficients xDrivePidCoeffs =
-            new TrcPidController.PidCoefficients(0.017, 0.0, 0.0, 0.0, 0.0);
-        private static final TrcPidController.PidCoefficients yDrivePidCoeffs =
-            new TrcPidController.PidCoefficients(0.011, 0.0, 0.001, 0.0, 0.0);
+        public final double FALCON_MAX_RPM                      = 6380.0;
+        public final double DRIVE_MOTOR_GEAR_RATIO              = 5.6;
+        public final double DRIVE_WHEEL_DIAMETER                = 3.9326556997620689090425924610785;    // inches
+        public final double STEER_MOTOR_GEAR_RATIO              = 13.3714;
+
+        private static final TrcPidController.PidCoefficients drivePidCoeffs =
+            new TrcPidController.PidCoefficients(0.02, 0.0, 0.002, 0.0, 0.0);
         private static final TrcPidController.PidCoefficients turnPidCoeffs =
-            new TrcPidController.PidCoefficients(0.012, 0.0, 0.0008, 0.0, 0.0);
+            new TrcPidController.PidCoefficients(0.0078, 0.0, 0.0, 0.0, 0.0);
         private static final TrcPidController.PidCoefficients velPidCoeffs =
-            new TrcPidController.PidCoefficients(0.0, 0.0, 0.0, 0.0125, 0.0);
+            new TrcPidController.PidCoefficients(0.0, 0.0, 0.0, 0.00909090909090909090909090909091, 0.0);
+        private static final TrcPidController.PidCoefficients steerPidCoeffs =
+            new TrcPidController.PidCoefficients(3.0, 0.0, 0.0, 0.0, 0.0);
 
         public static TrcDriveBase.BaseParams baseParams = new TrcDriveBase.BaseParams()
-            .setPidTolerances(2.0, 2.0)
-            .setXPidParams(xDrivePidCoeffs, 1.0)
-            .setYPidParams(yDrivePidCoeffs, 1.0)
+            .setPidTolerances(1.0, 1.0)
+            .setXPidParams(drivePidCoeffs, 0.5)
+            .setYPidParams(drivePidCoeffs, 0.5)
             .setTurnPidParams(turnPidCoeffs, 0.5)
             .setVelocityPidParams(velPidCoeffs)
-            .setDriveCharacteristics(157.48, 600.0, 600.0, 180.0);
+            .setDriveCharacteristics(110.0, 200.0, 90.0, 200.0);
+        public static TrcSwerveDrive.SwerveParams swerveParams = new TrcSwerveDrive.SwerveParams()
+            .setSteerMotorPidParams(
+                new TrcMotor.PidParams()
+                    .setPidCoefficients(steerPidCoeffs)
+                    .setPidControlParams(0.5, false));
 
-        public MecanumRobotInfo()
+        public ReefscapeRobotInfo()
         {
             this.setBaseParams(baseParams)
                 .setRobotInfo(
-                    RobotType.SwerveRobot.toString(), RobotParams.Robot.ROBOT_LENGTH, RobotParams.Robot.ROBOT_WIDTH,
+                    RobotType.ReefscapeRobot.toString(), RobotParams.Robot.ROBOT_LENGTH, RobotParams.Robot.ROBOT_WIDTH,
                     23.2, 23.2)
                 .setNavXImuInfo("NavX", NavXComType.kMXP_SPI)
                 .setDriveMotorInfo(
@@ -185,57 +188,40 @@ public class DriveBase extends TrcSubsystem
                     new String[] {"flDriveMotor", "frDriveMotor", "blDriveMotor", "brDriveMotor"},
                     new int[] {
                         HwConfig.CANID_FLDRIVE_MOTOR, HwConfig.CANID_FRDRIVE_MOTOR,
-                         HwConfig.CANID_BLDRIVE_MOTOR, HwConfig.CANID_BRDRIVE_MOTOR},
-                    new boolean[] {false, true, false, true})
-                .setMotorOdometry(1.6577438, 2.355935875)
+                        HwConfig.CANID_BLDRIVE_MOTOR, HwConfig.CANID_BRDRIVE_MOTOR},
+                    new boolean[] {false, false, false, false})
+                .setDriveMotorCurrentLimits(40.0, 45.0, 0.2, 55.0)
+                .setWpiOdometry(DRIVE_WHEEL_DIAMETER * Math.PI / DRIVE_MOTOR_GEAR_RATIO)
                 .setPidRampRates(0.5, 0.5, 1.0)
+                .setDriveRampRate(0.25, 0.02)
                 .setPidStallDetectionEnabled(true)
                 .setPidDriveParams(false)
                 .setPurePursuitDriveParams(10.0, true, false)
-                .setVisionInfo(PhotonVision.frontCamInfo, PhotonVision.backCamInfo)
+                .setVisionInfo(PhotonVision.reefscapeFrontCamInfo, PhotonVision.reefscapeBackCamInfo)
                 .setIndicators(
                     new LEDInfo("LED", HwConfig.PWM_CHANNEL_LED, HwConfig.NUM_LEDS));
-        }   //MecanumRobotInfo
-    }   //class MecanumRobotInfo
-
-    /**
-     * This class contains the Differential Robot Parameters.
-     */
-    public static class DifferentialRobotInfo extends FrcRobotBase.RobotInfo
-    {
-        private static final TrcPidController.PidCoefficients yDrivePidCoeffs =
-            new TrcPidController.PidCoefficients(0.011, 0.0, 0.0013, 0.0, 0.0);
-        private static final TrcPidController.PidCoefficients turnPidCoeffs =
-            new TrcPidController.PidCoefficients(0.011, 0.0, 0.0013, 0.0, 0.0);
-        private static final TrcPidController.PidCoefficients velPidCoeffs =
-            new TrcPidController.PidCoefficients(0.0, 0.0, 0.0, 0.0125, 0.0);
-
-        public static TrcDriveBase.BaseParams baseParams = new TrcDriveBase.BaseParams()
-            .setPidTolerances(2.0, 2.0)
-            .setYPidParams(yDrivePidCoeffs, 1.0)
-            .setTurnPidParams(turnPidCoeffs, 0.5)
-            .setVelocityPidParams(velPidCoeffs)
-            .setDriveCharacteristics(157.48, 600.0, 600.0, 180.0);
-
-        public DifferentialRobotInfo()
-        {
-            this.setBaseParams(baseParams)
-                .setRobotInfo(
-                    RobotType.SwerveRobot.toString(), RobotParams.Robot.ROBOT_LENGTH, RobotParams.Robot.ROBOT_WIDTH,
-                    23.2, 23.2)
-                .setNavXImuInfo("NavX", NavXComType.kMXP_SPI)
-                .setDriveMotorInfo(
+            this.setSwerveParams(swerveParams)
+                .setSteerEncoderInfo(
+                    EncoderType.Canandmag,
+                    new String[] {"flSteerEncoder", "frSteerEncoder", "blSteerEncoder", "brSteerEncoder"},
+                    new int[] {
+                        HwConfig.CANID_FLSTEER_ENCODER, HwConfig.CANID_FRSTEER_ENCODER,
+                        HwConfig.CANID_BLSTEER_ENCODER, HwConfig.CANID_BRSTEER_ENCODER},
+                    new boolean[] {false, false, false, false},
+                    new double[] {0.0, 0.0, 0.0, 0.0},
+                    RobotParams.Robot.STEER_ZERO_CAL_FILE)
+                .setSteerMotorInfo(
                     MotorType.CanTalonFx, null,
-                    new String[] {"leftDriveMotor", "rightDriveMotor"},
-                    new int[] {HwConfig.CANID_FLDRIVE_MOTOR, HwConfig.CANID_FRDRIVE_MOTOR},
-                    new boolean[] {false, true})
-                .setMotorOdometry(2.355935875)
-                .setPidRampRates(0.5, 1.0)
-                .setPidStallDetectionEnabled(true)
-                .setPidDriveParams(false)
-                .setPurePursuitDriveParams(10.0, true, false);
-        }   //DifferentialRobotInfo
-    }   //class DifferentialRobotInfo
+                    new String[] {"flSteerServo", "frSteerServo", "blSteerServo", "brSteerServo"},
+                    new int[] {
+                        HwConfig.CANID_FLSTEER_MOTOR, HwConfig.CANID_FRSTEER_MOTOR,
+                        HwConfig.CANID_BLSTEER_MOTOR, HwConfig.CANID_BRSTEER_MOTOR},
+                    new boolean[] {false, false, false, false})
+                .setSwerveBaseCharacteristics(
+                    23.2, 23.2, DRIVE_MOTOR_GEAR_RATIO, STEER_MOTOR_GEAR_RATIO, 360.0 / steerGearRatio)
+                .setSwerveModuleNames(new String[] {"flWheel", "frWheel", "blWheel", "brWheel"});
+        }   //ReefscapeRobotInfo
+    }   //class ReefscapeRobotInfo
 
     /**
      * This class contains the VisionOnly Parameters. This is for tuning vision with only the Control Hub and no
@@ -246,7 +232,7 @@ public class DriveBase extends TrcSubsystem
         public VisionOnlyInfo()
         {
             this.setRobotInfo("VisionOnly")
-                .setVisionInfo(OpenCvVision.hd3000CamInfo, null);
+                .setVisionInfo(PhotonVision.rebuiltFrontCamInfo, PhotonVision.rebuiltBackCamInfo);
         }   //VisionOnlyInfo
     }   //class VisionOnlyInfo
 
@@ -280,19 +266,14 @@ public class DriveBase extends TrcSubsystem
 
         switch (RobotParams.Preferences.robotType)
         {
-            case SwerveRobot:
-                robotInfo = new SwerveRobotInfo();
-                robotBase = RobotParams.Preferences.useDriveBase? new FrcSwerveBase((SwerveRobotInfo) robotInfo): null;
+            case RebuiltRobot:
+                robotInfo = new RebuiltRobotInfo();
+                robotBase = RobotParams.Preferences.useDriveBase? new FrcSwerveBase((RebuiltRobotInfo) robotInfo): null;
                 break;
 
-            case MecanumRobot:
-                robotInfo = new MecanumRobotInfo();
-                robotBase = RobotParams.Preferences.useDriveBase? new FrcMecanumBase(robotInfo): null;
-                break;
-
-            case DifferentialRobot:
-                robotInfo = new DifferentialRobotInfo();
-                robotBase = RobotParams.Preferences.useDriveBase? new FrcDifferentialBase(robotInfo): null;
+            case ReefscapeRobot:
+                robotInfo = new ReefscapeRobotInfo();
+                robotBase = RobotParams.Preferences.useDriveBase? new FrcSwerveBase((ReefscapeRobotInfo) robotInfo): null;
                 break;
 
             case VisionOnly:

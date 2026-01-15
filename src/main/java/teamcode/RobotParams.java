@@ -40,7 +40,7 @@ public class RobotParams
     public static class Preferences
     {
         // Global config
-        public static final RobotType robotType                 = RobotType.SwerveRobot;
+        public static final RobotType robotType                 = RobotType.RebuiltRobot;
         public static final boolean inCompetition               = false;
         public static final boolean hybridMode                  = false;
         public static final boolean useTraceLog                 = true;
@@ -92,6 +92,7 @@ public class RobotParams
         public static final int XBOX_DRIVER_CONTROLLER          = 0;
         public static final int XBOX_OPERATOR_CONTROLLER        = 1;
         // CAN IDs.
+        public static final int CANID_PIGEON2                   = 1;
         // Drive Motor CAN IDs.
         public static final int CANID_FLDRIVE_MOTOR             = 3;    //Orange
         public static final int CANID_FRDRIVE_MOTOR             = 4;    //Yellow
@@ -107,8 +108,8 @@ public class RobotParams
         public static final int CANID_BLSTEER_ENCODER           = 25;   //Green
         public static final int CANID_BRSTEER_ENCODER           = 26;   //Blue
         // Subsystem CAN IDs.
-        public static final int CANID_SHOOTER_MOTOR1            = 7;    //Purple
-        public static final int CANID_SHOOTER_MOTOR2            = 8;    //Gray
+        public static final int CANID_SHOOTER_LEFT_MOTOR        = 7;    //Purple
+        public static final int CANID_SHOOTER_RIGHT_MOTOR       = 8;    //Gray
         public static final int CANID_PAN_MOTOR                 = 9;    //White
         public static final int CANID_TILT_MOTOR                = 17;   //Purple
 
@@ -180,9 +181,9 @@ public class RobotParams
         //
         // Game time.
         //
-        public static final double AUTONOMOUS_PERIOD            = 15.0;     // in seconds
-        public static final double TELEOP_PERIOD                = 135.0;    // in seconds
-        public static final double ENDGAME_THRESHOLD            = 20.0;     // in seconds
+        public static final double AUTONOMOUS_PERIOD            = 20.0;     // in seconds
+        public static final double TELEOP_PERIOD                = 140.0;    // in seconds
+        public static final double ENDGAME_THRESHOLD            = 30.0;     // in seconds
         //
         // Game element locations and dimensions.
         //

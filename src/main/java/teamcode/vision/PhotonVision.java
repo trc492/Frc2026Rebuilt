@@ -41,12 +41,21 @@ import trclib.vision.TrcVision;
  */
 public class PhotonVision extends FrcPhotonVision
 {
-    // Front camera info
-    public static final TrcVision.CameraInfo frontCamInfo = new TrcVision.CameraInfo()
+    // Rebuilt Front camera info
+    public static final TrcVision.CameraInfo rebuiltFrontCamInfo = new TrcVision.CameraInfo()
         .setCameraInfo("FrontOV9782", 1280, 800)
         .setCameraPose(-0.25, 5.75, 7.0, 0.0, 21.8346, 0.0);
-    // Back camera info
-    public static final TrcVision.CameraInfo backCamInfo = new TrcVision.CameraInfo()
+    // Rebuilt Back camera info
+    public static final TrcVision.CameraInfo rebuiltBackCamInfo = new TrcVision.CameraInfo()
+        .setCameraInfo("BackOV9782", 1280, 800)
+        .setCameraPose(0.0, -1.563, 41.374, 180.0, 9.1241, 0.0);
+
+    // Reefscape Front camera info
+    public static final TrcVision.CameraInfo reefscapeFrontCamInfo = new TrcVision.CameraInfo()
+        .setCameraInfo("FrontOV9782", 1280, 800)
+        .setCameraPose(-0.25, 5.75, 7.0, 0.0, 21.8346, 0.0);
+    // Reefscape Back camera info
+    public static final TrcVision.CameraInfo reefscapeBackCamInfo = new TrcVision.CameraInfo()
         .setCameraInfo("BackOV9782", 1280, 800)
         .setCameraPose(0.0, -1.563, 41.374, 180.0, 9.1241, 0.0);
 

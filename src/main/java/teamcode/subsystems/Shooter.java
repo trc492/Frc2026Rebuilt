@@ -107,47 +107,38 @@ public class Shooter extends TrcSubsystem
     public static final class Params
     {
         public static final String SUBSYSTEM_NAME               = "Shooter";
-        public static final boolean NEED_ZERO_CAL               = true;
+        public static final boolean NEED_ZERO_CAL               = false;
 
-        public static final boolean HAS_TWO_SHOOTER_MOTORS      = false;
-        public static final boolean HAS_PAN_MOTOR               = true;
-        public static final boolean HAS_TILT_MOTOR              = true;
-        public static final boolean HAS_LAUNCHER                = true;
+        public static final boolean HAS_TWO_SHOOTER_MOTORS      = true;
+        public static final boolean HAS_PAN_MOTOR               = false;
+        public static final boolean HAS_TILT_MOTOR              = false;
+        public static final boolean HAS_LAUNCHER                = false;
 
-        // Shooter Motor1
-        public static final String SHOOTER_MOTOR1_NAME          = SUBSYSTEM_NAME + ".ShootMotor1";
-        public static final MotorType SHOOTER_MOTOR1_TYPE       = MotorType.CanTalonFx;
-        public static final int SHOOTER_MOTOR1_CANID            = RobotParams.HwConfig.CANID_SHOOTER_MOTOR1;
-        public static final boolean SHOOTER_MOTOR1_INVERTED     = false;
-
-        // Shooter Motor2
-        public static final String SHOOTER_MOTOR2_NAME          = SUBSYSTEM_NAME + ".ShootMotor2";
-        public static final MotorType SHOOTER_MOTOR2_TYPE       = MotorType.CanTalonFx;
-        public static final int SHOOTER_MOTOR2_CANID            = RobotParams.HwConfig.CANID_SHOOTER_MOTOR2;
-        public static final boolean SHOOTER_MOTOR2_INVERTED     = true;
+        // Shooter Motor
+        public static final String SHOOTER_PRIMARY_MOTOR_NAME   = SUBSYSTEM_NAME + ".PrimaryMotor";
+        public static final String SHOOTER_FOLLOWER_MOTOR_NAME  = SUBSYSTEM_NAME + ".FollowerMotor";
+        public static final MotorType SHOOTER_MOTOR_TYPE        = MotorType.CanTalonFx;
+        public static final int SHOOTER_PRIMARY_MOTOR_CANID     = RobotParams.HwConfig.CANID_SHOOTER_LEFT_MOTOR;
+        public static final int SHOOTER_FOLLOWER_MOTOR_CANID    = RobotParams.HwConfig.CANID_SHOOTER_RIGHT_MOTOR;
+        public static final boolean SHOOTER_PRIMARY_MOTOR_INVERTED = true;
+        public static final boolean SHOOTER_FOLLOWER_MOTOR_INVERTED = false;
 
         // Assume shooter motor1 and motor2 are the same type and have same gear ratio but they could have different
         // PID coefficients due to different motor strengths and frictions.
-        public static final double SHOOT_MOTOR_GEAR_RATIO       = 20.0/28.0;
+        public static final double SHOOT_MOTOR_GEAR_RATIO       = 1.0;
         public static final double SHOOT_MOTOR_REV_PER_COUNT    = 1.0/SHOOT_MOTOR_GEAR_RATIO;
         public static final double SHOOT_MOTOR_MAX_VEL          = 6000.0;
 
-        public static final double SHOOT_MOTOR1_PID_KP          = 1.0;
-        public static final double SHOOT_MOTOR1_PID_KI          = 0.01;
-        public static final double SHOOT_MOTOR1_PID_IZONE       = 160/60.0; // in RPS
-        public static final double SHOOT_MOTOR1_PID_KD          = 0.0;
-        public static final double SHOOT_MOTOR1_PID_KF          = 0.0125;
-
-        public static final double SHOOT_MOTOR2_PID_KP          = 1.0;
-        public static final double SHOOT_MOTOR2_PID_KI          = 0.0;
-        public static final double SHOOT_MOTOR2_PID_KD          = 0.0;
-        public static final double SHOOT_MOTOR2_PID_KF          = 0.0125;
+        public static final double SHOOT_MOTOR_PID_KP           = 1.0;
+        public static final double SHOOT_MOTOR_PID_KI           = 0.01;
+        public static final double SHOOT_MOTOR_PID_IZONE        = 160/60.0; // in RPS
+        public static final double SHOOT_MOTOR_PID_KD           = 0.0;
+        public static final double SHOOT_MOTOR_PID_KF           = 0.0125;
 
         public static final double SHOOT_PID_TOLERANCE_RPM      = 100.0;
-        public static final boolean SHOOT_SOFTWARE_PID_ENABLED  = true;
+        public static final boolean SHOOT_SOFTWARE_PID_ENABLED  = false;
         public static final double SHOOT_MOTOR_OFF_DELAY        = 0.5;      // in sec
         public static final double SHOOT_VEL_TRIGGER_THRESHOLD  = 350.0;    // in RPM
-        public static final double SHOOT_FAILSAFE_CHECK_INTERVAL= 0.1;      // in sec
 
         // Pan Motor
         public static final String PAN_MOTOR_NAME               = SUBSYSTEM_NAME + ".PanMotor";
@@ -223,15 +214,10 @@ public class Shooter extends TrcSubsystem
         // public static double LAUNCHER_RETRACT_TIME              = 0.10;     // in seconds
     }   //class Params
 
-    public static final TrcMotor.PidParams shootMotor1PidParams = new TrcMotor.PidParams()
+    public static final TrcMotor.PidParams shootMotorPidParams = new TrcMotor.PidParams()
         .setPidCoefficients(
-            Params.SHOOT_MOTOR1_PID_KP, Params.SHOOT_MOTOR1_PID_KI, Params.SHOOT_MOTOR1_PID_KD,
-            Params.SHOOT_MOTOR1_PID_KF, Params.SHOOT_MOTOR1_PID_IZONE)
-        .setPidControlParams(Params.SHOOT_PID_TOLERANCE_RPM/60.0, Params.SHOOT_SOFTWARE_PID_ENABLED);
-    public static final TrcMotor.PidParams shootMotor2PidParams = new TrcMotor.PidParams()
-        .setPidCoefficients(
-            Params.SHOOT_MOTOR2_PID_KP, Params.SHOOT_MOTOR2_PID_KI, Params.SHOOT_MOTOR2_PID_KD,
-            Params.SHOOT_MOTOR2_PID_KF)
+            Params.SHOOT_MOTOR_PID_KP, Params.SHOOT_MOTOR_PID_KI, Params.SHOOT_MOTOR_PID_KD,
+            Params.SHOOT_MOTOR_PID_KF, Params.SHOOT_MOTOR_PID_IZONE)
         .setPidControlParams(Params.SHOOT_PID_TOLERANCE_RPM/60.0, Params.SHOOT_SOFTWARE_PID_ENABLED);
     public static final TrcMotor.PidParams panMotorPidParams = new TrcMotor.PidParams()
         .setPidCoefficients(
@@ -279,14 +265,14 @@ public class Shooter extends TrcSubsystem
     
         FrcShooter.Params shooterParams = new FrcShooter.Params()
             .setShooterMotor1(
-                Params.SHOOTER_MOTOR1_NAME, Params.SHOOTER_MOTOR1_TYPE, null, Params.SHOOTER_MOTOR1_CANID,
-                Params.SHOOTER_MOTOR1_INVERTED);
+                Params.SHOOTER_PRIMARY_MOTOR_NAME, Params.SHOOTER_MOTOR_TYPE, null,
+                Params.SHOOTER_PRIMARY_MOTOR_CANID, Params.SHOOTER_PRIMARY_MOTOR_INVERTED);
 
         if (Params.HAS_TWO_SHOOTER_MOTORS)
         {
             shooterParams.setShooterMotor2(
-                Params.SHOOTER_MOTOR2_NAME, Params.SHOOTER_MOTOR2_TYPE, null, Params.SHOOTER_MOTOR2_CANID,
-                Params.SHOOTER_MOTOR2_INVERTED);
+                Params.SHOOTER_FOLLOWER_MOTOR_NAME, Params.SHOOTER_MOTOR_TYPE, null,
+                Params.SHOOTER_FOLLOWER_MOTOR_CANID, Params.SHOOTER_FOLLOWER_MOTOR_INVERTED, true);
         }
 
         if (Params.HAS_PAN_MOTOR)
@@ -313,16 +299,7 @@ public class Shooter extends TrcSubsystem
 
         TrcMotor motor = shooter.getShooterMotor1();
         motor.setPositionSensorScaleAndOffset(Params.SHOOT_MOTOR_REV_PER_COUNT, 0.0);
-        motor.setVelocityPidParameters(shootMotor1PidParams, null);
-
-        motor = shooter.getShooterMotor2();
-        if (motor != null)
-        {
-            // Assuming motor2 is the same type of motor as motor1 and has the same gear ratio.
-            // If it needs to, this allows different PID coefficients for motor2 in case they are not quite identical.
-            motor.setPositionSensorScaleAndOffset(Params.SHOOT_MOTOR_REV_PER_COUNT, 0.0);
-            motor.setVelocityPidParameters(shootMotor2PidParams, null);
-        }
+        motor.setVelocityPidParameters(shootMotorPidParams, null);
 
         motor = shooter.getPanMotor();
         if (motor != null)
