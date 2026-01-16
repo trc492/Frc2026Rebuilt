@@ -129,7 +129,7 @@ public class DriveBase extends TrcSubsystem
                         HwConfig.CANID_FLSTEER_ENCODER, HwConfig.CANID_FRSTEER_ENCODER,
                         HwConfig.CANID_BLSTEER_ENCODER, HwConfig.CANID_BRSTEER_ENCODER},
                     new boolean[] {false, false, false, false},
-                    new double[] {0.0, 0.0, 0.0, 0.0},
+                    new double[] {0.0, 0.0, 0.0, 0.0}, false,
                     RobotParams.Robot.STEER_ZERO_CAL_FILE)
                 .setSteerMotorInfo(
                     MotorType.CanTalonFx, null,
@@ -208,7 +208,7 @@ public class DriveBase extends TrcSubsystem
                         HwConfig.CANID_FLSTEER_ENCODER, HwConfig.CANID_FRSTEER_ENCODER,
                         HwConfig.CANID_BLSTEER_ENCODER, HwConfig.CANID_BRSTEER_ENCODER},
                     new boolean[] {false, false, false, false},
-                    new double[] {0.0, 0.0, 0.0, 0.0},
+                    new double[] {0.0, 0.0, 0.0, 0.0}, true,
                     RobotParams.Robot.STEER_ZERO_CAL_FILE)
                 .setSteerMotorInfo(
                     MotorType.CanTalonFx, null,
@@ -329,10 +329,14 @@ public class DriveBase extends TrcSubsystem
                         robotInfo.driveMotorCurrentTriggerPeriod);
                     swerveDrive.driveMotors[i].setStatorCurrentLimit(robotInfo.driveMotorStatorCurrentLimit);
                 }
-                // Sync absolute encoders to steer motor internal encoders.
-                for (int i = 0; i < swerveInfo.steerEncoderNames.length; i++)
+
+                if (swerveInfo.syncToSteerMotorEncoder)
                 {
-                    syncSteerEncoder((FrcSwerveBase.SwerveInfo) robotInfo, i);
+                    // Sync absolute encoders to steer motor internal encoders.
+                    for (int i = 0; i < swerveInfo.steerEncoderNames.length; i++)
+                    {
+                        syncSteerEncoder((FrcSwerveBase.SwerveInfo) robotInfo, i);
+                    }
                 }
             }
         }
