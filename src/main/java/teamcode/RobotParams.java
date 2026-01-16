@@ -169,8 +169,8 @@ public class RobotParams
         public static final String STEER_ZERO_CAL_FILE          = TEAM_FOLDER_PATH + "/SteerZeroCalibration.txt";
         public static final String FIELD_ZERO_CAL_FILE          = TEAM_FOLDER_PATH + "/FieldZeroCalibration.txt";
         public static final String ROBOT_CODEBASE               = "2026Rebuilt";
-        public static final double ROBOT_LENGTH                 = 35.5;
-        public static final double ROBOT_WIDTH                  = 35.5;
+        public static final double ROBOT_LENGTH                 = 35.0;
+        public static final double ROBOT_WIDTH                  = 35.0;
     }   //class Robot
 
     /**

@@ -43,11 +43,11 @@ public class PhotonVision extends FrcPhotonVision
 {
     // Rebuilt Front camera info
     public static final TrcVision.CameraInfo rebuiltFrontCamInfo = new TrcVision.CameraInfo()
-        .setCameraInfo("FrontOV9782", 1280, 800)
+        .setCameraInfo("OV9782_Front", 640, 480)
         .setCameraPose(-0.25, 5.75, 7.0, 0.0, 21.8346, 0.0);
     // Rebuilt Back camera info
     public static final TrcVision.CameraInfo rebuiltBackCamInfo = new TrcVision.CameraInfo()
-        .setCameraInfo("BackOV9782", 1280, 800)
+        .setCameraInfo("OV9782_Back", 640, 480)
         .setCameraPose(0.0, -1.563, 41.374, 180.0, 9.1241, 0.0);
 
     // Reefscape Front camera info

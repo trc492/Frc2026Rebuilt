@@ -125,18 +125,18 @@ public class Shooter extends TrcSubsystem
 
         // Assume shooter motor1 and motor2 are the same type and have same gear ratio but they could have different
         // PID coefficients due to different motor strengths and frictions.
-        public static final double SHOOT_MOTOR_GEAR_RATIO       = 1.0;
+        public static final double SHOOT_MOTOR_GEAR_RATIO       = 18.0/12.0;    // Load/Motor
         public static final double SHOOT_MOTOR_REV_PER_COUNT    = 1.0/SHOOT_MOTOR_GEAR_RATIO;
         public static final double SHOOT_MOTOR_MAX_VEL          = 6000.0;
 
-        public static final double SHOOT_MOTOR_PID_KP           = 1.0;
-        public static final double SHOOT_MOTOR_PID_KI           = 0.01;
-        public static final double SHOOT_MOTOR_PID_IZONE        = 160/60.0; // in RPS
+        public static final double SHOOT_MOTOR_PID_KP           = 0.0;//1.0;
+        public static final double SHOOT_MOTOR_PID_KI           = 0.0;//0.01;
+        public static final double SHOOT_MOTOR_PID_IZONE        = 0.0;//160/60.0; // in RPS
         public static final double SHOOT_MOTOR_PID_KD           = 0.0;
         public static final double SHOOT_MOTOR_PID_KF           = 0.0125;
 
         public static final double SHOOT_PID_TOLERANCE_RPM      = 100.0;
-        public static final boolean SHOOT_SOFTWARE_PID_ENABLED  = false;
+        public static final boolean SHOOT_SOFTWARE_PID_ENABLED  = true;
         public static final double SHOOT_MOTOR_OFF_DELAY        = 0.5;      // in sec
         public static final double SHOOT_VEL_TRIGGER_THRESHOLD  = 350.0;    // in RPM
 

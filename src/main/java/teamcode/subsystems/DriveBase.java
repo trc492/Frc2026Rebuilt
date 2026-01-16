@@ -103,7 +103,7 @@ public class DriveBase extends TrcSubsystem
                 .setRobotInfo(
                     RobotType.RebuiltRobot.toString(), RobotParams.Robot.ROBOT_LENGTH, RobotParams.Robot.ROBOT_WIDTH,
                     23.2, 23.2)
-                .setPigeon2ImuInfo("Pigeon2", RobotParams.HwConfig.CANID_PIGEON2, "Canivore")
+                .setPigeon2ImuInfo("Pigeon2", RobotParams.HwConfig.CANID_PIGEON2, "2026_CANivore")
                 .setDriveMotorInfo(
                     MotorType.CanTalonFx, null,
                     new String[] {"flDriveMotor", "frDriveMotor", "blDriveMotor", "brDriveMotor"},
