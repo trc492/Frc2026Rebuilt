@@ -920,13 +920,25 @@ public class Shooter extends TrcSubsystem
             dashboard.putNumber(DBKEY_SHOOTER_MOTOR1_RPM, shooter.getShooterMotor1RPM());
             dashboard.putNumber(DBKEY_SHOOTER_MOTOR1_TARGET_RPM, shooter.getShooterMotor1TargetRPM());
             dashboard.putNumber(DBKEY_SHOOTER_MOTOR1_POWER, shooter.getShooterMotor1Power());
-            dashboard.putNumber(DBKEY_SHOOTER_MOTOR2_RPM, shooter.getShooterMotor2RPM());
-            dashboard.putNumber(DBKEY_SHOOTER_MOTOR2_TARGET_RPM, shooter.getShooterMotor2TargetRPM());
-            dashboard.putNumber(DBKEY_SHOOTER_MOTOR2_POWER, shooter.getShooterMotor2Power());
-            dashboard.putNumber(DBKEY_PAN_ANGLE, shooter.getPanAngle());
-            dashboard.putNumber(DBKEY_PAN_TARGET, shooter.getPanAngleTarget());
-            dashboard.putNumber(DBKEY_TILT_ANGLE, shooter.getTiltAngle());
-            dashboard.putNumber(DBKEY_TILT_TARGET, shooter.getTiltAngleTarget());
+
+            if (shooter.shooterMotor2 != null)
+            {
+                dashboard.putNumber(DBKEY_SHOOTER_MOTOR2_RPM, shooter.getShooterMotor2RPM());
+                dashboard.putNumber(DBKEY_SHOOTER_MOTOR2_TARGET_RPM, shooter.getShooterMotor2TargetRPM());
+                dashboard.putNumber(DBKEY_SHOOTER_MOTOR2_POWER, shooter.getShooterMotor2Power());
+            }
+
+            if (shooter.panMotor != null)
+            {
+                dashboard.putNumber(DBKEY_PAN_ANGLE, shooter.getPanAngle());
+                dashboard.putNumber(DBKEY_PAN_TARGET, shooter.getPanAngleTarget());
+            }
+
+            if (shooter.tiltMotor != null)
+            {
+                dashboard.putNumber(DBKEY_TILT_ANGLE, shooter.getTiltAngle());
+                dashboard.putNumber(DBKEY_TILT_TARGET, shooter.getTiltAngleTarget());
+            }
         }
 
         return lineNum;

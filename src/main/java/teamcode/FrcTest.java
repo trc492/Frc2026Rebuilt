@@ -39,6 +39,7 @@ import trclib.command.CmdPidDrive;
 import trclib.command.CmdTimedDrive;
 import trclib.controller.TrcPidController;
 import trclib.dataprocessor.TrcUtil;
+import trclib.motor.TrcMotor;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcRobot;
 import trclib.robotcore.TrcRobot.RunMode;
@@ -714,7 +715,7 @@ public class FrcTest extends FrcTeleOp
         }
 
         robot.dashboard.displayPrintf(
-            15, "DriverController: " + button + "=" + (pressed ? "pressed" : "released"));
+            15, "TestDriverController: " + button + "=" + (pressed ? "pressed" : "released"));
         switch (button)
         {
             case A:
@@ -824,12 +825,12 @@ public class FrcTest extends FrcTeleOp
         }
 
         robot.dashboard.displayPrintf(
-            15, "OperatorController: " + button + "=" + (pressed ? "pressed" : "released"));
+            15, "TestOperatorController: " + button + "=" + (pressed ? "pressed" : "released"));
 
         switch (button)
         {
             case A:
-                if (testChoices.getTest() == Test.SUBSYSTEMS_TEST)
+                if (testChoices.getTest() == Test.TUNE_SUBSYSTEM)
                 {
                     if (pressed)
                     {
@@ -837,14 +838,22 @@ public class FrcTest extends FrcTeleOp
                         if (subsystemName.startsWith(Shooter.Params.SUBSYSTEM_NAME) && robot.shooter != null)
                         {
                             // Toggle shooter flywheel ON/OFF with velocity specified in Dashboard.
-                            if (robot.shooter.getShooterMotor1Power() != 0.0)
+                            if (robot.shooter.getShooterMotor1TargetRPM() != 0.0)
                             {
+                                robot.globalTracer.traceInfo(moduleName, ">>>>> Tune Shooter: Stop!");
                                 robot.shooter.stopShooter();
                             }
                             else
                             {
                                 double[] tuneParams = testChoices.getSubsystemTuneParams();
-                                robot.shooter.setShooterMotorRPM(tuneParams[0], null);
+                                TrcMotor.PidParams pidParams = new TrcMotor.PidParams()
+                                    .setPidCoefficients(
+                                        tuneParams[0], tuneParams[1],  tuneParams[2], tuneParams[3], tuneParams[4])
+                                    .setPidControlParams(tuneParams[5]/60.0, true);
+                                robot.globalTracer.traceInfo(
+                                    moduleName, ">>>>> Tune Shooter: PidParams=%s, vel=%f", pidParams, tuneParams[6]);
+                                robot.shooter.shooterMotor1.setVelocityPidParameters(pidParams, null);
+                                robot.shooter.setShooterMotorRPM(tuneParams[6], null);
                             }
                         }
                     }
