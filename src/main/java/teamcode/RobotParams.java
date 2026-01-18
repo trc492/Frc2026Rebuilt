@@ -113,6 +113,8 @@ public class RobotParams
         public static final int CANID_PAN_MOTOR                 = 9;    //White
         public static final int CANID_TILT_MOTOR                = 17;   //Purple
 
+        public static final String CANBUS_CANIVORE              = "2026_CANivore";
+
         // Miscellaneous CAN IDs.
         public static final int CANID_PDP                       = 30;
         public static final int CANID_PCM                       = 31;

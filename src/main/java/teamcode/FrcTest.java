@@ -832,28 +832,48 @@ public class FrcTest extends FrcTeleOp
             case A:
                 if (testChoices.getTest() == Test.TUNE_SUBSYSTEM)
                 {
-                    if (pressed)
+                    double[] tuneParams = testChoices.getSubsystemTuneParams();
+
+                    if (operatorAltFunc)
                     {
-                        String subsystemName = testChoices.getSubsystemName();
-                        if (subsystemName.startsWith(Shooter.Params.SUBSYSTEM_NAME) && robot.shooter != null)
+                        if (pressed)
                         {
-                            // Toggle shooter flywheel ON/OFF with velocity specified in Dashboard.
-                            if (robot.shooter.getShooterMotor1TargetRPM() != 0.0)
+                            if (robot.shooter.shooterMotor1.getPower() != 0.0)
                             {
                                 robot.globalTracer.traceInfo(moduleName, ">>>>> Tune Shooter: Stop!");
-                                robot.shooter.stopShooter();
+                                robot.shooter.shooterMotor1.setPower(0.0);
                             }
                             else
                             {
-                                double[] tuneParams = testChoices.getSubsystemTuneParams();
-                                TrcMotor.PidParams pidParams = new TrcMotor.PidParams()
-                                    .setPidCoefficients(
-                                        tuneParams[0], tuneParams[1],  tuneParams[2], tuneParams[3], tuneParams[4])
-                                    .setPidControlParams(tuneParams[5]/60.0, true);
-                                robot.globalTracer.traceInfo(
-                                    moduleName, ">>>>> Tune Shooter: PidParams=%s, vel=%f", pidParams, tuneParams[6]);
-                                robot.shooter.shooterMotor1.setVelocityPidParameters(pidParams, null);
-                                robot.shooter.setShooterMotorRPM(tuneParams[6], null);
+                                robot.globalTracer.traceInfo(moduleName, ">>>>> Tune Shooter: setPower=%f", tuneParams[6]);
+                                robot.shooter.shooterMotor1.setPower(tuneParams[6]);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (pressed)
+                        {
+                            String subsystemName = testChoices.getSubsystemName();
+                            if (subsystemName.startsWith(Shooter.Params.SUBSYSTEM_NAME) && robot.shooter != null)
+                            {
+                                // Toggle shooter flywheel ON/OFF with velocity specified in Dashboard.
+                                if (robot.shooter.getShooterMotor1TargetRPM() != 0.0)
+                                {
+                                    robot.globalTracer.traceInfo(moduleName, ">>>>> Tune Shooter: Stop!");
+                                    robot.shooter.stopShooter();
+                                }
+                                else
+                                {
+                                    TrcMotor.PidParams pidParams = new TrcMotor.PidParams()
+                                        .setPidCoefficients(
+                                            tuneParams[0], tuneParams[1],  tuneParams[2], tuneParams[3], tuneParams[4])
+                                        .setPidControlParams(tuneParams[5]/60.0, true);
+                                    robot.globalTracer.traceInfo(
+                                        moduleName, ">>>>> Tune Shooter: PidParams=%s, vel=%f", pidParams, tuneParams[6]);
+                                    robot.shooter.shooterMotor1.setVelocityPidParameters(pidParams, null);
+                                    robot.shooter.setShooterMotorRPM(tuneParams[6], null);
+                                }
                             }
                         }
                     }

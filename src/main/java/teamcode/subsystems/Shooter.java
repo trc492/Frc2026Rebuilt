@@ -114,6 +114,7 @@ public class Shooter extends TrcSubsystem
         public static final boolean HAS_TILT_MOTOR              = false;
         public static final boolean HAS_LAUNCHER                = false;
 
+        public static final String SHOOTER_MOTOR_CANBUS         = RobotParams.HwConfig.CANBUS_CANIVORE;
         // Shooter Motor
         public static final String SHOOTER_PRIMARY_MOTOR_NAME   = SUBSYSTEM_NAME + ".PrimaryMotor";
         public static final String SHOOTER_FOLLOWER_MOTOR_NAME  = SUBSYSTEM_NAME + ".FollowerMotor";
@@ -266,13 +267,15 @@ public class Shooter extends TrcSubsystem
         FrcShooter.Params shooterParams = new FrcShooter.Params()
             .setShooterMotor1(
                 Params.SHOOTER_PRIMARY_MOTOR_NAME, Params.SHOOTER_MOTOR_TYPE, null,
-                Params.SHOOTER_PRIMARY_MOTOR_CANID, Params.SHOOTER_PRIMARY_MOTOR_INVERTED);
+                Params.SHOOTER_PRIMARY_MOTOR_CANID, Params.SHOOTER_MOTOR_CANBUS,
+                Params.SHOOTER_PRIMARY_MOTOR_INVERTED);
 
         if (Params.HAS_TWO_SHOOTER_MOTORS)
         {
             shooterParams.setShooterMotor2(
                 Params.SHOOTER_FOLLOWER_MOTOR_NAME, Params.SHOOTER_MOTOR_TYPE, null,
-                Params.SHOOTER_FOLLOWER_MOTOR_CANID, Params.SHOOTER_FOLLOWER_MOTOR_INVERTED, true);
+                Params.SHOOTER_FOLLOWER_MOTOR_CANID, Params.SHOOTER_MOTOR_CANBUS,
+                Params.SHOOTER_FOLLOWER_MOTOR_INVERTED, true);
         }
 
         if (Params.HAS_PAN_MOTOR)
@@ -280,7 +283,7 @@ public class Shooter extends TrcSubsystem
             shooterParams
                 .setPanMotor(
                     Params.PAN_MOTOR_NAME, Params.PAN_MOTOR_TYPE, null, Params.PAN_MOTOR_CANID,
-                    Params.PAN_MOTOR_INVERTED,
+                    Params.SHOOTER_MOTOR_CANBUS, Params.PAN_MOTOR_INVERTED,
                     new TrcShooter.PanTiltParams(Params.PAN_POWER_LIMIT, Params.PAN_MIN_POS, Params.PAN_MAX_POS));
                 // .setPanMotorPosPresets(Params.PAN_POS_PRESET_TOLERANCE, Params.PAN_POS_PRESETS);
         }
@@ -290,7 +293,7 @@ public class Shooter extends TrcSubsystem
             shooterParams
                 .setTiltMotor(
                     Params.TILT_MOTOR_NAME, Params.TILT_MOTOR_TYPE, null, Params.TILT_MOTOR_CANID,
-                    Params.TILT_MOTOR_INVERTED,
+                    Params.SHOOTER_MOTOR_CANBUS, Params.TILT_MOTOR_INVERTED,
                     new TrcShooter.PanTiltParams(Params.TILT_POWER_LIMIT, Params.TILT_MIN_POS, Params.TILT_MAX_POS));
                 // .setTiltMotorPosPresets(Params.TILT_POS_PRESET_TOLERANCE, Params.TILT_POS_PRESETS);
         }
