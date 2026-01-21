@@ -29,6 +29,7 @@ import frclib.subsystem.FrcShooter;
 import teamcode.Robot;
 import teamcode.RobotParams;
 import trclib.dataprocessor.TrcLookupTable;
+import trclib.dataprocessor.TrcUtil;
 import trclib.motor.TrcMotor;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcEvent;
@@ -121,8 +122,8 @@ public class Shooter extends TrcSubsystem
         public static final MotorType SHOOTER_MOTOR_TYPE        = MotorType.CanTalonFx;
         public static final int SHOOTER_PRIMARY_MOTOR_CANID     = RobotParams.HwConfig.CANID_SHOOTER_LEFT_MOTOR;
         public static final int SHOOTER_FOLLOWER_MOTOR_CANID    = RobotParams.HwConfig.CANID_SHOOTER_RIGHT_MOTOR;
-        public static final boolean SHOOTER_PRIMARY_MOTOR_INVERTED = true;
-        public static final boolean SHOOTER_FOLLOWER_MOTOR_INVERTED = false;
+        public static final boolean SHOOTER_PRIMARY_MOTOR_INVERTED = false;
+        public static final boolean SHOOTER_FOLLOWER_MOTOR_INVERTED = true;
 
         // Assume shooter motor1 and motor2 are the same type and have same gear ratio but they could have different
         // PID coefficients due to different motor strengths and frictions.
@@ -130,11 +131,12 @@ public class Shooter extends TrcSubsystem
         public static final double SHOOT_MOTOR_REV_PER_COUNT    = 1.0/SHOOT_MOTOR_GEAR_RATIO;
         public static final double SHOOT_MOTOR_MAX_VEL          = 6000.0;
 
-        public static final double SHOOT_MOTOR_PID_KP           = 0.0;//1.0;
-        public static final double SHOOT_MOTOR_PID_KI           = 0.0;//0.01;
-        public static final double SHOOT_MOTOR_PID_IZONE        = 0.0;//160/60.0; // in RPS
+        // 01/20/2026: SWPid - 0.2, 0.0, 0.0, 0.015, 0.0
+        public static final double SHOOT_MOTOR_PID_KP           = 0.2;
+        public static final double SHOOT_MOTOR_PID_KI           = 0.0;
         public static final double SHOOT_MOTOR_PID_KD           = 0.0;
-        public static final double SHOOT_MOTOR_PID_KF           = 0.0125;
+        public static final double SHOOT_MOTOR_PID_KF           = 0.015;
+        public static final double SHOOT_MOTOR_PID_IZONE        = 0.0;  // in RPS
 
         public static final double SHOOT_PID_TOLERANCE_RPM      = 100.0;
         public static final boolean SHOOT_SOFTWARE_PID_ENABLED  = true;

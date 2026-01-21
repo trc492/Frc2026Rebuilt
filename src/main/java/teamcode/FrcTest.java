@@ -838,21 +838,16 @@ public class FrcTest extends FrcTeleOp
                     {
                         if (pressed)
                         {
-                            // if (robot.shooter.shooterMotor1.getPower() != 0.0)
-                            // {
-                            //     robot.globalTracer.traceInfo(moduleName, ">>>>> Tune Shooter: Stop!");
-                            //     robot.shooter.shooterMotor1.setPower(0.0);
-                            // }
-                            // else
-                            // {
-                            //     robot.globalTracer.traceInfo(moduleName, ">>>>> Tune Shooter: setPower=%f", tuneParams[6]);
-                            //     robot.shooter.shooterMotor1.setPower(tuneParams[6]);
-                            // }
-                            robot.shooter.shooterMotor1.setPower(0.5);
-                        }
-                        else
-                        {
-                            robot.shooter.shooterMotor1.setPower(0.0);
+                            if (robot.shooter.shooterMotor1.getPower() != 0.0)
+                            {
+                                robot.globalTracer.traceInfo(moduleName, ">>>>> Tune Shooter: Stop!");
+                                robot.shooter.shooterMotor1.setPower(0.0);
+                            }
+                            else
+                            {
+                                robot.globalTracer.traceInfo(moduleName, ">>>>> Tune Shooter: setPower=%f", tuneParams[6]);
+                                robot.shooter.shooterMotor1.setPower(tuneParams[6]);
+                            }
                         }
                     }
                     else
