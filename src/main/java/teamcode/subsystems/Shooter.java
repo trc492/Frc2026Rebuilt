@@ -29,7 +29,6 @@ import frclib.subsystem.FrcShooter;
 import teamcode.Robot;
 import teamcode.RobotParams;
 import trclib.dataprocessor.TrcLookupTable;
-import trclib.dataprocessor.TrcUtil;
 import trclib.motor.TrcMotor;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcEvent;
