@@ -218,7 +218,6 @@ public class Robot extends FrcRobot
                     shooter = shooterSubsystem.getShooter();
                 }
 
-                TrcSubsystem.updateSubsystemParamsToDashboard();
                 // Create autotasks.
 
                 // Zero calibrate all subsystems only once in robot initialization.

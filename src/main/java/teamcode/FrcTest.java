@@ -511,6 +511,7 @@ public class FrcTest extends FrcTeleOp
     public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
         int lineNum = 1;
+        Test test = testChoices.getTest();
 
         if (testCommand != null)
         {
@@ -519,7 +520,7 @@ public class FrcTest extends FrcTeleOp
         //
         // Run test Cmd.
         //
-        switch (testChoices.getTest())
+        switch (test)
         {
             case DRIVE_SPEED_TEST:
                 if (robot.robotBase != null)
@@ -596,7 +597,7 @@ public class FrcTest extends FrcTeleOp
 
         if (slowPeriodicLoop)
         {
-            if (allowTeleOp())
+            if (allowTeleOp(test))
             {
                 //
                 // Allow TeleOp to run so we can control the robot in subsystem test or drive speed test modes.
@@ -607,7 +608,7 @@ public class FrcTest extends FrcTeleOp
             //
             // Call super.runPeriodic only if you need TeleOp control of the robot.
             //
-            switch (testChoices.getTest())
+            switch (test)
             {
                 case X_TIMED_DRIVE:
                 case Y_TIMED_DRIVE:
@@ -644,7 +645,7 @@ public class FrcTest extends FrcTeleOp
                             yPidCtrl = robot.robotBase.purePursuitDrive.getYPosPidCtrl();
                             turnPidCtrl = robot.robotBase.purePursuitDrive.getTurnPidCtrl();
                         }
-                        else if (testChoices.getTest() == Test.PID_DRIVE && robot.robotBase.pidDrive != null)
+                        else if (test == Test.PID_DRIVE && robot.robotBase.pidDrive != null)
                         {
                             xPidCtrl = robot.robotBase.pidDrive.getXPidCtrl();
                             yPidCtrl = robot.robotBase.pidDrive.getYPidCtrl();
@@ -684,12 +685,11 @@ public class FrcTest extends FrcTeleOp
     /**
      * This method is called to determine if Test mode is allowed to do teleop control of the robot.
      *
+     * @param test specifies the test mode.
      * @return true to allow and false otherwise.
      */
-    private boolean allowTeleOp()
+    private boolean allowTeleOp(Test test)
     {
-        Test test = testChoices.getTest();
-
         return test == Test.SUBSYSTEMS_TEST || test == Test.TUNE_SUBSYSTEM || test == Test.VISION_TEST ||
                test == Test.DRIVE_SPEED_TEST;
     }   //allowTeleOp
@@ -707,6 +707,7 @@ public class FrcTest extends FrcTeleOp
     protected void driverControllerButtonEvent(FrcXboxController.ButtonType button, boolean pressed)
     {
         boolean passToTeleOp = true;
+        Test test = testChoices.getTest();
 
         if (traceButtonEvents)
         {
@@ -731,8 +732,6 @@ public class FrcTest extends FrcTeleOp
                 break;
 
             case Start:
-                Test test = testChoices.getTest();
-
                 if (test == Test.TUNE_DRIVE_PID)
                 {
                     if (robot.robotBase != null && robot.robotBase.purePursuitDrive != null)
@@ -768,14 +767,6 @@ public class FrcTest extends FrcTeleOp
                         passToTeleOp = false;
                     }
                 }
-                else if (test == Test.TUNE_SUBSYSTEM)
-                {
-                    if (pressed)
-                    {
-                        TrcSubsystem.updateSubsystemParamsFromDashboard();
-                    }
-                    passToTeleOp = false;
-                }
                 break;
 
             default:
@@ -800,6 +791,7 @@ public class FrcTest extends FrcTeleOp
     protected void operatorControllerButtonEvent(FrcXboxController.ButtonType button, boolean pressed)
     {
         boolean passToTeleOp = true;
+        Test test = testChoices.getTest();
 
         if (traceButtonEvents)
         {
@@ -812,15 +804,18 @@ public class FrcTest extends FrcTeleOp
         switch (button)
         {
             case A:
-                if (testChoices.getTest() == Test.TUNE_SUBSYSTEM)
+                if (test == Test.TUNE_SUBSYSTEM)
                 {
                     double[] tuneParams = testChoices.getSubsystemTuneParams();
 
                     if (pressed)
                     {
                         String subsystemName = testChoices.getSubsystemName();
-                        String[] tokens = subsystemName.split(".");
-                        if (robot.shooter != null && tokens[0].equalsIgnoreCase(Shooter.Params.SUBSYSTEM_NAME))
+                        String[] tokens = subsystemName.split("\\.");
+                        robot.globalTracer.traceErr(
+                            moduleName, "subsystemName=%s, tokens=%s", subsystemName, Arrays.toString(tokens));
+                        if (robot.shooter != null && tokens.length > 1 &&
+                            tokens[0].equalsIgnoreCase(Shooter.Params.SUBSYSTEM_NAME))
                         {
                             // Toggle shooter flywheel ON/OFF with velocity specified in Dashboard.
                             if (robot.shooter.getShooterMotor1TargetRPM() != 0.0)
@@ -848,7 +843,7 @@ public class FrcTest extends FrcTeleOp
                 break;
 
             case DpadUp:
-                if (testChoices.getTest() == Test.TUNE_SUBSYSTEM)
+                if (test == Test.TUNE_SUBSYSTEM)
                 {
                     if (pressed)
                     {
@@ -870,7 +865,7 @@ public class FrcTest extends FrcTeleOp
                 break;
 
             case DpadDown:
-                if (testChoices.getTest() == Test.TUNE_SUBSYSTEM)
+                if (test == Test.TUNE_SUBSYSTEM)
                 {
                     if (pressed)
                     {
@@ -894,7 +889,28 @@ public class FrcTest extends FrcTeleOp
             case DpadLeft:
             case DpadRight:
             case Back:
+                break;
+
             case Start:
+                if (test == Test.TUNE_SUBSYSTEM)
+                {
+                    if (pressed)
+                    {
+                        if (operatorAltFunc)
+                        {
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Populate tune parameters subsystem in test.");
+                            TrcSubsystem.updateSubsystemParamsToDashboard();
+                        }
+                        else
+                        {
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Commit tune parameters to subsystem in test.");
+                            TrcSubsystem.updateSubsystemParamsFromDashboard();
+                        }
+                    }
+                    passToTeleOp = false;
+                }
+                break;
+
             default:
                 break;
         }

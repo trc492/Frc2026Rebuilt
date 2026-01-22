@@ -131,7 +131,8 @@ public class Shooter extends TrcSubsystem
         public static final double SHOOT_MOTOR_REV_PER_COUNT    = 1.0/SHOOT_MOTOR_GEAR_RATIO;
         public static final double SHOOT_MOTOR_MAX_VEL          = 6000.0;
 
-        // 01/20/2026: SWPid - 0.2, 0.0, 0.0, 0.015, 0.0
+        // 01/20/2026: SWPid(0.2, 0.0, 0.0, 0.015, 0.0)
+        // 01/21/2026: NativePid(0.3, 0.0, 0.0, 0.101, 0.0)
         public static final double SHOOT_MOTOR_PID_KP           = 0.3;
         public static final double SHOOT_MOTOR_PID_KI           = 0.0;
         public static final double SHOOT_MOTOR_PID_KD           = 0.0;
