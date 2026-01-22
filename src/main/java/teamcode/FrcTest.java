@@ -812,9 +812,7 @@ public class FrcTest extends FrcTeleOp
                     {
                         String subsystemName = testChoices.getSubsystemName();
                         String[] tokens = subsystemName.split("\\.");
-                        robot.globalTracer.traceErr(
-                            moduleName, "subsystemName=%s, tokens=%s", subsystemName, Arrays.toString(tokens));
-                        if (robot.shooter != null && tokens.length > 1 &&
+                        if (robot.shooter != null && tokens.length > 0 &&
                             tokens[0].equalsIgnoreCase(Shooter.Params.SUBSYSTEM_NAME))
                         {
                             // Toggle shooter flywheel ON/OFF with velocity specified in Dashboard.
