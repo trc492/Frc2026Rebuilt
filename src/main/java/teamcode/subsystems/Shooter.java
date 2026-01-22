@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frclib.driverio.FrcDashboard;
 import frclib.motor.FrcMotorActuator.MotorType;
 import frclib.subsystem.FrcShooter;
+import teamcode.FrcTest;
 import teamcode.Robot;
 import teamcode.RobotParams;
 import trclib.dataprocessor.TrcLookupTable;
@@ -954,6 +955,41 @@ public class Shooter extends TrcSubsystem
     @Override
     public void updateParamsToDashboard()
     {
+        String subsystemName = FrcTest.testChoices.getSubsystemName();
+
+        if (!subsystemName.isEmpty())
+        {
+            if (subsystemName.equalsIgnoreCase(Params.SHOOTER_PRIMARY_MOTOR_NAME))
+            {
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_PARAM0, Params.SHOOT_MOTOR_PID_KP);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_PARAM1, Params.SHOOT_MOTOR_PID_KI);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_PARAM2, Params.SHOOT_MOTOR_PID_KD);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_PARAM3, Params.SHOOT_MOTOR_PID_KF);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_PARAM4, Params.SHOOT_MOTOR_PID_IZONE);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_PARAM5, Params.SHOOT_PID_TOLERANCE_RPM);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_PARAM6, 0.0);
+            }
+            else if (subsystemName.equalsIgnoreCase(Params.PAN_MOTOR_NAME))
+            {
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_PARAM0, Params.PAN_MOTOR_PID_KP);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_PARAM1, Params.PAN_MOTOR_PID_KI);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_PARAM2, Params.PAN_MOTOR_PID_KD);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_PARAM3, Params.PAN_MOTOR_PID_KF);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_PARAM4, Params.PAN_MOTOR_PID_IZONE);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_PARAM5, Params.PAN_PID_TOLERANCE);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_PARAM6, 0.0);
+            }
+            else if (subsystemName.equalsIgnoreCase(Params.TILT_MOTOR_NAME))
+            {
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_PARAM0, Params.TILT_MOTOR_PID_KP);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_PARAM1, Params.TILT_MOTOR_PID_KI);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_PARAM2, Params.TILT_MOTOR_PID_KD);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_PARAM3, Params.TILT_MOTOR_PID_KF);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_PARAM4, Params.TILT_MOTOR_PID_IZONE);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_PARAM5, Params.TILT_PID_TOLERANCE);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_PARAM6, 0.0);
+            }
+        }
     }   //updateParamsToDashboard
 
     /**
@@ -962,6 +998,38 @@ public class Shooter extends TrcSubsystem
     @Override
     public void updateParamsFromDashboard()
     {
+        String subsystemName = FrcTest.testChoices.getSubsystemName();
+
+        if (!subsystemName.isEmpty())
+        {
+            double[] tuneParams = FrcTest.testChoices.getSubsystemTuneParams();
+            TrcMotor.PidParams pidParams = new TrcMotor.PidParams()
+                .setPidCoefficients(
+                    tuneParams[0], tuneParams[1],  tuneParams[2], tuneParams[3], tuneParams[4])
+                .setPidControlParams(tuneParams[5]/60.0, false);
+            boolean foundMatch = false;
+
+            if (subsystemName.equalsIgnoreCase(Params.SHOOTER_PRIMARY_MOTOR_NAME))
+            {
+                shooter.shooterMotor1.setVelocityPidParameters(pidParams, null);
+                foundMatch = true;
+            }
+            else if (subsystemName.equalsIgnoreCase(Params.PAN_MOTOR_NAME))
+            {
+                shooter.panMotor.setPositionPidParameters(pidParams, null);
+                foundMatch = true;
+            }
+            else if (subsystemName.equalsIgnoreCase(Params.TILT_MOTOR_NAME))
+            {
+                shooter.tiltMotor.setPositionPidParameters(pidParams, null);
+                foundMatch = true;
+            }
+
+            if (foundMatch)
+            {
+                shooter.tracer.traceInfo(instanceName, "Tune %s: PidParams=%s", subsystemName, pidParams);
+            }
+        }
     }   //updateParamsFromDashboard
 
 }   //class Shooter

@@ -39,7 +39,6 @@ import trclib.command.CmdPidDrive;
 import trclib.command.CmdTimedDrive;
 import trclib.controller.TrcPidController;
 import trclib.dataprocessor.TrcUtil;
-import trclib.motor.TrcMotor;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcRobot;
 import trclib.robotcore.TrcRobot.RunMode;
@@ -123,7 +122,7 @@ public class FrcTest extends FrcTeleOp
      * 4. Add a getter method for the new choice.
      * 5. Add an entry of the new choice to the toString method.
      */
-    class TestChoices
+    public static class TestChoices
     {
         private final FrcUserChoices userChoices = new FrcUserChoices();
         private final FrcChoiceMenu<Test> testMenu;
@@ -324,7 +323,7 @@ public class FrcTest extends FrcTeleOp
     //
     // Global objects.
     //
-    private final TestChoices testChoices = new TestChoices();
+    public static final TestChoices testChoices = new TestChoices();
     private TrcRobot.RobotCommand testCommand;
     // Drive Speed Test.
     private double maxDriveVelocity = 0.0;
@@ -773,24 +772,7 @@ public class FrcTest extends FrcTeleOp
                 {
                     if (pressed)
                     {
-                        String subsystemName = testChoices.getSubsystemName();
-                        if (!subsystemName.isEmpty())
-                        {
-                            String[] tokens = subsystemName.split("\\.");
-                            String subComponent = tokens.length > 1 && !tokens[1].isEmpty()? tokens[1]: null;
-                            TrcSubsystem subsystem = TrcSubsystem.getSubsystem(tokens[0]);
-                            double[] tuneParams = testChoices.getSubsystemTuneParams();
-
-                            robot.globalTracer.traceInfo(
-                                moduleName,
-                                "Tuning Subsystem " + tokens[0] + ":" +
-                                "\n\tsubComponent=" + subComponent +
-                                "\n\ttuneParams=" + Arrays.toString(tuneParams));
-                            if (subsystem != null)
-                            {
-                                TrcSubsystem.updateSubsystemParamsFromDashboard();
-                            }
-                        }
+                        TrcSubsystem.updateSubsystemParamsFromDashboard();
                     }
                     passToTeleOp = false;
                 }
@@ -834,46 +816,23 @@ public class FrcTest extends FrcTeleOp
                 {
                     double[] tuneParams = testChoices.getSubsystemTuneParams();
 
-                    if (operatorAltFunc)
+                    if (pressed)
                     {
-                        if (pressed)
+                        String subsystemName = testChoices.getSubsystemName();
+                        String[] tokens = subsystemName.split(".");
+                        if (robot.shooter != null && tokens[0].equalsIgnoreCase(Shooter.Params.SUBSYSTEM_NAME))
                         {
-                            if (robot.shooter.shooterMotor1.getPower() != 0.0)
+                            // Toggle shooter flywheel ON/OFF with velocity specified in Dashboard.
+                            if (robot.shooter.getShooterMotor1TargetRPM() != 0.0)
                             {
                                 robot.globalTracer.traceInfo(moduleName, ">>>>> Tune Shooter: Stop!");
-                                robot.shooter.shooterMotor1.setPower(0.0);
+                                robot.shooter.stopShooter();
                             }
                             else
                             {
-                                robot.globalTracer.traceInfo(moduleName, ">>>>> Tune Shooter: setPower=%f", tuneParams[6]);
-                                robot.shooter.shooterMotor1.setPower(tuneParams[6]);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (pressed)
-                        {
-                            String subsystemName = testChoices.getSubsystemName();
-                            if (subsystemName.startsWith(Shooter.Params.SUBSYSTEM_NAME) && robot.shooter != null)
-                            {
-                                // Toggle shooter flywheel ON/OFF with velocity specified in Dashboard.
-                                if (robot.shooter.getShooterMotor1TargetRPM() != 0.0)
-                                {
-                                    robot.globalTracer.traceInfo(moduleName, ">>>>> Tune Shooter: Stop!");
-                                    robot.shooter.stopShooter();
-                                }
-                                else
-                                {
-                                    TrcMotor.PidParams pidParams = new TrcMotor.PidParams()
-                                        .setPidCoefficients(
-                                            tuneParams[0], tuneParams[1],  tuneParams[2], tuneParams[3], tuneParams[4])
-                                        .setPidControlParams(tuneParams[5]/60.0, true);
-                                    robot.globalTracer.traceInfo(
-                                        moduleName, ">>>>> Tune Shooter: PidParams=%s, vel=%f", pidParams, tuneParams[6]);
-                                    robot.shooter.shooterMotor1.setVelocityPidParameters(pidParams, null);
-                                    robot.shooter.setShooterMotorRPM(tuneParams[6], null);
-                                }
+                                robot.globalTracer.traceInfo(
+                                    moduleName, ">>>>> Tune Shooter: vel=%f", tuneParams[6]);
+                                robot.shooter.setShooterMotorRPM(tuneParams[6], null);
                             }
                         }
                     }
@@ -886,8 +845,52 @@ public class FrcTest extends FrcTeleOp
             case Y:
             case LeftBumper:
             case RightBumper:
+                break;
+
             case DpadUp:
+                if (testChoices.getTest() == Test.TUNE_SUBSYSTEM)
+                {
+                    if (pressed)
+                    {
+                        String subsystemName = testChoices.getSubsystemName();
+
+                        if (robot.shooter.panMotor != null &&
+                            subsystemName.equalsIgnoreCase(Shooter.Params.PAN_MOTOR_NAME))
+                        {
+                            robot.shooter.panMotor.presetPositionUp(moduleName, Shooter.Params.PAN_POWER_LIMIT);
+                        }
+                        else if (robot.shooter.tiltMotor != null &&
+                                 subsystemName.equalsIgnoreCase(Shooter.Params.TILT_MOTOR_NAME))
+                        {
+                            robot.shooter.tiltMotor.presetPositionUp(moduleName, Shooter.Params.TILT_POWER_LIMIT);
+                        }
+                    }
+                    passToTeleOp = false;
+                }
+                break;
+
             case DpadDown:
+                if (testChoices.getTest() == Test.TUNE_SUBSYSTEM)
+                {
+                    if (pressed)
+                    {
+                        String subsystemName = testChoices.getSubsystemName();
+
+                        if (robot.shooter.panMotor != null &&
+                            subsystemName.equalsIgnoreCase(Shooter.Params.PAN_MOTOR_NAME))
+                        {
+                            robot.shooter.panMotor.presetPositionDown(moduleName, Shooter.Params.PAN_POWER_LIMIT);
+                        }
+                        else if (robot.shooter.tiltMotor != null &&
+                                 subsystemName.equalsIgnoreCase(Shooter.Params.TILT_MOTOR_NAME))
+                        {
+                            robot.shooter.tiltMotor.presetPositionDown(moduleName, Shooter.Params.TILT_POWER_LIMIT);
+                        }
+                    }
+                    passToTeleOp = false;
+                }
+                break;
+
             case DpadLeft:
             case DpadRight:
             case Back:
