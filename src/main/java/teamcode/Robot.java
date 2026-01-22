@@ -131,12 +131,15 @@ public class Robot extends FrcRobot
         dashboard = new Dashboard().getDashboard();
         traceLogOpened = false;
         // Create and initialize inputs.
-        driverController = new FrcXboxController(
-            "DriverController", RobotParams.HwConfig.XBOX_DRIVER_CONTROLLER);
-        driverController.setLeftStickInverted(false, true);
-        driverController.setRightStickInverted(false, true);
+        if (RobotParams.Preferences.hasDriverGameController)
+        {
+            driverController = new FrcXboxController(
+                "DriverController", RobotParams.HwConfig.XBOX_DRIVER_CONTROLLER);
+            driverController.setLeftStickInverted(false, true);
+            driverController.setRightStickInverted(false, true);
+        }
 
-        if (!RobotParams.Preferences.useOneGameController)
+        if (RobotParams.Preferences.hasOperatorGameController)
         {
             operatorController = new FrcXboxController(
                 "OperatorController", RobotParams.HwConfig.XBOX_OPERATOR_CONTROLLER);
