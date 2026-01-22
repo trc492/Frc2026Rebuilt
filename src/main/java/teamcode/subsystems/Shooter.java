@@ -131,14 +131,14 @@ public class Shooter extends TrcSubsystem
         public static final double SHOOT_MOTOR_MAX_VEL          = 6000.0;
 
         // 01/20/2026: SWPid - 0.2, 0.0, 0.0, 0.015, 0.0
-        public static final double SHOOT_MOTOR_PID_KP           = 0.2;
+        public static final double SHOOT_MOTOR_PID_KP           = 0.3;
         public static final double SHOOT_MOTOR_PID_KI           = 0.0;
         public static final double SHOOT_MOTOR_PID_KD           = 0.0;
-        public static final double SHOOT_MOTOR_PID_KF           = 0.015;
+        public static final double SHOOT_MOTOR_PID_KF           = 0.101;
         public static final double SHOOT_MOTOR_PID_IZONE        = 0.0;  // in RPS
 
         public static final double SHOOT_PID_TOLERANCE_RPM      = 100.0;
-        public static final boolean SHOOT_SOFTWARE_PID_ENABLED  = true;
+        public static final boolean SHOOT_SOFTWARE_PID_ENABLED  = false;
         public static final double SHOOT_MOTOR_OFF_DELAY        = 0.5;      // in sec
         public static final double SHOOT_VEL_TRIGGER_THRESHOLD  = 350.0;    // in RPM
 
