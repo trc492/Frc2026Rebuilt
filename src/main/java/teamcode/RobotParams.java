@@ -68,6 +68,7 @@ public class RobotParams
         // Master switches for Subsystems
         public static final boolean useSubsystems               = true;
         public static final boolean showSubsystems              = true;
+        public static final String testSubsystemName            = "Shooter.PrimaryMotor";
         // Drive Base Subsystem
         public static final boolean useDriveBase                = false;
         public static final boolean showDriveBaseStatus         = false;

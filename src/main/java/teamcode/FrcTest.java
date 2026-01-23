@@ -179,7 +179,7 @@ public class FrcTest extends FrcTeleOp
             userChoices.addNumber(DBKEY_TEST_TARGET_VEL, 0.0);
             userChoices.addNumber(DBKEY_TEST_ROBOT_POS, 0.0);
             userChoices.addNumber(DBKEY_TEST_TARGET_POS, 0.0);
-            userChoices.addString(DBKEY_TEST_SUBSYSTEM_NAME, "");
+            userChoices.addString(DBKEY_TEST_SUBSYSTEM_NAME, RobotParams.Preferences.testSubsystemName);
             userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_PARAM0, 0.0);
             userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_PARAM1, 0.0);
             userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_PARAM2, 0.0);

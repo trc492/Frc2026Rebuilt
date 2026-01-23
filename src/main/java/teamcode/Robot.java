@@ -217,6 +217,7 @@ public class Robot extends FrcRobot
                     shooterSubsystem = new Shooter(this);
                     shooter = shooterSubsystem.getShooter();
                 }
+                TrcSubsystem.updateSubsystemParamsToDashboard();
 
                 // Create autotasks.
 
