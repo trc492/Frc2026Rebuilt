@@ -22,7 +22,6 @@
 
 package teamcode;
 
-import java.util.Arrays;
 import java.util.Locale;
 
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -39,6 +38,7 @@ import trclib.command.CmdPidDrive;
 import trclib.command.CmdTimedDrive;
 import trclib.controller.TrcPidController;
 import trclib.dataprocessor.TrcUtil;
+import trclib.motor.TrcMotor;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcRobot;
 import trclib.robotcore.TrcRobot.RunMode;
@@ -74,14 +74,20 @@ public class FrcTest extends FrcTeleOp
     private static final String DBKEY_TEST_TURN_KD = "Test/TurnKd";
     private static final String DBKEY_TEST_TURN_KF = "Test/TurnKf";
     private static final String DBKEY_TEST_TURN_IZONE = "Test/TurnIZone";
+
     private static final String DBKEY_TEST_SUBSYSTEM_NAME = "Test/SubsystemName";
-    public static final String DBKEY_TEST_SUBSYSTEM_PARAM0 = "Test/SubsystemParam0";
-    public static final String DBKEY_TEST_SUBSYSTEM_PARAM1 = "Test/SubsystemParam1";
-    public static final String DBKEY_TEST_SUBSYSTEM_PARAM2 = "Test/SubsystemParam2";
-    public static final String DBKEY_TEST_SUBSYSTEM_PARAM3 = "Test/SubsystemParam3";
-    public static final String DBKEY_TEST_SUBSYSTEM_PARAM4 = "Test/SubsystemParam4";
-    public static final String DBKEY_TEST_SUBSYSTEM_PARAM5 = "Test/SubsystemParam5";
-    public static final String DBKEY_TEST_SUBSYSTEM_PARAM6 = "Test/SubsystemParam6";
+    public static final String DBKEY_TEST_SUBSYSTEM_KP = "Test/SubsystemKp";
+    public static final String DBKEY_TEST_SUBSYSTEM_KI = "Test/SubsystemKi";
+    public static final String DBKEY_TEST_SUBSYSTEM_KD = "Test/SubsystemKd";
+    public static final String DBKEY_TEST_SUBSYSTEM_KF = "Test/SubsystemKf";
+    public static final String DBKEY_TEST_SUBSYSTEM_IZONE = "Test/SubsystemIZone";
+    public static final String DBKEY_TEST_SUBSYSTEM_TOLERANCE = "Test/SubsystemTolerance";
+    public static final String DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID = "Test/SubsystemSoftwarePid";
+    public static final String DBKEY_TEST_SUBSYSTEM_TARGET_PARAM = "Test/SubsystemTargetParam";
+
+    public static final String DBKEY_TEST_SUBSYSTEM_INPUT = "Test/SubsystemInput";
+    public static final String DBKEY_TEST_SUBSYSTEM_TARGET = "Test/SubsystemTarget";
+
     private static final String DBKEY_TEST_MAX_VELOCITY = "Test/MaxVelocity";
     private static final String DBKEY_TEST_MAX_ACCELERATION = "Test/MaxAcceleration";
     private static final String DBKEY_TEST_MAX_DECELERATION = "Test/MaxDeceleration";
@@ -179,14 +185,16 @@ public class FrcTest extends FrcTeleOp
             userChoices.addNumber(DBKEY_TEST_TARGET_VEL, 0.0);
             userChoices.addNumber(DBKEY_TEST_ROBOT_POS, 0.0);
             userChoices.addNumber(DBKEY_TEST_TARGET_POS, 0.0);
+
             userChoices.addString(DBKEY_TEST_SUBSYSTEM_NAME, RobotParams.Preferences.testSubsystemName);
-            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_PARAM0, 0.0);
-            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_PARAM1, 0.0);
-            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_PARAM2, 0.0);
-            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_PARAM3, 0.0);
-            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_PARAM4, 0.0);
-            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_PARAM5, 0.0);
-            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_PARAM6, 0.0);
+            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_KP, 0.0);
+            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_KI, 0.0);
+            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_KD, 0.0);
+            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_KF, 0.0);
+            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_IZONE, 0.0);
+            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_TOLERANCE, 0.0);
+            userChoices.addBoolean(DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, false);
+            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
         }   //TestChoices
 
         //
@@ -278,19 +286,29 @@ public class FrcTest extends FrcTeleOp
             return userChoices.getUserString(DBKEY_TEST_SUBSYSTEM_NAME);
         }   //getSubsystemName
 
-        public double[] getSubsystemTuneParams()
+        public TrcPidController.PidCoefficients getSubsystemPidCoefficients()
         {
-            return new double[]
-                {
-                    userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_PARAM0),
-                    userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_PARAM1),
-                    userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_PARAM2),
-                    userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_PARAM3),
-                    userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_PARAM4),
-                    userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_PARAM5),
-                    userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_PARAM6)
-                };
-        }   //getSubsystemTuneParams
+            return new TrcPidController.PidCoefficients(
+                userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_KP),
+                userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_KI),
+                userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_KD),
+                userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_KF),
+                userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_IZONE));
+        }   //getSubsystemPidCoefficients
+
+        public TrcMotor.PidParams getSubsystemPidParameters()
+        {
+            return new TrcMotor.PidParams()
+                        .setPidCoefficients(getSubsystemPidCoefficients())
+                        .setPidControlParams(
+                            userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_TOLERANCE),
+                            userChoices.getUserBoolean(DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID));
+        }   //getSubsystemPidParameters
+
+        public double getSubsystemTargetParam()
+        {
+            return userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_TARGET_PARAM);
+        }   //getSubsystemTargetParam
 
         @Override
         public String toString()
@@ -311,11 +329,11 @@ public class FrcTest extends FrcTeleOp
                 "maxAcceleration=\"%.1f\" " +
                 "maxDeceleration=\"%.1f\" " +
                 "subsystemName=\"%s\" " +
-                "subsystemTuneParams=\"%s\" ",
+                "subsystemPidParams=\"%s\" ",
                 getTest(), getXTarget(), getYTarget(), getTurnTarget(), getDrivePower(), getTurnPower(),
                 getDriveTime(), getXPidCoefficients(), getYPidCoefficients(), getTurnPidCoefficients(),
                 getMaxVelocity(), getMaxAcceleration(), getMaxDeceleration(), getSubsystemName(),
-                Arrays.toString(getSubsystemTuneParams()));
+                getSubsystemPidParameters());
         }   //toString
 
     }   //class TestChocies
@@ -806,8 +824,6 @@ public class FrcTest extends FrcTeleOp
             case A:
                 if (test == Test.TUNE_SUBSYSTEM)
                 {
-                    double[] tuneParams = testChoices.getSubsystemTuneParams();
-
                     if (pressed)
                     {
                         String subsystemName = testChoices.getSubsystemName();
@@ -823,9 +839,10 @@ public class FrcTest extends FrcTeleOp
                             }
                             else
                             {
+                                double shooterVel = testChoices.getSubsystemTargetParam();
                                 robot.globalTracer.traceInfo(
-                                    moduleName, ">>>>> Tune Shooter: vel=%f", tuneParams[6]);
-                                robot.shooter.setShooterMotorRPM(tuneParams[6], null);
+                                    moduleName, ">>>>> Tune Shooter: vel=%f", shooterVel);
+                                robot.shooter.setShooterMotorRPM(shooterVel, null);
                             }
                         }
                     }
