@@ -69,6 +69,7 @@ public class RobotParams
         public static final boolean useSubsystems               = true;
         public static final boolean showSubsystems              = true;
         public static final boolean showSubsystemGraphs         = true;
+        public static final boolean showIntakeStatus            = false;
         public static final String testSubsystemName            = "Shooter.PrimaryMotor";
         // Drive Base Subsystem
         public static final boolean useDriveBase                = false;
@@ -114,6 +115,9 @@ public class RobotParams
         public static final int CANID_SHOOTER_RIGHT_MOTOR       = 8;    //Gray
         public static final int CANID_PAN_MOTOR                 = 9;    //White
         public static final int CANID_TILT_MOTOR                = 17;   //Purple
+        public static final int CANID_INTAKE_MOTOR              = 18; // TODO: Determine this
+        public static final int CANID_INTAKE_DEPLOYER_MOTOR     = 19; // TODO: Determine this
+        public static final int CANID_INTAKE_FOLLOWER_MOTOR     = 20; // TODO: Determine this
 
         public static final String CANBUS_CANIVORE              = "2026_CANivore";
 

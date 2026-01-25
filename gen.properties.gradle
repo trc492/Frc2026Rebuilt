@@ -39,7 +39,7 @@ task generateProperties {
     outputs.dir outputDir
 
     // Define local variables to hold the values, and also register them as inputs
-    def buildHostValue = System.getenv('COMPUTERNAME')
+    def buildHostValue = System.getenv('COMPUTERNAME') ?: InetAddress.localHost.hostName
     def buildUserValue = System.getProperty('user.name')
     def buildTimestampValue = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())
     def gitBranchValue = getGitBranch() // Assuming getGitBranch() is defined elsewhere
