@@ -96,44 +96,185 @@ public class Shooter extends TrcSubsystem
 
     public static final class Params
     {
+        // Right Shooter
+
         public static final String SUBSYSTEM_NAME               = "Shooter";
         public static final boolean NEED_ZERO_CAL               = false;
 
-        public static final boolean HAS_TWO_SHOOTER_MOTORS      = true;
-        public static final boolean HAS_PAN_MOTOR               = false;
-        public static final boolean HAS_TILT_MOTOR              = false;
-        public static final boolean HAS_LAUNCHER                = false;
+        public static final boolean R_SHOOTER_HAS_TWO_SHOOTER_MOTORS      = true;
+        public static final boolean R_SHOOTER_HAS_TILT_MOTOR              = false;
+        public static final boolean R_SHOOTER_HAS_LAUNCHER                = false;
 
-        public static final String SHOOTER_MOTOR_CANBUS         = RobotParams.HwConfig.CANBUS_CANIVORE;
+        public static final String R_SHOOTER_MOTOR_CANBUS         = RobotParams.HwConfig.CANBUS_CANIVORE;
         // Shooter Motor
-        public static final String SHOOTER_PRIMARY_MOTOR_NAME   = SUBSYSTEM_NAME + ".PrimaryMotor";
-        public static final String SHOOTER_FOLLOWER_MOTOR_NAME  = SUBSYSTEM_NAME + ".FollowerMotor";
-        public static final MotorType SHOOTER_MOTOR_TYPE        = MotorType.CanTalonFx;
-        public static final int SHOOTER_PRIMARY_MOTOR_CANID     = RobotParams.HwConfig.CANID_SHOOTER_LEFT_MOTOR;
-        public static final int SHOOTER_FOLLOWER_MOTOR_CANID    = RobotParams.HwConfig.CANID_SHOOTER_RIGHT_MOTOR;
-        public static final boolean SHOOTER_PRIMARY_MOTOR_INVERTED = false;
-        public static final boolean SHOOTER_FOLLOWER_MOTOR_INVERTED = true;
+        public static final String R_SHOOTER_PRIMARY_MOTOR_NAME   = SUBSYSTEM_NAME + ".RightPrimaryMotor";
+        public static final String R_SHOOTER_FOLLOWER_MOTOR_NAME  = SUBSYSTEM_NAME + ".RightFollowerMotor";
+        public static final MotorType R_SHOOTER_MOTOR_TYPE        = MotorType.CanTalonFx;
+        public static final int R_SHOOTER_PRIMARY_MOTOR_CANID     = RobotParams.HwConfig.CANID_SHOOTER_LEFT_MOTOR;
+        public static final int R_SHOOTER_FOLLOWER_MOTOR_CANID    = RobotParams.HwConfig.CANID_SHOOTER_RIGHT_MOTOR;
+        public static final boolean R_SHOOTER_PRIMARY_MOTOR_INVERTED = false;
+        public static final boolean R_SHOOTER_FOLLOWER_MOTOR_INVERTED = true;
 
         // Assume shooter motor1 and motor2 are the same type and have same gear ratio but they could have different
         // PID coefficients due to different motor strengths and frictions.
-        public static final double SHOOT_MOTOR_GEAR_RATIO       = 18.0/12.0;    // Load/Motor
-        public static final double SHOOT_MOTOR_REV_PER_COUNT    = 1.0/SHOOT_MOTOR_GEAR_RATIO;
-        public static final double SHOOT_MOTOR_MAX_VEL          = 6000.0;
+        public static final double R_SHOOT_MOTOR_GEAR_RATIO       = 18.0/12.0;    // Load/Motor
+        public static final double R_SHOOT_MOTOR_REV_PER_COUNT    = 1.0/R_SHOOT_MOTOR_GEAR_RATIO;
+        public static final double R_SHOOT_MOTOR_MAX_VEL          = 6000.0;
 
         // 01/20/2026: SWPid(0.2, 0.0, 0.0, 0.015, 0.0)
         // 01/21/2026: NativePid(0.3, 0.0, 0.0, 0.101, 0.0)
-        public static final double SHOOT_MOTOR_PID_KP           = 0.3;
-        public static final double SHOOT_MOTOR_PID_KI           = 0.0;
-        public static final double SHOOT_MOTOR_PID_KD           = 0.0;
-        public static final double SHOOT_MOTOR_PID_KF           = 0.101;
-        public static final double SHOOT_MOTOR_PID_IZONE        = 0.0;  // in RPS
+        public static final double R_SHOOT_MOTOR_PID_KP           = 0.3;
+        public static final double R_SHOOT_MOTOR_PID_KI           = 0.0;
+        public static final double R_SHOOT_MOTOR_PID_KD           = 0.0;
+        public static final double R_SHOOT_MOTOR_PID_KF           = 0.101;
+        public static final double R_SHOOT_MOTOR_PID_IZONE        = 0.0;  // in RPS
 
-        public static final double SHOOT_PID_TOLERANCE_RPM      = 100.0;
-        public static final boolean SHOOT_SOFTWARE_PID_ENABLED  = false;
-        public static final double SHOOT_MOTOR_OFF_DELAY        = 0.5;      // in sec
-        public static final double SHOOT_VEL_TRIGGER_THRESHOLD  = 350.0;    // in RPM
+        public static final double R_SHOOT_PID_TOLERANCE_RPM      = 100.0;
+        public static final boolean R_SHOOT_SOFTWARE_PID_ENABLED  = false;
+        public static final double R_SHOOT_MOTOR_OFF_DELAY        = 0.5;      // in sec
+        public static final double R_SHOOT_VEL_TRIGGER_THRESHOLD  = 350.0;    // in RPM
+
+        public static double R_TURRET_X_OFFSET                    = 0.0;      // inches from robot center
+        public static double R_TURRET_Y_OFFSET                    = -3.246;   // inches from robot center
+        public static double R_CAM_DISTANCE_FROM_TURRET           = 2.9837;   // inches from turret center
+        public static TrcPose2D R_CAM_POSE_ON_TURRET              = new TrcPose2D(0.0, -R_CAM_DISTANCE_FROM_TURRET, 0.0);
+
+        // Tilt Motor
+        public static final String R_TILT_MOTOR_NAME              = SUBSYSTEM_NAME + ".RightTiltMotor";
+        public static final MotorType R_TILT_MOTOR_TYPE           = MotorType.CanTalonSrx;
+        public static final int R_TILT_MOTOR_CANID                = RobotParams.HwConfig.CANID_TILT_MOTOR;
+        public static final boolean R_TILT_MOTOR_INVERTED         = false;
+
+        public static final double R_TILT_MOTOR_PID_KP            = 0.06;
+        public static final double R_TILT_MOTOR_PID_KI            = 0.005;
+        public static final double R_TILT_MOTOR_PID_KD            = 0.0025;
+        public static final double R_TILT_MOTOR_PID_KF            = 0.0;
+        public static final double R_TILT_MOTOR_PID_IZONE         = 3.0;
+        public static final double R_TILT_PID_TOLERANCE           = 1.0;
+        public static final boolean R_TILT_SOFTWARE_PID_ENABLED   = true;
+
+//        public static final double R_TILT_GEAR_RATIO              = 543.0/56.0;   // Not accurate, why???
+//        public static final double R_TILT_DEG_PER_COUNT           = 360.0/R_TILT__GEAR_RATIO;
+        public static final double R_TILT_DEG_PER_COUNT           = 37.471013190648257044337576357835;
+        public static final double R_TILT_POS_OFFSET              = 25.0;
+        public static final double R_TILT_ENCODER_ZERO_OFFSET     = 0.124848;
+        public static final double R_TILT_POWER_LIMIT             = 1.0;
+        public static final double R_TILT_MIN_POS                 = R_TILT_POS_OFFSET;
+        public static final double R_TILT_MAX_POS                 = 45.0;
+        public static final double R_TILT_POS_PRESET_TOLERANCE    = 2.0;
+        public static final double[] R_TILT_POS_PRESETS           =
+            {R_TILT_MIN_POS, 30.0, 35.0, 40.0, R_TILT_MAX_POS};
+
+        // // Launcher
+        // public static final String LAUNCHER_SERVO_NAME          = SUBSYSTEM_NAME + ".Launcher";
+        // public static final boolean LAUNCHER_SERVO_INVERTED     = false;
+        // public static double LAUNCHER_REST_POS                  = 0.47;
+        // public static double LAUNCHER_LAUNCH_POS                = 1.0;
+        // public static double LAUNCHER_LAUNCH_DURATION           = 0.75;     // in seconds
+        // public static double LAUNCHER_RETRACT_TIME              = 0.10;     // in seconds
+        
+
+        // Left Shooter
+
+        public static final boolean L_SHOOTER_HAS_TWO_SHOOTER_MOTORS      = true;
+        public static final boolean L_SHOOTER_HAS_TILT_MOTOR              = false;
+        public static final boolean L_SHOOTER_HAS_LAUNCHER                = false;
+
+        public static final String L_SHOOTER_MOTOR_CANBUS         = RobotParams.HwConfig.CANBUS_CANIVORE;
+        // Shooter Motor
+        public static final String L_SHOOTER_PRIMARY_MOTOR_NAME   = SUBSYSTEM_NAME + ".LeftPrimaryMotor";
+        public static final String L_SHOOTER_FOLLOWER_MOTOR_NAME  = SUBSYSTEM_NAME + ".LeftFollowerMotor";
+        public static final MotorType L_SHOOTER_MOTOR_TYPE        = MotorType.CanTalonFx;
+        public static final int L_SHOOTER_PRIMARY_MOTOR_CANID     = RobotParams.HwConfig.CANID_SHOOTER_LEFT_MOTOR;
+        public static final int L_SHOOTER_FOLLOWER_MOTOR_CANID    = RobotParams.HwConfig.CANID_SHOOTER_RIGHT_MOTOR;
+        public static final boolean L_SHOOTER_PRIMARY_MOTOR_INVERTED = false;
+        public static final boolean L_SHOOTER_FOLLOWER_MOTOR_INVERTED = true;
+
+        // Assume shooter motor1 and motor2 are the same type and have same gear ratio but they could have different
+        // PID coefficients due to different motor strengths and frictions.
+        public static final double L_SHOOT_MOTOR_GEAR_RATIO       = 18.0/12.0;    // Load/Motor
+        public static final double L_SHOOT_MOTOR_REV_PER_COUNT    = 1.0/L_SHOOT_MOTOR_GEAR_RATIO;
+        public static final double L_SHOOT_MOTOR_MAX_VEL          = 6000.0;
+
+        // 01/20/2026: SWPid(0.2, 0.0, 0.0, 0.015, 0.0)
+        // 01/21/2026: NativePid(0.3, 0.0, 0.0, 0.101, 0.0)
+        public static final double L_SHOOT_MOTOR_PID_KP           = 0.3;
+        public static final double L_SHOOT_MOTOR_PID_KI           = 0.0;
+        public static final double L_SHOOT_MOTOR_PID_KD           = 0.0;
+        public static final double L_SHOOT_MOTOR_PID_KF           = 0.101;
+        public static final double L_SHOOT_MOTOR_PID_IZONE        = 0.0;  // in RPS
+
+        public static final double L_SHOOT_PID_TOLERANCE_RPM      = 100.0;
+        public static final boolean L_SHOOT_SOFTWARE_PID_ENABLED  = false;
+        public static final double L_SHOOT_MOTOR_OFF_DELAY        = 0.5;      // in sec
+        public static final double L_SHOOT_VEL_TRIGGER_THRESHOLD  = 350.0;    // in RPM
 
         // Pan Motor
+        public static final String L_PAN_MOTOR_NAME               = SUBSYSTEM_NAME + ".LeftPanMotor";
+        public static final MotorType L_PAN_MOTOR_TYPE            = MotorType.CanTalonFx;
+        public static final int L_PAN_MOTOR_CANID                 = RobotParams.HwConfig.CANID_PAN_MOTOR;
+        public static final boolean L_PAN_MOTOR_INVERTED          = true;
+
+        public static final double L_PAN_MOTOR_PID_KP             = 0.03;
+        public static final double L_PAN_MOTOR_PID_KI             = 0.02;
+        public static final double L_PAN_MOTOR_PID_KD             = 0.0;
+        public static final double L_PAN_MOTOR_PID_KF             = 0.0;
+        public static final double L_PAN_MOTOR_PID_IZONE          = 5.0;
+        public static final double L_PAN_PID_TOLERANCE            = 1.0;
+        public static final boolean L_PAN_SOFTWARE_PID_ENABLED    = true;
+
+        public static final double L_PAN_GEAR_RATIO               = 75.0/26.0;
+        public static final double L_PAN_DEG_PER_COUNT            = 360.0;
+        public static final double L_PAN_POS_OFFSET               = 92.0;
+        public static final double L_PAN_ENCODER_ZERO_OFFSET      = 0.0;
+        public static final double L_PAN_POWER_LIMIT              = 1.0;
+        public static final double L_PAN_MIN_POS                  = -260.0;
+        public static final double L_PAN_MAX_POS                  = 85.0;
+        public static final double L_PAN_POS_PRESET_TOLERANCE     = 5.0;
+        public static final double[] L_PAN_POS_PRESETS            =
+            {
+                L_PAN_MIN_POS, -330.0, -300.0, -270.0, -240.0, -210.0, -180.0, -150.0, -120.0, -90.0, -60.0, -30.0,
+                0.0, 30.0, 60.0, L_PAN_MAX_POS
+            };
+
+        public static final double L_PAN_ZERO_CAL_POWER           = 0.3;
+        public static final double L_PAN_STALL_MIN_POWER          = Math.abs(L_PAN_ZERO_CAL_POWER);
+        public static final double L_PAN_STALL_TOLERANCE          = 0.1;
+        public static final double L_PAN_STALL_TIMEOUT            = 0.1;
+        public static final double L_PAN_STALL_RESET_TIMEOUT      = 0.0;
+
+        public static double L_TURRET_X_OFFSET                    = 0.0;      // inches from robot center
+        public static double L_TURRET_Y_OFFSET                    = -3.246;   // inches from robot center
+        public static double L_CAM_DISTANCE_FROM_TURRET           = 2.9837;   // inches from turret center
+        public static TrcPose2D L_CAM_POSE_ON_TURRET              = new TrcPose2D(0.0, -L_CAM_DISTANCE_FROM_TURRET, 0.0);
+
+        // Tilt Motor
+        public static final String L_TILT_MOTOR_NAME              = SUBSYSTEM_NAME + ".LeftTiltMotor";
+        public static final MotorType L_TILT_MOTOR_TYPE           = MotorType.CanTalonSrx;
+        public static final int L_TILT_MOTOR_CANID                = RobotParams.HwConfig.CANID_TILT_MOTOR;
+        public static final boolean L_TILT_MOTOR_INVERTED         = false;
+
+        public static final double L_TILT_MOTOR_PID_KP            = 0.06;
+        public static final double L_TILT_MOTOR_PID_KI            = 0.005;
+        public static final double L_TILT_MOTOR_PID_KD            = 0.0025;
+        public static final double L_TILT_MOTOR_PID_KF            = 0.0;
+        public static final double L_TILT_MOTOR_PID_IZONE         = 3.0;
+        public static final double L_TILT_PID_TOLERANCE           = 1.0;
+        public static final boolean L_TILT_SOFTWARE_PID_ENABLED   = true;
+
+//        public static final double L_TILT_GEAR_RATIO              = 543.0/56.0;   // Not accurate, why???
+//        public static final double L_TILT_DEG_PER_COUNT           = 360.0/L_TILT__GEAR_RATIO;
+        public static final double L_TILT_DEG_PER_COUNT           = 37.471013190648257044337576357835;
+        public static final double L_TILT_POS_OFFSET              = 25.0;
+        public static final double L_TILT_ENCODER_ZERO_OFFSET     = 0.124848;
+        public static final double L_TILT_POWER_LIMIT             = 1.0;
+        public static final double L_TILT_MIN_POS                 = L_TILT_POS_OFFSET;
+        public static final double L_TILT_MAX_POS                 = 45.0;
+        public static final double L_TILT_POS_PRESET_TOLERANCE    = 2.0;
+        public static final double[] L_TILT_POS_PRESETS           =
+            {L_TILT_MIN_POS, 30.0, 35.0, 40.0, L_TILT_MAX_POS};
+
+        // Combined Pan Motor
         public static final String PAN_MOTOR_NAME               = SUBSYSTEM_NAME + ".PanMotor";
         public static final MotorType PAN_MOTOR_TYPE            = MotorType.CanTalonFx;
         public static final int PAN_MOTOR_CANID                 = RobotParams.HwConfig.CANID_PAN_MOTOR;
@@ -167,37 +308,6 @@ public class Shooter extends TrcSubsystem
         public static final double PAN_STALL_TIMEOUT            = 0.1;
         public static final double PAN_STALL_RESET_TIMEOUT      = 0.0;
 
-        public static double TURRET_X_OFFSET                    = 0.0;      // inches from robot center
-        public static double TURRET_Y_OFFSET                    = -3.246;   // inches from robot center
-        public static double CAM_DISTANCE_FROM_TURRET           = 2.9837;   // inches from turret center
-        public static TrcPose2D CAM_POSE_ON_TURRET              = new TrcPose2D(0.0, -CAM_DISTANCE_FROM_TURRET, 0.0);
-
-        // Tilt Motor
-        public static final String TILT_MOTOR_NAME              = SUBSYSTEM_NAME + ".TiltMotor";
-        public static final MotorType TILT_MOTOR_TYPE           = MotorType.CanTalonSrx;
-        public static final int TILT_MOTOR_CANID                = RobotParams.HwConfig.CANID_TILT_MOTOR;
-        public static final boolean TILT_MOTOR_INVERTED         = false;
-
-        public static final double TILT_MOTOR_PID_KP            = 0.06;
-        public static final double TILT_MOTOR_PID_KI            = 0.005;
-        public static final double TILT_MOTOR_PID_KD            = 0.0025;
-        public static final double TILT_MOTOR_PID_KF            = 0.0;
-        public static final double TILT_MOTOR_PID_IZONE         = 3.0;
-        public static final double TILT_PID_TOLERANCE           = 1.0;
-        public static final boolean TILT_SOFTWARE_PID_ENABLED   = true;
-
-//        public static final double TILT_GEAR_RATIO              = 543.0/56.0;   // Not accurate, why???
-//        public static final double TILT_DEG_PER_COUNT           = 360.0/TILT_GEAR_RATIO;
-        public static final double TILT_DEG_PER_COUNT           = 37.471013190648257044337576357835;
-        public static final double TILT_POS_OFFSET              = 25.0;
-        public static final double TILT_ENCODER_ZERO_OFFSET     = 0.124848;
-        public static final double TILT_POWER_LIMIT             = 1.0;
-        public static final double TILT_MIN_POS                 = TILT_POS_OFFSET;
-        public static final double TILT_MAX_POS                 = 45.0;
-        public static final double TILT_POS_PRESET_TOLERANCE    = 2.0;
-        public static final double[] TILT_POS_PRESETS           =
-            {TILT_MIN_POS, 30.0, 35.0, 40.0, TILT_MAX_POS};
-
         // // Launcher
         // public static final String LAUNCHER_SERVO_NAME          = SUBSYSTEM_NAME + ".Launcher";
         // public static final boolean LAUNCHER_SERVO_INVERTED     = false;
@@ -207,28 +317,28 @@ public class Shooter extends TrcSubsystem
         // public static double LAUNCHER_RETRACT_TIME              = 0.10;     // in seconds
     }   //class Params
 
-    public static final TrcMotor.PidParams shootMotorPidParams = new TrcMotor.PidParams()
+    public static final TrcMotor.PidParams rShootMotorPidParams = new TrcMotor.PidParams()
         .setPidCoefficients(
-            Params.SHOOT_MOTOR_PID_KP, Params.SHOOT_MOTOR_PID_KI, Params.SHOOT_MOTOR_PID_KD,
-            Params.SHOOT_MOTOR_PID_KF, Params.SHOOT_MOTOR_PID_IZONE)
-        .setPidControlParams(Params.SHOOT_PID_TOLERANCE_RPM/60.0, Params.SHOOT_SOFTWARE_PID_ENABLED);
+            Params.R_SHOOT_MOTOR_PID_KP, Params.R_SHOOT_MOTOR_PID_KI, Params.R_SHOOT_MOTOR_PID_KD,
+            Params.R_SHOOT_MOTOR_PID_KF, Params.R_SHOOT_MOTOR_PID_IZONE)
+        .setPidControlParams(Params.R_SHOOT_PID_TOLERANCE_RPM/60.0, Params.R_SHOOT_SOFTWARE_PID_ENABLED);
     public static final TrcMotor.PidParams panMotorPidParams = new TrcMotor.PidParams()
         .setPidCoefficients(
             Params.PAN_MOTOR_PID_KP, Params.PAN_MOTOR_PID_KI, Params.PAN_MOTOR_PID_KD, Params.PAN_MOTOR_PID_KF,
             Params.PAN_MOTOR_PID_IZONE)
-        .setPidControlParams(Params.PAN_PID_TOLERANCE, Params.PAN_SOFTWARE_PID_ENABLED);
-    public static final TrcMotor.PidParams tiltMotorPidParams = new TrcMotor.PidParams()
+        .setPidControlParams(Params.R_SHOOT_PID_TOLERANCE_RPM / 60.0, Params.R_SHOOT_SOFTWARE_PID_ENABLED);
+    public static final TrcMotor.PidParams rTiltMotorPidParams = new TrcMotor.PidParams()
         .setPidCoefficients(
-            Params.TILT_MOTOR_PID_KP, Params.TILT_MOTOR_PID_KI, Params.TILT_MOTOR_PID_KD, Params.TILT_MOTOR_PID_KF,
-            Params.TILT_MOTOR_PID_IZONE)
-        .setPidControlParams(Params.TILT_PID_TOLERANCE, Params.TILT_SOFTWARE_PID_ENABLED);
+            Params.R_TILT_MOTOR_PID_KP, Params.R_TILT_MOTOR_PID_KI, Params.R_TILT_MOTOR_PID_KD, Params.R_TILT_MOTOR_PID_KF,
+            Params.R_TILT_MOTOR_PID_IZONE)
+        .setPidControlParams(Params.R_TILT_PID_TOLERANCE, Params.R_TILT_SOFTWARE_PID_ENABLED);
     // public static final FrcServoActuator.TuneParams launcherTuneParams = new FrcServoActuator.TuneParams(
     //     Params.LAUNCHER_REST_POS, Params.LAUNCHER_LAUNCH_POS, Params.LAUNCHER_LAUNCH_DURATION,
     //     Params.LAUNCHER_RETRACT_TIME);
 
     private final FrcDashboard dashboard;
     // private final Robot robot;
-    private final TrcShooter shooter;
+    private final TrcShooter rShooter;
     // public final TrcServo launcher;
     // private String launchOwner;
     // private TrcEvent launchCompletionEvent;
@@ -255,52 +365,50 @@ public class Shooter extends TrcSubsystem
         dashboard.refreshKey(DBKEY_PREFERENCE_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs);
         dashboard.refreshKey(DBKEY_PREFERENCE_SHOW_STATUS, RobotParams.Preferences.showShooterStatus);
     
-        FrcShooter.Params shooterParams = new FrcShooter.Params()
+        FrcShooter.Params rShooterParams = new FrcShooter.Params()
             .setShooterMotor1(
-                Params.SHOOTER_PRIMARY_MOTOR_NAME, Params.SHOOTER_MOTOR_TYPE, null,
-                Params.SHOOTER_PRIMARY_MOTOR_CANID, Params.SHOOTER_MOTOR_CANBUS,
-                Params.SHOOTER_PRIMARY_MOTOR_INVERTED);
+                Params.R_SHOOTER_PRIMARY_MOTOR_NAME, Params.R_SHOOTER_MOTOR_TYPE, null,
+                Params.R_SHOOTER_PRIMARY_MOTOR_CANID, Params.R_SHOOTER_MOTOR_CANBUS,
+                Params.R_SHOOTER_PRIMARY_MOTOR_INVERTED);
 
-        if (Params.HAS_TWO_SHOOTER_MOTORS)
+        if (Params.R_SHOOTER_HAS_TWO_SHOOTER_MOTORS)
         {
-            shooterParams.setShooterMotor2(
-                Params.SHOOTER_FOLLOWER_MOTOR_NAME, Params.SHOOTER_MOTOR_TYPE, null,
-                Params.SHOOTER_FOLLOWER_MOTOR_CANID, Params.SHOOTER_MOTOR_CANBUS,
-                Params.SHOOTER_FOLLOWER_MOTOR_INVERTED, true);
+            rShooterParams.setShooterMotor2(
+                Params.R_SHOOTER_FOLLOWER_MOTOR_NAME, Params.R_SHOOTER_MOTOR_TYPE, null,
+                Params.R_SHOOTER_FOLLOWER_MOTOR_CANID, Params.R_SHOOTER_MOTOR_CANBUS,
+                Params.R_SHOOTER_FOLLOWER_MOTOR_INVERTED, true);
         }
 
-        if (Params.HAS_PAN_MOTOR)
-        {
-            shooterParams
-                .setPanMotor(
-                    Params.PAN_MOTOR_NAME, Params.PAN_MOTOR_TYPE, null, Params.PAN_MOTOR_CANID,
-                    Params.SHOOTER_MOTOR_CANBUS, Params.PAN_MOTOR_INVERTED,
-                    new TrcShooter.PanTiltParams(Params.PAN_POWER_LIMIT, Params.PAN_MIN_POS, Params.PAN_MAX_POS));
-                // .setPanMotorPosPresets(Params.PAN_POS_PRESET_TOLERANCE, Params.PAN_POS_PRESETS);
-        }
+        rShooterParams
+            .setPanMotor(
+                Params.PAN_MOTOR_NAME, Params.PAN_MOTOR_TYPE, null, Params.PAN_MOTOR_CANID,
+                Params.R_SHOOTER_MOTOR_CANBUS, Params.PAN_MOTOR_INVERTED,
+                new TrcShooter.PanTiltParams(Params.PAN_POWER_LIMIT, Params.PAN_MIN_POS, Params.PAN_MAX_POS));
+            // .setPanMotorPosPresets(Params.PAN_POS_PRESET_TOLERANCE, Params.PAN_POS_PRESETS);
+        
 
-        if (Params.HAS_TILT_MOTOR)
+        if (Params.R_SHOOTER_HAS_TILT_MOTOR)
         {
-            shooterParams
+            rShooterParams
                 .setTiltMotor(
-                    Params.TILT_MOTOR_NAME, Params.TILT_MOTOR_TYPE, null, Params.TILT_MOTOR_CANID,
-                    Params.SHOOTER_MOTOR_CANBUS, Params.TILT_MOTOR_INVERTED,
-                    new TrcShooter.PanTiltParams(Params.TILT_POWER_LIMIT, Params.TILT_MIN_POS, Params.TILT_MAX_POS));
+                    Params.R_TILT_MOTOR_NAME, Params.R_TILT_MOTOR_TYPE, null, Params.R_TILT_MOTOR_CANID,
+                    Params.R_SHOOTER_MOTOR_CANBUS, Params.R_TILT_MOTOR_INVERTED,
+                    new TrcShooter.PanTiltParams(Params.R_TILT_POWER_LIMIT, Params.R_TILT_MIN_POS, Params.R_TILT_MAX_POS));
                 // .setTiltMotorPosPresets(Params.TILT_POS_PRESET_TOLERANCE, Params.TILT_POS_PRESETS);
         }
 
-        shooter = new FrcShooter(Params.SUBSYSTEM_NAME, shooterParams).getShooter();
+        rShooter = new FrcShooter(Params.SUBSYSTEM_NAME, rShooterParams).getShooter();
 
-        TrcMotor motor = shooter.getShooterMotor1();
-        motor.setPositionSensorScaleAndOffset(Params.SHOOT_MOTOR_REV_PER_COUNT, 0.0);
-        motor.setVelocityPidParameters(shootMotorPidParams, null);
+        TrcMotor motor = rShooter.getShooterMotor1();
+        motor.setPositionSensorScaleAndOffset(Params.R_SHOOT_MOTOR_REV_PER_COUNT, 0.0);
+        motor.setVelocityPidParameters(rShootMotorPidParams, null);
 
-        motor = shooter.getPanMotor();
+        motor = rShooter.getPanMotor();
         if (motor != null)
         {
             motor.setPositionSensorScaleAndOffset(
                 Params.PAN_DEG_PER_COUNT, Params.PAN_POS_OFFSET, Params.PAN_ENCODER_ZERO_OFFSET);
-            motor.setPositionPidParameters(panMotorPidParams, this::getPanPosition);
+            motor.setPositionPidParameters(panMotorPidParams, this::getRPanPosition);
             // There is no lower limit switch, enable stall detection for zero calibration and soft limits for
             // protection.
             motor.setStallProtection(
@@ -309,18 +417,18 @@ public class Shooter extends TrcSubsystem
             motor.setSoftPositionLimits(Params.PAN_MIN_POS, Params.PAN_MAX_POS, false);
         }
 
-        motor = shooter.getTiltMotor();
+        motor = rShooter.getTiltMotor();
         if (motor != null)
         {
             motor.setPositionSensorScaleAndOffset(
-                Params.TILT_DEG_PER_COUNT, Params.TILT_POS_OFFSET, Params.TILT_ENCODER_ZERO_OFFSET);
-            motor.setPositionPidParameters(tiltMotorPidParams, null);
-            motor.setSoftPositionLimits(Params.TILT_MIN_POS, Params.TILT_MAX_POS, false);
+                Params.R_TILT_DEG_PER_COUNT, Params.R_TILT_POS_OFFSET, Params.R_TILT_ENCODER_ZERO_OFFSET);
+            motor.setPositionPidParameters(rTiltMotorPidParams, null);
+            motor.setSoftPositionLimits(Params.R_TILT_MIN_POS, Params.R_TILT_MAX_POS, false);
 
             if (motor.getEncoderRawPosition() == 0)
             {
                 motor.getEncoder().reset();
-                shooter.tracer.traceInfo(
+                rShooter.tracer.traceInfo(
                     instanceName, "Detected Axon zero encoder reading, reset and retry (reading=%f)",
                     motor.getEncoderRawPosition());
             }
@@ -345,20 +453,20 @@ public class Shooter extends TrcSubsystem
      *
      * @return created shooter.
      */
-    public TrcShooter getShooter()
+    public TrcShooter getRShooter()
     {
-        return shooter;
-    }   //getShooter
+        return rShooter;
+    }   //getRShooter
 
     /**
      * This method returns the current flywheel velocity in RPM.
      *
      * @return current flywheel velocity in RPM.
      */
-    public double getFlywheelRPM()
+    public double getRFlywheelRPM()
     {
-        return shooter.shooterMotor1.getVelocity()*60.0;
-    }   //getFlywheelRPM
+        return rShooter.shooterMotor1.getVelocity()*60.0;
+    }   //getRFlywheelRPM
 
     // /**
     //  * This method returns the launcher servo position.
@@ -477,124 +585,124 @@ public class Shooter extends TrcSubsystem
      * @param alliance specifies the alliance goal to track.
      * @param flywheelTrackingEnabled specifies true to enable flywheel tracking, false to disable.
      */
-    public void enableGoalTracking(
-        String owner, boolean useVision, Alliance alliance, boolean flywheelTrackingEnabled)
-    {
-        // if (alliance == null)
-        // {
-        //     // Unknown alliance, probably because we are running standalone FtcTeleOp or FtcTest.
-        //     alliance = FrcAuto.getAlliance();
-        // }
+    // public void enableGoalTracking(
+    //     String owner, boolean useVision, Alliance alliance, boolean flywheelTrackingEnabled)
+    // {
+    //     // if (alliance == null)
+    //     // {
+    //     //     // Unknown alliance, probably because we are running standalone FtcTeleOp or FtcTest.
+    //     //     alliance = FrcAuto.getAlliance();
+    //     // }
 
-        shooter.tracer.traceInfo(
-            instanceName,
-            "enableGoalTracking(owner=" + owner +
-            ", useVision=" + useVision +
-            ", alliance=" + alliance +
-            ", flywheelTracking=" + flywheelTrackingEnabled + ")");
-        if (useVision)
-        {
-            // if (robot.vision != null && robot.vision.isLimelightVisionEnabled())
-            {
-                if (shooter.acquireExclusiveAccess(owner))
-                {
-                    if (!isGoalTrackingEnabled())
-                    {
-                        shooter.panMotor.setPosition(owner, 0.0, 0.0, true, Params.PAN_POWER_LIMIT, null, 0.0);
-                    }
-                    // Reset failsafe so we can re-evaluate it again. This is just in case failsafe somehow got detected
-                    // by mistake.
-                    shooter.disableShooterPowerMode(null, null);
-                    // robot.enableTrackingInfo(true, alliance);
-                    this.trackedAlliance = alliance;
-                    this.visionTracking = true;
-                    this.flywheelTracking = flywheelTrackingEnabled;
-                }
-            }
-        }
-        else
-        {
-            if (shooter.acquireExclusiveAccess(owner))
-            {
-                if (!isGoalTrackingEnabled())
-                {
-                    shooter.panMotor.setPosition(owner, 0.0, 0.0, true, Params.PAN_POWER_LIMIT, null, 0.0);
-                }
-                // Reset failsafe so we can re-evaluate it again. This is just in case failsafe somehow got detected
-                // by mistake.
-                shooter.disableShooterPowerMode(null, null);
-                // robot.enableTrackingInfo(false, alliance);
-                this.trackedAlliance = alliance;
-                this.visionTracking = false;
-                this.flywheelTracking = flywheelTrackingEnabled;
-            }
-        }
-    }   //enableGoalTracking
+    //     shooter.tracer.traceInfo(
+    //         instanceName,
+    //         "enableGoalTracking(owner=" + owner +
+    //         ", useVision=" + useVision +
+    //         ", alliance=" + alliance +
+    //         ", flywheelTracking=" + flywheelTrackingEnabled + ")");
+    //     if (useVision)
+    //     {
+    //         // if (robot.vision != null && robot.vision.isLimelightVisionEnabled())
+    //         {
+    //             if (shooter.acquireExclusiveAccess(owner))
+    //             {
+    //                 if (!isGoalTrackingEnabled())
+    //                 {
+    //                     shooter.panMotor.setPosition(owner, 0.0, 0.0, true, Params.PAN_POWER_LIMIT, null, 0.0);
+    //                 }
+    //                 // Reset failsafe so we can re-evaluate it again. This is just in case failsafe somehow got detected
+    //                 // by mistake.
+    //                 shooter.disableShooterPowerMode(null, null);
+    //                 // robot.enableTrackingInfo(true, alliance);
+    //                 this.trackedAlliance = alliance;
+    //                 this.visionTracking = true;
+    //                 this.flywheelTracking = flywheelTrackingEnabled;
+    //             }
+    //         }
+    //     }
+    //     else
+    //     {
+    //         if (shooter.acquireExclusiveAccess(owner))
+    //         {
+    //             if (!isGoalTrackingEnabled())
+    //             {
+    //                 shooter.panMotor.setPosition(owner, 0.0, 0.0, true, Params.PAN_POWER_LIMIT, null, 0.0);
+    //             }
+    //             // Reset failsafe so we can re-evaluate it again. This is just in case failsafe somehow got detected
+    //             // by mistake.
+    //             shooter.disableShooterPowerMode(null, null);
+    //             // robot.enableTrackingInfo(false, alliance);
+    //             this.trackedAlliance = alliance;
+    //             this.visionTracking = false;
+    //             this.flywheelTracking = flywheelTrackingEnabled;
+    //         }
+    //     }
+    // }   //enableGoalTracking
 
     /**
      * This method stops Goal Tracking.
      */
-    private void stopGoalTracking()
-    {
-        shooter.tracer.traceInfo(instanceName, "Stop GoalTracking.");
-        shooter.panMotor.cancel();
-        shooter.stopShooter();
-        this.trackedAlliance = null;
-        this.visionTracking = false;
-        this.flywheelTracking = false;
-        // Don't reset failsafe. Disabling GoalTracking doesn't mean the problem fixed itself.
-    }   //stopGoalTracking
+    // private void stopGoalTracking()
+    // {
+    //     shooter.tracer.traceInfo(instanceName, "Stop GoalTracking.");
+    //     shooter.panMotor.cancel();
+    //     shooter.stopShooter();
+    //     this.trackedAlliance = null;
+    //     this.visionTracking = false;
+    //     this.flywheelTracking = false;
+    //     // Don't reset failsafe. Disabling GoalTracking doesn't mean the problem fixed itself.
+    // }   //stopGoalTracking
 
     /**
      * This method disables Goal Tracking.
      *
      * @param owner specifies the owner that acquired the subsystem ownerships, null if no ownership required.
      */
-    public void disableGoalTracking(String owner)
-    {
-        if (shooter.validateOwnership(owner))
-        {
-            shooter.tracer.traceInfo(
-                instanceName,
-                "disableGoalTracking(owner=" + owner + ", turretPos=" + shooter.panMotor.getPosition() + ")");
-            shooter.releaseExclusiveAccess(owner);
-            stopGoalTracking();
-            // robot.disableTrackingInfo();
-        }
-    }   //disableGoalTracking
+    // public void disableGoalTracking(String owner)
+    // {
+    //     if (shooter.validateOwnership(owner))
+    //     {
+    //         shooter.tracer.traceInfo(
+    //             instanceName,
+    //             "disableGoalTracking(owner=" + owner + ", turretPos=" + shooter.panMotor.getPosition() + ")");
+    //         shooter.releaseExclusiveAccess(owner);
+    //         stopGoalTracking();
+    //         // robot.disableTrackingInfo();
+    //     }
+    // }   //disableGoalTracking
 
     /**
      * This method pauses the current Goal Tracking session and save the tracking parameters for the session.
      */
-    public void pauseGoalTracking()
-    {
-        // Only do this if Goal Tracking was enabled.
-        if (isGoalTrackingEnabled())
-        {
-            shooter.tracer.traceInfo(instanceName, "Pause GoalTracking.");
-            savedOwner = shooter.getCurrentOwner();
-            savedTrackedAlliance = this.trackedAlliance;
-            savedVisionTracking = this.visionTracking;
-            savedFlywheelTracking = this.flywheelTracking;
-            stopGoalTracking();
-        }
-    }   //pauseGoalTracking
+    // public void pauseGoalTracking()
+    // {
+    //     // Only do this if Goal Tracking was enabled.
+    //     if (isGoalTrackingEnabled())
+    //     {
+    //         shooter.tracer.traceInfo(instanceName, "Pause GoalTracking.");
+    //         savedOwner = shooter.getCurrentOwner();
+    //         savedTrackedAlliance = this.trackedAlliance;
+    //         savedVisionTracking = this.visionTracking;
+    //         savedFlywheelTracking = this.flywheelTracking;
+    //         stopGoalTracking();
+    //     }
+    // }   //pauseGoalTracking
 
     /**
      * This method restores the saved Goal Tracking parameters and resumes the saved Goal Tracking session.
      */
-    public void resumeGoalTracking()
-    {
-        if (savedTrackedAlliance != null)
-        {
-            shooter.tracer.traceInfo(instanceName, "Resume GoalTracking.");
-            enableGoalTracking(savedOwner, savedVisionTracking, savedTrackedAlliance, savedFlywheelTracking);
-            this.savedOwner = null;
-            this.savedTrackedAlliance = null;
-            this.savedVisionTracking = false;
-            this.savedFlywheelTracking = false;
-        }
-    }   //resumeGoalTracking
+    // public void resumeGoalTracking()
+    // {
+    //     if (savedTrackedAlliance != null)
+    //     {
+    //         shooter.tracer.traceInfo(instanceName, "Resume GoalTracking.");
+    //         enableGoalTracking(savedOwner, savedVisionTracking, savedTrackedAlliance, savedFlywheelTracking);
+    //         this.savedOwner = null;
+    //         this.savedTrackedAlliance = null;
+    //         this.savedVisionTracking = false;
+    //         this.savedFlywheelTracking = false;
+    //     }
+    // }   //resumeGoalTracking
 
     // private Double crossOverTarget = null;
 
@@ -605,9 +713,9 @@ public class Shooter extends TrcSubsystem
      * @return angle distance between the current position and the AprilTag target if tracking is ON, angle position
      *         of the target relative to robot heading if tracking is OFF.
      */
-    private double getPanPosition()
+    private double getRPanPosition()
     {
-        double panPosition = shooter.getPanAngle();
+        double panPosition = rShooter.getPanAngle();
 
         // if (isGoalTrackingEnabled())
         // {
@@ -726,20 +834,20 @@ public class Shooter extends TrcSubsystem
      * @param turretAngleDeg specifies the turret heading in degrees.
      * @return camera pose relative to the robot center.
      */
-    public TrcPose2D getInvertedCamPoseOnRobot(double turretAngleDeg)
-    {
-//        if (useTrig)
-//        {
-//            double turretAngleRad = Math.toRadians(turretAngleDeg + 180.0);
-//            return new TrcPose2D(
-//                -(Params.CAM_DISTANCE_FROM_TURRET*Math.sin(turretAngleRad) + Params.TURRET_X_OFFSET),
-//                -(Params.CAM_DISTANCE_FROM_TURRET*Math.cos(turretAngleRad) + Params.TURRET_Y_OFFSET),
-//                turretAngleDeg);
-//        }
-        TrcPose2D turretPoseOnRobot = new TrcPose2D(Params.TURRET_X_OFFSET, Params.TURRET_Y_OFFSET, turretAngleDeg);
-        TrcPose2D camPoseOnRobot = turretPoseOnRobot.addRelativePose(Params.CAM_POSE_ON_TURRET);
-        return camPoseOnRobot.invert();
-    }   //getInvertedCamPoseOnRobot
+//     public TrcPose2D getInvertedCamPoseOnRobot(double turretAngleDeg)
+//     {
+// //        if (useTrig)
+// //        {
+// //            double turretAngleRad = Math.toRadians(turretAngleDeg + 180.0);
+// //            return new TrcPose2D(
+// //                -(Params.CAM_DISTANCE_FROM_TURRET*Math.sin(turretAngleRad) + Params.TURRET_X_OFFSET),
+// //                -(Params.CAM_DISTANCE_FROM_TURRET*Math.cos(turretAngleRad) + Params.TURRET_Y_OFFSET),
+// //                turretAngleDeg);
+// //        }
+//         TrcPose2D turretPoseOnRobot = new TrcPose2D(Params.TURRET_X_OFFSET, Params.TURRET_Y_OFFSET, turretAngleDeg);
+//         TrcPose2D camPoseOnRobot = turretPoseOnRobot.addRelativePose(Params.CAM_POSE_ON_TURRET);
+//         return camPoseOnRobot.invert();
+//     }   //getInvertedCamPoseOnRobot
 
     /**
      * This method returns the Robot Field position adjusted by the camera position on the robot's turret.
@@ -747,24 +855,24 @@ public class Shooter extends TrcSubsystem
      * @param camFieldPose specifies the camera's field position from Vision.
      * @return robot's field position.
      */
-    public TrcPose2D adjustRobotFieldPosition(TrcPose2D camFieldPose)
-    {
-        TrcPose2D robotFieldPose = null;
+    // public TrcPose2D adjustRobotFieldPosition(TrcPose2D camFieldPose)
+    // {
+    //     TrcPose2D robotFieldPose = null;
 
-        if (camFieldPose != null)
-        {
-            double turretAngleDeg = shooter.getPanAngle();
+    //     if (camFieldPose != null)
+    //     {
+    //         double turretAngleDeg = shooter.getPanAngle();
 
-            TrcPose2D invertedCamPoseOnRobot = getInvertedCamPoseOnRobot(turretAngleDeg);
-            robotFieldPose = camFieldPose.addRelativePose(invertedCamPoseOnRobot);
-            robotFieldPose.angle = camFieldPose.angle - turretAngleDeg;
-            shooter.tracer.traceDebug(
-                Params.SUBSYSTEM_NAME, "turretAngle=%f, camFieldPose=%s, invCamPoseOnRobot=%s, robotFieldPose=%s",
-                turretAngleDeg, camFieldPose, invertedCamPoseOnRobot, robotFieldPose);
-        }
+    //         TrcPose2D invertedCamPoseOnRobot = getInvertedCamPoseOnRobot(turretAngleDeg);
+    //         robotFieldPose = camFieldPose.addRelativePose(invertedCamPoseOnRobot);
+    //         robotFieldPose.angle = camFieldPose.angle - turretAngleDeg;
+    //         shooter.tracer.traceDebug(
+    //             Params.SUBSYSTEM_NAME, "turretAngle=%f, camFieldPose=%s, invCamPoseOnRobot=%s, robotFieldPose=%s",
+    //             turretAngleDeg, camFieldPose, invertedCamPoseOnRobot, robotFieldPose);
+    //     }
 
-        return robotFieldPose;
-    }   //adjustRobotFieldPosition
+    //     return robotFieldPose;
+    // }   //adjustRobotFieldPosition
 
     //
     // Implements TrcSubsystem abstract methods.
@@ -776,7 +884,7 @@ public class Shooter extends TrcSubsystem
     @Override
     public void cancel()
     {
-        shooter.cancel();
+        rShooter.cancel();
         // if (launcher != null)
         // {
         //     if (launcher.getPosition() == launcherTuneParams.activatePos)
@@ -838,7 +946,7 @@ public class Shooter extends TrcSubsystem
         //             event.cancel();
         //         }
         //     }, completionEvent);
-        shooter.panMotor.zeroCalibrate(owner, Params.PAN_ZERO_CAL_POWER);
+        // shooter.panMotor.zeroCalibrate(owner, Params.PAN_ZERO_CAL_POWER);
     }   //zeroCalibrate
 
     /**
@@ -867,22 +975,22 @@ public class Shooter extends TrcSubsystem
             {
                 TrcMotor motor;
 
-                motor = shooter.getShooterMotor1();
+                motor = rShooter.getShooterMotor1();
                 dashboard.displayPrintf(
                     lineNum++, "%s: power=%.1f, current=%.1f, vel=%.1f, target=%.1f",
                     Params.SUBSYSTEM_NAME + ".Motor", motor.getPower(), motor.getCurrent(),
-                    shooter.getShooterMotor1RPM(), shooter.getShooterMotor1TargetRPM());
+                    rShooter.getShooterMotor1RPM(), rShooter.getShooterMotor1TargetRPM());
 
-                motor = shooter.getShooterMotor2();
+                motor = rShooter.getShooterMotor2();
                 if (motor != null)
                 {
                     dashboard.displayPrintf(
                         lineNum++, "%s: power=%.1f, current=%.1f, vel=%.1f, target=%.1f",
                         Params.SUBSYSTEM_NAME + ".Motor2", motor.getPower(), motor.getCurrent(),
-                        shooter.getShooterMotor2RPM(), shooter.getShooterMotor2TargetRPM());
+                        rShooter.getShooterMotor2RPM(), rShooter.getShooterMotor2TargetRPM());
                 }
 
-                motor = shooter.getPanMotor();
+                motor = rShooter.getPanMotor();
                 if (motor != null)
                 {
                     dashboard.displayPrintf(
@@ -891,7 +999,7 @@ public class Shooter extends TrcSubsystem
                         motor.getPosition(), motor.getPidTarget());
                 }
 
-                motor = shooter.getTiltMotor();
+                motor = rShooter.getTiltMotor();
                 if (motor != null)
                 {
                     dashboard.displayPrintf(
@@ -915,20 +1023,20 @@ public class Shooter extends TrcSubsystem
 
             if (!subsystemName.isEmpty())
             {
-                if (subsystemName.equalsIgnoreCase(Params.SHOOTER_PRIMARY_MOTOR_NAME))
+                if (subsystemName.equalsIgnoreCase(Params.R_SHOOTER_PRIMARY_MOTOR_NAME))
                 {
-                    dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_INPUT, shooter.getShooterMotor1RPM());
-                    dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET, shooter.getShooterMotor1TargetRPM());
+                    dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_INPUT, rShooter.getShooterMotor1RPM());
+                    dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET, rShooter.getShooterMotor1TargetRPM());
                 }
                 else if (subsystemName.equalsIgnoreCase(Params.PAN_MOTOR_NAME))
                 {
-                    dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_INPUT, shooter.getPanAngle());
-                    dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET, shooter.getPanAngleTarget());
+                    dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_INPUT, rShooter.getPanAngle());
+                    dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET, rShooter.getPanAngleTarget());
                 }
-                else if (subsystemName.equalsIgnoreCase(Params.TILT_MOTOR_NAME))
+                else if (subsystemName.equalsIgnoreCase(Params.R_TILT_MOTOR_NAME))
                 {
-                    dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_INPUT, shooter.getTiltAngle());
-                    dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET, shooter.getTiltAngleTarget());
+                    dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_INPUT, rShooter.getTiltAngle());
+                    dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET, rShooter.getTiltAngleTarget());
                 }
             }
         }
@@ -946,15 +1054,15 @@ public class Shooter extends TrcSubsystem
 
         if (!subsystemName.isEmpty())
         {
-            if (subsystemName.equalsIgnoreCase(Params.SHOOTER_PRIMARY_MOTOR_NAME))
+            if (subsystemName.equalsIgnoreCase(Params.R_SHOOTER_PRIMARY_MOTOR_NAME))
             {
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KP, Params.SHOOT_MOTOR_PID_KP);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KI, Params.SHOOT_MOTOR_PID_KI);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KD, Params.SHOOT_MOTOR_PID_KD);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KF, Params.SHOOT_MOTOR_PID_KF);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_IZONE, Params.SHOOT_MOTOR_PID_IZONE);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.SHOOT_PID_TOLERANCE_RPM);
-                dashboard.putBoolean(FrcTest.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.SHOOT_SOFTWARE_PID_ENABLED);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KP, Params.R_SHOOT_MOTOR_PID_KP);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KI, Params.R_SHOOT_MOTOR_PID_KI);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KD, Params.R_SHOOT_MOTOR_PID_KD);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KF, Params.R_SHOOT_MOTOR_PID_KF);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_IZONE, Params.R_SHOOT_MOTOR_PID_IZONE);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.R_SHOOT_PID_TOLERANCE_RPM);
+                dashboard.putBoolean(FrcTest.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.R_SHOOT_SOFTWARE_PID_ENABLED);
                 dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
             }
             else if (subsystemName.equalsIgnoreCase(Params.PAN_MOTOR_NAME))
@@ -968,15 +1076,15 @@ public class Shooter extends TrcSubsystem
                 dashboard.putBoolean(FrcTest.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.PAN_SOFTWARE_PID_ENABLED);
                 dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
             }
-            else if (subsystemName.equalsIgnoreCase(Params.TILT_MOTOR_NAME))
+            else if (subsystemName.equalsIgnoreCase(Params.R_TILT_MOTOR_NAME))
             {
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KP, Params.TILT_MOTOR_PID_KP);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KI, Params.TILT_MOTOR_PID_KI);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KD, Params.TILT_MOTOR_PID_KD);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KF, Params.TILT_MOTOR_PID_KF);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_IZONE, Params.TILT_MOTOR_PID_IZONE);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.TILT_PID_TOLERANCE);
-                dashboard.putBoolean(FrcTest.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.TILT_SOFTWARE_PID_ENABLED);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KP, Params.R_TILT_MOTOR_PID_KP);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KI, Params.R_TILT_MOTOR_PID_KI);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KD, Params.R_TILT_MOTOR_PID_KD);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KF, Params.R_TILT_MOTOR_PID_KF);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_IZONE, Params.R_TILT_MOTOR_PID_IZONE);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.R_TILT_PID_TOLERANCE);
+                dashboard.putBoolean(FrcTest.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.R_TILT_SOFTWARE_PID_ENABLED);
                 dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
             }
         }
@@ -995,27 +1103,27 @@ public class Shooter extends TrcSubsystem
             TrcMotor.PidParams pidParams = FrcTest.testChoices.getSubsystemPidParameters();
             boolean foundMatch = false;
 
-            if (subsystemName.equalsIgnoreCase(Params.SHOOTER_PRIMARY_MOTOR_NAME))
+            if (subsystemName.equalsIgnoreCase(Params.R_SHOOTER_PRIMARY_MOTOR_NAME))
             {
                 // Adjust shooter tolerance to RPS.
                 pidParams.pidTolerance /= 60.0;
-                shooter.shooterMotor1.setVelocityPidParameters(pidParams, null);
+                rShooter.shooterMotor1.setVelocityPidParameters(pidParams, null);
                 foundMatch = true;
             }
             else if (subsystemName.equalsIgnoreCase(Params.PAN_MOTOR_NAME))
             {
-                shooter.panMotor.setPositionPidParameters(pidParams, null);
+                rShooter.panMotor.setPositionPidParameters(pidParams, null);
                 foundMatch = true;
             }
-            else if (subsystemName.equalsIgnoreCase(Params.TILT_MOTOR_NAME))
+            else if (subsystemName.equalsIgnoreCase(Params.R_TILT_MOTOR_NAME))
             {
-                shooter.tiltMotor.setPositionPidParameters(pidParams, null);
+                rShooter.tiltMotor.setPositionPidParameters(pidParams, null);
                 foundMatch = true;
             }
 
             if (foundMatch)
             {
-                shooter.tracer.traceInfo(instanceName, "Tune %s: PidParams=%s", subsystemName, pidParams);
+                rShooter.tracer.traceInfo(instanceName, "Tune %s: PidParams=%s", subsystemName, pidParams);
             }
         }
     }   //updateParamsFromDashboard

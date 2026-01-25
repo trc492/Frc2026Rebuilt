@@ -101,7 +101,7 @@ public class Robot extends FrcRobot
     public Command m_autonomousCommand;
     // Other subsystems.
     public Shooter shooterSubsystem;
-    public TrcShooter shooter;
+    public TrcShooter rShooter;
 
     // Auto Tasks.
 
@@ -215,7 +215,7 @@ public class Robot extends FrcRobot
                 if (RobotParams.Preferences.useShooter)
                 {
                     shooterSubsystem = new Shooter(this);
-                    shooter = shooterSubsystem.getShooter();
+                    rShooter = shooterSubsystem.getRShooter();
                 }
                 TrcSubsystem.updateSubsystemParamsToDashboard();
 
