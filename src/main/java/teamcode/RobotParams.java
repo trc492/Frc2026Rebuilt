@@ -81,6 +81,7 @@ public class RobotParams
         public static final boolean useAntiTipping              = false;
         // Other Subsystems
         public static final boolean useShooter                  = true;
+        public static final boolean useIntake                   = true;
         public static final boolean showShooterStatus           = true;
         public static final boolean useRegression               = true;
         // Auto Tasks

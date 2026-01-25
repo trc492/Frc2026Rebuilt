@@ -50,6 +50,7 @@ import frclib.vision.FrcPhotonVision;
 import frclib.vision.FrcPhotonVision.DetectedObject;
 import teamcode.indicators.LEDIndicator;
 import teamcode.subsystems.DriveBase;
+import teamcode.subsystems.Intake;
 import teamcode.subsystems.Shooter;
 import teamcode.vision.OpenCvVision;
 import teamcode.vision.PhotonVision;
@@ -102,6 +103,7 @@ public class Robot extends FrcRobot
     // Other subsystems.
     public Shooter shooterSubsystem;
     public TrcShooter rShooter;
+    public Intake intake;
 
     // Auto Tasks.
 
@@ -217,6 +219,12 @@ public class Robot extends FrcRobot
                     shooterSubsystem = new Shooter(this);
                     rShooter = shooterSubsystem.getRShooter();
                 }
+
+                if(RobotParams.Preferences.useIntake)
+                {
+                    intake = new Intake(this);
+                }
+                
                 TrcSubsystem.updateSubsystemParamsToDashboard();
 
                 // Create autotasks.
