@@ -42,6 +42,7 @@ public class Shooter extends TrcSubsystem
     private static final boolean NEED_ZERO_CAL = false;
     private static final String DBKEY_PREFERENCE_SHOW_STATUS = SUBSYSTEM_NAME + "/ShowStatus";
     private static final String DBKEY_PREFERENCE_SHOW_GRAPHS = SUBSYSTEM_NAME + "/ShowGraphs";
+    private static final String DBKEY_SHOOTER_CURRENT = "Shooter/ShooterCurrent";
 
     public static final String GOAL_ZONE_SHOOT_POINT = "GoalZoneShootPoint";
     public static final String FAR_ZONE_SHOOT_POINT = "FarZoneShootPoint";
@@ -96,7 +97,7 @@ public class Shooter extends TrcSubsystem
 
         // Common Shooter Motor Characteristics
         public static final MotorType SHOOTER_MOTOR_TYPE        = MotorType.CanTalonFx;
-        public static final double SHOOTER_MOTOR_GEAR_RATIO     = 18.0/12.0;    // Load/Motor
+        public static final double SHOOTER_MOTOR_GEAR_RATIO     = 24.0/14.0;    // Load/Motor
         public static final double SHOOTER_MOTOR_REV_PER_COUNT  = 1.0/SHOOTER_MOTOR_GEAR_RATIO;
         public static final double SHOOTER_MOTOR_MAX_VEL        = 6000.0;
         public static final double SHOOTER_PID_TOLERANCE_RPM    = 100.0;
@@ -885,11 +886,13 @@ public class Shooter extends TrcSubsystem
                 {
                     dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_INPUT, leftShooter.getShooterMotor1RPM());
                     dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET, leftShooter.getShooterMotor1TargetRPM());
+                    dashboard.putNumber(DBKEY_SHOOTER_CURRENT, leftShooter.getShooterMotor1Current());
                 }
                 else if (subsystemName.equalsIgnoreCase(Params.RSHOOTER_PRIMARY_MOTOR_NAME))
                 {
                     dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_INPUT, rightShooter.getShooterMotor1RPM());
                     dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET, rightShooter.getShooterMotor1TargetRPM());
+                    dashboard.putNumber(DBKEY_SHOOTER_CURRENT, rightShooter.getShooterMotor1Current());
                 }
                 else if (subsystemName.equalsIgnoreCase(Params.LTILT_MOTOR_NAME))
                 {
