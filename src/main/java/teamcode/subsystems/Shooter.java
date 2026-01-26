@@ -93,6 +93,7 @@ public class Shooter extends TrcSubsystem
         public static final boolean HAS_TWO_SHOOTERS            = false;
         public static final boolean HAS_TILT_MOTOR              = false;
         public static final boolean HAS_TURRET                  = false;
+        public static final boolean HAS_FEEDER_MOTOR            = false;
 
         // Common Shooter Motor Characteristics
         public static final MotorType SHOOTER_MOTOR_TYPE        = MotorType.CanTalonFx;
@@ -198,12 +199,28 @@ public class Shooter extends TrcSubsystem
 
         public static double R_TURRET_X_OFFSET                  = 0.0;      // inches from robot center
         public static double R_TURRET_Y_OFFSET                  = -3.246;   // inches from robot center
+
+        // Feeder Motor Characteristics
+        public static final MotorType FEEDER_MOTOR_TYPE         = MotorType.CanTalonFx;
+        public static final String FEEDER_PRIMARY_MOTOR_NAME    = SUBSYSTEM_NAME + ".FeederPrimaryMotor";
+        public static final boolean FEEDER_PRIMARY_MOTOR_INVERTED = false;
+        public static final int FEEDER_PRIMARY_MOTOR_CANID    = RobotParams.HwConfig.CANID_SHOOTER_PRIMARY_FEEDER_MOTOR;
+        public static final String FEEDER_FOLLOWER_MOTOR_NAME = SUBSYSTEM_NAME + ".FeederFollowerMotor";
+        public static final boolean FEEDER_FOLLOWER_MOTOR_INVERTED = true;
+        public static final int FEEDER_FOLLOWER_MOTOR_CANID   = RobotParams.HwConfig.CANID_SHOOTER_FOLLOWER_FEEDER_MOTOR;
+
+        // Feeder Characteristics
+        // TODO: Can't add these as they are part of the TrcRollerIntake in the library, determine if we need them later
+        // public static final double FEED_POWER                       = 1.0;
+        // public static final double EJECT_POWER                      = -0.5;
+
     }   //class Params
 
     private final FrcDashboard dashboard;
     private final TrcShooter leftShooter;
     private final TrcShooter rightShooter;
     private final TrcMotor turret;
+    private final TrcMotor feeder;
 
     /**
      * Constructor: Creates an instance of the object.
@@ -324,6 +341,22 @@ public class Shooter extends TrcSubsystem
         {
             turret = null;
         }
+        
+        if (Params.HAS_FEEDER_MOTOR)
+        {
+            FrcMotorActuator.Params feederParams = new FrcMotorActuator.Params()
+                .setPrimaryMotor(
+                    Params.FEEDER_PRIMARY_MOTOR_NAME, Params.FEEDER_MOTOR_TYPE, Params.FEEDER_PRIMARY_MOTOR_INVERTED,
+                    false, false, Params.FEEDER_PRIMARY_MOTOR_CANID, Params.CANBUS_NAME, null)
+                .addFollowerMotor(
+                    Params.FEEDER_FOLLOWER_MOTOR_NAME, Params.FEEDER_MOTOR_TYPE, Params.FEEDER_FOLLOWER_MOTOR_INVERTED, 
+                    Params.FEEDER_FOLLOWER_MOTOR_CANID, Params.CANBUS_NAME, null); 
+            feeder = new FrcMotorActuator(feederParams).getMotor();
+        }
+        else
+        {
+            feeder = null;
+        }
     }   //Shooter
 
     /**
@@ -355,6 +388,16 @@ public class Shooter extends TrcSubsystem
     {
         return turret;
     }   //getTurret
+
+    /**
+     * This method returns the created feeder.
+     *
+     * @return created feeder.
+     */
+    public TrcMotor getFeeder()
+    {
+        return feeder;
+    }   //getFeeder
 
     /**
      * This method returns the left shooter flywheel velocity target in RPM.
@@ -871,6 +914,13 @@ public class Shooter extends TrcSubsystem
                         lineNum++, "%s: power=%.1f, current=%.1f, pos=%.1f/%.1f",
                         SUBSYSTEM_NAME + ".Turret", turret.getPower(), turret.getCurrent(), turret.getPosition(),
                         turret.getPidTarget());
+                }
+                
+                if (feeder != null)
+                {
+                    dashboard.displayPrintf(
+                        lineNum++, "%s: power=%.1f, current=%.1f",
+                        SUBSYSTEM_NAME + ".Feeder", feeder.getPower(), feeder.getCurrent());
                 }
             }
         }
