@@ -262,15 +262,18 @@ public class Shooter extends TrcSubsystem
                 .setPidControlParams(Params.SHOOTER_PID_TOLERANCE_RPM/60.0, Params.SHOOTER_SOFTWARE_PID_ENABLED),
             null);
         motor = leftShooter.getTiltMotor();
-        motor.setPositionSensorScaleAndOffset(Params.TILT_MOTOR_DEG_PER_COUNT, Params.TILT_POS_OFFSET);
-        motor.setPositionPidParameters(
-            new TrcMotor.PidParams()
-                .setPidCoefficients(
-                    Params.LTILT_MOTOR_PID_KP, Params.LTILT_MOTOR_PID_KI, Params.LTILT_MOTOR_PID_KD,
-                    Params.LTILT_MOTOR_PID_KF, Params.LTILT_MOTOR_PID_IZONE)
-                .setPidControlParams(Params.TILT_PID_TOLERANCE, Params.TILT_SOFTWARE_PID_ENABLED),
-            null);
-        motor.setSoftPositionLimits(Params.TILT_MIN_POS, Params.TILT_MAX_POS, false);
+        if (motor != null)
+        {
+            motor.setPositionSensorScaleAndOffset(Params.TILT_MOTOR_DEG_PER_COUNT, Params.TILT_POS_OFFSET);
+            motor.setPositionPidParameters(
+                new TrcMotor.PidParams()
+                    .setPidCoefficients(
+                        Params.LTILT_MOTOR_PID_KP, Params.LTILT_MOTOR_PID_KI, Params.LTILT_MOTOR_PID_KD,
+                        Params.LTILT_MOTOR_PID_KF, Params.LTILT_MOTOR_PID_IZONE)
+                    .setPidControlParams(Params.TILT_PID_TOLERANCE, Params.TILT_SOFTWARE_PID_ENABLED),
+                null);
+            motor.setSoftPositionLimits(Params.TILT_MIN_POS, Params.TILT_MAX_POS, false);
+        }
 
         if (Params.HAS_TWO_SHOOTERS)
         {
@@ -303,15 +306,18 @@ public class Shooter extends TrcSubsystem
                     .setPidControlParams(Params.SHOOTER_PID_TOLERANCE_RPM/60.0, Params.SHOOTER_SOFTWARE_PID_ENABLED),
                 null);
             motor = rightShooter.getTiltMotor();
-            motor.setPositionSensorScaleAndOffset(Params.TILT_MOTOR_DEG_PER_COUNT, Params.TILT_POS_OFFSET);
-            motor.setPositionPidParameters(
-                new TrcMotor.PidParams()
-                    .setPidCoefficients(
-                        Params.RTILT_MOTOR_PID_KP, Params.RTILT_MOTOR_PID_KI, Params.RTILT_MOTOR_PID_KD,
-                        Params.RTILT_MOTOR_PID_KF, Params.RTILT_MOTOR_PID_IZONE)
-                    .setPidControlParams(Params.TILT_PID_TOLERANCE, Params.TILT_SOFTWARE_PID_ENABLED),
-                null);
-            motor.setSoftPositionLimits(Params.TILT_MIN_POS, Params.TILT_MAX_POS, false);
+            if (motor != null)
+            {
+                motor.setPositionSensorScaleAndOffset(Params.TILT_MOTOR_DEG_PER_COUNT, Params.TILT_POS_OFFSET);
+                motor.setPositionPidParameters(
+                    new TrcMotor.PidParams()
+                        .setPidCoefficients(
+                            Params.RTILT_MOTOR_PID_KP, Params.RTILT_MOTOR_PID_KI, Params.RTILT_MOTOR_PID_KD,
+                            Params.RTILT_MOTOR_PID_KF, Params.RTILT_MOTOR_PID_IZONE)
+                        .setPidControlParams(Params.TILT_PID_TOLERANCE, Params.TILT_SOFTWARE_PID_ENABLED),
+                    null);
+                motor.setSoftPositionLimits(Params.TILT_MIN_POS, Params.TILT_MAX_POS, false);
+            }
         }
         else
         {
