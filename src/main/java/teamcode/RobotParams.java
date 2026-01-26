@@ -69,7 +69,6 @@ public class RobotParams
         public static final boolean useSubsystems               = true;
         public static final boolean showSubsystems              = true;
         public static final boolean showSubsystemGraphs         = true;
-        public static final boolean showIntakeStatus            = false;
         public static final String testSubsystemName            = "Shooter.PrimaryMotor";
         // Drive Base Subsystem
         public static final boolean useDriveBase                = false;
@@ -81,9 +80,14 @@ public class RobotParams
         public static final boolean useAntiTipping              = false;
         // Other Subsystems
         public static final boolean useShooter                  = true;
-        public static final boolean useIntake                   = true;
         public static final boolean showShooterStatus           = true;
         public static final boolean useRegression               = true;
+        public static final boolean useIntake                   = false;
+        public static final boolean showIntakeStatus            = false;
+        public static final boolean useHopper                   = false;
+        public static final boolean showHopperStatus            = false;
+        public static final boolean useClimber                  = false;
+        public static final boolean showClimberStatus           = false;
         // Auto Tasks
     }   //class Preferences
 
@@ -95,8 +99,12 @@ public class RobotParams
         // Joystick ports.
         public static final int XBOX_DRIVER_CONTROLLER          = 0;
         public static final int XBOX_OPERATOR_CONTROLLER        = 1;
+        // CAN Bus Names
+        public static final String CANBUS_CANIVORE              = "2026_CANivore";
         // CAN IDs.
-        public static final int CANID_PIGEON2                   = 1;
+        public static final int CANID_PDP                       = 1;
+        public static final int CANID_PCM                       = 2;
+        public static final int CANID_PIGEON2                   = 10;
         // Drive Motor CAN IDs.
         public static final int CANID_FLDRIVE_MOTOR             = 3;    //Orange
         public static final int CANID_FRDRIVE_MOTOR             = 4;    //Yellow
@@ -111,21 +119,20 @@ public class RobotParams
         public static final int CANID_FRSTEER_ENCODER           = 24;   //Yellow
         public static final int CANID_BLSTEER_ENCODER           = 25;   //Green
         public static final int CANID_BRSTEER_ENCODER           = 26;   //Blue
-        // Subsystem CAN IDs.
-        public static final int CANID_SHOOTER_LEFT_MOTOR        = 7;    //Purple
-        public static final int CANID_SHOOTER_RIGHT_MOTOR       = 8;    //Gray
-        public static final int CANID_PAN_MOTOR                 = 9;    //White
-        public static final int CANID_TILT_MOTOR                = 17;   //Purple
-        public static final int CANID_INTAKE_MOTOR              = 18; // TODO: Determine this
-        public static final int CANID_INTAKE_DEPLOYER_MOTOR     = 19; // TODO: Determine this
-        public static final int CANID_INTAKE_FOLLOWER_MOTOR     = 20; // TODO: Determine this
-
-        public static final String CANBUS_CANIVORE              = "2026_CANivore";
-
-        // Miscellaneous CAN IDs.
-        public static final int CANID_PDP                       = 30;
-        public static final int CANID_PCM                       = 31;
-        // Subsystem CAN IDs.
+        // Shooter CAN IDs.
+        public static final int CANID_LSHOOTER_PRIMARY_MOTOR    = 7;    //Purple
+        public static final int CANID_LSHOOTER_FOLLOWER_MOTOR   = 8;    //Gray
+        public static final int CANID_LSHOOTER_TILT_MOTOR       = 9;    //White
+        public static final int CANID_RSHOOTER_PRIMARY_MOTOR    = 17;   //Purple
+        public static final int CANID_RSHOOTER_FOLLOWER_MOTOR   = 18;   //Gray
+        public static final int CANID_RSHOOTER_TILT_MOTOR       = 19;   //White
+        public static final int CANID_SHOOTER_TURRET_MOTOR      = 27;   //Purple
+        // Intake CAN IDs
+        public static final int CANID_INTAKE_PRIMARY_MOTOR      = 28;   //Gray
+        public static final int CANID_INTAKE_FOLLOWER_MOTOR     = 29;   //White
+        public static final int CANID_INTAKE_DEPLOYER_MOTOR     = 37;   //Purple
+        // Hopper CAN IDs
+        // Climber CAN IDs
 
         // Analog Input ports.
         public static final int AIN_ULTRASONIC                  = 0;

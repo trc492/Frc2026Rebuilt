@@ -56,12 +56,14 @@ import teamcode.vision.OpenCvVision;
 import teamcode.vision.PhotonVision;
 import trclib.dataprocessor.TrcUtil;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
+import trclib.motor.TrcMotor;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcBuildInfo;
 import trclib.robotcore.TrcDbgTrace;
 import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcRobot.RunMode;
 import trclib.sensor.TrcRobotBattery;
+import trclib.subsystem.TrcRollerIntake;
 import trclib.subsystem.TrcShooter;
 import trclib.subsystem.TrcSubsystem;
 import trclib.vision.TrcVisionRelocalize;
@@ -102,8 +104,12 @@ public class Robot extends FrcRobot
     public Command m_autonomousCommand;
     // Other subsystems.
     public Shooter shooterSubsystem;
-    public TrcShooter rShooter;
-    public Intake intake;
+    public TrcShooter leftShooter;
+    public TrcShooter rightShooter;
+    public TrcMotor turret;
+    public Intake intakeSubsystem;
+    public TrcRollerIntake intake;
+    public TrcMotor intakeDeployer;
 
     // Auto Tasks.
 
@@ -216,13 +222,17 @@ public class Robot extends FrcRobot
                 // Create subsystems.
                 if (RobotParams.Preferences.useShooter)
                 {
-                    shooterSubsystem = new Shooter(this);
-                    rShooter = shooterSubsystem.getRShooter();
+                    shooterSubsystem = new Shooter();
+                    leftShooter = shooterSubsystem.getLeftShooter();
+                    rightShooter = shooterSubsystem.getRightShooter();
+                    turret = shooterSubsystem.getTurret();
                 }
 
                 if(RobotParams.Preferences.useIntake)
                 {
-                    intake = new Intake(this);
+                    intakeSubsystem = new Intake();
+                    intake = intakeSubsystem.getIntake();
+                    intakeDeployer = intakeSubsystem.getDeployer();
                 }
                 
                 TrcSubsystem.updateSubsystemParamsToDashboard();

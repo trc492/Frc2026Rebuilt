@@ -827,22 +827,54 @@ public class FrcTest extends FrcTeleOp
                     if (pressed)
                     {
                         String subsystemName = testChoices.getSubsystemName();
-                        String[] tokens = subsystemName.split("\\.");
-                        if (robot.rShooter != null && tokens.length > 0 &&
-                            tokens[0].equalsIgnoreCase(Shooter.Params.SUBSYSTEM_NAME))
+                        if (robot.shooterSubsystem != null && subsystemName.equalsIgnoreCase(Shooter.SUBSYSTEM_NAME))
                         {
-                            // Toggle shooter flywheel ON/OFF with velocity specified in Dashboard.
-                            if (robot.rShooter.getShooterMotor1TargetRPM() != 0.0)
+                            // Toggle left and right shooter flywheels ON/OFF with velocity specified in Dashboard.
+                            if (robot.shooterSubsystem.getFlywheelTargetRPM() != 0.0)
                             {
-                                robot.globalTracer.traceInfo(moduleName, ">>>>> Tune Shooter: Stop!");
-                                robot.rShooter.stopShooter();
+                                robot.globalTracer.traceInfo(moduleName, ">>>>> Tune %s: Stop!", subsystemName);
+                                robot.shooterSubsystem.stopFlywheel();
                             }
                             else
                             {
-                                double shooterVel = testChoices.getSubsystemTargetParam();
+                                double flywheelRPM = testChoices.getSubsystemTargetParam();
                                 robot.globalTracer.traceInfo(
-                                    moduleName, ">>>>> Tune Shooter: vel=%f", shooterVel);
-                                robot.rShooter.setShooterMotorRPM(shooterVel, null);
+                                    moduleName, ">>>>> Tune %s: RPM=%f", subsystemName, flywheelRPM);
+                                robot.shooterSubsystem.setFlywheelRPM(flywheelRPM, flywheelRPM);
+                            }
+                        }
+                        else if (robot.leftShooter != null &&
+                                 subsystemName.equalsIgnoreCase(Shooter.Params.LSHOOTER_PRIMARY_MOTOR_NAME))
+                        {
+                            // Toggle left shooter flywheel ON/OFF with velocity specified in Dashboard.
+                            if (robot.leftShooter.getShooterMotor1TargetRPM() != 0.0)
+                            {
+                                robot.globalTracer.traceInfo(moduleName, ">>>>> Tune %s: Stop!", subsystemName);
+                                robot.leftShooter.stopShooter();
+                            }
+                            else
+                            {
+                                double flywheelRPM = testChoices.getSubsystemTargetParam();
+                                robot.globalTracer.traceInfo(
+                                    moduleName, ">>>>> Tune %s: RPM=%f", subsystemName, flywheelRPM);
+                                robot.leftShooter.setShooterMotorRPM(flywheelRPM, null);
+                            }
+                        }
+                        else if (robot.rightShooter != null &&
+                                 subsystemName.equalsIgnoreCase(Shooter.Params.RSHOOTER_PRIMARY_MOTOR_NAME))
+                        {
+                            // Toggle right shooter flywheel ON/OFF with velocity specified in Dashboard.
+                            if (robot.rightShooter.getShooterMotor1TargetRPM() != 0.0)
+                            {
+                                robot.globalTracer.traceInfo(moduleName, ">>>>> Tune %s: Stop!", subsystemName);
+                                robot.rightShooter.stopShooter();
+                            }
+                            else
+                            {
+                                double flywheelRPM = testChoices.getSubsystemTargetParam();
+                                robot.globalTracer.traceInfo(
+                                    moduleName, ">>>>> Tune %s: RPM=%f", subsystemName, flywheelRPM);
+                                robot.rightShooter.setShooterMotorRPM(flywheelRPM, null);
                             }
                         }
                     }
@@ -864,15 +896,20 @@ public class FrcTest extends FrcTeleOp
                     {
                         String subsystemName = testChoices.getSubsystemName();
 
-                        if (robot.rShooter.panMotor != null &&
-                            subsystemName.equalsIgnoreCase(Shooter.Params.PAN_MOTOR_NAME))
+                        if (robot.leftShooter.tiltMotor != null &&
+                            subsystemName.equalsIgnoreCase(Shooter.Params.LTILT_MOTOR_NAME))
                         {
-                            robot.rShooter.panMotor.presetPositionUp(moduleName, Shooter.Params.PAN_POWER_LIMIT);
+                            robot.leftShooter.tiltMotor.presetPositionUp(moduleName, Shooter.Params.TILT_POWER_LIMIT);
                         }
-                        else if (robot.rShooter.tiltMotor != null &&
-                                 subsystemName.equalsIgnoreCase(Shooter.Params.R_TILT_MOTOR_NAME))
+                        else if (robot.rightShooter.tiltMotor != null &&
+                                 subsystemName.equalsIgnoreCase(Shooter.Params.RTILT_MOTOR_NAME))
                         {
-                            robot.rShooter.tiltMotor.presetPositionUp(moduleName, Shooter.Params.R_TILT_POWER_LIMIT);
+                            robot.rightShooter.tiltMotor.presetPositionUp(moduleName, Shooter.Params.TILT_POWER_LIMIT);
+                        }
+                        else if (robot.turret != null &&
+                                 subsystemName.equalsIgnoreCase(Shooter.Params.TURRET_MOTOR_NAME))
+                        {
+                            robot.rightShooter.panMotor.presetPositionUp(moduleName, Shooter.Params.TURRET_POWER_LIMIT);
                         }
                     }
                     passToTeleOp = false;
@@ -886,15 +923,20 @@ public class FrcTest extends FrcTeleOp
                     {
                         String subsystemName = testChoices.getSubsystemName();
 
-                        if (robot.rShooter.panMotor != null &&
-                            subsystemName.equalsIgnoreCase(Shooter.Params.PAN_MOTOR_NAME))
+                        if (robot.leftShooter.tiltMotor != null &&
+                            subsystemName.equalsIgnoreCase(Shooter.Params.LTILT_MOTOR_NAME))
                         {
-                            robot.rShooter.panMotor.presetPositionDown(moduleName, Shooter.Params.PAN_POWER_LIMIT);
+                            robot.leftShooter.tiltMotor.presetPositionDown(moduleName, Shooter.Params.TILT_POWER_LIMIT);
                         }
-                        else if (robot.rShooter.tiltMotor != null &&
-                                 subsystemName.equalsIgnoreCase(Shooter.Params.R_TILT_MOTOR_NAME))
+                        else if (robot.rightShooter.tiltMotor != null &&
+                                 subsystemName.equalsIgnoreCase(Shooter.Params.RTILT_MOTOR_NAME))
                         {
-                            robot.rShooter.tiltMotor.presetPositionDown(moduleName, Shooter.Params.R_TILT_POWER_LIMIT);
+                            robot.rightShooter.tiltMotor.presetPositionDown(moduleName, Shooter.Params.TILT_POWER_LIMIT);
+                        }
+                        else if (robot.turret != null &&
+                                 subsystemName.equalsIgnoreCase(Shooter.Params.TURRET_MOTOR_NAME))
+                        {
+                            robot.rightShooter.panMotor.presetPositionDown(moduleName, Shooter.Params.TURRET_POWER_LIMIT);
                         }
                     }
                     passToTeleOp = false;
