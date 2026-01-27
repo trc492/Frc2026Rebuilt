@@ -51,11 +51,11 @@ public class Intake extends TrcSubsystem
         // Motor Characteristics
         public static final MotorType INTAKE_MOTOR_TYPE         = MotorType.CanTalonFx;
         public static final String INTAKE_PRIMARY_MOTOR_NAME    = SUBSYSTEM_NAME + ".PrimaryMotor";
-        public static final int INTAKE_PRIMARY_MOTOR_CANID      = RobotParams.HwConfig.CANID_INTAKE_PRIMARY_MOTOR;
         public static final boolean INTAKE_PRIMARY_MOTOR_INVERTED = false;
+        public static final int INTAKE_PRIMARY_MOTOR_CANID      = RobotParams.HwConfig.CANID_INTAKE_PRIMARY_MOTOR;
         public static final String INTAKE_FOLLOWER_MOTOR_NAME   = SUBSYSTEM_NAME + ".FollowerMotor";
-        public static final int INTAKE_FOLLOWER_MOTOR_CANID     = RobotParams.HwConfig.CANID_INTAKE_FOLLOWER_MOTOR;
         public static final boolean INTAKE_FOLLOWER_MOTOR_INVERTED = false;
+        public static final int INTAKE_FOLLOWER_MOTOR_CANID     = RobotParams.HwConfig.CANID_INTAKE_FOLLOWER_MOTOR;
         // Intake Parameters
         public static final double INTAKE_POWER                 = 0.5;
         public static final double EJECT_POWER                  = -0.5;
@@ -67,8 +67,8 @@ public class Intake extends TrcSubsystem
         // Motor Characteristics
         public static final MotorType DEPLOYER_MOTOR_TYPE       = MotorType.CanTalonFx;
         public static final String DEPLOYER_MOTOR_NAME          = SUBSYSTEM_NAME + ".DeployerMotor";
-        public static final int DEPLOYER_MOTOR_CANID            = RobotParams.HwConfig.CANID_INTAKE_DEPLOYER_MOTOR;
         public static final boolean DEPLOYER_MOTOR_INVERTED     = false;
+        public static final int DEPLOYER_MOTOR_CANID            = RobotParams.HwConfig.CANID_INTAKE_DEPLOYER_MOTOR;
         // PID Parameters
         public static final double DEPLOYER_MOTOR_PID_KP        = 0.0;
         public static final double DEPLOYER_MOTOR_PID_KI        = 0.0;
@@ -85,7 +85,9 @@ public class Intake extends TrcSubsystem
         public static final double DEPLOYER_MIN_POS             = DEPLOYER_POS_OFFSET;
         public static final double DEPLOYER_MAX_POS             = 12.0;
         public static final double DEPLOYER_POS_PRESET_TOLERANCE = 5.0;
-        public static final double[] PAN_POS_PRESETS            = {DEPLOYER_MIN_POS, DEPLOYER_MAX_POS};
+        public static final double DEPLOYER_RETRACT_POS         = DEPLOYER_MIN_POS;
+        public static final double DEPLOYER_EXTEND_POS          = DEPLOYER_MAX_POS;
+        public static final double[] DEPLOYER_POS_PRESETS       = {DEPLOYER_RETRACT_POS, DEPLOYER_EXTEND_POS};
         // Zero calibration
         public static final double DEPLOYER_ZERO_CAL_POWER      = -0.3;
         public static final double DEPLOYER_STALL_MIN_POWER     = Math.abs(DEPLOYER_ZERO_CAL_POWER);
@@ -158,6 +160,19 @@ public class Intake extends TrcSubsystem
         return deployer;
     } //getDeployer
 
+    public void retractDeployer()
+    {
+        deployer.setPosition(Params.DEPLOYER_RETRACT_POS);
+    }   //retractDeployer
+
+    public void extendDeployer()
+    {
+        if(deployer != null)
+        {
+            deployer.setPosition(Params.DEPLOYER_EXTEND_POS);
+        }
+    }   // extendDeployer
+
     //
     // Implements TrcSubsystem abstract methods.
     //
@@ -172,18 +187,6 @@ public class Intake extends TrcSubsystem
         if (deployer != null) deployer.cancel();
     }   //cancel
 
-    public void extend(){
-        if(deployer != null)
-        {
-            deployer.setPosition(Params.PAN_POS_PRESETS[1]);
-        }
-    } // extend
-
-    public void retract()
-    {
-        deployer.setPosition(Params.PAN_POS_PRESETS[0]);
-    } //retract
-    
    /**
      * This method starts zero calibrate of the subsystem.
      *

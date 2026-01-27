@@ -56,6 +56,7 @@ import teamcode.subsystems.Shooter;
 import teamcode.vision.OpenCvVision;
 import teamcode.vision.PhotonVision;
 import trclib.dataprocessor.TrcUtil;
+import trclib.drivebase.TrcDriveBase;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
 import trclib.motor.TrcMotor;
 import trclib.pathdrive.TrcPose2D;
@@ -244,9 +245,8 @@ public class Robot extends FrcRobot
                 {
                     hopperSubsystem = new Hopper();
                     hopper = hopperSubsystem.getHopper();
-
                 }
-                
+
                 TrcSubsystem.updateSubsystemParamsToDashboard();
 
                 // Create autotasks.
@@ -508,6 +508,27 @@ public class Robot extends FrcRobot
             TrcDbgTrace.setTraceLogEnabled(enabled);
         }
     }   //setTraceLogEnabled
+
+    public TrcPose2D adjustMotionTarget(TrcDriveBase driveBase, TrcPose2D target, double timeOfFlight)
+    {
+        // Field-relative translational velocity
+        TrcPose2D fieldVel = driveBase.getFieldVelocity();
+        // Robot heading (field-relative, degrees, CW positive)
+        double headingRad = Math.toRadians(driveBase.getHeading());
+        // Rotate field velocity into robot frame (CW-positive convention)
+        double cos = Math.cos(headingRad);
+        double sin = Math.sin(headingRad);
+        double vxRobot =  fieldVel.x * cos + fieldVel.y * sin;
+        double vyRobot = -fieldVel.x * sin + fieldVel.y * cos;
+        // // Robot angular velocity (rad/s, CW positive)
+        // double omega = Math.toRadians(driveBase.getAngularVelocity());
+
+        // Motion compensation during ball flight
+        TrcPose2D motionPose = new TrcPose2D(-vxRobot * timeOfFlight, -vyRobot * timeOfFlight, 0.0);
+            // omega * timeOfFlight);   // yawComp (CW-positive)
+
+        return target.addRelativePose(motionPose);
+    }   //adjustMotionTarget
 
     /**
      * This method retrieves the field zero compass heading from the calibration data file.

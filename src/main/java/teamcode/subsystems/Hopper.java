@@ -43,14 +43,11 @@ public class Hopper extends TrcSubsystem
         // Agitator Params
         public static final MotorType HOPPER_MOTOR_TYPE         = MotorType.CanTalonFx;
         public static final String HOPPER_PRIMARY_MOTOR_NAME    = SUBSYSTEM_NAME + ".PrimaryMotor";
-        public static final String HOPPER_FOLLOWER_MOTOR_NAME  = SUBSYSTEM_NAME + ".FollowerMotor"; 
-        public static final int HOPPER_PRIMARY_MOTOR_CANID      = RobotParams.HwConfig.CANID_LEFT_HOPPER_MOTOR;
-        public static final int HOPPER_FOLLOWER_MOTOR_CANID      = RobotParams.HwConfig.CANID_RIGHT_HOPPER_MOTOR;
-
-
-        public static final boolean HOPPER_RIGHT_MOTOR_INVERTED = false;
-        public static final boolean HOPPER_LEFT_MOTOR_INVERTED = false;
-      
+        public static final boolean HOPPER_PRIMARY_MOTOR_INVERTED = false;
+        public static final int HOPPER_PRIMARY_MOTOR_CANID      = RobotParams.HwConfig.CANID_HOPPER_LEFT_MOTOR;
+        public static final String HOPPER_FOLLOWER_MOTOR_NAME   = SUBSYSTEM_NAME + ".FollowerMotor";
+        public static final boolean HOPPER_FOLLOWER_MOTOR_INVERTED = false;
+        public static final int HOPPER_FOLLOWER_MOTOR_CANID     = RobotParams.HwConfig.CANID_HOPPER_RIGHT_MOTOR;
     }   //class Params
 
     private final FrcDashboard dashboard;
@@ -67,34 +64,30 @@ public class Hopper extends TrcSubsystem
         dashboard.refreshKey(DBKEY_PREFERENCE_SHOW_STATUS, RobotParams.Preferences.showHopperStatus);
         dashboard.refreshKey(DBKEY_PREFERENCE_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs);
 
-
         FrcMotorActuator.Params hopperParams = new FrcMotorActuator.Params()
             .setPrimaryMotor(
-                Params.HOPPER_PRIMARY_MOTOR_NAME, Params.HOPPER_MOTOR_TYPE, Params.HOPPER_LEFT_MOTOR_INVERTED,
-                true, true, Params.HOPPER_PRIMARY_MOTOR_CANID, 
-                Params.CANBUS_NAME, null)
-            .addFollowerMotor(Params.HOPPER_FOLLOWER_MOTOR_NAME, Params.HOPPER_MOTOR_TYPE, 
-            Params.HOPPER_RIGHT_MOTOR_INVERTED, Params.HOPPER_FOLLOWER_MOTOR_CANID, 
-            Params.CANBUS_NAME, null);
-        
-        hopper = new FrcMotorActuator(hopperParams).getMotor();
+                Params.HOPPER_PRIMARY_MOTOR_NAME, Params.HOPPER_MOTOR_TYPE, Params.HOPPER_PRIMARY_MOTOR_INVERTED,
+                true, true, Params.HOPPER_PRIMARY_MOTOR_CANID, Params.CANBUS_NAME, null)
+            .addFollowerMotor(
+                Params.HOPPER_FOLLOWER_MOTOR_NAME, Params.HOPPER_MOTOR_TYPE, Params.HOPPER_FOLLOWER_MOTOR_INVERTED,
+                Params.HOPPER_FOLLOWER_MOTOR_CANID, Params.CANBUS_NAME, null);
 
+        hopper = new FrcMotorActuator(hopperParams).getMotor();
     }   //Hopper
 
     //
     // Implements TrcSubsystem abstract methods.
     //
 
-    public void setPower(double power)
-    {
-        hopper.setPower(power);
-
-    } //setPower
-
     public TrcMotor getHopper()
     {
         return hopper;
     } //getHopper
+
+    public void setPower(double power)
+    {
+        hopper.setPower(power);
+    } //setPower
 
     /**
      * This method cancels any pending operations.
@@ -140,12 +133,8 @@ public class Hopper extends TrcSubsystem
             {
                 dashboard.displayPrintf(
                     lineNum++, "%s: power=%.1f, current=%.1f",
-                    Params.HOPPER_PRIMARY_MOTOR_NAME, hopper.getPower(), hopper.getCurrent());
+                    SUBSYSTEM_NAME, hopper.getPower(), hopper.getCurrent());
             }
-        }
-
-        if (dashboard.getBoolean(DBKEY_PREFERENCE_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs))
-        {
         }
 
         return lineNum;
