@@ -32,9 +32,9 @@ import trclib.robotcore.TrcTaskMgr;
 /**
  * This class implements auto-assist task.
  */
-public class TaskAuto extends TrcAutoTask<TaskAuto.State>
+public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
 {
-    private static final String moduleName = TaskAuto.class.getSimpleName();
+    private static final String moduleName = TaskAutoClimb.class.getSimpleName();
 
     public enum State
     {
@@ -61,7 +61,7 @@ public class TaskAuto extends TrcAutoTask<TaskAuto.State>
      *
      * @param robot specifies the robot object that contains all the necessary subsystems.
      */
-    public TaskAuto(Robot robot)
+    public TaskAutoClimb(Robot robot)
     {
         super(moduleName, TrcTaskMgr.TaskType.POST_PERIODIC_TASK);
         this.robot = robot;
