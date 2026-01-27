@@ -172,6 +172,18 @@ public class Intake extends TrcSubsystem
         if (deployer != null) deployer.cancel();
     }   //cancel
 
+    public void extend(){
+        if(deployer != null)
+        {
+            deployer.setPosition(Params.PAN_POS_PRESETS[1]);
+        }
+    } // extend
+
+    public void retract()
+    {
+        deployer.setPosition(Params.PAN_POS_PRESETS[0]);
+    } //retract
+    
    /**
      * This method starts zero calibrate of the subsystem.
      *

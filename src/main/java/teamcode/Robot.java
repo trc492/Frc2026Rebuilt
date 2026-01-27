@@ -50,6 +50,7 @@ import frclib.vision.FrcPhotonVision;
 import frclib.vision.FrcPhotonVision.DetectedObject;
 import teamcode.indicators.LEDIndicator;
 import teamcode.subsystems.DriveBase;
+import teamcode.subsystems.Hopper;
 import teamcode.subsystems.Intake;
 import teamcode.subsystems.Shooter;
 import teamcode.vision.OpenCvVision;
@@ -111,6 +112,8 @@ public class Robot extends FrcRobot
     public Intake intakeSubsystem;
     public TrcRollerIntake intake;
     public TrcMotor intakeDeployer;
+    public Hopper hopperSubsystem;
+    public TrcMotor hopper;
 
     // Auto Tasks.
 
@@ -235,6 +238,13 @@ public class Robot extends FrcRobot
                     intakeSubsystem = new Intake();
                     intake = intakeSubsystem.getIntake();
                     intakeDeployer = intakeSubsystem.getDeployer();
+                }
+
+                if(RobotParams.Preferences.useHopper)
+                {
+                    hopperSubsystem = new Hopper();
+                    hopper = hopperSubsystem.getHopper();
+
                 }
                 
                 TrcSubsystem.updateSubsystemParamsToDashboard();

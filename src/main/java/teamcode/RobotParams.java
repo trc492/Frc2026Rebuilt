@@ -134,6 +134,8 @@ public class RobotParams
         public static final int CANID_INTAKE_FOLLOWER_MOTOR     = 38;   //Gray
         public static final int CANID_INTAKE_DEPLOYER_MOTOR     = 39;   //White
         // Hopper CAN IDs
+        public static final int CANID_LEFT_HOPPER_MOTOR         = 20; // TODO: Determine number
+        public static final int CANID_RIGHT_HOPPER_MOTOR        = 21; // TODO: Determine number
         // Climber CAN IDs
 
         // Analog Input ports.
