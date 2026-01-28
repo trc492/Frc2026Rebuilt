@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcMatchInfo;
 import frclib.driverio.FrcUserChoices;
-import teamcode.autocommands.CmdAuto;
+import teamcode.autocommands.CmdRebuiltAuto;
 import trclib.command.CmdPidDrive;
 import trclib.command.CmdPurePursuitDrive;
 import trclib.command.CmdTimedDrive;
@@ -291,7 +291,7 @@ public class FrcAuto implements TrcRobot.RobotMode
             case TEMPLATE_AUTO:
                 if (robot.robotBase != null)
                 {
-                    autoCommand = new CmdAuto(robot, autoChoices);
+                    autoCommand = new CmdRebuiltAuto(robot, autoChoices);
                 }
                 break;
 

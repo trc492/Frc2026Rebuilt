@@ -32,9 +32,9 @@ import trclib.timer.TrcTimer;
 /**
  * This class implements an autonomous strategy.
  */
-public class CmdAuto implements TrcRobot.RobotCommand
+public class CmdRebuiltAuto implements TrcRobot.RobotCommand
 {
-    private static final String moduleName = CmdAuto.class.getSimpleName();
+    private static final String moduleName = CmdRebuiltAuto.class.getSimpleName();
 
     private enum State
     {
@@ -54,7 +54,7 @@ public class CmdAuto implements TrcRobot.RobotCommand
      * @param robot specifies the robot object for providing access to various global objects.
      * @param autoChoices specifies the autoChoices object.
      */
-    public CmdAuto(Robot robot, FrcAuto.AutoChoices autoChoices)
+    public CmdRebuiltAuto(Robot robot, FrcAuto.AutoChoices autoChoices)
     {
         this.robot = robot;
         this.autoChoices = autoChoices;
@@ -63,7 +63,7 @@ public class CmdAuto implements TrcRobot.RobotCommand
         event = new TrcEvent(moduleName);
         sm = new TrcStateMachine<>(moduleName);
         sm.start(State.START);
-    }   //CmdAuto
+    }   //CmdRebuiltAuto
 
     //
     // Implements the TrcRobot.RobotCommand interface.
@@ -103,11 +103,11 @@ public class CmdAuto implements TrcRobot.RobotCommand
 
         if (state == null)
         {
-            robot.dashboard.displayPrintf(8, "State: disabled or waiting (nextState=" + sm.getNextState() + ")...");
+            robot.dashboard.displayPrintf(15, "State: disabled or waiting (nextState=" + sm.getNextState() + ")...");
         }
         else
         {
-            robot.dashboard.displayPrintf(8, "State: " + state);
+            robot.dashboard.displayPrintf(15, "State: " + state);
             robot.globalTracer.tracePreStateInfo(sm.toString(), state);
             switch (state)
             {
@@ -142,4 +142,4 @@ public class CmdAuto implements TrcRobot.RobotCommand
         return !sm.isEnabled();
     }   //cmdPeriodic
 
-}   //class CmdAuto
+}   //class CmdRebuiltAuto
