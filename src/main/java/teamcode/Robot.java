@@ -48,6 +48,9 @@ import frclib.sensor.FrcPdp;
 import frclib.sensor.FrcRobotBattery;
 import frclib.vision.FrcPhotonVision;
 import frclib.vision.FrcPhotonVision.DetectedObject;
+import teamcode.autotasks.TaskAutoClimb;
+import teamcode.autotasks.TaskAutoPickup;
+import teamcode.autotasks.TaskAutoScore;
 import teamcode.indicators.LEDIndicator;
 import teamcode.subsystems.DriveBase;
 import teamcode.subsystems.Hopper;
@@ -56,7 +59,6 @@ import teamcode.subsystems.Shooter;
 import teamcode.vision.OpenCvVision;
 import teamcode.vision.PhotonVision;
 import trclib.dataprocessor.TrcUtil;
-import trclib.drivebase.TrcDriveBase;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
 import trclib.motor.TrcMotor;
 import trclib.pathdrive.TrcPose2D;
@@ -115,8 +117,10 @@ public class Robot extends FrcRobot
     public TrcMotor intakeDeployer;
     public Hopper hopperSubsystem;
     public TrcMotor hopper;
-
     // Auto Tasks.
+    public TaskAutoScore autoScoreTask;
+    public TaskAutoPickup autoPickupTask;
+    public TaskAutoClimb autoClimbTask;
 
     /**
      * Constructor: Create an instance of the object.
@@ -250,6 +254,9 @@ public class Robot extends FrcRobot
                 TrcSubsystem.updateSubsystemParamsToDashboard();
 
                 // Create autotasks.
+                autoScoreTask = RobotParams.Preferences.useAutoScoreTask? new TaskAutoScore(this): null;
+                autoPickupTask = RobotParams.Preferences.useAutoPickupTask? new TaskAutoPickup(this): null;
+                autoClimbTask = RobotParams.Preferences.useAutoClimbTask? new TaskAutoClimb(this): null;
 
                 // Zero calibrate all subsystems only once in robot initialization.
                 zeroCalibrate(null, null);

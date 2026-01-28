@@ -65,7 +65,7 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
     {
         super(moduleName, TrcTaskMgr.TaskType.POST_PERIODIC_TASK);
         this.robot = robot;
-    }   //TaskAuto
+    }   //TaskAutoScore
 
     /**
      * This method starts the auto-assist operation.
@@ -73,14 +73,14 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
      * @param owner specifies the owner to acquire subsystem ownerships, can be null if not requiring ownership.
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
-    public void autoAssist(String owner, TrcEvent completionEvent)
+    public void autoScore(String owner, TrcEvent completionEvent)
     {
         TaskParams taskParams = new TaskParams();
         tracer.traceInfo(
             moduleName,
-            "autoAssist(owner=" + owner + ", event=" + completionEvent + ", taskParams=" + taskParams + ")");
+            "autoScore(owner=" + owner + ", event=" + completionEvent + ", taskParams=" + taskParams + ")");
         startAutoTask(owner, State.START, taskParams, completionEvent);
-    }   //autoAssist
+    }   //autoScore
 
     //
     // Implement TrcAutoTask abstract methods.
@@ -168,4 +168,4 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
         }
     }   //runTaskState
  
-}   //class TaskAuto
+}   //class TaskAutoScore

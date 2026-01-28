@@ -65,22 +65,22 @@ public class TaskAutoPickup extends TrcAutoTask<TaskAutoPickup.State>
     {
         super(moduleName, TrcTaskMgr.TaskType.POST_PERIODIC_TASK);
         this.robot = robot;
-    }   //TaskAuto
+    }   //TaskAutoPickup
 
     /**
-     * This method starts the auto-assist operation.
+     * This method starts the auto pickup operation.
      *
      * @param owner specifies the owner to acquire subsystem ownerships, can be null if not requiring ownership.
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
-    public void autoAssist(String owner, TrcEvent completionEvent)
+    public void autoPickup(String owner, TrcEvent completionEvent)
     {
         TaskParams taskParams = new TaskParams();
         tracer.traceInfo(
             moduleName,
-            "autoAssist(owner=" + owner + ", event=" + completionEvent + ", taskParams=" + taskParams + ")");
+            "autoPickup(owner=" + owner + ", event=" + completionEvent + ", taskParams=" + taskParams + ")");
         startAutoTask(owner, State.START, taskParams, completionEvent);
-    }   //autoAssist
+    }   //autoPickuup
 
     //
     // Implement TrcAutoTask abstract methods.
@@ -168,4 +168,4 @@ public class TaskAutoPickup extends TrcAutoTask<TaskAutoPickup.State>
         }
     }   //runTaskState
  
-}   //class TaskAuto
+}   //class TaskAutoPickup

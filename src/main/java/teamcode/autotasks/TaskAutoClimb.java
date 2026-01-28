@@ -65,22 +65,22 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
     {
         super(moduleName, TrcTaskMgr.TaskType.POST_PERIODIC_TASK);
         this.robot = robot;
-    }   //TaskAuto
+    }   //TaskAutoClimb
 
     /**
-     * This method starts the auto-assist operation.
+     * This method starts the auto climb operation.
      *
      * @param owner specifies the owner to acquire subsystem ownerships, can be null if not requiring ownership.
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
-    public void autoAssist(String owner, TrcEvent completionEvent)
+    public void autoClimb(String owner, TrcEvent completionEvent)
     {
         TaskParams taskParams = new TaskParams();
         tracer.traceInfo(
             moduleName,
-            "autoAssist(owner=" + owner + ", event=" + completionEvent + ", taskParams=" + taskParams + ")");
+            "autoClimb(owner=" + owner + ", event=" + completionEvent + ", taskParams=" + taskParams + ")");
         startAutoTask(owner, State.START, taskParams, completionEvent);
-    }   //autoAssist
+    }   //autoClimb
 
     //
     // Implement TrcAutoTask abstract methods.
@@ -168,4 +168,4 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
         }
     }   //runTaskState
  
-}   //class TaskAuto
+}   //class TaskAutoClimb
