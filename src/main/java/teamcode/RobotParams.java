@@ -211,6 +211,7 @@ public class RobotParams
         // Game element locations and dimensions.
         //
         // Array of AprilTag poses indexed by AprilTag ID.
+        // TODO: Add all april tag poses
         public static final TrcPose2D[] APRILTAG_POSES          =
         {
         /*ID01*/    new TrcPose2D(-25.98, 657.48, -126.0), //z=58.5
@@ -236,6 +237,11 @@ public class RobotParams
         /*ID21*/    new TrcPose2D(-158.66, 209.45, 0.0), //z=12.125
         /*ID22*/    new TrcPose2D(-130.32, 192.91, 60.0) //z=12.125
         };
+
+        // TODO: Determine april tags by color
+        public static final int[] blueGoalAprilTag              = new int[] {10};
+        public static final int[] redGoalAprilTag               = new int[] {12};
+        public static final int[] anyGoalAprilTags              = new int[] {10, 12};
         //
         // Robot starting positions.
         //

@@ -47,7 +47,7 @@ public class Shooter extends TrcSubsystem
     public static final String GOAL_ZONE_SHOOT_POINT = "GoalZoneShootPoint";
     public static final String FAR_ZONE_SHOOT_POINT = "FarZoneShootPoint";
 
-    private static final TrcLookupTable.Region[] shootRegions =
+    public static final TrcLookupTable.Region[] shootRegions =
     {
         // Region 1: tilt 26°, y = 15.42211x + 3116.30051
         new TrcLookupTable.Region(26.0, new double[][] {{3116.30051, 15.42211}}),
@@ -61,7 +61,7 @@ public class Shooter extends TrcSubsystem
         new TrcLookupTable.Region(45.0, new double[][] {{3288.15202, 14.80364}})
     };
 
-    private static final TrcLookupTable shootParamsTable = new TrcLookupTable()
+    public static final TrcLookupTable shootParamsTable = new TrcLookupTable()
         //        name,                     distance,   region,             shooterVel
         // Region 1: tilt 26°
         .addEntry(null,                     25.7,       shootRegions[0],    3500.0)
