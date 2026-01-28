@@ -22,12 +22,16 @@
 
 package teamcode.autotasks;
 
+import frclib.vision.FrcPhotonVision;
 import teamcode.Robot;
+import teamcode.indicators.LEDIndicator;
+import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcAutoTask;
 import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcOwnershipMgr;
 import trclib.robotcore.TrcRobot;
 import trclib.robotcore.TrcTaskMgr;
+import trclib.timer.TrcTimer;
 
 /**
  * This class implements auto-assist task.
@@ -39,22 +43,32 @@ public class TaskAutoPickup extends TrcAutoTask<TaskAutoPickup.State>
     public enum State
     {
         START,
+        FIND_FUEL,
+        PICKUP_FUEL,
         DONE
     }   //enum State
 
     private static class TaskParams
     {
-        TaskParams()
+        boolean useVision;
+
+        TaskParams(boolean useVision)
         {
         }   //TaskParams
 
         public String toString()
         {
-            return "()";
+            return "useVision=" + useVision;
         }   //toString
     }   //class TaskParams
 
     private final Robot robot;
+    private final TrcEvent driveEvent;
+    private final TrcEvent pickupEvent;
+
+    private boolean useVision;
+    private Double visionExpiredTime = null;
+    private TrcPose2D fuelPose = null;
 
     /**
      * Constructor: Create an instance of the object.
@@ -65,6 +79,9 @@ public class TaskAutoPickup extends TrcAutoTask<TaskAutoPickup.State>
     {
         super(moduleName, TrcTaskMgr.TaskType.POST_PERIODIC_TASK);
         this.robot = robot;
+
+        this.pickupEvent = new TrcEvent(moduleName + ".pickupEvent");
+        this.driveEvent = new TrcEvent(moduleName + ".driveEvent");
     }   //TaskAutoPickup
 
     /**
@@ -75,7 +92,7 @@ public class TaskAutoPickup extends TrcAutoTask<TaskAutoPickup.State>
      */
     public void autoPickup(String owner, TrcEvent completionEvent)
     {
-        TaskParams taskParams = new TaskParams();
+        TaskParams taskParams = new TaskParams(useVision);
         tracer.traceInfo(
             moduleName,
             "autoPickup(owner=" + owner + ", event=" + completionEvent + ", taskParams=" + taskParams + ")");
@@ -97,11 +114,23 @@ public class TaskAutoPickup extends TrcAutoTask<TaskAutoPickup.State>
     @Override
     protected boolean acquireSubsystemsOwnership(String owner)
     {
-        // Call each subsystem.acquireExclusiveAccess(owner) and return true only if all acquires returned true.
-        // For example:
-        // return owner == null ||
-        //        subsystem1.acquireExclusiveAccess(owner) && subsystem2.acquireExclusiveAccess(owner);
-        return owner == null || robot.robotBase.driveBase.acquireExclusiveAccess(owner);
+
+        boolean success = true;
+
+        if (owner != null)
+        {
+            if (useVision && robot.robotBase != null)
+            {
+                success = robot.robotBase.driveBase.acquireExclusiveAccess(owner);
+            }
+
+            if(robot.intakeSubsystem != null)
+            {
+                success &= robot.intake.acquireExclusiveAccess(owner); // TODO: FIGURE OUT OWNERSHIP FOR INTAKE SUBSYSTEM
+            }
+        }
+
+        return success;
     }   //acquireSubsystemsOwnership
 
     /**
@@ -119,8 +148,15 @@ public class TaskAutoPickup extends TrcAutoTask<TaskAutoPickup.State>
             tracer.traceInfo(
                 moduleName,
                 "Releasing subsystem ownership on behalf of " + owner +
-                "\n\trobotDrive=" + ownershipMgr.getOwner(robot.robotBase.driveBase));
-            robot.robotBase.driveBase.releaseExclusiveAccess(owner);
+                "\n\tintake=" + ownershipMgr.getOwner(robot.intake) +
+                (useVision && robot.robotBase != null?
+                    ("\n\tdriveBase=" + ownershipMgr.getOwner(robot.robotBase.driveBase)): ""));
+    
+            robot.intake.releaseExclusiveAccess(owner);
+            if (useVision && robot.robotBase != null)
+            {
+                robot.robotBase.driveBase.releaseExclusiveAccess(owner);
+            }
         }
     }   //releaseSubsystemsOwnership
 
@@ -134,7 +170,14 @@ public class TaskAutoPickup extends TrcAutoTask<TaskAutoPickup.State>
     protected void stopSubsystems(String owner)
     {
         tracer.traceInfo(moduleName, "Stopping subsystems.");
-        robot.robotBase.cancel(owner);
+
+        if(useVision && robot.robotBase != null){
+            robot.robotBase.cancel(owner);
+        }
+
+        if(robot.intakeSubsystem != null){
+            robot.intakeSubsystem.cancel();
+        }
     }   //stopSubsystems
 
     /**
@@ -158,6 +201,73 @@ public class TaskAutoPickup extends TrcAutoTask<TaskAutoPickup.State>
         switch (state)
         {
             case START:
+                fuelPose = null;
+
+                if (!taskParams.useVision)
+                {
+                    // Not using vision, just turn on intake and let the driver plow towards the object to pick it up
+                    // manually.
+                    tracer.traceInfo(moduleName, "***** Not using Vision to pickup fuel, manual pickup.");
+                    sm.setState(State.PICKUP_FUEL);
+                }
+                else if (robot.photonVisionBack != null)
+                {
+                    tracer.traceInfo(moduleName, "***** Using Artifact Vision.");
+                    visionExpiredTime = null;
+                    sm.setState(State.FIND_FUEL);
+                }
+
+                break;
+
+            case FIND_FUEL:
+                FrcPhotonVision.DetectedObject object = robot.photonVisionBack.getBestDetectedObject(null);
+
+                if (object != null)
+                {
+                    fuelPose = object.getObjectPose();
+                    tracer.traceInfo(
+                        moduleName, "***** Vision found fuel: objPose=" + fuelPose);
+                    if (robot.ledIndicator != null)
+                    {
+                        // Artifact pattern will turn itself off.
+                        //robot.ledIndicator.setStatusPatternOn(object.detectedObj.label, false); // TODO: FIGURE OUT LED FOR DETECTED OBJECTS
+                    }
+                    sm.setState(State.PICKUP_FUEL);
+                }
+                else if (visionExpiredTime == null)
+                {
+                    // Can't find object, set a timeout and try again.
+                    visionExpiredTime = TrcTimer.getCurrentTime() + 1.0;
+                }
+                else if (TrcTimer.getCurrentTime() >= visionExpiredTime)
+                {
+                    // Timed out, moving on.
+                    tracer.traceInfo(moduleName, "***** No fuel found.");
+                    if (robot.ledIndicator != null)
+                    {
+                        // Indicate we timed out and found nothing.
+                        //robot.ledIndicator.setStatusPatternOn(LEDIndicator.NOT_FOUND, false); // TODO: FIGURE OUT LED FOR NO OBJECT
+                    }
+                    sm.setState(State.DONE);
+                }
+                break;
+
+            case PICKUP_FUEL:
+                robot.intake.autoIntake(owner, pickupEvent, 0.0);
+
+                sm.addEvent(pickupEvent);
+
+                tracer.traceInfo(moduleName, "***** Intaking Fuel");
+
+                if (fuelPose != null && robot.robotBase != null)
+                {
+                    robot.robotBase.purePursuitDrive.start(owner, driveEvent, 0.0, true, 
+                    fuelPose);
+
+                    sm.addEvent(driveEvent);
+                    tracer.traceInfo(moduleName, "***** Drive to fuel at at " + fuelPose);
+                }
+                sm.waitForEvents(State.DONE, false);
                 break;
 
             case DONE:
