@@ -98,7 +98,7 @@ public class Shooter extends TrcSubsystem
 
         // Common Shooter Motor Characteristics
         public static final MotorType SHOOTER_MOTOR_TYPE        = MotorType.CanTalonFx;
-        public static final double SHOOTER_MOTOR_GEAR_RATIO     = 24.0/14.0;    // Load/Motor
+        public static final double SHOOTER_MOTOR_GEAR_RATIO     = 27.0/42.0;    // Load/Motor
         public static final double SHOOTER_MOTOR_REV_PER_COUNT  = 1.0/SHOOTER_MOTOR_GEAR_RATIO;
         public static final double SHOOTER_MOTOR_MAX_VEL        = 6000.0;
         public static final double SHOOTER_PID_TOLERANCE_RPM    = 100.0;
@@ -110,9 +110,9 @@ public class Shooter extends TrcSubsystem
         public static final boolean LSHOOTER_PRIMARY_MOTOR_INVERTED = false;
         public static final int LSHOOTER_PRIMARY_MOTOR_CANID    = RobotParams.HwConfig.CANID_LSHOOTER_PRIMARY_MOTOR;
         public static final String LSHOOTER_FOLLOWER_MOTOR_NAME = SUBSYSTEM_NAME + ".LeftFollowerMotor";
-        public static final boolean LSHOOTER_FOLLOWER_MOTOR_INVERTED = true;
+        public static final boolean LSHOOTER_FOLLOWER_MOTOR_INVERTED = false;
         public static final int LSHOOTER_FOLLOWER_MOTOR_CANID   = RobotParams.HwConfig.CANID_LSHOOTER_FOLLOWER_MOTOR;
-        public static final double LSHOOTER_MOTOR_PID_KP        = 0.3;
+        public static final double LSHOOTER_MOTOR_PID_KP        = 0.45;
         public static final double LSHOOTER_MOTOR_PID_KI        = 0.0;
         public static final double LSHOOTER_MOTOR_PID_KD        = 0.0;
         public static final double LSHOOTER_MOTOR_PID_KF        = 0.101;
