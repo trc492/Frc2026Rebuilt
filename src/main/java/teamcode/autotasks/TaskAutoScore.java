@@ -248,9 +248,9 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
                 if (aimInfo == null)
                 {
                     int[] goalAprilTags =
-                        taskParams.alliance == null? RobotParams.Game.anyGoalAprilTags:
+                        taskParams.alliance == null? RobotParams.Game.anyHubAprilTags:
                         taskParams.alliance == Alliance.Blue ?
-                            RobotParams.Game.blueGoalAprilTag: RobotParams.Game.redGoalAprilTag;
+                            RobotParams.Game.blueHubAprilTags: RobotParams.Game.redHubAprilTags;
                     FrcPhotonVision.DetectedObject aprilTagInfo = robot.photonVisionTurret.getBestDetectedAprilTag(goalAprilTags);
                     if (aprilTagInfo != null)
                     {

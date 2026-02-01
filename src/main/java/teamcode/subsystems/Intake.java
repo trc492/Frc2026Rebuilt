@@ -27,7 +27,9 @@ import frclib.motor.FrcMotorActuator;
 import frclib.motor.FrcMotorActuator.MotorType;
 import frclib.subsystem.FrcRollerIntake;
 import teamcode.FrcTest;
+import teamcode.Robot;
 import teamcode.RobotParams;
+import teamcode.indicators.LEDIndicator;
 import trclib.motor.TrcMotor;
 import trclib.motor.TrcMotor.PidParams;
 import trclib.robotcore.TrcEvent;
@@ -97,17 +99,19 @@ public class Intake extends TrcSubsystem
     }   //class Params
 
     private final FrcDashboard dashboard;
+    private final Robot robot;
     private final TrcRollerIntake intake;
     private final TrcMotor deployer;
 
     /**
      * Constructor: Creates an instance of the object.
      */
-    public Intake()
+    public Intake(Robot robot)
     {
         super(SUBSYSTEM_NAME, NEED_ZERO_CAL);
 
         this.dashboard = FrcDashboard.getInstance();
+        this.robot = robot;
         dashboard.refreshKey(DBKEY_PREFERENCE_SHOW_STATUS, RobotParams.Preferences.showIntakeStatus);
         dashboard.refreshKey(DBKEY_PREFERENCE_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs);
 
@@ -172,6 +176,44 @@ public class Intake extends TrcSubsystem
             deployer.setPosition(Params.DEPLOYER_EXTEND_POS);
         }
     }   // extendDeployer
+
+    /**
+     * This method enables/disable intake of fuels. When enabled, it turns on manual intake.
+     *
+     * @param enabled specifies true to enable and false to disable.
+     */
+    public void setIntakeEnabled(boolean enabled)
+    {
+        boolean intakeOn = intake.isActive();
+
+        if (!intakeOn && enabled)
+        {
+            // Enabling Intake, turn on manual intake.
+            intake.tracer.traceInfo(instanceName, "Turning on Intake.");
+            intake.intake(Intake.Params.INTAKE_POWER);
+        }
+        else if (intakeOn && !enabled)
+        {
+            // Disabling Intake, turn off manual intake and Spindexer AutoReceive.
+            intake.tracer.traceInfo(instanceName, "Turning off Intake.");
+            intake.cancel();
+        }
+
+        if (robot.ledIndicator != null)
+        {
+            robot.ledIndicator.setStatusPatternState(LEDIndicator.INTAKE_ON, enabled);
+        }
+    }   //setIntakeEnabled
+
+    /**
+     * This method checks if Intake is enabled.
+     *
+     * @return true if Intake is enabled, false if disabled.
+     */
+    public boolean isIntakeEnabled()
+    {
+        return intake.isActive();
+    }   //isIntakeEnabled
 
     //
     // Implements TrcSubsystem abstract methods.

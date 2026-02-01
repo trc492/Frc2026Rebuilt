@@ -42,6 +42,7 @@ public class LEDIndicator
     public static final String APRILTAG_FOUND = "AprilTagFound";
     public static final String YELLOW_BLOB = "YellowBlob";
     public static final String NOT_FOUND = "NotFound";
+    public static final String INTAKE_ON = "IntakeOn";
     public static final String DRIVE_FIELD_MODE = "FieldMode";
     public static final String DRIVE_ROBOT_MODE = "RobotMode";
     public static final String DRIVE_INVERTED_MODE = "InvertedMode";
@@ -55,6 +56,8 @@ public class LEDIndicator
         new TrcAddressableLED.LedPattern(YELLOW_BLOB, new FrcColor(63, 63, 0), RobotParams.HwConfig.NUM_LEDS);
     private static final TrcAddressableLED.LedPattern notFoundPattern =         // Red
         new TrcAddressableLED.LedPattern(NOT_FOUND, new FrcColor(63, 0, 0), RobotParams.HwConfig.NUM_LEDS);
+    private static final TrcAddressableLED.LedPattern intakeOnPattern =   // Cyan
+        new TrcAddressableLED.LedPattern(DRIVE_FIELD_MODE, new FrcColor(0, 63, 63), RobotParams.HwConfig.NUM_LEDS);
     private static final TrcAddressableLED.LedPattern driveFieldModePattern =   // Cyan
         new TrcAddressableLED.LedPattern(DRIVE_FIELD_MODE, new FrcColor(0, 63, 63), RobotParams.HwConfig.NUM_LEDS);
     private static final TrcAddressableLED.LedPattern driveRobotModePattern =   // White
@@ -71,6 +74,7 @@ public class LEDIndicator
         new TrcPriorityIndicator.Pattern(APRILTAG_FOUND, aprilTagFoundPattern, 0.5, 0.0),
         new TrcPriorityIndicator.Pattern(YELLOW_BLOB, yellowBlobPattern, 0.5, 0.0),
         new TrcPriorityIndicator.Pattern(NOT_FOUND, notFoundPattern, 0.5, 0.0),
+        new TrcPriorityIndicator.Pattern(INTAKE_ON, intakeOnPattern, 0.25, 0.25),
         new TrcPriorityIndicator.Pattern(DRIVE_FIELD_MODE, driveFieldModePattern),
         new TrcPriorityIndicator.Pattern(DRIVE_ROBOT_MODE, driveRobotModePattern),
         new TrcPriorityIndicator.Pattern(DRIVE_INVERTED_MODE, driveInvertedModePattern),
@@ -121,6 +125,16 @@ public class LEDIndicator
             reset(led);
         }
     }   //reset
+
+    /**
+     * This method sets the statusLED pattern ON or OFF.
+     *
+     * @param patternName specifies the name of the LED pattern to turn on.
+     */
+    public void setStatusPatternState(String patternName, boolean on)
+    {
+        leds[0].setPatternState(patternName, on);
+    }   //setStatusPatternState
 
     /**
      * This method sets the LED to indicate the drive orientation mode of the robot.

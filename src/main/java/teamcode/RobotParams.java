@@ -232,6 +232,8 @@ public class RobotParams
         public static final TrcPose2D[] aprilTagFieldPoses      = getAprilTagFieldPoses();
         public static final int[] blueHubAprilTags              = new int[] {10, 2, 5, 9, 11, 8, 3, 4};
         public static final int[] redHubAprilTags               = new int[] {26, 18, 21, 25, 24, 27, 19, 20};
+        public static final int[] anyHubAprilTags               =
+            new int[] {10, 26, 2, 18, 5, 21, 9, 25, 11, 24, 8, 27, 3, 19, 4, 20};
         //
         // Game element locations and dimensions.
         //
