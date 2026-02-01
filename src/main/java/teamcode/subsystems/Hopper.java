@@ -41,7 +41,7 @@ public class Hopper extends TrcSubsystem
     {
         public static final String CANBUS_NAME                  = RobotParams.HwConfig.CANBUS_CANIVORE;
         // Agitator Params
-        public static final MotorType HOPPER_MOTOR_TYPE         = MotorType.CanTalonFx;
+        public static final MotorType HOPPER_MOTOR_TYPE         = MotorType.CanSparkMax;
         public static final String HOPPER_PRIMARY_MOTOR_NAME    = SUBSYSTEM_NAME + ".PrimaryMotor";
         public static final boolean HOPPER_PRIMARY_MOTOR_INVERTED = false;
         public static final int HOPPER_PRIMARY_MOTOR_CANID      = RobotParams.HwConfig.CANID_HOPPER_LEFT_MOTOR;

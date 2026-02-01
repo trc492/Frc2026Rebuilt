@@ -244,7 +244,7 @@ public class Robot extends FrcRobot
 
                 if (RobotParams.Preferences.useIntake)
                 {
-                    intakeSubsystem = new Intake();
+                    intakeSubsystem = new Intake(this);
                     intake = intakeSubsystem.getIntake();
                     intakeDeployer = intakeSubsystem.getDeployer();
                 }

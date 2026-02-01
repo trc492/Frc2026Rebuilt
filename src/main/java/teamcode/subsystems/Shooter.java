@@ -131,7 +131,7 @@ public class Shooter extends TrcSubsystem
         public static final double RSHOOTER_MOTOR_PID_IZONE     = 0.0;      // in RPS
 
         // Common Tilt Motor Characteristics
-        public static final MotorType TILT_MOTOR_TYPE           = MotorType.CanTalonFx;
+        public static final MotorType TILT_MOTOR_TYPE           = MotorType.CanSparkMax;
         public static final double TILT_MOTOR_GEAR_RATIO        = 1.0;      // Load/Motor
         public static final double TILT_MOTOR_DEG_PER_COUNT     = 360.0/TILT_MOTOR_GEAR_RATIO;
         public static final double TILT_PID_TOLERANCE           = 1.0;
@@ -202,7 +202,7 @@ public class Shooter extends TrcSubsystem
         public static double R_TURRET_Y_OFFSET                  = -3.246;   // inches from robot center
 
         // Feeder Motor Characteristics
-        public static final MotorType FEEDER_MOTOR_TYPE         = MotorType.CanTalonFx;
+        public static final MotorType FEEDER_MOTOR_TYPE         = MotorType.CanSparkMax;
         public static final String FEEDER_PRIMARY_MOTOR_NAME    = SUBSYSTEM_NAME + ".FeederPrimaryMotor";
         public static final boolean FEEDER_PRIMARY_MOTOR_INVERTED = false;
         public static final int FEEDER_PRIMARY_MOTOR_CANID      = RobotParams.HwConfig.CANID_SHOOTER_PRIMARY_FEEDER_MOTOR;
