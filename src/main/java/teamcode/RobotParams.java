@@ -23,6 +23,7 @@
 package teamcode;
 
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import frclib.robotcore.FrcField;
 import teamcode.subsystems.DriveBase.RobotType;
 import trclib.pathdrive.TrcPose2D;
 
@@ -208,45 +209,38 @@ public class RobotParams
         public static final double TELEOP_PERIOD                = 140.0;    // in seconds
         public static final double ENDGAME_THRESHOLD            = 30.0;     // in seconds
         //
+        // Field configuration and dimensions in inches.
+        //
+        public static final boolean mirroredField               = false;
+        public static final double fieldLength                  = FrcField.getFieldLength();
+        public static final double fieldWidth                   = FrcField.getFieldWidth();
+        //
+        // AprilTag Poses
+        //
+        private static TrcPose2D[] getAprilTagFieldPoses()
+        {
+            TrcPose2D[] poses = new TrcPose2D[32];
+
+            for (int i = 0; i < poses.length; i++)
+            {
+                poses[i] = FrcField.getAprilTagFieldPose(i + 1);
+            }
+
+            return poses;
+        }   //getAprilTagFieldPoses
+
+        public static final TrcPose2D[] aprilTagFieldPoses      = getAprilTagFieldPoses();
+        public static final int[] blueHubAprilTags              = new int[] {10, 2, 5, 9, 11, 8, 3, 4};
+        public static final int[] redHubAprilTags               = new int[] {26, 18, 21, 25, 24, 27, 19, 20};
+        //
         // Game element locations and dimensions.
         //
-        // Array of AprilTag poses indexed by AprilTag ID.
-        // TODO: Add all april tag poses
-        public static final TrcPose2D[] APRILTAG_POSES          =
-        {
-        /*ID01*/    new TrcPose2D(-25.98, 657.48, -126.0), //z=58.5
-        /*ID02*/    new TrcPose2D(-291.34, 657.48, 126.0), //z=58.5
-        /*ID03*/    new TrcPose2D(-317.32, 455.12, 90.0), //z=51.125
-        /*ID04*/    new TrcPose2D(-241.73, 365.35, 0.0), //z=73.5466,pitch=30
-        /*ID05*/    new TrcPose2D(-75.2, 365.35, 0.0), //z=73.5466,pitch=30
-        /*ID06*/    new TrcPose2D(-130.32, 530.32, 60.0), //z=12.125
-        /*ID07*/    new TrcPose2D(-158.66, 546.85, 0.0), //z=12.125
-        /*ID08*/    new TrcPose2D(-187.01, 530.32, -60.0), //z=12.125
-        /*ID09*/    new TrcPose2D(-187.01, 497.64, -120.0), //z=12.125
-        /*ID10*/    new TrcPose2D(-158.66, 481.5, 180.0), //z=12.125
-        /*ID11*/    new TrcPose2D(-130.32, 497.64, 120.0), //z=12.125
-        /*ID12*/    new TrcPose2D(-25.98, 33.46, -54.0), //z=58.5
-        /*ID13*/    new TrcPose2D(-291.34, 33.46, 54.0), //z=58.5
-        /*ID14*/    new TrcPose2D(-241.73, 325.59, 180.0), //z=73.5466,pitch=30
-        /*ID15*/    new TrcPose2D(-75.2, 325.59, 180.0), //z=73.5466,pitch=30
-        /*ID16*/    new TrcPose2D(0.0, 235.83, -90.0), //z=51.125
-        /*ID17*/    new TrcPose2D(-130.32, 160.24, 120.0), //z=12.125
-        /*ID18*/    new TrcPose2D(-158.66, 144.09, 180.0), //z=12.125
-        /*ID19*/    new TrcPose2D(-187.01, 160.24, -120.0), //z=12.125
-        /*ID20*/    new TrcPose2D(-187.01, 192.91, -60.0), //z=12.125
-        /*ID21*/    new TrcPose2D(-158.66, 209.45, 0.0), //z=12.125
-        /*ID22*/    new TrcPose2D(-130.32, 192.91, 60.0) //z=12.125
-        };
-
-        // TODO: Determine april tags by color
-        public static final int[] blueGoalAprilTag              = new int[] {10};
-        public static final int[] redGoalAprilTag               = new int[] {12};
-        public static final int[] anyGoalAprilTags              = new int[] {10, 12};
+        public static final TrcPose2D blueHubPose               = new TrcPose2D(-158.32, 181.56, 0.0);
         //
         // Robot starting positions.
         //
         public static final double STARTPOS_BLUE_Y              = Robot.ROBOT_LENGTH / 2.0;
-        public static final double STARTPOS_RED_Y               = Field.LENGTH - STARTPOS_BLUE_Y;
+        public static final double STARTPOS_RED_Y               = FrcField.getFieldLength() - STARTPOS_BLUE_Y;
         public static final double STARTPOS_1_X                 = -42.19;
         public static final double STARTPOS_2_X                 = -108.19;
         public static final double STARTPOS_3_X                 = -174.19;
@@ -261,17 +255,5 @@ public class RobotParams
             STARTPOS_BLUE_1, STARTPOS_BLUE_2, STARTPOS_BLUE_3
         };
     }   //class Game
-
-    /**
-     * This class contains field dimension constants. Generally, these should not change. But some seasons may have
-     * slight variations of the field dimensions.
-     */
-    public static class Field
-    {
-        // Field dimensions in inches.
-        public static final double LENGTH                       = 54.0*12.0;
-        public static final double WIDTH                        = 27.0*12.0;
-        public static final boolean mirroredField               = false;
-    }   //class Field
 
 }   //class RobotParams

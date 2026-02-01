@@ -58,7 +58,6 @@ import teamcode.subsystems.Intake;
 import teamcode.subsystems.Shooter;
 import teamcode.vision.OpenCvVision;
 import teamcode.vision.PhotonVision;
-import trclib.dataprocessor.TrcUtil;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
 import trclib.motor.TrcMotor;
 import trclib.pathdrive.TrcPose2D;
@@ -70,6 +69,7 @@ import trclib.sensor.TrcRobotBattery;
 import trclib.subsystem.TrcRollerIntake;
 import trclib.subsystem.TrcShooter;
 import trclib.subsystem.TrcSubsystem;
+import trclib.vision.TrcVision;
 import trclib.vision.TrcVisionRelocalize;
 
 /**
@@ -100,8 +100,8 @@ public class Robot extends FrcRobot
     // Miscellaneous hardware.
     public LEDIndicator ledIndicator;
     // Vision.
-    public PhotonVision photonVisionFront;
-    public PhotonVision photonVisionBack;
+    public PhotonVision photonVisionTurret;
+    public PhotonVision photonVisionIntake;
     public OpenCvVision openCvVision;
     public TrcVisionRelocalize visionRelocalize;
     // Hybrid mode objects.
@@ -141,6 +141,7 @@ public class Robot extends FrcRobot
      * 4. Instantiate and initialize the new subsystem object in robotInit under the "Create other subsystems" section.
      * 5. Put code in FrcTeleOp to operate the subsystem if necessary (i.e. slowPeriodic/xxxButtonEvent).
      */
+    @SuppressWarnings("unused")
     @Override
     public void robotInit()
     {
@@ -186,23 +187,26 @@ public class Robot extends FrcRobot
         ledIndicator = robotInfo.ledInfos != null? new LEDIndicator(robotInfo.ledInfos): null;
 
         // Create and initialize Vision subsystem.
-        if (RobotParams.Preferences.useVision)
+        if (RobotParams.Preferences.useVision && robotInfo.camInfos != null)
         {
-            if (RobotParams.Preferences.usePhotonVision)
+            if (RobotParams.Preferences.usePhotonVision && robotInfo.camInfos.length >= 2)
             {
-                photonVisionFront = robotInfo.webCam1 != null? new PhotonVision(robotInfo.webCam1, ledIndicator): null;
-                photonVisionBack = robotInfo.webCam2 != null? new PhotonVision(robotInfo.webCam2, ledIndicator): null;
+                photonVisionTurret = robotInfo.camInfos[0] != null?
+                    new PhotonVision(robotInfo.camInfos[0], ledIndicator): null;
+                photonVisionIntake = robotInfo.camInfos[1] != null?
+                    new PhotonVision(robotInfo.camInfos[1], ledIndicator): null;
             }
-            else if (RobotParams.Preferences.useOpenCvVision && robotInfo.webCam2 != null)
+            else if (RobotParams.Preferences.useOpenCvVision && robotInfo.camInfos.length >= 3 &&
+                     robotInfo.camInfos[2] != null)
             {
+                TrcVision.CameraInfo camInfo = robotInfo.camInfos[2];
                 UsbCamera camera = CameraServer.startAutomaticCapture(1);
-                camera.setResolution(robotInfo.webCam2.camImageWidth, robotInfo.webCam2.camImageHeight);
+                camera.setResolution(camInfo.camImageWidth, camInfo.camImageHeight);
                 camera.setFPS(10);
                 openCvVision = new OpenCvVision(
-                    "OpenCvVision", 1, robotInfo.webCam2,
-                    CameraServer.getVideo(),
+                    "OpenCvVision", 1, camInfo, CameraServer.getVideo(),
                     CameraServer.putVideo(
-                        "UsbWebcam", robotInfo.webCam2.camImageWidth, robotInfo.webCam2.camImageHeight));
+                        "UsbWebcam", camInfo.camImageWidth, camInfo.camImageHeight));
             }
 
             if (RobotParams.Preferences.doVisionRelocalize)
@@ -391,36 +395,28 @@ public class Robot extends FrcRobot
     @Override
     public void robotPeriodic(RunMode runMode, boolean slowPeriodicLoop)
     {
-        if (visionRelocalize != null)
+        if (visionRelocalize != null && photonVisionTurret != null)
         {
             double fpgaTime = Timer.getFPGATimestamp();
             TrcPose2D robotPose = robotBase.driveBase.getFieldPosition();
             visionRelocalize.addTimedPose(fpgaTime, robotPose);
-            DetectedObject aprilTagObj = null;
-            if (photonVisionBack != null)
-            {
-                aprilTagObj = photonVisionBack.getBestDetectedAprilTag(null);
-            }
-
-            if (aprilTagObj == null && photonVisionFront != null)
-            {
-                aprilTagObj = photonVisionFront.getBestDetectedAprilTag(null);
-            }
+            DetectedObject aprilTagObj = photonVisionTurret.getBestDetectedAprilTag(null);
 
             if (aprilTagObj != null)
             {
                 TrcPose2D relocalizedPose =
                     visionRelocalize.getRelocalizedPose(aprilTagObj.timestamp, aprilTagObj.robotPose, robotPose);
-                TrcPose2D diffPose = relocalizedPose.relativeTo(robotPose);
-                if (TrcUtil.magnitude(diffPose.x, diffPose.y) > 12.0)
-                {
-                    robotBase.driveBase.setFieldPosition(relocalizedPose);
-                    globalTracer.traceInfo(
-                        moduleName,
-                        "VisionRelocalize: Time=%.6f, Before=%s, After=%s, VisionPose[%d](time=%.6f, pose=%s)",
-                        fpgaTime, robotPose, relocalizedPose, aprilTagObj.target.getFiducialId(),
-                        aprilTagObj.timestamp, aprilTagObj.robotPose);
-                }
+                robotBase.driveBase.setFieldPosition(relocalizedPose);
+                globalTracer.traceDebug(
+                    moduleName,
+                    "VisionRelocalize: Time=%.6f, Relocalize %s->%s, VisionPose[%d](time=%.6f, pose=%s)",
+                    fpgaTime, robotPose, relocalizedPose, aprilTagObj.target.getFiducialId(),
+                    aprilTagObj.timestamp, aprilTagObj.robotPose);
+                // TrcPose2D diffPose = relocalizedPose.relativeTo(robotPose);
+                // if (TrcUtil.magnitude(diffPose.x, diffPose.y) > 12.0)
+                // {
+                //     robotBase.driveBase.setFieldPosition(relocalizedPose);
+                // }
             }
         }
 
@@ -756,18 +752,18 @@ public class Robot extends FrcRobot
         if (alliance == Alliance.Red)
         {
             // Translate blue alliance pose to red alliance pose.
-            if (RobotParams.Field.mirroredField)
+            if (RobotParams.Game.mirroredField)
             {
                 // Mirrored field.
                 double angleDelta = (newPose.angle - 90.0)*2.0;
                 newPose.angle -= angleDelta;
-                newPose.y = RobotParams.Field.LENGTH - newPose.y;
+                newPose.y = RobotParams.Game.fieldLength - newPose.y;
             }
             else
             {
                 // Symmetrical field.
-                newPose.x = -RobotParams.Field.WIDTH - newPose.x;
-                newPose.y = RobotParams.Field.LENGTH - newPose.y;
+                newPose.x = -RobotParams.Game.fieldWidth - newPose.x;
+                newPose.y = RobotParams.Game.fieldLength - newPose.y;
                 newPose.angle = (newPose.angle + 180.0) % 360.0;
             }
         }

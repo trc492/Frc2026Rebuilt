@@ -41,13 +41,13 @@ import trclib.vision.TrcVision;
  */
 public class PhotonVision extends FrcPhotonVision
 {
-    // Rebuilt Front camera info
-    public static final TrcVision.CameraInfo rebuiltFrontCamInfo = new TrcVision.CameraInfo()
-        .setCameraInfo("OV9782_Front", 640, 480)
+    // Rebuilt Turret camera info
+    public static final TrcVision.CameraInfo rebuiltTurretCamInfo = new TrcVision.CameraInfo()
+        .setCameraInfo("OV9782_Turret", 640, 480)
         .setCameraPose(-0.25, 5.75, 7.0, 0.0, 21.8346, 0.0);
-    // Rebuilt Back camera info
-    public static final TrcVision.CameraInfo rebuiltBackCamInfo = new TrcVision.CameraInfo()
-        .setCameraInfo("OV9782_Back", 640, 480)
+    // Rebuilt Intake camera info
+    public static final TrcVision.CameraInfo rebuiltIntakeCamInfo = new TrcVision.CameraInfo()
+        .setCameraInfo("OV9782_Intake", 640, 480)
         .setCameraPose(0.0, -1.563, 41.374, 180.0, 9.1241, 0.0);
 
     // Reefscape Front camera info
@@ -65,16 +65,13 @@ public class PhotonVision extends FrcPhotonVision
     public enum PipelineType
     {
         APRILTAG(0),
-        RED_BLOB(1),
-        BLUE_BLOB(2);
+        YELLOW_BLOB(1);
 
         public int pipelineIndex;
-
         PipelineType(int value)
         {
             pipelineIndex = value;
         }
-
     }   //enum PipelineType
 
     private final FrcDashboard dashboard;
@@ -120,11 +117,11 @@ public class PhotonVision extends FrcPhotonVision
      */
     public TrcPose2D getRobotFieldPose(DetectedObject aprilTagObj, boolean usePoseEstimator)
     {
-        return usePoseEstimator? getRobotEstimatedPose(super.robotToCamera):
-                                 getRobotPoseFromAprilTagFieldPose(
-                                    FrcPhotonVision.getAprilTagFieldPose3d(aprilTagObj.target.getFiducialId(), null),
-                                    aprilTagObj.target.getBestCameraToTarget(),
-                                    super.robotToCamera);
+        return usePoseEstimator?
+            getRobotEstimatedPose(super.robotToCamera):
+            getRobotPoseFromAprilTagFieldPose(
+                FrcPhotonVision.getAprilTagFieldPose3d(aprilTagObj.target.getFiducialId(), null),
+                aprilTagObj.target.getBestCameraToTarget(), super.robotToCamera);
     }   //getRobotFieldPose
 
     /**
@@ -260,7 +257,7 @@ public class PhotonVision extends FrcPhotonVision
         TrcPose2D closestAprilTagPose = null;
         double minDistance = Double.MAX_VALUE;
 
-        for (TrcPose2D aprilTagPose: RobotParams.Game.APRILTAG_POSES)
+        for (TrcPose2D aprilTagPose: RobotParams.Game.aprilTagFieldPoses)
         {
             double distance = robotPose.distanceTo(aprilTagPose);
 

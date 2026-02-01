@@ -355,9 +355,9 @@ public class FrcTest extends FrcTeleOp
     private TrcPose2D tuneDriveEndPoint = null;
     private boolean tuneDriveAtEndPoint = false;
     // Vision Pipelines.
-    private PipelineType photonFrontPipeline = PipelineType.APRILTAG;
-    private PipelineType photonBackPipeline = PipelineType.APRILTAG;
-    private ObjectType openCvDetectObjType = ObjectType.RED_BLOB;
+    private PipelineType photonTurretPipeline = PipelineType.APRILTAG;
+    private PipelineType photonIntakePipeline = PipelineType.APRILTAG;
+    private ObjectType openCvDetectObjType = ObjectType.YELLOW_BLOB;
 
     public FrcTest(Robot robot)
     {
@@ -459,14 +459,14 @@ public class FrcTest extends FrcTeleOp
                 break;
 
             case VISION_TEST:
-                if (robot.photonVisionFront != null)
+                if (robot.photonVisionTurret != null)
                 {
-                    robot.photonVisionFront.setPipeline(photonFrontPipeline);
+                    robot.photonVisionTurret.setPipeline(photonTurretPipeline);
                 }
 
-                if (robot.photonVisionBack != null)
+                if (robot.photonVisionIntake != null)
                 {
-                    robot.photonVisionBack.setPipeline(photonBackPipeline);
+                    robot.photonVisionIntake.setPipeline(photonIntakePipeline);
                 }
 
                 if (robot.openCvVision != null)
@@ -991,14 +991,14 @@ public class FrcTest extends FrcTeleOp
      */
     private int doVisionTest(int lineNum)
     {
-        if (robot.photonVisionFront != null)
+        if (robot.photonVisionTurret != null)
         {
-            lineNum = robot.photonVisionFront.updateStatus(lineNum, true);
+            lineNum = robot.photonVisionTurret.updateStatus(lineNum, true);
         }
 
-        if (robot.photonVisionBack != null)
+        if (robot.photonVisionIntake != null)
         {
-            lineNum = robot.photonVisionBack.updateStatus(lineNum, true);
+            lineNum = robot.photonVisionIntake.updateStatus(lineNum, true);
         }
 
         if (robot.openCvVision != null)

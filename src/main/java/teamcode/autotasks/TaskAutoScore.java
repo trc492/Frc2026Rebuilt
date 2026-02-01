@@ -29,12 +29,13 @@ import teamcode.RobotParams;
 import teamcode.subsystems.Shooter;
 import teamcode.vision.PhotonVision.PipelineType;
 import trclib.dataprocessor.TrcLookupTable;
+import trclib.dataprocessor.TrcUtil;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcAutoTask;
 import trclib.robotcore.TrcEvent;
-import trclib.robotcore.TrcOwnershipMgr;
 import trclib.robotcore.TrcRobot;
 import trclib.robotcore.TrcTaskMgr;
+import trclib.subsystem.TrcShooter.AimInfo;
 import trclib.timer.TrcTimer;
 
 /**
@@ -56,7 +57,7 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
     private static class TaskParams
     {
         private Alliance alliance;
-        public boolean inAuto = false;
+        // public boolean inAuto = false;
         public boolean useRegression = false;
         public boolean flywheelTracking = false;
         public boolean relocalize = false;
@@ -68,11 +69,11 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
             return this;
         }   //setAlliance
 
-        public TaskParams setInAuto(boolean inAuto)
-        {
-            this.inAuto = inAuto;
-            return this;
-        }   //inAuto
+        // public TaskParams setInAuto(boolean inAuto)
+        // {
+        //     this.inAuto = inAuto;
+        //     return this;
+        // }   //inAuto
 
         public TaskParams setRegression(boolean useRegression)
         {
@@ -101,7 +102,7 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
         public String toString()
         {
             return "(alliance=" + alliance +
-                   ",inAuto=" + inAuto +
+                //    ",inAuto=" + inAuto +
                    ",useRegression=" + useRegression +
                    ",flywheelTracking=" + flywheelTracking +
                    ",relocalize=" + relocalize +
@@ -113,7 +114,7 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
     private final Robot robot;
     private final TrcEvent event;
 
-    private double[] aimInfo = null;
+    private AimInfo aimInfo = null;
     private Double visionExpiredTime = null;
 
     /**
@@ -135,12 +136,12 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
     public void autoScore(
-        String owner, TrcEvent completionEvent, Alliance alliance, boolean inAuto, boolean useRegression, 
-        boolean flywheelTracking, boolean relocalize, boolean passMode)
+        String owner, TrcEvent completionEvent, Alliance alliance, boolean useRegression, boolean flywheelTracking,
+        boolean relocalize, boolean passMode)
     {
         autoScoreParams
             .setAlliance(alliance)
-            .setInAuto(inAuto)
+            // .setInAuto(inAuto)
             .setRegression(useRegression)
             .setFlywheelTracking(flywheelTracking)
             .setRelocalize(relocalize)
@@ -170,7 +171,8 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
         // For example:
         // return owner == null ||
         //        subsystem1.acquireExclusiveAccess(owner) && subsystem2.acquireExclusiveAccess(owner);
-        return owner == null || robot.robotBase.driveBase.acquireExclusiveAccess(owner);
+        // return owner == null || robot.robotBase.driveBase.acquireExclusiveAccess(owner);
+        return true;
     }   //acquireSubsystemsOwnership
 
     /**
@@ -182,15 +184,15 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
     @Override
     protected void releaseSubsystemsOwnership(String owner)
     {
-        if (owner != null)
-        {
-            TrcOwnershipMgr ownershipMgr = TrcOwnershipMgr.getInstance();
-            tracer.traceInfo(
-                moduleName,
-                "Releasing subsystem ownership on behalf of " + owner +
-                "\n\trobotDrive=" + ownershipMgr.getOwner(robot.robotBase.driveBase));
-            robot.robotBase.driveBase.releaseExclusiveAccess(owner);
-        }
+        // if (owner != null)
+        // {
+        //     TrcOwnershipMgr ownershipMgr = TrcOwnershipMgr.getInstance();
+        //     tracer.traceInfo(
+        //         moduleName,
+        //         "Releasing subsystem ownership on behalf of " + owner +
+        //         "\n\trobotDrive=" + ownershipMgr.getOwner(robot.robotBase.driveBase));
+        //     robot.robotBase.driveBase.releaseExclusiveAccess(owner);
+        // }
     }   //releaseSubsystemsOwnership
 
     /**
@@ -203,7 +205,7 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
     protected void stopSubsystems(String owner)
     {
         tracer.traceInfo(moduleName, "Stopping subsystems.");
-        robot.robotBase.cancel(owner);
+        // robot.robotBase.cancel(owner);
     }   //stopSubsystems
 
     /**
@@ -227,9 +229,9 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
         switch (state)
         {
             case START:
-                if (robot.photonVisionFront == null) // NOTE: Turret camera is most likely front and will be used for auto score
+                if (robot.photonVisionTurret == null)
                 {
-                    tracer.traceWarn(moduleName, "***** Vision is not enabled, quit.");
+                    tracer.traceWarn(moduleName, "***** Turret Vision is not enabled, quit.");
                     sm.setState(State.DONE);
                 }
                 else
@@ -237,7 +239,7 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
                     visionExpiredTime = null;
                     aimInfo = null;
                     tracer.traceInfo(moduleName, "***** Using AprilTag Vision.");
-                    robot.photonVisionFront.setPipeline(PipelineType.APRILTAG);
+                    robot.photonVisionTurret.setPipeline(PipelineType.APRILTAG);
                     sm.setState(State.DO_VISION);
                 }
                 break;
@@ -249,7 +251,7 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
                         taskParams.alliance == null? RobotParams.Game.anyGoalAprilTags:
                         taskParams.alliance == Alliance.Blue ?
                             RobotParams.Game.blueGoalAprilTag: RobotParams.Game.redGoalAprilTag;
-                    FrcPhotonVision.DetectedObject aprilTagInfo = robot.photonVisionFront.getBestDetectedAprilTag(goalAprilTags);
+                    FrcPhotonVision.DetectedObject aprilTagInfo = robot.photonVisionTurret.getBestDetectedAprilTag(goalAprilTags);
                     if (aprilTagInfo != null)
                     {
                         int aprilTagId = aprilTagInfo.target.getFiducialId();
@@ -289,11 +291,12 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
                     event.clear();
                     sm.addEvent(event);
                     // TODO: Fix shoot params when table for FRC is created
-                    TrcLookupTable.Entry shootParams = Shooter.shootParamsTable.get(
-                        aimInfo[0], taskParams.useRegression);
+                    double targetDistance = TrcUtil.magnitude(aimInfo.targetPose.x, aimInfo.targetPose.y);
+                    TrcLookupTable.Entry shootParams =
+                        Shooter.shootParamsTable.get(targetDistance, taskParams.useRegression);
                     tracer.traceInfo(
                         moduleName, "***** ShootParams: dist=%f, bearing=%f, shootParams=%s, event=%s",
-                        aimInfo[0], aimInfo[1], shootParams, event);
+                        targetDistance, aimInfo.panAngle, shootParams, event);
                     // robot.shooter.setTiltAngle(shootParams.region.value);
                     // robot.shooter.aimShooter(
                     //     owner, shootParams.outputs[0]/60.0, 0.0, null, aimInfo[1], event, 0.0, null, 0.0);

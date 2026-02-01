@@ -47,17 +47,15 @@ public class OpenCvVision extends FrcOpenCvDetector
         .setCameraInfo("HD-3000", 1280, 720)
         .setCameraPose(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     private static final double APRILTAG_SIZE               = 6.5;
-    private static final double COLOR_BLOB_WIDTH            = 3.5;
-    private static final double COLOR_BLOB_HEIGHT           = 1.5;
+    private static final double COLOR_BLOB_WIDTH            = 5.91;
+    private static final double COLOR_BLOB_HEIGHT           = 5.91;
     private static final double COLOR_BLOB_GROUND_OFFSET    = 0.0;
     private static final String DBKEY_PREFIX                = "Vision/";
     // YCrCb Color Space.
     private static final TrcOpenCvColorBlobPipeline.ColorConversion colorConversion =
-        TrcOpenCvColorBlobPipeline.ColorConversion.RGBToYCrCb;
-    private static final double[] redBlobThresholdsLow = {10.0, 170.0, 80.0};
-    private static final double[] redBlobThresholdsHigh = {180.0, 240.0, 120.0};
-    private static final double[] blueBlobThresholdsLow = {0.0, 80.0, 150.0};
-    private static final double[] blueBlobThresholdsHigh = {180.0, 150.0, 200.0};
+        TrcOpenCvColorBlobPipeline.ColorConversion.RGBToHSV;
+    private static final double[] yellowBlobThresholdsLow = {0.0, 200.0, 180.0};
+    private static final double[] yellowBlobThresholdsHigh = {50.0, 255.0, 255.0};
     private static final TrcOpenCvColorBlobPipeline.FilterContourParams colorBlobFilterParams =
         new TrcOpenCvColorBlobPipeline.FilterContourParams()
             .setMinArea(10000.0)
@@ -71,14 +69,13 @@ public class OpenCvVision extends FrcOpenCvDetector
         new TrcOpenCvColorBlobPipeline.PipelineParams()
             .setAnnotation(false, false)
             .setColorConversion(colorConversion)
-            .addColorThresholds(LEDIndicator.RED_BLOB, true, redBlobThresholdsLow, redBlobThresholdsHigh)
-            .addColorThresholds(LEDIndicator.BLUE_BLOB, true, blueBlobThresholdsLow, blueBlobThresholdsHigh)
+            .addColorThresholds(LEDIndicator.YELLOW_BLOB, true, yellowBlobThresholdsLow, yellowBlobThresholdsHigh)
             .buildColorThresholdSets()
             .setFilterContourParams(true, colorBlobFilterParams);
 
     public enum ObjectType
     {
-        APRILTAG, RED_BLOB, BLUE_BLOB, NONE;
+        APRILTAG, YELLOW_BLOB, NONE;
 
         static ObjectType nextObjectType(ObjectType objType)
         {
@@ -87,14 +84,10 @@ public class OpenCvVision extends FrcOpenCvDetector
             switch (objType)
             {
                 case APRILTAG:
-                    nextObjType = RED_BLOB;
+                    nextObjType = YELLOW_BLOB;
                     break;
 
-                case RED_BLOB:
-                    nextObjType = BLUE_BLOB;
-                    break;
-
-                case BLUE_BLOB:
+                case YELLOW_BLOB:
                     nextObjType = NONE;
                     break;
 
@@ -138,7 +131,7 @@ public class OpenCvVision extends FrcOpenCvDetector
         {
             tracer.traceInfo(instanceName, "Starting Webcam AprilTagVision...");
             aprilTagPipeline = new FrcOpenCvAprilTagPipeline(
-                "tag16h5", null,
+                "tag36h11", null,
                 new AprilTagPoseEstimator.Config(
                     Units.inchesToMeters(APRILTAG_SIZE), cameraInfo.lensInfo.fx, cameraInfo.lensInfo.fy,
                     cameraInfo.lensInfo.cx, cameraInfo.lensInfo.cy));
@@ -187,8 +180,7 @@ public class OpenCvVision extends FrcOpenCvDetector
                 setPipeline(aprilTagPipeline);
                 break;
 
-            case RED_BLOB:
-            case BLUE_BLOB:
+            case YELLOW_BLOB:
                 setPipeline(colorBlobPipeline);
                 break;
 

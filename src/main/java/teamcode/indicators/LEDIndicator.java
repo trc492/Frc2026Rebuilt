@@ -40,8 +40,7 @@ public class LEDIndicator
     // LED pattern names.
     public static final String APRILTAG_LOCKED = "AprilTagLocked";
     public static final String APRILTAG_FOUND = "AprilTagFound";
-    public static final String RED_BLOB = "RedBlob";
-    public static final String BLUE_BLOB = "BlueBlob";
+    public static final String YELLOW_BLOB = "YellowBlob";
     public static final String NOT_FOUND = "NotFound";
     public static final String DRIVE_FIELD_MODE = "FieldMode";
     public static final String DRIVE_ROBOT_MODE = "RobotMode";
@@ -52,18 +51,16 @@ public class LEDIndicator
         new TrcAddressableLED.LedPattern(APRILTAG_LOCKED, new FrcColor(0, 63, 0), RobotParams.HwConfig.NUM_LEDS);
     private static final TrcAddressableLED.LedPattern aprilTagFoundPattern =    // Magenta
         new TrcAddressableLED.LedPattern(APRILTAG_FOUND, new FrcColor(63, 0, 63), RobotParams.HwConfig.NUM_LEDS);
-    private static final TrcAddressableLED.LedPattern redBlobPattern =          // Red
-        new TrcAddressableLED.LedPattern(RED_BLOB, new FrcColor(63, 0, 0), RobotParams.HwConfig.NUM_LEDS);
-    private static final TrcAddressableLED.LedPattern blueBlobPattern =         // Blue
-        new TrcAddressableLED.LedPattern(BLUE_BLOB, new FrcColor(0, 0, 63), RobotParams.HwConfig.NUM_LEDS);
-    private static final TrcAddressableLED.LedPattern notFoundPattern =         // Yellow
-        new TrcAddressableLED.LedPattern(NOT_FOUND, new FrcColor(63, 63, 0), RobotParams.HwConfig.NUM_LEDS);
+    private static final TrcAddressableLED.LedPattern yellowBlobPattern =       // Yellow
+        new TrcAddressableLED.LedPattern(YELLOW_BLOB, new FrcColor(63, 63, 0), RobotParams.HwConfig.NUM_LEDS);
+    private static final TrcAddressableLED.LedPattern notFoundPattern =         // Red
+        new TrcAddressableLED.LedPattern(NOT_FOUND, new FrcColor(63, 0, 0), RobotParams.HwConfig.NUM_LEDS);
     private static final TrcAddressableLED.LedPattern driveFieldModePattern =   // Cyan
         new TrcAddressableLED.LedPattern(DRIVE_FIELD_MODE, new FrcColor(0, 63, 63), RobotParams.HwConfig.NUM_LEDS);
     private static final TrcAddressableLED.LedPattern driveRobotModePattern =   // White
         new TrcAddressableLED.LedPattern(DRIVE_ROBOT_MODE, new FrcColor(63, 63, 63), RobotParams.HwConfig.NUM_LEDS);
-    private static final TrcAddressableLED.LedPattern driveInvertedModePattern =// Magenta
-        new TrcAddressableLED.LedPattern(DRIVE_INVERTED_MODE, new FrcColor(63, 0, 63), RobotParams.HwConfig.NUM_LEDS);
+    private static final TrcAddressableLED.LedPattern driveInvertedModePattern =// Blue
+        new TrcAddressableLED.LedPattern(DRIVE_INVERTED_MODE, new FrcColor(0, 0, 63), RobotParams.HwConfig.NUM_LEDS);
     private static final TrcAddressableLED.LedPattern offPattern =              // Black
         new TrcAddressableLED.LedPattern(OFF, new FrcColor(0, 0, 0), RobotParams.HwConfig.NUM_LEDS);
 
@@ -72,8 +69,7 @@ public class LEDIndicator
         // Highest priority
         new TrcPriorityIndicator.Pattern(APRILTAG_LOCKED, aprilTagLockedPattern, 0.5, 0.0),
         new TrcPriorityIndicator.Pattern(APRILTAG_FOUND, aprilTagFoundPattern, 0.5, 0.0),
-        new TrcPriorityIndicator.Pattern(RED_BLOB, redBlobPattern, 0.5, 0.0),
-        new TrcPriorityIndicator.Pattern(BLUE_BLOB, blueBlobPattern, 0.5, 0.0),
+        new TrcPriorityIndicator.Pattern(YELLOW_BLOB, yellowBlobPattern, 0.5, 0.0),
         new TrcPriorityIndicator.Pattern(NOT_FOUND, notFoundPattern, 0.5, 0.0),
         new TrcPriorityIndicator.Pattern(DRIVE_FIELD_MODE, driveFieldModePattern),
         new TrcPriorityIndicator.Pattern(DRIVE_ROBOT_MODE, driveRobotModePattern),
@@ -184,12 +180,8 @@ public class LEDIndicator
                     }
                     break;
 
-                case RED_BLOB:
-                    leds[0].setPatternState(RED_BLOB, true);
-                    break;
-
-                case BLUE_BLOB:
-                    leds[0].setPatternState(BLUE_BLOB, true);
+                case YELLOW_BLOB:
+                    leds[0].setPatternState(YELLOW_BLOB, true);
                     break;
 
                 default:

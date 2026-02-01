@@ -44,6 +44,7 @@ import trclib.robotcore.TrcDbgTrace;
 import trclib.robotcore.TrcEvent;
 import trclib.sensor.TrcEncoder;
 import trclib.subsystem.TrcSubsystem;
+import trclib.vision.TrcVision;
 
 /**
  * This class creates the appropriate Robot Drive Base according to the specified robot type.
@@ -118,7 +119,8 @@ public class DriveBase extends TrcSubsystem
                 .setPidStallDetectionEnabled(true)
                 .setPidDriveParams(false)
                 .setPurePursuitDriveParams(10.0, true, false)
-                .setVisionInfo(PhotonVision.rebuiltFrontCamInfo, PhotonVision.rebuiltBackCamInfo)
+                .setVisionInfo(
+                    new TrcVision.CameraInfo[] {PhotonVision.rebuiltTurretCamInfo, PhotonVision.rebuiltIntakeCamInfo})
                 .setIndicators(
                     new LEDInfo("LED", HwConfig.PWM_CHANNEL_LED, HwConfig.NUM_LEDS));
             this.setSwerveParams(swerveParams)
@@ -197,7 +199,8 @@ public class DriveBase extends TrcSubsystem
                 .setPidStallDetectionEnabled(true)
                 .setPidDriveParams(false)
                 .setPurePursuitDriveParams(10.0, true, false)
-                .setVisionInfo(PhotonVision.reefscapeFrontCamInfo, PhotonVision.reefscapeBackCamInfo)
+                .setVisionInfo(
+                    new TrcVision.CameraInfo[] {PhotonVision.reefscapeFrontCamInfo, PhotonVision.reefscapeBackCamInfo})
                 .setIndicators(
                     new LEDInfo("LED", HwConfig.PWM_CHANNEL_LED, HwConfig.NUM_LEDS));
             this.setSwerveParams(swerveParams)
@@ -232,7 +235,8 @@ public class DriveBase extends TrcSubsystem
         public VisionOnlyInfo()
         {
             this.setRobotInfo("VisionOnly")
-                .setVisionInfo(PhotonVision.rebuiltFrontCamInfo, PhotonVision.rebuiltBackCamInfo);
+                .setVisionInfo(
+                    new TrcVision.CameraInfo[] {PhotonVision.rebuiltTurretCamInfo, PhotonVision.rebuiltIntakeCamInfo});
         }   //VisionOnlyInfo
     }   //class VisionOnlyInfo
 

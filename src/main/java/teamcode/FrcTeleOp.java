@@ -128,16 +128,16 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             // Set robot to FIELD by default but don't change the heading.
             robot.setDriveOrientation(driveOrientationMenu.getCurrentChoiceObject(), false);
             // Enable AprilTag vision for re-localization.
-            if (robot.photonVisionFront != null)
+            if (robot.photonVisionTurret != null)
             {
-                robot.globalTracer.traceInfo(moduleName, "Enabling FrontCam for AprilTagVision.");
-                robot.photonVisionBack.setPipeline(PipelineType.APRILTAG);
+                robot.globalTracer.traceInfo(moduleName, "Enabling TurretCam for AprilTagVision.");
+                robot.photonVisionTurret.setPipeline(PipelineType.APRILTAG);
             }
 
-            if (robot.photonVisionBack != null)
+            if (robot.photonVisionIntake != null)
             {
-                robot.globalTracer.traceInfo(moduleName, "Enabling BackCam for AprilTagVision.");
-                robot.photonVisionBack.setPipeline(PipelineType.APRILTAG);
+                robot.globalTracer.traceInfo(moduleName, "Enabling IntakeCam for AprilTagVision.");
+                robot.photonVisionIntake.setPipeline(PipelineType.APRILTAG);
             }
         }
 
@@ -200,19 +200,14 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                         {
                             DetectedObject aprilTagObj = null;
 
-                            if (robot.photonVisionFront != null)
+                            if (robot.photonVisionTurret != null)
                             {
-                                aprilTagObj = robot.photonVisionFront.getBestDetectedAprilTag(null);
-                            }
-
-                            if (aprilTagObj == null && robot.photonVisionBack != null)
-                            {
-                                aprilTagObj = robot.photonVisionBack.getBestDetectedAprilTag(null);
+                                aprilTagObj = robot.photonVisionTurret.getBestDetectedAprilTag(null);
                             }
 
                             if (aprilTagObj != null)
                             {
-                                robotFieldPose = robot.photonVisionBack.getRobotFieldPose(aprilTagObj, false);
+                                robotFieldPose = robot.photonVisionTurret.getRobotFieldPose(aprilTagObj, false);
                             }
                         }
                     }
@@ -397,10 +392,8 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 break;
 
             case Start:
-                if (robot.photonVisionFront != null &&
-                    robot.photonVisionFront.getPipeline() == PipelineType.APRILTAG ||
-                    robot.photonVisionBack != null &&
-                    robot.photonVisionBack.getPipeline() == PipelineType.APRILTAG)
+                if (robot.photonVisionTurret != null &&
+                    robot.photonVisionTurret.getPipeline() == PipelineType.APRILTAG)
                 {
                     // On press of the button, we will start looking for AprilTag for re-localization.
                     // On release of the button, we will set the robot's field location if we found the
