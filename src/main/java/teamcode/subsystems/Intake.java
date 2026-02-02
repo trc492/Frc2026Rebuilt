@@ -194,7 +194,7 @@ public class Intake extends TrcSubsystem
         }
         else if (intakeOn && !enabled)
         {
-            // Disabling Intake, turn off manual intake and Spindexer AutoReceive.
+            // Disabling Intake, turn off manual intake.
             intake.tracer.traceInfo(instanceName, "Turning off Intake.");
             intake.cancel();
         }

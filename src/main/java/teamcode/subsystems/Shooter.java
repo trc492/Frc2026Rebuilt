@@ -34,6 +34,8 @@ import trclib.motor.TrcMotor.PidParams;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcEvent;
 import trclib.subsystem.TrcShooter;
+import trclib.subsystem.TrcShooter.AimInfo;
+import trclib.subsystem.TrcShooter.ShootOperation;
 import trclib.subsystem.TrcSubsystem;
 
 public class Shooter extends TrcSubsystem
@@ -211,11 +213,31 @@ public class Shooter extends TrcSubsystem
         public static final int FEEDER_FOLLOWER_MOTOR_CANID     = RobotParams.HwConfig.CANID_SHOOTER_FOLLOWER_FEEDER_MOTOR;
     }   //class Params
 
+    private static class ShootOpParams
+    {
+        String shootOpOwner;
+        ShootOperation shootOp;
+        Double shootOffDelay;
+        TrcEvent completionEvent;
+
+        ShootOpParams(String owner, ShootOperation shootOp, Double shootOffDelay, TrcEvent completionEvent)
+        {
+            this.shootOpOwner = owner;
+            this.shootOp = shootOp;
+            this.shootOffDelay = shootOffDelay;
+            this.completionEvent = completionEvent;
+        }   //ShootOpParams
+    }   //class ShootOpParams
+
     private final FrcDashboard dashboard;
     private final TrcShooter leftShooter;
     private final TrcShooter rightShooter;
     private final TrcMotor turret;
     private final TrcMotor feeder;
+    private final TrcEvent leftShooterCallback;
+    private final TrcEvent rightShooterCallback;
+
+    private ShootOpParams shootOpParams = null;
 
     /**
      * Constructor: Creates an instance of the object.
@@ -268,6 +290,7 @@ public class Shooter extends TrcSubsystem
                 null);
             motor.setSoftPositionLimits(Params.TILT_MIN_POS, Params.TILT_MAX_POS, false);
         }
+        leftShooterCallback = new TrcEvent("LeftShooterCallback");
 
         if (Params.HAS_TWO_SHOOTERS)
         {
@@ -312,10 +335,12 @@ public class Shooter extends TrcSubsystem
                     null);
                 motor.setSoftPositionLimits(Params.TILT_MIN_POS, Params.TILT_MAX_POS, false);
             }
+            rightShooterCallback = new TrcEvent("RightShooterCallback");
         }
         else
         {
             rightShooter = null;
+            rightShooterCallback = null;
         }
 
         if (Params.HAS_TURRET)
@@ -443,6 +468,115 @@ public class Shooter extends TrcSubsystem
             rightShooter.setShooterMotorRPM(rightFlywheelRPM, null);
         }
     }   //setFlywheelRPM
+
+    /**
+     * This method sets the shooter velocity and the tilt/pan angles if tilt/pan exist. This method is asynchronous.
+     * When both shooter velocity and tilt/pan positions have reached target and if shoot method is provided, it will
+     * shoot and signal an event if provided.
+     *
+     * @param owner specifies the owner that acquired the subsystem ownerships, null if no ownership required.
+     * @param aimInfo specifies the AimInfo for aiming the target.
+     * @param event specifies an event to signal when both reached target, can be null if not provided.
+     * @param timeout specifies maximum timeout period, can be zero if no timeout.
+     * @param shootOp specifies the shoot method, can be null if aim only.
+     * @param shootOffDelay specifies the delay in seconds to turn off shooter after shooting, or zero if no delay
+     *        (turn off immediately), only applicable if shootOp is not null. Can also be null if keeping the shooter
+     *        on.
+     */
+    public void aimShooter(
+        String owner, AimInfo aimInfo, TrcEvent event, double timeout, ShootOperation shootOp, Double shootOffDelay)
+    {
+        leftShooter.tracer.traceInfo(
+            instanceName,
+            "owner=" + owner +
+            ", aimInfo=" + aimInfo +
+            ", event=" + event +
+            ", timeout=" + timeout +
+            ", aimOnly=" + (shootOp == null) +
+            ", shootOffDelay=" + shootOffDelay);
+        shootOpParams = new ShootOpParams(shootOp != null? owner: null, shootOp, shootOffDelay, event);
+        // Pass the rightShooterCallback as the callback context.
+        leftShooterCallback.setCallback(this::shooterCallback, rightShooterCallback);
+        // Aim only.
+        leftShooter.aimShooter(owner, aimInfo, leftShooterCallback, timeout);
+        if (rightShooter != null)
+        {
+            // Pass the leftShooterCallback as the callback context.
+            rightShooterCallback.setCallback(this::shooterCallback, leftShooterCallback);
+            // Aim only.
+            rightShooter.aimShooter(owner, aimInfo, rightShooterCallback, timeout);
+        }
+    }   //aimShooter
+
+    private void shooterCallback(Object context, boolean canceled)
+    {
+        if (canceled)
+        {
+            if (shootOpParams.completionEvent != null)
+            {
+                shootOpParams.completionEvent.cancel();
+            }
+            shootOpParams = null;
+        }
+        else
+        {
+            TrcEvent theOtherShooter = (TrcEvent) context;
+
+            if (theOtherShooter == null || theOtherShooter.isSignaled())
+            {
+                // Ready to shoot.
+                if (shootOpParams.shootOp != null)
+                {
+                    // If both shooters are ready, shoot.
+                    // TrcEvent shootCompletionEvent = new TrcEvent(instanceName + ".shootCompletionEvent");
+                    // shootCompletionEvent.setCallback(
+                    //     (ctxt, cancel) ->
+                    //     {
+                    //         if (cancel)
+                    //         {
+                    //             leftShooter.tracer.traceInfo(instanceName, "Shoot canceled.");
+                    //             if (shootOpParams.completionEvent != null)
+                    //             {
+                    //                 shootOpParams.completionEvent.cancel();
+                    //             }
+                    //         }
+                    //         else if (shootOpParams.shootOffDelay == null)
+                    //         {
+                    //             tracer.traceInfo(instanceName, "Shoot completed, keeping shooter motor running.");
+                    //             finish(true);
+                    //         }
+                    //         else if (shootOffDelay == 0.0)
+                    //         {
+                    //             tracer.traceInfo(instanceName, "Shoot completed, stop shooter motor.");
+                    //             stopShooter();
+                    //             finish(true);
+                    //         }
+                    //         else
+                    //         {
+                    //             tracer.traceInfo(
+                    //                 instanceName, "Shoot completed, delay stopping shooter motor for " + shootOffDelay + "s.");
+                    //             // // Even if we have a shootOffDelay, don't delay signaling completion.
+                    //             // if (completionEvent != null)
+                    //             // {
+                    //             //     completionEvent.signal();
+                    //             //     completionEvent = null;
+                    //             // }
+                    //             shootTimer.set(shootOffDelay, this::timedOut, true);
+                    //         }
+
+                    //     }, null);
+                    // TODO: How to deal with shootOffDelay and how to detect shooting done.
+                    shootOpParams.shootOp.shoot(shootOpParams.shootOpOwner, null);
+                }
+
+                if (shootOpParams.completionEvent != null)
+                {
+                    shootOpParams.completionEvent.signal();
+                }
+                shootOpParams = null;
+            }
+        }
+    }   //shooterCallback
 
     /**
      * This method is called to launch the game piece into the shooter, typically when TrcShooter has reached shooting
