@@ -49,7 +49,7 @@ public class FrcAuto implements TrcRobot.RobotMode
     //
     public enum AutoStrategy
     {
-        TEMPLATE_AUTO,
+        REBUILT_AUTO,
         PP_DRIVE,
         PID_DRIVE,
         TIMED_DRIVE,
@@ -59,9 +59,9 @@ public class FrcAuto implements TrcRobot.RobotMode
 
     public enum AutoStartPos
     {
-        POS_1(0),
-        POS_2(1),
-        POS_3(2);
+        START_POS_OUTPOST(0),
+        START_POS_CENTER(1),
+        START_POS_DEPOT(2);
         // The value can be used as index into arrays if necessary.
         public int value;
         AutoStartPos(int value)
@@ -69,6 +69,22 @@ public class FrcAuto implements TrcRobot.RobotMode
             this.value = value;
         }   //AutoStartPos
     }   //enum AutoStartPos
+
+    // Specifies what side we want to move to after shooting preloads
+    public enum MoveTo
+    {
+        NONE,
+        OUTPOST,
+        DEPOT
+    }   //enum MoveTo
+
+    // Specifies what we want to do when going to the neutral zone
+    public enum PassBack
+    {
+        NONE,
+        HOARD,
+        PASS_BACK
+    }   //enum PassBack
 
     /**
      * This class encapsulates all user choices for autonomous mode from the smart dashboard.
@@ -88,6 +104,16 @@ public class FrcAuto implements TrcRobot.RobotMode
         private static final String DBKEY_AUTO_STRATEGY = "Auto/Strategy";                  //Choices
         private static final String DBKEY_AUTO_START_POS = "Auto/StartPos";                 //Choices
         private static final String DBKEY_AUTO_START_DELAY = "Auto/StartDelay";             //Number
+
+        private static final String DBKEY_AUTO_USE_VISION   = "Auto/UseVision";             //Boolean
+        private static final String DBKEY_AUTO_RELOCALIZE = "Auto/Relocalize";              //Boolean
+        private static final String DBKEY_AUTO_DEPOT_PICKUP = "Auto/DepotPickup";           //Boolean
+        private static final String DBKEY_AUTO_OUTPOST_PICKUP = "Auto/OutpostPickup";       //Boolean
+        private static final String DBKEY_AUTO_NEUTRAL_ZONE_PICKUP = "Auto/NeutralZonePickup"; //Boolean
+        private static final String DBKEY_AUTO_MOVE_TO = "Auto/MoveTo";                     //Choices
+        private static final String DBKEY_AUTO_PASS_BACK = "Auto/PassBack";                 //Choices
+        private static final String DBKEY_AUTO_CLIMB = "Auto/Climb";                        //Boolean
+        
         private static final String DBKEY_AUTO_PATHFILE = "Auto/PathFile";                  //String
         private static final String DBKEY_AUTO_X_DRIVE_DISTANCE = "Auto/XDriveDistance";    //Number
         private static final String DBKEY_AUTO_Y_DRIVE_DISTANCE = "Auto/YDriveDistance";    //Number
@@ -101,6 +127,9 @@ public class FrcAuto implements TrcRobot.RobotMode
         private final FrcChoiceMenu<AutoStrategy> autoStrategyMenu;
         private final FrcChoiceMenu<AutoStartPos> autoStartPosMenu;
 
+        private final FrcChoiceMenu<MoveTo> moveToChoiceMenu;
+        private final FrcChoiceMenu<PassBack> passBackChoiceMenu;
+
         public AutoChoices()
         {
             //
@@ -109,6 +138,9 @@ public class FrcAuto implements TrcRobot.RobotMode
             allianceMenu = new FrcChoiceMenu<>(DBKEY_AUTO_ALLIANCE);
             autoStrategyMenu = new FrcChoiceMenu<>(DBKEY_AUTO_STRATEGY);
             autoStartPosMenu = new FrcChoiceMenu<>(DBKEY_AUTO_START_POS);
+
+            moveToChoiceMenu = new FrcChoiceMenu<>(DBKEY_AUTO_MOVE_TO);
+            passBackChoiceMenu = new FrcChoiceMenu<>(DBKEY_AUTO_PASS_BACK);
             //
             // Populate autonomous mode choice menus.
             //
@@ -121,16 +153,24 @@ public class FrcAuto implements TrcRobot.RobotMode
             }
             else
             {
-                autoStrategyMenu.addChoice("Template Auto", AutoStrategy.TEMPLATE_AUTO);
+                autoStrategyMenu.addChoice("Rebuilt Auto", AutoStrategy.REBUILT_AUTO, true, false);
                 autoStrategyMenu.addChoice("Pure Pursuit Drive", AutoStrategy.PP_DRIVE);
                 autoStrategyMenu.addChoice("PID Drive", AutoStrategy.PID_DRIVE);
                 autoStrategyMenu.addChoice("Timed Drive", AutoStrategy.TIMED_DRIVE);
             }
-            autoStrategyMenu.addChoice("Do Nothing", AutoStrategy.DO_NOTHING, true, true);
+            autoStrategyMenu.addChoice("Do Nothing", AutoStrategy.DO_NOTHING, false, true);
 
-            autoStartPosMenu.addChoice("Start Position 1", AutoStartPos.POS_1, true, false);
-            autoStartPosMenu.addChoice("Start Position 2", AutoStartPos.POS_2);
-            autoStartPosMenu.addChoice("Start Position 3", AutoStartPos.POS_3, false, true);
+            autoStartPosMenu.addChoice("Start Position Outpost", AutoStartPos.START_POS_OUTPOST, true, false);
+            autoStartPosMenu.addChoice("Start Position Center", AutoStartPos.START_POS_CENTER);
+            autoStartPosMenu.addChoice("Start Position Depot", AutoStartPos.START_POS_DEPOT, false, true);
+
+            moveToChoiceMenu.addChoice("None", MoveTo.NONE, true, false);
+            moveToChoiceMenu.addChoice("Outpost Side", MoveTo.OUTPOST);
+            moveToChoiceMenu.addChoice("Depot Side", MoveTo.DEPOT, false, true);
+
+            passBackChoiceMenu.addChoice("None", PassBack.NONE, true, false);
+            passBackChoiceMenu.addChoice("Hoard", PassBack.HOARD);
+            passBackChoiceMenu.addChoice("Pass Back", PassBack.PASS_BACK, false, true);
             //
             // Initialize dashboard with default choice values.
             //
@@ -138,6 +178,16 @@ public class FrcAuto implements TrcRobot.RobotMode
             userChoices.addChoiceMenu(DBKEY_AUTO_STRATEGY, autoStrategyMenu);
             userChoices.addChoiceMenu(DBKEY_AUTO_START_POS, autoStartPosMenu);
             userChoices.addNumber(DBKEY_AUTO_START_DELAY, 0.0);
+
+            userChoices.addBoolean(DBKEY_AUTO_USE_VISION, true);
+            userChoices.addBoolean(DBKEY_AUTO_RELOCALIZE, true);
+            userChoices.addBoolean(DBKEY_AUTO_DEPOT_PICKUP, false);
+            userChoices.addBoolean(DBKEY_AUTO_OUTPOST_PICKUP, false);
+            userChoices.addBoolean(DBKEY_AUTO_NEUTRAL_ZONE_PICKUP, false);
+            userChoices.addChoiceMenu(DBKEY_AUTO_MOVE_TO, moveToChoiceMenu);
+            userChoices.addChoiceMenu(DBKEY_AUTO_PASS_BACK, passBackChoiceMenu);
+            userChoices.addBoolean(DBKEY_AUTO_CLIMB, false);
+
             userChoices.addString(DBKEY_AUTO_PATHFILE, "DrivePath.csv");
             userChoices.addNumber(DBKEY_AUTO_X_DRIVE_DISTANCE, 0.0);    // in feet
             userChoices.addNumber(DBKEY_AUTO_Y_DRIVE_DISTANCE, 0.0);    // in feet
@@ -171,6 +221,46 @@ public class FrcAuto implements TrcRobot.RobotMode
         {
             return userChoices.getUserNumber(DBKEY_AUTO_START_DELAY);
         }   //getStartDelay
+
+        public boolean useVision()
+        {
+            return userChoices.getUserBoolean(DBKEY_AUTO_USE_VISION);
+        }   //useVision
+
+        public boolean getRelocalize()
+        {
+            return userChoices.getUserBoolean(DBKEY_AUTO_RELOCALIZE);
+        }   //useVision
+
+        public boolean depotPickup()
+        {
+            return userChoices.getUserBoolean(DBKEY_AUTO_DEPOT_PICKUP);
+        }   //depotPickup
+
+        public boolean outpostPickup()
+        {
+            return userChoices.getUserBoolean(DBKEY_AUTO_OUTPOST_PICKUP);
+        }   //outpostPickup
+
+        public boolean neutralZonePickup()
+        {
+            return userChoices.getUserBoolean(DBKEY_AUTO_NEUTRAL_ZONE_PICKUP);
+        }   //neutralZonePickup
+
+        public MoveTo getMoveTo()
+        {
+            return moveToChoiceMenu.getCurrentChoiceObject();
+        }   //getMoveTo
+
+        public PassBack getPassBack()
+        {
+            return passBackChoiceMenu.getCurrentChoiceObject();
+        }   //getPassBack
+
+        public boolean getClimb()
+        {
+            return userChoices.getUserBoolean(DBKEY_AUTO_CLIMB);
+        }   //getClimb
 
         public String getPathFile()
         {
@@ -209,6 +299,16 @@ public class FrcAuto implements TrcRobot.RobotMode
                    "strategy=\"" + getStrategy() + "\" " +
                    "startPos=\"" + getStartPos() + "\" " +
                    "startDelay=" + getStartDelay() + " sec " +
+
+                   "useVision=\""  + useVision() + "\" " +
+                   "relocalize=\"" + getRelocalize() + "\" " +
+                   "depotPickup=\"" + depotPickup() + "\" " +
+                   "outpostPickup=\"" + outpostPickup() + "\" " +
+                   "neutralZonePickup=\"" + neutralZonePickup() + "\" " +
+                   "moveTo=\"" + getMoveTo() + "\" " +
+                   "passBack=\"" + getPassBack() + "\" " +
+                   "climb=\"" + getClimb() + "\" " +
+
                    "pathFile=\"" + getPathFile() + "\" " +
                    "xDistance=" + getXDriveDistance() + " ft " +
                    "yDistance=" + getYDriveDistance() + " ft " +
@@ -288,7 +388,7 @@ public class FrcAuto implements TrcRobot.RobotMode
         //
         switch (autoChoices.getStrategy())
         {
-            case TEMPLATE_AUTO:
+            case REBUILT_AUTO:
                 if (robot.robotBase != null)
                 {
                     autoCommand = new CmdRebuiltAuto(robot, autoChoices);
