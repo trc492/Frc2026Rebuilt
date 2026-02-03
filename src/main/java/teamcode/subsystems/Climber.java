@@ -49,7 +49,7 @@ public class Climber extends TrcSubsystem
         super(SUBSYSTEM_NAME, NEED_ZERO_CAL);
 
         this.dashboard = FrcDashboard.getInstance();
-        dashboard.refreshKey(DBKEY_PREFERENCE_SHOW_STATUS, RobotParams.Preferences.showHopperStatus);
+        dashboard.refreshKey(DBKEY_PREFERENCE_SHOW_STATUS, RobotParams.Preferences.showClimberStatus);
         dashboard.refreshKey(DBKEY_PREFERENCE_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs);
     }   //Climber
 
@@ -94,7 +94,7 @@ public class Climber extends TrcSubsystem
     @Override
     public int updateStatus(int lineNum, boolean slowLoop)
     {
-        if (dashboard.getBoolean(DBKEY_PREFERENCE_SHOW_STATUS, RobotParams.Preferences.showHopperStatus))
+        if (dashboard.getBoolean(DBKEY_PREFERENCE_SHOW_STATUS, RobotParams.Preferences.showClimberStatus))
         {
             if (slowLoop)
             {

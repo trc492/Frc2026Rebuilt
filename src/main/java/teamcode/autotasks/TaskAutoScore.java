@@ -308,7 +308,7 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
                 tracer.traceInfo(
                     moduleName,
                     "***** Shooting fuel");
-                robot.shooterSubsystem.shoot(owner, event);
+                robot.shooterSubsystem.shoot(owner, robot.leftFeeder, event);
                 sm.waitForSingleEvent(event, State.DONE);
                 break;
 

@@ -53,7 +53,6 @@ import teamcode.autotasks.TaskAutoPickup;
 import teamcode.autotasks.TaskAutoScore;
 import teamcode.indicators.LEDIndicator;
 import teamcode.subsystems.DriveBase;
-import teamcode.subsystems.Hopper;
 import teamcode.subsystems.Intake;
 import teamcode.subsystems.Shooter;
 import teamcode.vision.OpenCvVision;
@@ -110,13 +109,11 @@ public class Robot extends FrcRobot
     public Shooter shooterSubsystem;
     public TrcShooter leftShooter;
     public TrcShooter rightShooter;
-    public TrcMotor turret;
-    public TrcMotor feeder;
+    public TrcMotor leftFeeder;
+    public TrcMotor rightFeeder;
     public Intake intakeSubsystem;
     public TrcRollerIntake intake;
     public TrcMotor intakeDeployer;
-    public Hopper hopperSubsystem;
-    public TrcMotor hopper;
     // Auto Tasks.
     public TaskAutoScore autoScoreTask;
     public TaskAutoPickup autoPickupTask;
@@ -238,8 +235,8 @@ public class Robot extends FrcRobot
                     shooterSubsystem = new Shooter();
                     leftShooter = shooterSubsystem.getLeftShooter();
                     rightShooter = shooterSubsystem.getRightShooter();
-                    turret = shooterSubsystem.getTurret();
-                    feeder = shooterSubsystem.getFeeder();
+                    leftFeeder = shooterSubsystem.getLeftFeeder();
+                    rightFeeder = shooterSubsystem.getRightFeeder();
                 }
 
                 if (RobotParams.Preferences.useIntake)
@@ -247,12 +244,6 @@ public class Robot extends FrcRobot
                     intakeSubsystem = new Intake(this);
                     intake = intakeSubsystem.getIntake();
                     intakeDeployer = intakeSubsystem.getDeployer();
-                }
-
-                if(RobotParams.Preferences.useHopper)
-                {
-                    hopperSubsystem = new Hopper();
-                    hopper = hopperSubsystem.getHopper();
                 }
 
                 TrcSubsystem.updateSubsystemParamsToDashboard();

@@ -85,8 +85,6 @@ public class RobotParams
         public static final boolean useRegression               = true;
         public static final boolean useIntake                   = false;
         public static final boolean showIntakeStatus            = false;
-        public static final boolean useHopper                   = false;
-        public static final boolean showHopperStatus            = false;
         public static final boolean useClimber                  = false;
         public static final boolean showClimberStatus           = false;
         // Auto Tasks
@@ -123,23 +121,24 @@ public class RobotParams
         public static final int CANID_FRSTEER_ENCODER           = 24;   //Yellow
         public static final int CANID_BLSTEER_ENCODER           = 25;   //Green
         public static final int CANID_BRSTEER_ENCODER           = 26;   //Blue
-        // Shooter CAN IDs.
+        // Left Shooter CAN IDs.
         public static final int CANID_LSHOOTER_PRIMARY_MOTOR    = 7;    //Purple
         public static final int CANID_LSHOOTER_FOLLOWER_MOTOR   = 8;    //Gray
         public static final int CANID_LSHOOTER_TILT_MOTOR       = 9;    //White
-        public static final int CANID_RSHOOTER_PRIMARY_MOTOR    = 17;   //Purple
-        public static final int CANID_RSHOOTER_FOLLOWER_MOTOR   = 18;   //Gray
-        public static final int CANID_RSHOOTER_TILT_MOTOR       = 19;   //White
-        public static final int CANID_SHOOTER_TURRET_MOTOR      = 27;   //Purple
-        public static final int CANID_SHOOTER_PRIMARY_FEEDER_MOTOR = 28;//Gray
-        public static final int CANID_SHOOTER_FOLLOWER_FEEDER_MOTOR = 29;//White
+        public static final int CANID_LSHOOTER_TURRET_MOTOR     = 17;   //Purple
+        public static final int CANID_LSHOOTER_LOWER_FEEDER_MOTOR = 18; //Gray
+        public static final int CANID_LSHOOTER_UPPER_FEEDER_MOTOR = 19; //White
+        // Right Shooter CAN IDs.
+        public static final int CANID_RSHOOTER_PRIMARY_MOTOR    = 27;   //Purple
+        public static final int CANID_RSHOOTER_FOLLOWER_MOTOR   = 28;   //Gray
+        public static final int CANID_RSHOOTER_TILT_MOTOR       = 29;   //White
+        public static final int CANID_RSHOOTER_TURRET_MOTOR     = 37;   //Purple
+        public static final int CANID_RSHOOTER_LOWER_FEEDER_MOTOR = 38; //Gray
+        public static final int CANID_RSHOOTER_UPPER_FEEDER_MOTOR = 39; //White
         // Intake CAN IDs
-        public static final int CANID_INTAKE_PRIMARY_MOTOR      = 37;   //Purple
-        public static final int CANID_INTAKE_FOLLOWER_MOTOR     = 38;   //Gray
-        public static final int CANID_INTAKE_DEPLOYER_MOTOR     = 39;   //White
-        // Hopper CAN IDs
-        public static final int CANID_HOPPER_LEFT_MOTOR         = 47;   //Purple
-        public static final int CANID_HOPPER_RIGHT_MOTOR        = 48;   //Gray
+        public static final int CANID_INTAKE_PRIMARY_MOTOR      = 47;   //Purple
+        public static final int CANID_INTAKE_FOLLOWER_MOTOR     = 48;   //Gray
+        public static final int CANID_INTAKE_DEPLOYER_MOTOR     = 49;   //White
         // Climber CAN IDs
 
         // Analog Input ports.

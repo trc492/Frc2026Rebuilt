@@ -830,7 +830,7 @@ public class FrcTest extends FrcTeleOp
                         if (robot.shooterSubsystem != null && subsystemName.equalsIgnoreCase(Shooter.SUBSYSTEM_NAME))
                         {
                             // Toggle left and right shooter flywheels ON/OFF with velocity specified in Dashboard.
-                            if (robot.shooterSubsystem.getFlywheelTargetRPM() != 0.0)
+                            if (robot.shooterSubsystem.getLeftFlywheelTargetRPM() != 0.0)
                             {
                                 robot.globalTracer.traceInfo(moduleName, ">>>>> Tune %s: Stop!", subsystemName);
                                 robot.shooterSubsystem.stopFlywheel();
@@ -901,13 +901,18 @@ public class FrcTest extends FrcTeleOp
                         {
                             robot.leftShooter.tiltMotor.presetPositionUp(moduleName, Shooter.Params.TILT_POWER_LIMIT);
                         }
-                        else if (robot.rightShooter.tiltMotor != null &&
+                        else if (robot.rightShooter != null && robot.rightShooter.tiltMotor != null &&
                                  subsystemName.equalsIgnoreCase(Shooter.Params.RTILT_MOTOR_NAME))
                         {
                             robot.rightShooter.tiltMotor.presetPositionUp(moduleName, Shooter.Params.TILT_POWER_LIMIT);
                         }
-                        else if (robot.turret != null &&
-                                 subsystemName.equalsIgnoreCase(Shooter.Params.TURRET_MOTOR_NAME))
+                        else if (robot.leftShooter.panMotor != null &&
+                                 subsystemName.equalsIgnoreCase(Shooter.Params.LTURRET_MOTOR_NAME))
+                        {
+                            robot.leftShooter.panMotor.presetPositionUp(moduleName, Shooter.Params.TURRET_POWER_LIMIT);
+                        }
+                        else if (robot.rightShooter != null && robot.rightShooter.panMotor != null &&
+                                 subsystemName.equalsIgnoreCase(Shooter.Params.RTURRET_MOTOR_NAME))
                         {
                             robot.rightShooter.panMotor.presetPositionUp(moduleName, Shooter.Params.TURRET_POWER_LIMIT);
                         }
@@ -928,13 +933,18 @@ public class FrcTest extends FrcTeleOp
                         {
                             robot.leftShooter.tiltMotor.presetPositionDown(moduleName, Shooter.Params.TILT_POWER_LIMIT);
                         }
-                        else if (robot.rightShooter.tiltMotor != null &&
+                        else if (robot.rightShooter != null && robot.rightShooter.tiltMotor != null &&
                                  subsystemName.equalsIgnoreCase(Shooter.Params.RTILT_MOTOR_NAME))
                         {
                             robot.rightShooter.tiltMotor.presetPositionDown(moduleName, Shooter.Params.TILT_POWER_LIMIT);
                         }
-                        else if (robot.turret != null &&
-                                 subsystemName.equalsIgnoreCase(Shooter.Params.TURRET_MOTOR_NAME))
+                        else if (robot.leftShooter.panMotor != null &&
+                                 subsystemName.equalsIgnoreCase(Shooter.Params.LTURRET_MOTOR_NAME))
+                        {
+                            robot.leftShooter.panMotor.presetPositionDown(moduleName, Shooter.Params.TURRET_POWER_LIMIT);
+                        }
+                        else if (robot.rightShooter != null && robot.rightShooter.panMotor != null &&
+                                 subsystemName.equalsIgnoreCase(Shooter.Params.RTURRET_MOTOR_NAME))
                         {
                             robot.rightShooter.panMotor.presetPositionDown(moduleName, Shooter.Params.TURRET_POWER_LIMIT);
                         }
