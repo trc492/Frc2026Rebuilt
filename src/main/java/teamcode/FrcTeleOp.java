@@ -182,6 +182,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
      * @param slowPeriodicLoop specifies true if it is running the slow periodic loop on the main robot thread,
      *        false otherwise.
      */
+    @SuppressWarnings("unused")
     @Override
     public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
@@ -211,7 +212,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                             }
                         }
                     }
-                    else
+                    else if (robot.driverController != null)
                     {
                         boolean showDriveBaseStatus = robot.dashboard.getBoolean(
                             DBKEY_SHOW_DRIVE_POWER, RobotParams.Preferences.showDrivePower);
@@ -255,7 +256,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                     // Analog control of subsystems.
                 }
 
-                if (RobotParams.Preferences.useRumble)
+                if (RobotParams.Preferences.useRumble && robot.driverController != null)
                 {
                     if (!rumbling && elapsedTime > RobotParams.Game.TELEOP_PERIOD - RobotParams.Game.ENDGAME_THRESHOLD)
                     {
