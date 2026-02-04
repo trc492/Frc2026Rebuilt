@@ -88,7 +88,7 @@ public class Vision //implements TrcVision.ObjectInfo
     public final FrcPhotonVision intakeVision;
     private final Transform3d leftShooterCamFromRobot;
     private final Transform3d rightShooterCamFromRobot;
-    private final Transform3d intakeCamFromRobot;
+    // private final Transform3d intakeCamFromRobot;
     private PipelineType leftShooterPipeline = PipelineType.APRILTAG;
     private PipelineType rightShooterPipeline = PipelineType.APRILTAG;
     private PipelineType intakePipeline = PipelineType.YELLOW_FUEL;
@@ -149,13 +149,13 @@ public class Vision //implements TrcVision.ObjectInfo
         {
             tracer.traceInfo(moduleName, "Creating IntakeVision for camera %s.", camInfos[2].camName);
             intakeVision = new FrcPhotonVision(camInfos[2], (obj)-> 0.0);
-            intakeCamFromRobot = new Transform3d(
-                new Translation3d(Units.inchesToMeters(camInfos[2].camPose.y),
-                                  -Units.inchesToMeters(camInfos[2].camPose.x),
-                                  Units.inchesToMeters(camInfos[2].camPose.z)),
-                new Rotation3d(Units.degreesToRadians(camInfos[2].camPose.roll),
-                               -Units.degreesToRadians(camInfos[2].camPose.pitch),
-                               -Units.degreesToRadians(camInfos[2].camPose.yaw)));
+            // intakeCamFromRobot = new Transform3d(
+            //     new Translation3d(Units.inchesToMeters(camInfos[2].camPose.y),
+            //                       -Units.inchesToMeters(camInfos[2].camPose.x),
+            //                       Units.inchesToMeters(camInfos[2].camPose.z)),
+            //     new Rotation3d(Units.degreesToRadians(camInfos[2].camPose.roll),
+            //                    -Units.degreesToRadians(camInfos[2].camPose.pitch),
+            //                    -Units.degreesToRadians(camInfos[2].camPose.yaw)));
             dashboard.refreshKey(DBKEY_PREFIX + camInfos[2].camName, "");
             rightShooterVision.setPipelineIndex(intakePipeline.pipelineIndex);
         }
