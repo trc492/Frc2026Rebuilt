@@ -162,7 +162,7 @@ public class Vision //implements TrcVision.ObjectInfo
         else
         {
             intakeVision = null;
-            intakeCamFromRobot = null;
+            // intakeCamFromRobot = null;
         }
 
         FrcDashboard.getInstance().addStatusUpdate(moduleName, this::updateStatus);
