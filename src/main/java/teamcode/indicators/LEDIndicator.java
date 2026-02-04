@@ -27,7 +27,7 @@ import frclib.drivebase.FrcRobotBase.LEDInfo;
 import frclib.driverio.FrcAddressableLED;
 import frclib.vision.FrcPhotonVision;
 import teamcode.RobotParams;
-import teamcode.vision.PhotonVision;
+import teamcode.vision.Vision;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
 import trclib.driverio.TrcAddressableLED;
 import trclib.driverio.TrcPriorityIndicator;
@@ -172,7 +172,7 @@ public class LEDIndicator
      * @param detectedObj specifies the detected object, valid if pipelineType is not null.
      */
     public void setPhotonDetectedObject(
-        PhotonVision.PipelineType pipelineType, FrcPhotonVision.DetectedObject detectedObj)
+        Vision.PipelineType pipelineType, FrcPhotonVision.DetectedObject detectedObj)
     {
         if (pipelineType == null || detectedObj == null)
         {
@@ -184,7 +184,7 @@ public class LEDIndicator
             {
                 case APRILTAG:
                     if (Math.abs(Math.toDegrees(Math.atan2(detectedObj.targetPose.x, detectedObj.targetPose.y))) <
-                        PhotonVision.ONTARGET_THRESHOLD)
+                        Vision.ONTARGET_THRESHOLD)
                     {
                         leds[0].setPatternState(APRILTAG_LOCKED, true);
                     }

@@ -55,8 +55,7 @@ import teamcode.indicators.LEDIndicator;
 import teamcode.subsystems.DriveBase;
 import teamcode.subsystems.Intake;
 import teamcode.subsystems.Shooter;
-import teamcode.vision.OpenCvVision;
-import teamcode.vision.PhotonVision;
+import teamcode.vision.Vision;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
 import trclib.motor.TrcMotor;
 import trclib.pathdrive.TrcPose2D;
@@ -68,7 +67,6 @@ import trclib.sensor.TrcRobotBattery;
 import trclib.subsystem.TrcRollerIntake;
 import trclib.subsystem.TrcShooter;
 import trclib.subsystem.TrcSubsystem;
-import trclib.vision.TrcVision;
 import trclib.vision.TrcVisionRelocalize;
 
 /**
@@ -99,9 +97,7 @@ public class Robot extends FrcRobot
     // Miscellaneous hardware.
     public LEDIndicator ledIndicator;
     // Vision.
-    public PhotonVision photonVisionTurret;
-    public PhotonVision photonVisionIntake;
-    public OpenCvVision openCvVision;
+    public Vision vision;
     public TrcVisionRelocalize visionRelocalize;
     // Hybrid mode objects.
     public Command m_autonomousCommand;
@@ -186,25 +182,7 @@ public class Robot extends FrcRobot
         // Create and initialize Vision subsystem.
         if (RobotParams.Preferences.useVision && robotInfo.camInfos != null)
         {
-            if (RobotParams.Preferences.usePhotonVision && robotInfo.camInfos.length >= 2)
-            {
-                photonVisionTurret = robotInfo.camInfos[0] != null?
-                    new PhotonVision(robotInfo.camInfos[0], ledIndicator): null;
-                photonVisionIntake = robotInfo.camInfos[1] != null?
-                    new PhotonVision(robotInfo.camInfos[1], ledIndicator): null;
-            }
-            else if (RobotParams.Preferences.useOpenCvVision && robotInfo.camInfos.length >= 3 &&
-                     robotInfo.camInfos[2] != null)
-            {
-                TrcVision.CameraInfo camInfo = robotInfo.camInfos[2];
-                UsbCamera camera = CameraServer.startAutomaticCapture(1);
-                camera.setResolution(camInfo.camImageWidth, camInfo.camImageHeight);
-                camera.setFPS(10);
-                openCvVision = new OpenCvVision(
-                    "OpenCvVision", 1, camInfo, CameraServer.getVideo(),
-                    CameraServer.putVideo(
-                        "UsbWebcam", camInfo.camImageWidth, camInfo.camImageHeight));
-            }
+            vision = new Vision(robotInfo.camInfos, ledIndicator);
 
             if (RobotParams.Preferences.doVisionRelocalize)
             {
@@ -279,7 +257,8 @@ public class Robot extends FrcRobot
     public void robotStartMode(RunMode runMode, RunMode prevMode)
     {
         // Enable LostComm detection.
-        if (dashboard.getBoolean(Dashboard.DBKEY_PREFERENCE_COMMSTATUS_MONITOR, RobotParams.Preferences.useCommStatusMonitor))
+        if (dashboard.getBoolean(
+                Dashboard.DBKEY_PREFERENCE_COMMSTATUS_MONITOR, RobotParams.Preferences.useCommStatusMonitor))
         {
             super.setCommStatusMonitorEnabled(this::commStatusCallback);
         }
@@ -386,12 +365,12 @@ public class Robot extends FrcRobot
     @Override
     public void robotPeriodic(RunMode runMode, boolean slowPeriodicLoop)
     {
-        if (visionRelocalize != null && photonVisionTurret != null)
+        if (visionRelocalize != null && vision != null)
         {
             double fpgaTime = Timer.getFPGATimestamp();
             TrcPose2D robotPose = robotBase.driveBase.getFieldPosition();
             visionRelocalize.addTimedPose(fpgaTime, robotPose);
-            DetectedObject aprilTagObj = photonVisionTurret.getBestDetectedAprilTag(null);
+            DetectedObject aprilTagObj = vision.getBestDetectedAprilTag(null, null);
 
             if (aprilTagObj != null)
             {

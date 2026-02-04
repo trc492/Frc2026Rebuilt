@@ -31,8 +31,6 @@ import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcUserChoices;
 import frclib.driverio.FrcXboxController;
 import teamcode.subsystems.Shooter;
-import teamcode.vision.OpenCvVision.ObjectType;
-import teamcode.vision.PhotonVision.PipelineType;
 import trclib.command.CmdDriveMotorsTest;
 import trclib.command.CmdPidDrive;
 import trclib.command.CmdTimedDrive;
@@ -354,10 +352,6 @@ public class FrcTest extends FrcTeleOp
     private TrcPose2D tuneDriveStartPoint = null;
     private TrcPose2D tuneDriveEndPoint = null;
     private boolean tuneDriveAtEndPoint = false;
-    // Vision Pipelines.
-    private PipelineType photonTurretPipeline = PipelineType.APRILTAG;
-    private PipelineType photonIntakePipeline = PipelineType.APRILTAG;
-    private ObjectType openCvDetectObjType = ObjectType.YELLOW_BLOB;
 
     public FrcTest(Robot robot)
     {
@@ -455,23 +449,6 @@ public class FrcTest extends FrcTeleOp
                         new TrcPose2D(
                             testChoices.getXTarget()*12.0, testChoices.getYTarget()*12.0,
                             testChoices.getTurnTarget()));
-                }
-                break;
-
-            case VISION_TEST:
-                if (robot.photonVisionTurret != null)
-                {
-                    robot.photonVisionTurret.setPipeline(photonTurretPipeline);
-                }
-
-                if (robot.photonVisionIntake != null)
-                {
-                    robot.photonVisionIntake.setPipeline(photonIntakePipeline);
-                }
-
-                if (robot.openCvVision != null)
-                {
-                    robot.openCvVision.setDetectObjectType(openCvDetectObjType);
                 }
                 break;
 
@@ -1001,19 +978,9 @@ public class FrcTest extends FrcTeleOp
      */
     private int doVisionTest(int lineNum)
     {
-        if (robot.photonVisionTurret != null)
+        if (robot.vision != null)
         {
-            lineNum = robot.photonVisionTurret.updateStatus(lineNum, true);
-        }
-
-        if (robot.photonVisionIntake != null)
-        {
-            lineNum = robot.photonVisionIntake.updateStatus(lineNum, true);
-        }
-
-        if (robot.openCvVision != null)
-        {
-            lineNum = robot.openCvVision.updateStatus(lineNum, true);
+            lineNum = robot.vision.updateStatus(lineNum, true);
         }
 
         return lineNum;

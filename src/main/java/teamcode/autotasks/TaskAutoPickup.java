@@ -25,7 +25,6 @@ package teamcode.autotasks;
 import frclib.vision.FrcPhotonVision;
 import teamcode.Robot;
 import teamcode.indicators.LEDIndicator;
-import teamcode.vision.PhotonVision.PipelineType;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcAutoTask;
 import trclib.robotcore.TrcEvent;
@@ -175,8 +174,7 @@ public class TaskAutoPickup extends TrcAutoTask<TaskAutoPickup.State>
         {
             case START:
                 fuelPose = null;
-                if (robot.photonVisionIntake != null &&
-                    robot.photonVisionIntake.getPipeline() == PipelineType.YELLOW_BLOB)
+                if (robot.vision != null && robot.vision.intakeVision != null)
                 {
                     tracer.traceInfo(moduleName, "***** Using Intake Vision.");
                     visionExpiredTime = null;
@@ -191,7 +189,7 @@ public class TaskAutoPickup extends TrcAutoTask<TaskAutoPickup.State>
 
             case FIND_FUEL:
                 // PhotonVision YellowBlob pipeline is configured to sort with largest area first.
-                FrcPhotonVision.DetectedObject object = robot.photonVisionIntake.getBestDetectedObject(null);
+                FrcPhotonVision.DetectedObject object = robot.vision.getBestDetectedFuel(null);
 
                 if (object != null)
                 {

@@ -35,7 +35,7 @@ import frclib.sensor.FrcEncoder.EncoderType;
 import teamcode.Dashboard;
 import teamcode.RobotParams;
 import teamcode.RobotParams.HwConfig;
-import teamcode.vision.PhotonVision;
+import teamcode.vision.Vision;
 import trclib.controller.TrcPidController;
 import trclib.drivebase.TrcDriveBase;
 import trclib.drivebase.TrcSwerveDrive;
@@ -120,7 +120,7 @@ public class DriveBase extends TrcSubsystem
                 .setPidDriveParams(false)
                 .setPurePursuitDriveParams(10.0, true, false)
                 .setVisionInfo(
-                    new TrcVision.CameraInfo[] {PhotonVision.leftShooterCamInfo, PhotonVision.rightShooterCamInfo})
+                    new TrcVision.CameraInfo[] {Vision.leftShooterCamInfo, Vision.rightShooterCamInfo})
                 .setIndicators(
                     new LEDInfo("LED", HwConfig.PWM_CHANNEL_LED, HwConfig.NUM_LEDS));
             this.setSwerveParams(swerveParams)
@@ -200,7 +200,7 @@ public class DriveBase extends TrcSubsystem
                 .setPidDriveParams(false)
                 .setPurePursuitDriveParams(10.0, true, false)
                 .setVisionInfo(
-                    new TrcVision.CameraInfo[] {PhotonVision.reefscapeFrontCamInfo, PhotonVision.reefscapeBackCamInfo})
+                    new TrcVision.CameraInfo[] {Vision.reefscapeFrontCamInfo, Vision.reefscapeBackCamInfo})
                 .setIndicators(
                     new LEDInfo("LED", HwConfig.PWM_CHANNEL_LED, HwConfig.NUM_LEDS));
             this.setSwerveParams(swerveParams)
@@ -236,7 +236,7 @@ public class DriveBase extends TrcSubsystem
         {
             this.setRobotInfo("VisionOnly")
                 .setVisionInfo(
-                    new TrcVision.CameraInfo[] {PhotonVision.leftShooterCamInfo, PhotonVision.rightShooterCamInfo});
+                    new TrcVision.CameraInfo[] {Vision.leftShooterCamInfo, Vision.rightShooterCamInfo});
         }   //VisionOnlyInfo
     }   //class VisionOnlyInfo
 

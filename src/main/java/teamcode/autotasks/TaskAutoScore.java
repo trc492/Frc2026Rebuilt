@@ -27,7 +27,6 @@ import frclib.vision.FrcPhotonVision;
 import teamcode.Robot;
 import teamcode.RobotParams;
 import teamcode.subsystems.Shooter;
-import teamcode.vision.PhotonVision.PipelineType;
 import trclib.dataprocessor.TrcLookupTable;
 import trclib.dataprocessor.TrcUtil;
 import trclib.pathdrive.TrcPose2D;
@@ -229,17 +228,17 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
         switch (state)
         {
             case START:
-                if (robot.photonVisionTurret == null)
+                if (robot.vision == null ||
+                    robot.vision.leftShooterVision == null && robot.vision.rightShooterVision == null)
                 {
-                    tracer.traceWarn(moduleName, "***** Turret Vision is not enabled, quit.");
+                    tracer.traceWarn(moduleName, "***** Shooter Vision is not enabled, quit.");
                     sm.setState(State.DONE);
                 }
                 else
                 {
+                    tracer.traceInfo(moduleName, "***** Using Shooter Vision.");
                     visionExpiredTime = null;
                     aimInfo = null;
-                    tracer.traceInfo(moduleName, "***** Using AprilTag Vision.");
-                    robot.photonVisionTurret.setPipeline(PipelineType.APRILTAG);
                     sm.setState(State.DO_VISION);
                 }
                 break;
@@ -251,7 +250,8 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
                         taskParams.alliance == null? RobotParams.Game.anyHubAprilTags:
                         taskParams.alliance == Alliance.Blue ?
                             RobotParams.Game.blueHubAprilTags: RobotParams.Game.redHubAprilTags;
-                    FrcPhotonVision.DetectedObject aprilTagInfo = robot.photonVisionTurret.getBestDetectedAprilTag(goalAprilTags);
+                    FrcPhotonVision.DetectedObject aprilTagInfo =
+                        robot.vision.getBestDetectedAprilTag(null, goalAprilTags);
                     if (aprilTagInfo != null)
                     {
                         int aprilTagId = aprilTagInfo.target.getFiducialId();

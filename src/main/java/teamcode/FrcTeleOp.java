@@ -26,7 +26,6 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcXboxController;
 import frclib.vision.FrcPhotonVision.DetectedObject;
-import teamcode.vision.PhotonVision.PipelineType;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
 import trclib.drivebase.TrcSwerveDrive;
 import trclib.driverio.TrcGameController.DriveMode;
@@ -127,18 +126,6 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         {
             // Set robot to FIELD by default but don't change the heading.
             robot.setDriveOrientation(driveOrientationMenu.getCurrentChoiceObject(), false);
-            // Enable AprilTag vision for re-localization.
-            if (robot.photonVisionTurret != null)
-            {
-                robot.globalTracer.traceInfo(moduleName, "Enabling TurretCam for AprilTagVision.");
-                robot.photonVisionTurret.setPipeline(PipelineType.APRILTAG);
-            }
-
-            if (robot.photonVisionIntake != null)
-            {
-                robot.globalTracer.traceInfo(moduleName, "Enabling IntakeCam for AprilTagVision.");
-                robot.photonVisionIntake.setPipeline(PipelineType.APRILTAG);
-            }
         }
 
         if (RobotParams.Preferences.hybridMode)
@@ -199,16 +186,11 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                     {
                         if (robotFieldPose == null)
                         {
-                            DetectedObject aprilTagObj = null;
-
-                            if (robot.photonVisionTurret != null)
-                            {
-                                aprilTagObj = robot.photonVisionTurret.getBestDetectedAprilTag(null);
-                            }
+                            DetectedObject aprilTagObj = robot.vision.getBestDetectedAprilTag(null, null);
 
                             if (aprilTagObj != null)
                             {
-                                robotFieldPose = robot.photonVisionTurret.getRobotFieldPose(aprilTagObj, false);
+                                robotFieldPose = robot.vision.getRobotFieldPose();
                             }
                         }
                     }
@@ -393,8 +375,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 break;
 
             case Start:
-                if (robot.photonVisionTurret != null &&
-                    robot.photonVisionTurret.getPipeline() == PipelineType.APRILTAG)
+                if (robot.vision != null)
                 {
                     // On press of the button, we will start looking for AprilTag for re-localization.
                     // On release of the button, we will set the robot's field location if we found the
