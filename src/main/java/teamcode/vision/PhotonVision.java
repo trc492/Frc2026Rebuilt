@@ -27,8 +27,8 @@ import java.util.Comparator;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Transform3d;
 import frclib.driverio.FrcDashboard;
+import frclib.robotcore.FrcField;
 import frclib.vision.FrcPhotonVision;
 import teamcode.RobotParams;
 import teamcode.indicators.LEDIndicator;
@@ -42,12 +42,12 @@ import trclib.vision.TrcVision;
 public class PhotonVision extends FrcPhotonVision
 {
     // Rebuilt Turret camera info
-    public static final TrcVision.CameraInfo rebuiltTurretCamInfo = new TrcVision.CameraInfo()
-        .setCameraInfo("OV9782_Turret", 640, 480)
+    public static final TrcVision.CameraInfo leftShooterCamInfo = new TrcVision.CameraInfo()
+        .setCameraInfo("OV9782_LeftShooter", 640, 480)
         .setCameraPose(-0.25, 5.75, 7.0, 0.0, 21.8346, 0.0);
     // Rebuilt Intake camera info
-    public static final TrcVision.CameraInfo rebuiltIntakeCamInfo = new TrcVision.CameraInfo()
-        .setCameraInfo("OV9782_Intake", 640, 480)
+    public static final TrcVision.CameraInfo rightShooterCamInfo = new TrcVision.CameraInfo()
+        .setCameraInfo("OV9782_RightShooter", 640, 480)
         .setCameraPose(0.0, -1.563, 41.374, 180.0, 9.1241, 0.0);
 
     // Reefscape Front camera info
@@ -65,7 +65,8 @@ public class PhotonVision extends FrcPhotonVision
     public enum PipelineType
     {
         APRILTAG(0),
-        YELLOW_BLOB(1);
+        YELLOW_BLOB(1),
+        YELLOW_FUEL(2);
 
         public int pipelineIndex;
         PipelineType(int value)
@@ -94,18 +95,18 @@ public class PhotonVision extends FrcPhotonVision
         FrcDashboard.getInstance().addStatusUpdate(instanceName, this::updateStatus);
     }   //PhotonVision
 
-    /**
-     * This method returns the transform between two adjacent AprilTags.
-     *
-     * @param fromAprilTagId specifies the From AprilTag ID.
-     * @param toAprilTagId specifies the To AprilTag ID.
-     * @return transform between two adjacent AprilTags.
-     */
-    public Transform3d getMultiTagTransform(int fromAprilTagId, int toAprilTagId)
-    {
-        return FrcPhotonVision.getAprilTagFieldPose3d(toAprilTagId, null).minus(
-               FrcPhotonVision.getAprilTagFieldPose3d(fromAprilTagId, null));
-    }   //getMultiTagTransform
+    // /**
+    //  * This method returns the transform between two adjacent AprilTags.
+    //  *
+    //  * @param fromAprilTagId specifies the From AprilTag ID.
+    //  * @param toAprilTagId specifies the To AprilTag ID.
+    //  * @return transform between two adjacent AprilTags.
+    //  */
+    // public Transform3d getMultiTagTransform(int fromAprilTagId, int toAprilTagId)
+    // {
+    //     return FrcPhotonVision.getAprilTagFieldPose3d(toAprilTagId, null).minus(
+    //            FrcPhotonVision.getAprilTagFieldPose3d(fromAprilTagId, null));
+    // }   //getMultiTagTransform
 
     /**
      * This method returns the robot's field position.
@@ -120,7 +121,7 @@ public class PhotonVision extends FrcPhotonVision
         return usePoseEstimator?
             getRobotEstimatedPose(super.robotToCamera):
             getRobotPoseFromAprilTagFieldPose(
-                FrcPhotonVision.getAprilTagFieldPose3d(aprilTagObj.target.getFiducialId(), null),
+                FrcField.getAprilTagFieldPose3d(aprilTagObj.target.getFiducialId()),
                 aprilTagObj.target.getBestCameraToTarget(), super.robotToCamera);
     }   //getRobotFieldPose
 
@@ -292,7 +293,7 @@ public class PhotonVision extends FrcPhotonVision
                 {
                     // Even though PhotonVision said detected target, FieldLayout may not give us AprilTagPose.
                     // Check it before access the AprilTag pose.
-                    Pose3d aprilTagPose = getAprilTagFieldPose3d(target.getFiducialId(), null);
+                    Pose3d aprilTagPose = FrcField.getAprilTagFieldPose3d(target.getFiducialId());
                     if (aprilTagPose != null)
                     {
                         targetHeight = aprilTagPose.getZ();

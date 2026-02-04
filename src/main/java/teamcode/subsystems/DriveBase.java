@@ -120,7 +120,7 @@ public class DriveBase extends TrcSubsystem
                 .setPidDriveParams(false)
                 .setPurePursuitDriveParams(10.0, true, false)
                 .setVisionInfo(
-                    new TrcVision.CameraInfo[] {PhotonVision.rebuiltTurretCamInfo, PhotonVision.rebuiltIntakeCamInfo})
+                    new TrcVision.CameraInfo[] {PhotonVision.leftShooterCamInfo, PhotonVision.rightShooterCamInfo})
                 .setIndicators(
                     new LEDInfo("LED", HwConfig.PWM_CHANNEL_LED, HwConfig.NUM_LEDS));
             this.setSwerveParams(swerveParams)
@@ -236,7 +236,7 @@ public class DriveBase extends TrcSubsystem
         {
             this.setRobotInfo("VisionOnly")
                 .setVisionInfo(
-                    new TrcVision.CameraInfo[] {PhotonVision.rebuiltTurretCamInfo, PhotonVision.rebuiltIntakeCamInfo});
+                    new TrcVision.CameraInfo[] {PhotonVision.leftShooterCamInfo, PhotonVision.rightShooterCamInfo});
         }   //VisionOnlyInfo
     }   //class VisionOnlyInfo
 
