@@ -23,7 +23,12 @@
  package teamcode.subsystems;
 
 import frclib.driverio.FrcDashboard;
+import frclib.motor.FrcMotorActuator;
+import frclib.motor.FrcMotorActuator.MotorType;
+import frclib.motor.FrcMotorActuator.SparkMaxMotorParams;
+import teamcode.FrcTest;
 import teamcode.RobotParams;
+import trclib.motor.TrcMotor;
 import trclib.robotcore.TrcEvent;
 import trclib.subsystem.TrcSubsystem;
 
@@ -37,9 +42,24 @@ public class Climber extends TrcSubsystem
     public static final class Params
     {
         public static final String CANBUS_NAME                  = RobotParams.HwConfig.CANBUS_CANIVORE;
+
+        // Motor Characteristics
+        public static final MotorType CLIMBER_MOTOR_TYPE        = MotorType.CanTalonFx;
+        //                                                                                       dunno if this true or false
+        public static final SparkMaxMotorParams CLIMBER_SPARKMAX_PARAMS = new SparkMaxMotorParams(true, false);
+        public static final String CLIMBER_MOTOR_NAME           = SUBSYSTEM_NAME + ".Motor";
+        public static final boolean CLIMBER_MOTOR_INVERTED      = false;
+        public static final int CLIMBER_MOTOR_CANID             = RobotParams.HwConfig.CANID_CLIMBER_MOTOR;
+
+        // Position Scales
+        //                                                        don't know
+        public static final double DEPLOY_POS                   = 1.0;
+        //                                                        don't know
+        public static final double RETRACT_POS                  = 0.0;
     }   //class Params
 
     private final FrcDashboard dashboard;
+    private final TrcMotor climberMotor;
 
     /**
      * Constructor: Creates an instance of the object.
@@ -51,11 +71,28 @@ public class Climber extends TrcSubsystem
         this.dashboard = FrcDashboard.getInstance();
         dashboard.refreshKey(DBKEY_PREFERENCE_SHOW_STATUS, RobotParams.Preferences.showClimberStatus);
         dashboard.refreshKey(DBKEY_PREFERENCE_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs);
+
+        FrcMotorActuator.Params climberMotorParams = new FrcMotorActuator.Params()
+            .setPrimaryMotor(
+                Params.CLIMBER_MOTOR_NAME, Params.CLIMBER_MOTOR_TYPE, Params.CLIMBER_MOTOR_INVERTED,
+                true, true, Params.CLIMBER_MOTOR_CANID, Params.CANBUS_NAME, Params.CLIMBER_SPARKMAX_PARAMS);
+        climberMotor = new FrcMotorActuator(climberMotorParams).getMotor();
     }   //Climber
 
-    //
-    // Implements TrcSubsystem abstract methods.
-    //
+    public TrcMotor getClimberMotor()
+    {
+        return climberMotor;
+    } //getClimberMotor
+
+    public void deploy()
+    {
+        climberMotor.setPosition(Params.DEPLOY_POS);
+    }  //deploy
+
+    public void climb()
+    {
+        climberMotor.setPosition(Params.RETRACT_POS);
+    } //climb
 
     /**
      * This method cancels any pending operations.
@@ -63,6 +100,7 @@ public class Climber extends TrcSubsystem
     @Override
     public void cancel()
     {
+        climberMotor.cancel();
     }   //cancel
 
    /**
@@ -82,6 +120,7 @@ public class Climber extends TrcSubsystem
     @Override
     public void resetState()
     {
+        climberMotor.setPosition(Params.RETRACT_POS);
     }   //resetState
 
     /**
@@ -98,11 +137,13 @@ public class Climber extends TrcSubsystem
         {
             if (slowLoop)
             {
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_INPUT, climberMotor.getPosition());
             }
         }
 
         if (dashboard.getBoolean(DBKEY_PREFERENCE_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs))
         {
+            dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_INPUT, climberMotor.getPosition());
         }
 
         return lineNum;
