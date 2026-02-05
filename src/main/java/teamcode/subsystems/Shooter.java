@@ -722,9 +722,8 @@ public class Shooter extends TrcSubsystem
                         robot.robotBase.driveBase, this::getLeftShooterAimInfo, aimInfo, 0.5, 3,
                         aimConvergenceStats);
                 }
-                goalTrackingState.rightShooterAimInfo = new AimInfo(
-                    aimInfo.targetPose, rightFlywheelRPM, null, aimInfo.panAngle, aimInfo.tiltAngle,
-                    aimInfo.timeOfFlight);
+                goalTrackingState.rightShooterAimInfo = aimInfo.clone();
+                goalTrackingState.rightShooterAimInfo.flywheel1RPM = rightFlywheelRPM;
             }
             else
             {
@@ -734,6 +733,39 @@ public class Shooter extends TrcSubsystem
                     targetPose, shootParams.outputs[0], null, targetPose.angle % 360.0, shootParams.region.value,
                     shootParams.outputs[1]);
             }
+
+            // Check for crossing over hardstop.
+            if (aimInfo.panAngle < Params.TURRET_MIN_POS)
+            {
+                if (aimInfo.panAngle + 360.0 > Params.TURRET_MAX_POS)
+                {
+                    tracer.traceDebug(instanceName, "Crossing hardstop CCW to dead zone at %f", aimInfo.panAngle);
+                    // We landed inside the dead zone, just stay at the edge of it.
+                    aimInfo.panAngle = Params.TURRET_MIN_POS;
+                }
+                else
+                {
+                    aimInfo.panAngle += 360.0;
+                    tracer.traceDebug(
+                        instanceName, "Crossing hardstop CCW, spin it the other way to %f", aimInfo.panAngle);
+                }
+            }
+            else if (aimInfo.panAngle > Params.TURRET_MAX_POS)
+            {
+                if (aimInfo.panAngle - 360.0 < Params.TURRET_MIN_POS)
+                {
+                    tracer.traceDebug(instanceName, "Crossing hardstop CW to dead zone at %f", aimInfo.panAngle);
+                    // We landed inside the dead zone, just stay at the edge of it.
+                    aimInfo.panAngle = Params.TURRET_MAX_POS;
+                }
+                else
+                {
+                    aimInfo.panAngle -= 360.0;
+                    tracer.traceDebug(
+                        instanceName, "Crossing hardstop CW, spin it the other way to %f", aimInfo.panAngle);
+                }
+            }
+
             tracer.traceDebug(
                 instanceName, "aimInfo=%s, distance=%f, bearing=%f",
                 aimInfo, Math.hypot(aimInfo.targetPose.x, aimInfo.targetPose.y), aimInfo.targetPose.angle % 360.0);
