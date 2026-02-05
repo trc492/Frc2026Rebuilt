@@ -98,7 +98,6 @@ public class Shooter extends TrcSubsystem
     public static final class Params
     {
         public static final String CANBUS_NAME                  = RobotParams.HwConfig.CANBUS_CANIVORE;
-        public static final boolean HAS_TWO_SHOOTERS            = false;
         public static final boolean SHOOTER_HAS_TILT            = false;
         public static final boolean SHOOTER_HAS_TURRET          = false;
         public static final boolean SHOOTER_HAS_FEEDER          = false;
@@ -263,97 +262,105 @@ public class Shooter extends TrcSubsystem
     public Shooter(Robot robot)
     {
         super(SUBSYSTEM_NAME, NEED_ZERO_CAL);
+        TrcMotor motor;
 
         dashboard = FrcDashboard.getInstance();
         dashboard.refreshKey(DBKEY_PREFERENCE_SHOW_STATUS, RobotParams.Preferences.showShooterStatus);
         dashboard.refreshKey(DBKEY_PREFERENCE_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs);
         this.robot = robot;
-    
-        TrcMotor motor;
-        FrcShooter.Params lShooterParams = new FrcShooter.Params()
-            .setShooterMotor1(
-                Params.LSHOOTER_PRIMARY_MOTOR_NAME, Params.SHOOTER_MOTOR_TYPE, Params.LSHOOTER_PRIMARY_MOTOR_INVERTED,
-                Params.LSHOOTER_PRIMARY_MOTOR_CANID, Params.CANBUS_NAME, null)
-            .setShooterMotor2(
-                Params.LSHOOTER_FOLLOWER_MOTOR_NAME, Params.SHOOTER_MOTOR_TYPE, Params.LSHOOTER_FOLLOWER_MOTOR_INVERTED,
-                Params.LSHOOTER_FOLLOWER_MOTOR_CANID, Params.CANBUS_NAME, null, true);
-        if (Params.SHOOTER_HAS_TILT)
+
+        if (RobotParams.Preferences.useLeftShooter)
         {
-            lShooterParams
-                .setTiltMotor(
-                    Params.LTILT_MOTOR_NAME, Params.TILT_MOTOR_TYPE, Params.LTILT_MOTOR_INVERTED,
-                    Params.LTILT_MOTOR_CANID, Params.CANBUS_NAME, Params.TILT_SPARKMAX_PARAMS,
-                    new TrcShooter.PanTiltParams(Params.TILT_POWER_LIMIT, Params.TILT_MIN_POS, Params.TILT_MAX_POS))
-                .setTiltMotorPosPresets(Params.TILT_POS_PRESET_TOLERANCE, Params.TILT_POS_PRESETS);
-        }
-        if (Params.SHOOTER_HAS_TURRET)
-        {
-            lShooterParams
-                .setPanMotor(
-                    Params.LTURRET_MOTOR_NAME, Params.TURRET_MOTOR_TYPE, Params.LTURRET_MOTOR_INVERTED,
-                    Params.LTURRET_MOTOR_CANID, Params.CANBUS_NAME, null,
-                    new TrcShooter.PanTiltParams(
-                        Params.TURRET_POWER_LIMIT, Params.TURRET_MIN_POS, Params.TURRET_MAX_POS))
-                .setPanMotorPosPresets(Params.TURRET_POS_PRESET_TOLERANCE, Params.TURRET_POS_PRESETS);
-        }
-        leftShooter = new FrcShooter(SUBSYSTEM_NAME + ".LeftShooter", lShooterParams).getShooter();
-        motor = leftShooter.getShooterMotor1();
-        motor.setPositionSensorScaleAndOffset(Params.SHOOTER_MOTOR_REV_PER_COUNT, 0.0);
-        motor.setVelocityPidParameters(
-            new TrcMotor.PidParams()
-                .setPidCoefficients(
-                    Params.LSHOOTER_MOTOR_PID_KP, Params.LSHOOTER_MOTOR_PID_KI, Params.LSHOOTER_MOTOR_PID_KD,
-                    Params.LSHOOTER_MOTOR_PID_KF, Params.LSHOOTER_MOTOR_PID_IZONE)
-                .setPidControlParams(Params.SHOOTER_PID_TOLERANCE_RPM/60.0, Params.SHOOTER_SOFTWARE_PID_ENABLED),
-            null);
-        motor = leftShooter.getTiltMotor();
-        if (motor != null)
-        {
-            motor.setPositionSensorScaleAndOffset(Params.TILT_MOTOR_DEG_PER_COUNT, Params.TILT_POS_OFFSET);
-            motor.setPositionPidParameters(
+            FrcShooter.Params lShooterParams = new FrcShooter.Params()
+                .setShooterMotor1(
+                    Params.LSHOOTER_PRIMARY_MOTOR_NAME, Params.SHOOTER_MOTOR_TYPE, Params.LSHOOTER_PRIMARY_MOTOR_INVERTED,
+                    Params.LSHOOTER_PRIMARY_MOTOR_CANID, Params.CANBUS_NAME, null)
+                .setShooterMotor2(
+                    Params.LSHOOTER_FOLLOWER_MOTOR_NAME, Params.SHOOTER_MOTOR_TYPE, Params.LSHOOTER_FOLLOWER_MOTOR_INVERTED,
+                    Params.LSHOOTER_FOLLOWER_MOTOR_CANID, Params.CANBUS_NAME, null, true);
+            if (Params.SHOOTER_HAS_TILT)
+            {
+                lShooterParams
+                    .setTiltMotor(
+                        Params.LTILT_MOTOR_NAME, Params.TILT_MOTOR_TYPE, Params.LTILT_MOTOR_INVERTED,
+                        Params.LTILT_MOTOR_CANID, Params.CANBUS_NAME, Params.TILT_SPARKMAX_PARAMS,
+                        new TrcShooter.PanTiltParams(Params.TILT_POWER_LIMIT, Params.TILT_MIN_POS, Params.TILT_MAX_POS))
+                    .setTiltMotorPosPresets(Params.TILT_POS_PRESET_TOLERANCE, Params.TILT_POS_PRESETS);
+            }
+            if (Params.SHOOTER_HAS_TURRET)
+            {
+                lShooterParams
+                    .setPanMotor(
+                        Params.LTURRET_MOTOR_NAME, Params.TURRET_MOTOR_TYPE, Params.LTURRET_MOTOR_INVERTED,
+                        Params.LTURRET_MOTOR_CANID, Params.CANBUS_NAME, null,
+                        new TrcShooter.PanTiltParams(
+                            Params.TURRET_POWER_LIMIT, Params.TURRET_MIN_POS, Params.TURRET_MAX_POS))
+                    .setPanMotorPosPresets(Params.TURRET_POS_PRESET_TOLERANCE, Params.TURRET_POS_PRESETS);
+            }
+            leftShooter = new FrcShooter(SUBSYSTEM_NAME + ".LeftShooter", lShooterParams).getShooter();
+            motor = leftShooter.getShooterMotor1();
+            motor.setPositionSensorScaleAndOffset(Params.SHOOTER_MOTOR_REV_PER_COUNT, 0.0);
+            motor.setVelocityPidParameters(
                 new TrcMotor.PidParams()
                     .setPidCoefficients(
-                        Params.LTILT_MOTOR_PID_KP, Params.LTILT_MOTOR_PID_KI, Params.LTILT_MOTOR_PID_KD,
-                        Params.LTILT_MOTOR_PID_KF, Params.LTILT_MOTOR_PID_IZONE)
-                    .setPidControlParams(Params.TILT_PID_TOLERANCE, Params.TILT_SOFTWARE_PID_ENABLED),
+                        Params.LSHOOTER_MOTOR_PID_KP, Params.LSHOOTER_MOTOR_PID_KI, Params.LSHOOTER_MOTOR_PID_KD,
+                        Params.LSHOOTER_MOTOR_PID_KF, Params.LSHOOTER_MOTOR_PID_IZONE)
+                    .setPidControlParams(Params.SHOOTER_PID_TOLERANCE_RPM/60.0, Params.SHOOTER_SOFTWARE_PID_ENABLED),
                 null);
-            motor.setSoftPositionLimits(Params.TILT_MIN_POS, Params.TILT_MAX_POS, false);
-        }
-        motor = leftShooter.getPanMotor();
-        if (motor != null)
-        {
-            motor.setPositionSensorScaleAndOffset(Params.TURRET_MOTOR_DEG_PER_COUNT, Params.TURRET_POS_OFFSET);
-            motor.setPositionPidParameters(
-                new TrcMotor.PidParams()
-                    .setPidCoefficients(
-                        Params.LTURRET_MOTOR_PID_KP, Params.LTURRET_MOTOR_PID_KI, Params.LTURRET_MOTOR_PID_KD,
-                        Params.LTURRET_MOTOR_PID_KF, Params.LTURRET_MOTOR_PID_IZONE)
-                    .setPidControlParams(Params.TURRET_PID_TOLERANCE, Params.TURRET_SOFTWARE_PID_ENABLED),
-                null);
-            motor.setSoftPositionLimits(Params.TURRET_MIN_POS, Params.TURRET_MAX_POS, false);
-            // There is no lower limit switch, enable stall detection for zero calibration and soft limits for
-            // protection.
-            motor.setStallProtection(
-                Params.TURRET_STALL_MIN_POWER, Params.TURRET_STALL_TOLERANCE, Params.TURRET_STALL_TIMEOUT,
-                Params.TURRET_STALL_RESET_TIMEOUT);
-        }
-        if (Params.SHOOTER_HAS_FEEDER)
-        {
-            FrcMotorActuator.Params feederParams = new FrcMotorActuator.Params()
-                .setPrimaryMotor(
-                    Params.LFEEDER_LOWER_MOTOR_NAME, Params.FEEDER_MOTOR_TYPE, Params.LFEEDER_LOWER_MOTOR_INVERTED,
-                    true, true, Params.LFEEDER_LOWER_MOTOR_CANID, Params.CANBUS_NAME, Params.FEEDER_SPARKMAX_PARAMS)
-                .addFollowerMotor(
-                    Params.LFEEDER_UPPER_MOTOR_NAME, Params.FEEDER_MOTOR_TYPE, Params.LFEEDER_UPPER_MOTOR_INVERTED,
-                    Params.LFEEDER_UPPER_MOTOR_CANID, Params.CANBUS_NAME, Params.FEEDER_SPARKMAX_PARAMS); 
-            leftFeeder = new FrcMotorActuator(feederParams).getMotor();
+            motor = leftShooter.getTiltMotor();
+            if (motor != null)
+            {
+                motor.setPositionSensorScaleAndOffset(Params.TILT_MOTOR_DEG_PER_COUNT, Params.TILT_POS_OFFSET);
+                motor.setPositionPidParameters(
+                    new TrcMotor.PidParams()
+                        .setPidCoefficients(
+                            Params.LTILT_MOTOR_PID_KP, Params.LTILT_MOTOR_PID_KI, Params.LTILT_MOTOR_PID_KD,
+                            Params.LTILT_MOTOR_PID_KF, Params.LTILT_MOTOR_PID_IZONE)
+                        .setPidControlParams(Params.TILT_PID_TOLERANCE, Params.TILT_SOFTWARE_PID_ENABLED),
+                    null);
+                motor.setSoftPositionLimits(Params.TILT_MIN_POS, Params.TILT_MAX_POS, false);
+            }
+            motor = leftShooter.getPanMotor();
+            if (motor != null)
+            {
+                motor.setPositionSensorScaleAndOffset(Params.TURRET_MOTOR_DEG_PER_COUNT, Params.TURRET_POS_OFFSET);
+                motor.setPositionPidParameters(
+                    new TrcMotor.PidParams()
+                        .setPidCoefficients(
+                            Params.LTURRET_MOTOR_PID_KP, Params.LTURRET_MOTOR_PID_KI, Params.LTURRET_MOTOR_PID_KD,
+                            Params.LTURRET_MOTOR_PID_KF, Params.LTURRET_MOTOR_PID_IZONE)
+                        .setPidControlParams(Params.TURRET_PID_TOLERANCE, Params.TURRET_SOFTWARE_PID_ENABLED),
+                    null);
+                motor.setSoftPositionLimits(Params.TURRET_MIN_POS, Params.TURRET_MAX_POS, false);
+                // There is no lower limit switch, enable stall detection for zero calibration and soft limits for
+                // protection.
+                motor.setStallProtection(
+                    Params.TURRET_STALL_MIN_POWER, Params.TURRET_STALL_TOLERANCE, Params.TURRET_STALL_TIMEOUT,
+                    Params.TURRET_STALL_RESET_TIMEOUT);
+            }
+            if (Params.SHOOTER_HAS_FEEDER)
+            {
+                FrcMotorActuator.Params feederParams = new FrcMotorActuator.Params()
+                    .setPrimaryMotor(
+                        Params.LFEEDER_LOWER_MOTOR_NAME, Params.FEEDER_MOTOR_TYPE, Params.LFEEDER_LOWER_MOTOR_INVERTED,
+                        true, true, Params.LFEEDER_LOWER_MOTOR_CANID, Params.CANBUS_NAME, Params.FEEDER_SPARKMAX_PARAMS)
+                    .addFollowerMotor(
+                        Params.LFEEDER_UPPER_MOTOR_NAME, Params.FEEDER_MOTOR_TYPE, Params.LFEEDER_UPPER_MOTOR_INVERTED,
+                        Params.LFEEDER_UPPER_MOTOR_CANID, Params.CANBUS_NAME, Params.FEEDER_SPARKMAX_PARAMS); 
+                leftFeeder = new FrcMotorActuator(feederParams).getMotor();
+            }
+            else
+            {
+                leftFeeder = null;
+            }
         }
         else
         {
+            leftShooter = null;
             leftFeeder = null;
         }
 
-        if (Params.HAS_TWO_SHOOTERS)
+        if (RobotParams.Preferences.useRightShooter)
         {
             FrcShooter.Params rShooterParams = new FrcShooter.Params()
                 .setShooterMotor1(
@@ -383,7 +390,7 @@ public class Shooter extends TrcSubsystem
                             Params.TURRET_POWER_LIMIT, Params.TURRET_MIN_POS, Params.TURRET_MAX_POS))
                     .setPanMotorPosPresets(Params.TURRET_POS_PRESET_TOLERANCE, Params.TURRET_POS_PRESETS);
             }
-            rightShooter = new FrcShooter(SUBSYSTEM_NAME + ".RightShooter", lShooterParams).getShooter();
+            rightShooter = new FrcShooter(SUBSYSTEM_NAME + ".RightShooter", rShooterParams).getShooter();
             motor = rightShooter.getShooterMotor1();
             motor.setPositionSensorScaleAndOffset(Params.SHOOTER_MOTOR_REV_PER_COUNT, 0.0);
             motor.setVelocityPidParameters(
@@ -445,7 +452,8 @@ public class Shooter extends TrcSubsystem
             rightShooter = null;
             rightFeeder = null;
         }
-        tracer = leftShooter.tracer;
+
+        tracer = leftShooter != null? leftShooter.tracer: rightShooter.tracer;
     }   //Shooter
 
     /**
@@ -495,7 +503,7 @@ public class Shooter extends TrcSubsystem
      */
     public double getLeftFlywheelTargetRPM()
     {
-        return leftShooter.getShooterMotor1TargetRPM();
+        return leftShooter != null? leftShooter.getShooterMotor1TargetRPM(): 0.0;
     }   //getLeftFlywheelTargetRPM
 
     /**
@@ -505,7 +513,7 @@ public class Shooter extends TrcSubsystem
      */
     public double getLeftFlywheelRPM()
     {
-        return leftShooter.getShooterMotor1RPM();
+        return leftShooter != null ? leftShooter.getShooterMotor1RPM(): 0.0;
     }   //getLeftFlywheelRPM
 
     /**
@@ -533,7 +541,7 @@ public class Shooter extends TrcSubsystem
      */
     public void stopFlywheel()
     {
-        leftShooter.stopShooter();
+        if (leftShooter != null) leftShooter.stopShooter();
         if (rightShooter != null) rightShooter.stopShooter();
     }   //stopFlywheel
 
@@ -543,9 +551,13 @@ public class Shooter extends TrcSubsystem
      * @param leftFlywheelRPM specifies the left shooter flywheel RPM.
      * @param rightFlywheelRPM specifies the right shooter flywheel RPM, can be null to leave it alone.
      */
-    public void setFlywheelRPM(double leftFlywheelRPM, Double rightFlywheelRPM)
+    public void setFlywheelRPM(Double leftFlywheelRPM, Double rightFlywheelRPM)
     {
-        leftShooter.setShooterMotorRPM(leftFlywheelRPM, null);
+        if (leftShooter != null && leftFlywheelRPM != null)
+        {
+            leftShooter.setShooterMotorRPM(leftFlywheelRPM, null);
+        }
+
         if (rightShooter != null && rightFlywheelRPM != null)
         {
             rightShooter.setShooterMotorRPM(rightFlywheelRPM, null);
@@ -595,8 +607,14 @@ public class Shooter extends TrcSubsystem
                     robot.adjustPoseByAlliance(RobotParams.Game.blueHubPose, FrcAuto.autoChoices.getAlliance());
                 goalTrackingState.paused = false;
                 goalTrackingState.rightShooterAimInfo = null;
-                leftShooter.setGoalTrackingEnabled(this::getLeftShooterAimInfo);
-                rightShooter.setGoalTrackingEnabled(this::getRightShooterAimInfo);
+                if (leftShooter != null)
+                {
+                    leftShooter.setGoalTrackingEnabled(this::getLeftShooterAimInfo);
+                }
+                if (rightShooter != null)
+                {
+                    rightShooter.setGoalTrackingEnabled(this::getRightShooterAimInfo);
+                }
             }
             else if (goalTrackingState.goalFieldPose != null && !enabled)
             {
@@ -604,8 +622,14 @@ public class Shooter extends TrcSubsystem
                 goalTrackingState.goalFieldPose = null;
                 goalTrackingState.paused = false;
                 goalTrackingState.rightShooterAimInfo = null;
-                leftShooter.setGoalTrackingEnabled(null);
-                rightShooter.setGoalTrackingEnabled(null);
+                if (leftShooter != null)
+                {
+                    leftShooter.setGoalTrackingEnabled(null);
+                }
+                if (rightShooter != null)
+                {
+                    rightShooter.setGoalTrackingEnabled(null);
+                }
             }
         }
     }   //setGoalTrackingEnabled
@@ -845,7 +869,7 @@ public class Shooter extends TrcSubsystem
     @Override
     public void cancel()
     {
-        leftShooter.cancel();
+        if (leftShooter != null) leftShooter.cancel();
         if (rightShooter != null) rightShooter.cancel();
         if (leftFeeder != null) leftFeeder.cancel();
         if (rightFeeder != null) rightFeeder.cancel();
@@ -860,10 +884,10 @@ public class Shooter extends TrcSubsystem
     @Override
     public void zeroCalibrate(String owner, TrcEvent completionEvent)
     {
-        TrcEvent leftZeroCalEvent = new TrcEvent("LeftZeroCalEvent");
-        TrcEvent rightZeroCalEvent = new TrcEvent("RightZeroCalEvent");
+        TrcEvent leftZeroCalEvent = leftShooter != null? new TrcEvent("LeftZeroCalEvent"): null;
+        TrcEvent rightZeroCalEvent = rightShooter != null? new TrcEvent("RightZeroCalEvent"): null;
 
-        if (leftShooter.panMotor != null)
+        if (leftShooter != null && leftShooter.panMotor != null)
         {
             leftZeroCalEvent.setCallback(this::zeroCalCallback, rightZeroCalEvent);
             leftShooter.panMotor.zeroCalibrate(owner, Params.TURRET_ZERO_CAL_POWER, leftZeroCalEvent);
@@ -929,24 +953,27 @@ public class Shooter extends TrcSubsystem
             {
                 TrcMotor motor;
 
-                motor = leftShooter.getShooterMotor1();
-                dashboard.displayPrintf(
-                    lineNum++, "LeftShooter: power=%.1f, current=%.1f, vel=%.1f, target=%.1f",
-                    motor.getPower(), motor.getCurrent(), leftShooter.getShooterMotor1RPM(),
-                    leftShooter.getShooterMotor1TargetRPM());
-                motor = leftShooter.getTiltMotor();
-                if (motor != null)
+                if (leftShooter != null)
                 {
+                    motor = leftShooter.getShooterMotor1();
                     dashboard.displayPrintf(
-                        lineNum++, "LeftTilt: power=%.1f, current=%.1f, pos=%.1f/%.1f",
-                        motor.getPower(), motor.getCurrent(), motor.getPosition(), motor.getPidTarget());
-                }
-                motor = leftShooter.getPanMotor();
-                if (motor != null)
-                {
-                    dashboard.displayPrintf(
-                        lineNum++, "LeftTurret: power=%.1f, current=%.1f, pos=%.1f/%.1f",
-                        motor.getPower(), motor.getCurrent(), motor.getPosition(), motor.getPidTarget());
+                        lineNum++, "LeftShooter: power=%.1f, current=%.1f, vel=%.1f, target=%.1f",
+                        motor.getPower(), motor.getCurrent(), leftShooter.getShooterMotor1RPM(),
+                        leftShooter.getShooterMotor1TargetRPM());
+                    motor = leftShooter.getTiltMotor();
+                    if (motor != null)
+                    {
+                        dashboard.displayPrintf(
+                            lineNum++, "LeftTilt: power=%.1f, current=%.1f, pos=%.1f/%.1f",
+                            motor.getPower(), motor.getCurrent(), motor.getPosition(), motor.getPidTarget());
+                    }
+                    motor = leftShooter.getPanMotor();
+                    if (motor != null)
+                    {
+                        dashboard.displayPrintf(
+                            lineNum++, "LeftTurret: power=%.1f, current=%.1f, pos=%.1f/%.1f",
+                            motor.getPower(), motor.getCurrent(), motor.getPosition(), motor.getPidTarget());
+                    }
                 }
 
                 if (rightShooter != null)
