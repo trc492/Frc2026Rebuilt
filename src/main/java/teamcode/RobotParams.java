@@ -212,7 +212,7 @@ public class RobotParams
         //
         // Field configuration and dimensions in inches.
         //
-        public static final boolean mirroredField               = false;
+        public static final boolean mirroredField               = true;
         public static final double fieldLength                  = FrcField.getFieldLength();
         public static final double fieldWidth                   = FrcField.getFieldWidth();
         //
@@ -244,19 +244,32 @@ public class RobotParams
         //
         public static final double STARTPOS_BLUE_Y              = Robot.ROBOT_LENGTH / 2.0;
         public static final double STARTPOS_RED_Y               = FrcField.getFieldLength() - STARTPOS_BLUE_Y;
-        public static final double STARTPOS_1_X                 = -42.19;
-        public static final double STARTPOS_2_X                 = -108.19;
-        public static final double STARTPOS_3_X                 = -174.19;
-        public static final TrcPose2D STARTPOS_BLUE_1           = new TrcPose2D(STARTPOS_1_X, STARTPOS_BLUE_Y, 180.0);
-        public static final TrcPose2D STARTPOS_BLUE_2           = new TrcPose2D(STARTPOS_2_X, STARTPOS_BLUE_Y, 180.0);
-        public static final TrcPose2D STARTPOS_BLUE_3           = new TrcPose2D(STARTPOS_3_X, STARTPOS_BLUE_Y, 180.0);
-        public static final TrcPose2D STARTPOS_RED_1            = new TrcPose2D(STARTPOS_1_X, STARTPOS_RED_Y, 0.0);
-        public static final TrcPose2D STARTPOS_RED_2            = new TrcPose2D(STARTPOS_2_X, STARTPOS_RED_Y, 0.0);
-        public static final TrcPose2D STARTPOS_RED_3            = new TrcPose2D(STARTPOS_3_X, STARTPOS_RED_Y, 0.0);
+        public static final double STARTPOS_DEPOT_X             = -42.19;
+        public static final double STARTPOS_CENTER_X            = -108.19;
+        public static final double STARTPOS_OUTPOST_X           = -174.19;
+        public static final TrcPose2D STARTPOS_BLUE_DEPOT       = new TrcPose2D(STARTPOS_DEPOT_X, STARTPOS_BLUE_Y, 180.0);
+        public static final TrcPose2D STARTPOS_BLUE_CENTER      = new TrcPose2D(STARTPOS_CENTER_X, STARTPOS_BLUE_Y, 180.0);
+        public static final TrcPose2D STARTPOS_BLUE_OUTPOST     = new TrcPose2D(STARTPOS_OUTPOST_X, STARTPOS_BLUE_Y, 180.0);
+        public static final TrcPose2D STARTPOS_RED_DEPOT        = new TrcPose2D(STARTPOS_DEPOT_X, STARTPOS_RED_Y, 0.0);
+        public static final TrcPose2D STARTPOS_RED_CENTER       = new TrcPose2D(STARTPOS_CENTER_X, STARTPOS_RED_Y, 0.0);
+        public static final TrcPose2D STARTPOS_RED_OUTPOST      = new TrcPose2D(STARTPOS_OUTPOST_X, STARTPOS_RED_Y, 0.0);
         public static final TrcPose2D[] startPoses              =
         {
-            STARTPOS_BLUE_1, STARTPOS_BLUE_2, STARTPOS_BLUE_3
+            STARTPOS_BLUE_DEPOT, STARTPOS_BLUE_CENTER, STARTPOS_BLUE_OUTPOST
         };
+
+        //
+        // Robot field positions.
+        //
+
+        public static final TrcPose2D BLUE_OUTPOST_PICKUP_POSE        = new TrcPose2D(0.0, 0.0, 0.0);
+        public static final TrcPose2D BLUE_DEPOT_PICKUP_POSE        = new TrcPose2D(0.0, 0.0, 0.0);
+
+        public static final TrcPose2D BLUE_OUTPOST_NEUTRAL_PICKUP_POSE = new TrcPose2D(0.0, 0.0, 0.0);
+        public static final TrcPose2D BLUE_DEPOT_NEUTRAL_PICKUP_POSE   = new TrcPose2D(0.0, 0.0, 0.0);
+
+        public static final TrcPose2D BLUE_CLIMB_POSE   = new TrcPose2D(0.0, 0.0, 0.0);
+        
     }   //class Game
 
 }   //class RobotParams
