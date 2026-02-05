@@ -210,7 +210,7 @@ public class Robot extends FrcRobot
                 // Create subsystems.
                 if (RobotParams.Preferences.useShooter)
                 {
-                    shooterSubsystem = new Shooter();
+                    shooterSubsystem = new Shooter(this);
                     leftShooter = shooterSubsystem.getLeftShooter();
                     rightShooter = shooterSubsystem.getRightShooter();
                     leftFeeder = shooterSubsystem.getLeftFeeder();

@@ -27,13 +27,16 @@ import frclib.motor.FrcMotorActuator;
 import frclib.motor.FrcMotorActuator.MotorType;
 import frclib.motor.FrcMotorActuator.SparkMaxMotorParams;
 import frclib.subsystem.FrcShooter;
+import teamcode.FrcAuto;
 import teamcode.FrcTest;
+import teamcode.Robot;
 import teamcode.RobotParams;
 import trclib.dataprocessor.TrcLookupTable;
 import trclib.motor.TrcMotor;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcEvent;
 import trclib.subsystem.TrcShooter;
+import trclib.subsystem.TrcShooter.AimInfo;
 import trclib.subsystem.TrcSubsystem;
 
 public class Shooter extends TrcSubsystem
@@ -42,6 +45,8 @@ public class Shooter extends TrcSubsystem
     private static final boolean NEED_ZERO_CAL = false;
     private static final String DBKEY_PREFERENCE_SHOW_STATUS = SUBSYSTEM_NAME + "/ShowStatus";
     private static final String DBKEY_PREFERENCE_SHOW_GRAPHS = SUBSYSTEM_NAME + "/ShowGraphs";
+    private static final String DBKEY_PREFERENCE_USE_REGRESSION = SUBSYSTEM_NAME + "/UseRegression";
+    private static final String DBKEY_PREFERENCE_USE_MOTION_COMPENSATION = SUBSYSTEM_NAME + "/UseMotionCompensation";
     private static final String DBKEY_SHOOTER_CURRENT = "Shooter/ShooterCurrent";
 
     public static final String GOAL_ZONE_SHOOT_POINT = "GoalZoneShootPoint";
@@ -229,7 +234,16 @@ public class Shooter extends TrcSubsystem
         public static final int RFEEDER_UPPER_MOTOR_CANID       = RobotParams.HwConfig.CANID_RSHOOTER_UPPER_FEEDER_MOTOR;
     }   //class Params
 
+    private static class GoalTrackingState
+    {
+        TrcPose2D goalFieldPose = null;
+        boolean paused = false;
+        AimInfo lastAimInfo = null;
+    }   //class GoalTrackingState
+
+    private final GoalTrackingState goalTrackingState = new GoalTrackingState();
     private final FrcDashboard dashboard;
+    private final Robot robot;
     private final TrcShooter leftShooter;
     private final TrcShooter rightShooter;
     private final TrcMotor leftFeeder;
@@ -240,13 +254,14 @@ public class Shooter extends TrcSubsystem
     /**
      * Constructor: Creates an instance of the object.
      */
-    public Shooter()
+    public Shooter(Robot robot)
     {
         super(SUBSYSTEM_NAME, NEED_ZERO_CAL);
 
         dashboard = FrcDashboard.getInstance();
         dashboard.refreshKey(DBKEY_PREFERENCE_SHOW_STATUS, RobotParams.Preferences.showShooterStatus);
         dashboard.refreshKey(DBKEY_PREFERENCE_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs);
+        this.robot = robot;
     
         TrcMotor motor;
         FrcShooter.Params lShooterParams = new FrcShooter.Params()
@@ -529,6 +544,164 @@ public class Shooter extends TrcSubsystem
             rightShooter.setShooterMotorRPM(rightFlywheelRPM, null);
         }
     }   //setFlywheelRPM
+
+    /**
+     * This method checks if Goal Tracking is enabled.
+     *
+     * @return true if Goal Tracking is enabled, false if disabled.
+     */
+    public boolean isGoalTrackingEnabled()
+    {
+        synchronized (goalTrackingState)
+        {
+            return goalTrackingState.goalFieldPose != null;
+        }
+    }   //isGoalTrackingEnabled
+
+    /**
+     * This method checks if Goal Tracking is paused.
+     *
+     * @return true if goal tracking is enabled but paused, false otherwise.
+     */
+    public boolean isGoalTrackingPaused()
+    {
+        synchronized (goalTrackingState)
+        {
+            return goalTrackingState.goalFieldPose != null && goalTrackingState.paused;
+        }
+    }   //isGoalTrackingPaused
+
+    /**
+     * This method enables/disables Goal Tracking.
+     *
+     * @param enabled specifies true to enable GoalTracking, false to disable.
+     */
+    public void setGoalTrackingEnabled(boolean enabled)
+    {
+        synchronized (goalTrackingState)
+        {
+            if (goalTrackingState.goalFieldPose == null && enabled)
+            {
+                // Enabling GoalTracking.
+                robot.globalTracer.traceInfo(instanceName, "Enabling GoalTracking.");
+                goalTrackingState.goalFieldPose =
+                    robot.adjustPoseByAlliance(RobotParams.Game.blueHubPose, FrcAuto.autoChoices.getAlliance());
+                goalTrackingState.paused = false;
+                goalTrackingState.lastAimInfo = null;
+                leftShooter.setGoalTrackingEnabled(this::getLeftShooterAimInfo);
+                rightShooter.setGoalTrackingEnabled(this::getRightShooterAimInfo);
+            }
+            else if (goalTrackingState.goalFieldPose != null && !enabled)
+            {
+                robot.globalTracer.traceInfo(instanceName, "Disabling GoalTracking.");
+                goalTrackingState.goalFieldPose = null;
+                goalTrackingState.paused = false;
+                goalTrackingState.lastAimInfo = null;
+                leftShooter.setGoalTrackingEnabled(null);
+                rightShooter.setGoalTrackingEnabled(null);
+            }
+        }
+    }   //setGoalTrackingEnabled
+
+    /**
+     * This method pauses Goal Tracking so that we can perform other operations such as aimShooter that needs the
+     * control of the shooter.
+     */
+    public void pauseGoalTracking()
+    {
+        synchronized (goalTrackingState)
+        {
+            if (goalTrackingState.goalFieldPose != null)
+            {
+                robot.globalTracer.traceInfo(instanceName, "Pause GoalTracking.");
+                goalTrackingState.paused = true;
+                goalTrackingState.lastAimInfo = null;
+            }
+        }
+    }   //pauseGoalTracking
+
+    /**
+     * This method resumes Goal Tracking from a previous pause.
+     */
+    public void resumeGoalTracking()
+    {
+        synchronized (goalTrackingState)
+        {
+            if (isGoalTrackingPaused())
+            {
+                robot.globalTracer.traceInfo(instanceName, "Resume GoalTracking.");
+                goalTrackingState.paused = false;
+                goalTrackingState.lastAimInfo = null;
+            }
+        }
+    }   //resumeGoalTracking
+
+    /**
+     * This method is called by GoalTracking to get AimInfo for aiming at the target.
+     *
+     * @param targetPose specifies the targetPose for looking up AimInfo in the shooting table. This is used by
+     *        compensateRobotMotion, other callers set this to null.
+     * @return AimInfo containing information to aim at the target.
+     */
+    private AimInfo getLeftShooterAimInfo(TrcPose2D targetPose)
+    {
+        synchronized (goalTrackingState)
+        {
+            AimInfo aimInfo;
+            boolean useRegression = dashboard.getBoolean(
+                DBKEY_PREFERENCE_USE_REGRESSION, RobotParams.Preferences.useRegression);
+            TrcLookupTable.Entry shootParams;
+
+            if (targetPose == null)
+            {
+                // Get AimInfo by Oodometry.
+                TrcPose2D robotPose = robot.robotBase.driveBase.getFieldPosition();
+                targetPose = goalTrackingState.goalFieldPose.relativeTo(robotPose);
+                shootParams = shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), useRegression);
+                aimInfo = new AimInfo(
+                    targetPose, shootParams.outputs[0], null, targetPose.angle % 360.0, shootParams.region.value,
+                    shootParams.outputs[1]);
+                if (dashboard.getBoolean(
+                        DBKEY_PREFERENCE_USE_MOTION_COMPENSATION, RobotParams.Preferences.useMotionCompensation))
+                {
+                    // Compensate for robot motion.
+                    aimInfo = leftShooter.compensateRobotMotion(
+                        robot.robotBase.driveBase, this::getLeftShooterAimInfo, aimInfo, 1.0, 3,
+                        new TrcShooter.AimConvergenceStats());
+                }
+                goalTrackingState.lastAimInfo = aimInfo;
+            }
+            else
+            {
+                // Called by compensateRobotMotion.
+                shootParams = shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), useRegression);
+                aimInfo = new AimInfo(
+                    targetPose, shootParams.outputs[0], null, targetPose.angle % 360.0, shootParams.region.value,
+                    shootParams.outputs[1]);
+            }
+            robot.globalTracer.traceDebug(
+                instanceName, "aimInfo=%s, distance=%f, bearing=%f",
+                aimInfo, Math.hypot(aimInfo.targetPose.x, aimInfo.targetPose.y), aimInfo.targetPose.angle % 360.0);
+
+            return aimInfo;
+        }
+    }   //getLeftShooterAimInfo
+
+    /**
+     * This method is called by GoalTracking to get AimInfo for aiming at the target.
+     *
+     * @param targetPose specifies the targetPose for looking up AimInfo in the shooting table. This is used by
+     *        compensateRobotMotion, other callers set this to null.
+     * @return AimInfo containing information to aim at the target.
+     */
+    private AimInfo getRightShooterAimInfo(TrcPose2D targetPose)
+    {
+        // Right shooter just follows the AimInfo determined by the left shooter.
+        synchronized (goalTrackingState)
+        {
+            return goalTrackingState.lastAimInfo;
+        }
+    }   //getRightShooterAimInfo
 
     /**
      * This method is called to launch the fuel into the shooter, typically when TrcShooter has reached shooting
