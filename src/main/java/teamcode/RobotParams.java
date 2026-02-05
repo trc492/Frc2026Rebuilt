@@ -213,7 +213,7 @@ public class RobotParams
         //
         // Field configuration and dimensions in inches.
         //
-        public static final boolean mirroredField               = true;
+        public static final boolean mirroredField               = false;
         public static final double fieldLength                  = FrcField.getFieldLength();
         public static final double fieldWidth                   = FrcField.getFieldWidth();
         //

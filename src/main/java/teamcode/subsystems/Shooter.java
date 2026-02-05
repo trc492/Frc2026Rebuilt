@@ -129,9 +129,9 @@ public class Shooter extends TrcSubsystem
         public static final boolean RSHOOTER_PRIMARY_MOTOR_INVERTED = false;
         public static final int RSHOOTER_PRIMARY_MOTOR_CANID    = RobotParams.HwConfig.CANID_RSHOOTER_PRIMARY_MOTOR;
         public static final String RSHOOTER_FOLLOWER_MOTOR_NAME = SUBSYSTEM_NAME + ".RightFollowerMotor";
-        public static final boolean RSHOOTER_FOLLOWER_MOTOR_INVERTED = true;
+        public static final boolean RSHOOTER_FOLLOWER_MOTOR_INVERTED = false;
         public static final int RSHOOTER_FOLLOWER_MOTOR_CANID   = RobotParams.HwConfig.CANID_RSHOOTER_FOLLOWER_MOTOR;
-        public static final double RSHOOTER_MOTOR_PID_KP        = 0.3;
+        public static final double RSHOOTER_MOTOR_PID_KP        = 0.45;
         public static final double RSHOOTER_MOTOR_PID_KI        = 0.0;
         public static final double RSHOOTER_MOTOR_PID_KD        = 0.0;
         public static final double RSHOOTER_MOTOR_PID_KF        = 0.101;
