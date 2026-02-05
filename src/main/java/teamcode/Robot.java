@@ -710,11 +710,11 @@ public class Robot extends FrcRobot
     /**
      * This method adjusts the given pose in the blue alliance to be the specified alliance.
      *
-     * @param x specifies x position in the blue alliance in the specified unit.
-     * @param y specifies y position in the blue alliance in the specified unit.
-     * @param heading specifies heading in the blue alliance in degrees.
+     * @param x specifies x position in the blue alliance.
+     * @param y specifies y position in the blue alliance.
+     * @param heading specifies heading in the blue alliance.
      * @param alliance specifies the alliance to be converted to.
-     * @return pose adjusted to be in the specified alliance in inches.
+     * @return pose adjusted to be in the specified alliance.
      */
     public TrcPose2D adjustPoseByAlliance(double x, double y, double heading, Alliance alliance)
     {
@@ -745,15 +745,22 @@ public class Robot extends FrcRobot
     /**
      * This method adjusts the given pose in the blue alliance to be the specified alliance.
      *
-     * @param pose specifies pose in the blue alliance in the specified unit.
+     * @param pose specifies pose in the blue alliance.
      * @param alliance specifies the alliance to be converted to.
-     * @return pose adjusted to be in the specified alliance in inches.
+     * @return pose adjusted to be in the specified alliance.
      */
     public TrcPose2D adjustPoseByAlliance(TrcPose2D pose, Alliance alliance)
     {
         return adjustPoseByAlliance(pose.x, pose.y, pose.angle, alliance);
     }   //adjustPoseByAlliance
 
+    /**
+     * This method adjusts the array of poses in the blue alliance to be the specified alliance.
+     *
+     * @param alliance specifies the alliance to be converted to.
+     * @param poses specifies an array of poses in the blue alliance.
+     * @return pose adjusted to be in the specified alliance.
+     */
     public TrcPose2D[] adjustPathByAlliance(
         Alliance alliance, TrcPose2D... poses)
     {

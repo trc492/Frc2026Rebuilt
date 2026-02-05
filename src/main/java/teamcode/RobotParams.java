@@ -244,17 +244,19 @@ public class RobotParams
         //
         // Robot starting positions.
         //
+        // TODO: CodeReview: Are we really starting by the driver station wall? STARTPOS_BLUE_Y should be the "StartLine"
         public static final double STARTPOS_BLUE_Y              = Robot.ROBOT_LENGTH / 2.0;
-        public static final double STARTPOS_RED_Y               = FrcField.getFieldLength() - STARTPOS_BLUE_Y;
+        // public static final double STARTPOS_RED_Y               = fieldLength - STARTPOS_BLUE_Y;
         public static final double STARTPOS_DEPOT_X             = -42.19;
         public static final double STARTPOS_CENTER_X            = -108.19;
         public static final double STARTPOS_OUTPOST_X           = -174.19;
+        // TODO: CodeReview: Are we really facing backwards?
         public static final TrcPose2D STARTPOS_BLUE_DEPOT       = new TrcPose2D(STARTPOS_DEPOT_X, STARTPOS_BLUE_Y, 180.0);
         public static final TrcPose2D STARTPOS_BLUE_CENTER      = new TrcPose2D(STARTPOS_CENTER_X, STARTPOS_BLUE_Y, 180.0);
         public static final TrcPose2D STARTPOS_BLUE_OUTPOST     = new TrcPose2D(STARTPOS_OUTPOST_X, STARTPOS_BLUE_Y, 180.0);
-        public static final TrcPose2D STARTPOS_RED_DEPOT        = new TrcPose2D(STARTPOS_DEPOT_X, STARTPOS_RED_Y, 0.0);
-        public static final TrcPose2D STARTPOS_RED_CENTER       = new TrcPose2D(STARTPOS_CENTER_X, STARTPOS_RED_Y, 0.0);
-        public static final TrcPose2D STARTPOS_RED_OUTPOST      = new TrcPose2D(STARTPOS_OUTPOST_X, STARTPOS_RED_Y, 0.0);
+        // public static final TrcPose2D STARTPOS_RED_DEPOT        = new TrcPose2D(STARTPOS_DEPOT_X, STARTPOS_RED_Y, 0.0);
+        // public static final TrcPose2D STARTPOS_RED_CENTER       = new TrcPose2D(STARTPOS_CENTER_X, STARTPOS_RED_Y, 0.0);
+        // public static final TrcPose2D STARTPOS_RED_OUTPOST      = new TrcPose2D(STARTPOS_OUTPOST_X, STARTPOS_RED_Y, 0.0);
         public static final TrcPose2D[] startPoses              =
         {
             STARTPOS_BLUE_DEPOT, STARTPOS_BLUE_CENTER, STARTPOS_BLUE_OUTPOST
