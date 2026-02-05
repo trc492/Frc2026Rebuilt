@@ -25,6 +25,7 @@ package teamcode;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import frclib.robotcore.FrcField;
 import teamcode.subsystems.DriveBase.RobotType;
+import teamcode.subsystems.Shooter;
 import trclib.pathdrive.TrcPose2D;
 
 /**
@@ -70,7 +71,7 @@ public class RobotParams
         public static final boolean useSubsystems               = true;
         public static final boolean showSubsystems              = true;
         public static final boolean showSubsystemGraphs         = true;
-        public static final String testSubsystemName            = "Shooter.LeftPrimaryMotor";
+        public static final String testSubsystemName            = Shooter.Params.LSHOOTER_PRIMARY_MOTOR_NAME;
         // Drive Base Subsystem
         public static final boolean useDriveBase                = false;
         public static final boolean showDriveBaseStatus         = false;
