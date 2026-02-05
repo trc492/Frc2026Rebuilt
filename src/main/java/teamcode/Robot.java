@@ -28,6 +28,7 @@ import java.io.FileReader;
 import java.io.PrintStream;
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
@@ -752,6 +753,14 @@ public class Robot extends FrcRobot
     {
         return adjustPoseByAlliance(pose.x, pose.y, pose.angle, alliance);
     }   //adjustPoseByAlliance
+
+    public TrcPose2D[] adjustPathByAlliance(
+        Alliance alliance, TrcPose2D... poses)
+    {
+        return Stream.of(poses)
+                     .map(pose -> adjustPoseByAlliance(pose, alliance))
+                     .toArray(TrcPose2D[]::new);
+    }   //adjustPathByAlliance
 
     /**
      * This method adjusts the given pose by the given x and y offsets.

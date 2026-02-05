@@ -22,8 +22,14 @@
 
 package teamcode.autocommands;
 
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import teamcode.FrcAuto;
+import teamcode.FrcAuto.AutoStartPos;
+import teamcode.FrcAuto.MoveTo;
+import teamcode.FrcAuto.PassBack;
 import teamcode.Robot;
+import teamcode.RobotParams;
+import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcRobot;
 import trclib.robotcore.TrcStateMachine;
@@ -39,6 +45,17 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
     private enum State
     {
         START,
+        SHOOT_PRELOAD,
+        PICKUP_DEPOT,
+        PICKUP_OUTPOST,
+        FINISH_PICKUP,
+        SHOOT_FUEL,
+        GO_TO_NEUTRAL_ZONE,
+        PICKUP_NEUTRAL,
+        RETURN_TO_SCORE_POS,
+        SHOOT_NEUTRAL_FUEL,
+        GO_TO_CLIMB_POS,
+        CLIMB,
         DONE
     }   //enum State
 
@@ -47,6 +64,17 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
     private final TrcTimer timer;
     private final TrcEvent event;
     private final TrcStateMachine<State> sm;
+
+    private FrcAuto.AutoStartPos startPos;
+    private Alliance alliance;
+    private boolean useVision;
+    private boolean relocalize;
+    private boolean depotPickup;
+    private boolean outpostPickup;
+    private boolean neutralZonePickup;
+    private MoveTo moveTo;
+    private PassBack passBack;
+    private boolean climb;
 
     /**
      * Constructor: Create an instance of the object.
@@ -114,18 +142,268 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                 case START:
                     // Set robot location according to auto choices.
                     robot.setRobotStartPosition(autoChoices);
+                     // Retrieve auto choice options.
+                    startPos = autoChoices.getStartPos();
+                    alliance = autoChoices.getAlliance();
+                    useVision = autoChoices.useVision();
+                    relocalize = autoChoices.getRelocalize();
+                    depotPickup = autoChoices.depotPickup();
+                    outpostPickup = autoChoices.outpostPickup();
+                    neutralZonePickup = autoChoices.neutralZonePickup();
+                    moveTo = autoChoices.getMoveTo();
+                    passBack = autoChoices.getPassBack();
+                    climb = autoChoices.getClimb();
                     // Do delay if necessary.
                     double startDelay = autoChoices.getStartDelay();
                     if (startDelay > 0.0)
                     {
                         robot.globalTracer.traceInfo(moduleName, "***** Do delay " + startDelay + "s.");
                         timer.set(startDelay, event);
-                        sm.waitForSingleEvent(event, State.DONE);
+                        sm.waitForSingleEvent(event, State.SHOOT_PRELOAD);
                     }
                     else
                     {
-                        sm.setState(State.DONE);
+                        sm.setState(State.SHOOT_PRELOAD);       
                     }
+                    break;
+
+                case SHOOT_PRELOAD:
+                    // TODO: How to determine certain params such as useRegression and flywheelTracking?
+                    robot.autoScoreTask.autoScore(null, event, alliance, false, true, relocalize, false);
+                    State nextState;
+                    if ((startPos == AutoStartPos.START_POS_DEPOT || (startPos == AutoStartPos.START_POS_CENTER && moveTo == MoveTo.DEPOT)) && depotPickup)
+                    {
+                        nextState = State.PICKUP_DEPOT;
+                    }
+                    else if ((startPos == AutoStartPos.START_POS_OUTPOST || (startPos == AutoStartPos.START_POS_CENTER && moveTo == MoveTo.OUTPOST)) && outpostPickup)
+                    {
+                        nextState = State.PICKUP_OUTPOST;
+                    }
+                    else if (neutralZonePickup)
+                    {
+                        nextState = State.GO_TO_NEUTRAL_ZONE;
+                    }
+                    else if (climb)
+                    {
+                        nextState = State.GO_TO_CLIMB_POS;
+                    }
+                    else
+                    {
+                        nextState = State.DONE;
+                    }
+                    sm.waitForSingleEvent(event, nextState);
+                    break;
+
+                case PICKUP_DEPOT:  
+                    TrcPose2D depotIntermediatePose = RobotParams.Game.BLUE_DEPOT_PICKUP_POSE.clone();
+                    if (alliance == Alliance.Blue)
+                    {
+                        depotIntermediatePose.y -= 18.0; //TODO: Tune distance
+                    }
+                    else
+                    {
+                        depotIntermediatePose.y += 18.0; //TODO: Tune distance
+                    }
+
+                    TrcPose2D depotEndPose = RobotParams.Game.BLUE_DEPOT_PICKUP_POSE.clone();
+                    if (alliance == Alliance.Blue)
+                    {
+                        depotEndPose.x -= 20.0; //TODO: Tune distance
+                    }
+                    else
+                    {
+                        depotEndPose.x += 20.0; //TODO: Tune distance
+                    }
+
+                    TrcPose2D[] depotPickupPath = {depotIntermediatePose, RobotParams.Game.BLUE_DEPOT_PICKUP_POSE, depotEndPose};
+
+                    robot.robotBase.purePursuitDrive.setWaypointEventHandler(
+                            (i, wp) ->
+                            {
+                                robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
+                                if (i == 2)
+                                {
+                                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
+                                    robot.intakeSubsystem.extendDeployer();
+                                    robot.intake.intake(1.0);
+                                }
+                            });
+
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
+                    robot.robotBase.purePursuitDrive.start(
+                        null, event, 0.0, false,
+                        robot.robotInfo.baseParams.profiledMaxDriveVelocity,
+                        robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
+                        robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
+                        robot.adjustPathByAlliance(alliance, depotPickupPath));
+                    sm.waitForSingleEvent(event, State.FINISH_PICKUP);
+                    break;
+
+                case PICKUP_OUTPOST:
+                    TrcPose2D outpostEndPose = RobotParams.Game.BLUE_OUTPOST_PICKUP_POSE.clone();
+                    if (alliance == Alliance.Blue)
+                    {
+                        outpostEndPose.y -= 24.0; //TODO: Tune distance
+                    }
+                    else
+                    {
+                        outpostEndPose.y += 24.0; //TODO: Tune distance
+                    }
+                    TrcPose2D[] outpostPickupPath = {RobotParams.Game.BLUE_OUTPOST_PICKUP_POSE, outpostEndPose};
+
+                    robot.robotBase.purePursuitDrive.setWaypointEventHandler(
+                            (i, wp) ->
+                            {
+                                robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
+                                if (i == 1)
+                                {
+                                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
+                                    robot.intakeSubsystem.extendDeployer();
+                                    robot.intake.intake(1.0);
+                                }
+                            });
+
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
+                    robot.robotBase.purePursuitDrive.start(
+                        null, event, 0.0, false,
+                        robot.robotInfo.baseParams.profiledMaxDriveVelocity,
+                        robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
+                        robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
+                        robot.adjustPathByAlliance(alliance, outpostPickupPath));
+                    sm.waitForSingleEvent(event, State.FINISH_PICKUP);
+                    break;
+                
+                case FINISH_PICKUP:
+                    robot.intake.cancel();
+                    robot.robotBase.purePursuitDrive.setWaypointEventHandler(null);
+                    sm.setState(State.SHOOT_FUEL);
+                    break;
+                
+                case SHOOT_FUEL:
+                    robot.autoScoreTask.autoScore(null, event, alliance, false, true, relocalize, false);
+                    if (climb)
+                    {
+                        sm.waitForSingleEvent(event, State.GO_TO_CLIMB_POS);
+                    }
+                    else
+                    {
+                        sm.waitForSingleEvent(event, State.DONE);
+                    }
+                    break;
+                
+                case GO_TO_NEUTRAL_ZONE:
+                    boolean isDepot = (startPos == AutoStartPos.START_POS_DEPOT) || 
+                        (startPos == AutoStartPos.START_POS_CENTER && moveTo == MoveTo.DEPOT);
+
+                    TrcPose2D centerIntermediatePose = isDepot ? 
+                        RobotParams.Game.STARTPOS_BLUE_DEPOT.clone() : RobotParams.Game.STARTPOS_BLUE_OUTPOST.clone();
+                    TrcPose2D neutralIntermediatePose = centerIntermediatePose.clone();
+                    TrcPose2D neutralPickupPose = isDepot ? 
+                        RobotParams.Game.BLUE_DEPOT_NEUTRAL_PICKUP_POSE.clone() : RobotParams.Game.BLUE_OUTPOST_NEUTRAL_PICKUP_POSE.clone();
+
+                    double yOffset = (alliance == Alliance.Blue) ? 30.0 : -30.0;
+                    neutralIntermediatePose.y += yOffset;
+                    
+                    double xOffset = (isDepot) ? 48.0 : -48.0;
+                    neutralPickupPose.x += (alliance == Alliance.Blue) ? xOffset : -xOffset;
+
+                    TrcPose2D[] approachPath;
+                    if (startPos == AutoStartPos.START_POS_CENTER)
+                    {
+                        approachPath = new TrcPose2D[] {centerIntermediatePose, neutralIntermediatePose, neutralPickupPose};
+                    } 
+                    else
+                    {
+                        approachPath = new TrcPose2D[] {neutralIntermediatePose, neutralPickupPose};
+                    }
+
+                    robot.robotBase.purePursuitDrive.start(
+                        null, event, 0.0, false,
+                        robot.robotInfo.baseParams.profiledMaxDriveVelocity,
+                        robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
+                        robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
+                        robot.adjustPathByAlliance(alliance, approachPath));
+
+                    sm.waitForSingleEvent(event, State.PICKUP_NEUTRAL);
+                    break;
+
+                case PICKUP_NEUTRAL:
+                    boolean depotSide = (startPos == AutoStartPos.START_POS_DEPOT) || 
+                                            (startPos == AutoStartPos.START_POS_CENTER && moveTo == MoveTo.DEPOT);
+                    TrcPose2D neutralEndPose = depotSide ? 
+                        RobotParams.Game.BLUE_DEPOT_NEUTRAL_PICKUP_POSE.clone() : 
+                        RobotParams.Game.BLUE_OUTPOST_NEUTRAL_PICKUP_POSE.clone();
+
+                    double endXOffset = (depotSide) ? 35.0 : -35.0;
+                    neutralEndPose.x += (alliance == Alliance.Blue) ? endXOffset : -endXOffset;
+
+                    robot.intakeSubsystem.extendDeployer();
+                    robot.intake.intake(1.0);
+                    if (passBack == PassBack.PASS_BACK)
+                    {
+                        robot.autoScoreTask.autoScore(null, event, alliance, false, true, relocalize, true);
+                    }
+                    robot.robotBase.purePursuitDrive.start(
+                        null, event, 0.0, false,
+                        robot.robotInfo.baseParams.profiledMaxDriveVelocity,
+                        robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
+                        robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
+                        robot.adjustPoseByAlliance(neutralEndPose, alliance));
+                    sm.waitForSingleEvent(event, State.RETURN_TO_SCORE_POS);
+                    break;
+                
+                case RETURN_TO_SCORE_POS:
+                    robot.intake.cancel();
+                    robot.autoScoreTask.cancel();
+
+                    boolean isDepotReturn = (startPos == AutoStartPos.START_POS_DEPOT) || 
+                                            (startPos == AutoStartPos.START_POS_CENTER && moveTo == MoveTo.DEPOT);
+
+                    TrcPose2D returnScorePose = isDepotReturn ? 
+                        RobotParams.Game.STARTPOS_BLUE_DEPOT.clone() : RobotParams.Game.STARTPOS_BLUE_OUTPOST.clone();
+                    
+                    TrcPose2D returnIntermediatePose = returnScorePose.clone();
+
+                    double returnYOffset = (alliance == Alliance.Blue) ? 30.0 : -30.0;
+                    returnIntermediatePose.y += returnYOffset;
+
+                    TrcPose2D[] returnPath = new TrcPose2D[] {returnIntermediatePose, returnScorePose};
+
+                    robot.robotBase.purePursuitDrive.start(
+                        null, event, 0.0, false,
+                        robot.robotInfo.baseParams.profiledMaxDriveVelocity,
+                        robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
+                        robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
+                        robot.adjustPathByAlliance(alliance, returnPath));
+
+                    sm.waitForSingleEvent(event, State.SHOOT_NEUTRAL_FUEL);
+                    break;
+                
+                case SHOOT_NEUTRAL_FUEL:
+                    robot.autoScoreTask.autoScore(null, event, alliance, false, true, relocalize, false);
+                    if (climb)
+                    {
+                        sm.waitForSingleEvent(event, State.GO_TO_CLIMB_POS);
+                    }
+                    else
+                    {
+                        sm.waitForSingleEvent(event, State.DONE);
+                    }
+                    break;
+                    
+                case GO_TO_CLIMB_POS:
+                    robot.robotBase.purePursuitDrive.start(
+                        null, event, 0.0, false,
+                        robot.robotInfo.baseParams.profiledMaxDriveVelocity,
+                        robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
+                        robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
+                        robot.adjustPoseByAlliance(RobotParams.Game.BLUE_CLIMB_POSE, alliance));
+                        sm.waitForSingleEvent(event, State.CLIMB);
+                    break;
+
+                case CLIMB:
+                    robot.autoClimbTask.autoClimb(null, event);
+                    sm.waitForSingleEvent(event, State.DONE);
                     break;
 
                 case DONE:
