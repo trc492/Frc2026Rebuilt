@@ -575,7 +575,7 @@ public class Robot extends FrcRobot
     {
         int startPosIndex = FrcAuto.autoChoices.getStartPos().value;
         Alliance alliance = FrcAuto.autoChoices.getAlliance();
-        TrcPose2D robotPose = adjustPoseByAlliance(RobotParams.Game.startPoses[startPosIndex], alliance);
+        TrcPose2D robotPose = adjustPoseByAlliance(RobotParams.Game.blueStartPoses[startPosIndex], alliance);
         setFieldPosition(robotPose, false);
     }   //setRobotStartPosition
 
