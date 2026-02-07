@@ -280,7 +280,7 @@ public class Shooter extends TrcSubsystem
                     Params.LSHOOTER_PRIMARY_MOTOR_CANID, Params.CANBUS_NAME, null, true)
                 .setShooterMotor2(
                     Params.LSHOOTER_FOLLOWER_MOTOR_NAME, Params.SHOOTER_MOTOR_TYPE, Params.LSHOOTER_FOLLOWER_MOTOR_INVERTED,
-                    Params.LSHOOTER_FOLLOWER_MOTOR_CANID, Params.CANBUS_NAME, null, true, true);
+                    Params.LSHOOTER_FOLLOWER_MOTOR_CANID, Params.CANBUS_NAME, null, false, true);
             if (Params.SHOOTER_HAS_TILT)
             {
                 lShooterParams
@@ -373,7 +373,7 @@ public class Shooter extends TrcSubsystem
                 .setShooterMotor2(
                     Params.RSHOOTER_FOLLOWER_MOTOR_NAME, Params.SHOOTER_MOTOR_TYPE,
                     Params.RSHOOTER_FOLLOWER_MOTOR_INVERTED, Params.RSHOOTER_FOLLOWER_MOTOR_CANID, Params.CANBUS_NAME,
-                    null, true, true);
+                    null, false, true);
             if (Params.SHOOTER_HAS_TILT)
             {
                 rShooterParams
