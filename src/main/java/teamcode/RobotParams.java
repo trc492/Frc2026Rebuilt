@@ -42,7 +42,7 @@ public class RobotParams
     public static class Preferences
     {
         // Global config
-        public static final RobotType robotType                 = RobotType.RebuiltRobot;
+        public static final RobotType robotType                 = RobotType.ReefscapeRobot;
         public static final boolean inCompetition               = false;
         public static final boolean hybridMode                  = false;
         public static final boolean useTraceLog                 = true;
@@ -55,26 +55,26 @@ public class RobotParams
         public static final boolean updateDashboard             = !inCompetition;   // Start up default value.
         public static final boolean useLED                      = false;
         public static final boolean useRumble                   = false;
-        public static final boolean hasDriverGameController     = false;
-        public static final boolean hasOperatorGameController   = true;
+        public static final boolean hasDriverGameController     = robotType == RobotType.ReefscapeRobot;
+        public static final boolean hasOperatorGameController   = robotType == RobotType.RebuiltRobot;
         // Vision
-        public static final boolean useVision                   = false;
-        public static final boolean showVisionStatus            = false;
+        public static final boolean useVision                   = robotType == RobotType.ReefscapeRobot;
+        public static final boolean showVisionStatus            = true;
         public static final boolean usePhotonVision             = true;
         public static final boolean useOpenCvVision             = false;
         public static final boolean useWebcamAprilTagVision     = false;
         public static final boolean useWebcamColorBlobVision    = false;
         public static final boolean useSolvePnp                 = false;
         public static final boolean useStreamCamera             = false;
-        public static final boolean doVisionRelocalize          = false;
+        public static final boolean doVisionRelocalize          = true;
         // Master switches for Subsystems
-        public static final boolean useSubsystems               = true;
+        public static final boolean useSubsystems               = robotType == RobotType.RebuiltRobot;
         public static final boolean showSubsystems              = true;
         public static final boolean showSubsystemGraphs         = true;
         public static final String testSubsystemName            = Shooter.Params.LSHOOTER_PRIMARY_MOTOR_NAME;
         // Drive Base Subsystem
-        public static final boolean useDriveBase                = false;
-        public static final boolean showDriveBaseStatus         = false;
+        public static final boolean useDriveBase                = robotType == RobotType.ReefscapeRobot;
+        public static final boolean showDriveBaseStatus         = true;
         public static final boolean debugDriveBase              = false;
         public static final boolean debugPidDrive               = false;
         public static final boolean showDrivePower              = false;

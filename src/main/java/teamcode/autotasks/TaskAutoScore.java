@@ -23,19 +23,12 @@
 package teamcode.autotasks;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import frclib.vision.FrcPhotonVision;
 import teamcode.Robot;
-import teamcode.RobotParams;
 import teamcode.subsystems.Shooter;
-import trclib.dataprocessor.TrcLookupTable;
-import trclib.dataprocessor.TrcUtil;
-import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcAutoTask;
 import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcRobot;
 import trclib.robotcore.TrcTaskMgr;
-import trclib.subsystem.TrcShooter.AimInfo;
-import trclib.timer.TrcTimer;
 
 /**
  * This class implements auto-assist task.
@@ -55,42 +48,7 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
 
     private static class TaskParams
     {
-        private Alliance alliance;
-        // public boolean inAuto = false;
-        public boolean useRegression = false;
-        public boolean flywheelTracking = false;
-        public boolean relocalize = false;
         public boolean passMode = false;
-
-        public TaskParams setAlliance(Alliance alliance)
-        {
-            this.alliance = alliance;
-            return this;
-        }   //setAlliance
-
-        // public TaskParams setInAuto(boolean inAuto)
-        // {
-        //     this.inAuto = inAuto;
-        //     return this;
-        // }   //inAuto
-
-        public TaskParams setRegression(boolean useRegression)
-        {
-            this.useRegression = useRegression;
-            return this;
-        }   //useRegression
-
-        public TaskParams setFlywheelTracking(boolean flywheelTracking)
-        {
-            this.flywheelTracking = flywheelTracking;
-            return this;
-        }   //setFlywheelTracking
-
-        public TaskParams setRelocalize(boolean relocalize)
-        {
-            this.relocalize = relocalize;
-            return this;
-        }   //setRelocalize
 
         public TaskParams setPassMode(boolean passMode)
         {
@@ -100,21 +58,20 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
 
         public String toString()
         {
-            return "(alliance=" + alliance +
-                //    ",inAuto=" + inAuto +
-                   ",useRegression=" + useRegression +
-                   ",flywheelTracking=" + flywheelTracking +
-                   ",relocalize=" + relocalize +
-                   ",passMode" + passMode + ")";
+            return "(passMode" + passMode + ")";
         }   //toString
     }   //class TaskParams
 
     private final TaskParams autoScoreParams = new TaskParams();
     private final Robot robot;
-    private final TrcEvent event;
+    private final TrcEvent leftShooterReadyEvent;
+    private final TrcEvent rightShooterReadyEvent;
+    private final TrcEvent leftShooterDone;
+    private final TrcEvent rightShooterDone;
 
-    private AimInfo aimInfo = null;
-    private Double visionExpiredTime = null;
+    private boolean enabledGoalTracking = false;
+    private boolean leftShooterShooting = false;
+    private boolean rightShooterShooting = false;
 
     /**
      * Constructor: Create an instance of the object.
@@ -125,7 +82,10 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
     {
         super(moduleName, TrcTaskMgr.TaskType.POST_PERIODIC_TASK);
         this.robot = robot;
-        this.event = new TrcEvent(moduleName + ".event");
+        this.leftShooterReadyEvent = new TrcEvent(moduleName + ".leftShooterReady");
+        this.rightShooterReadyEvent = new TrcEvent(moduleName + ".rightShooterReady");
+        this.leftShooterDone = new TrcEvent(moduleName + ".leftShooterDone");
+        this.rightShooterDone = new TrcEvent(moduleName + ".rightShooterDone");
     }   //TaskAutoScore
 
     /**
@@ -135,16 +95,9 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
     public void autoScore(
-        String owner, TrcEvent completionEvent, Alliance alliance, boolean useRegression, boolean flywheelTracking,
-        boolean relocalize, boolean passMode)
+        String owner, TrcEvent completionEvent, Alliance alliance, boolean passMode)
     {
-        autoScoreParams
-            .setAlliance(alliance)
-            // .setInAuto(inAuto)
-            .setRegression(useRegression)
-            .setFlywheelTracking(flywheelTracking)
-            .setRelocalize(relocalize)
-            .setPassMode(passMode);
+        autoScoreParams.setPassMode(passMode);
         tracer.traceInfo(
             moduleName,
             "autoScore(owner=" + owner + ", event=" + completionEvent + ", taskParams=" + autoScoreParams + ")");
@@ -204,6 +157,11 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
     protected void stopSubsystems(String owner)
     {
         tracer.traceInfo(moduleName, "Stopping subsystems.");
+        if (enabledGoalTracking)
+        {
+            robot.shooterSubsystem.setGoalTrackingEnabled(null);
+            enabledGoalTracking = false;
+        }
         // robot.robotBase.cancel(owner);
     }   //stopSubsystems
 
@@ -228,88 +186,60 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
         switch (state)
         {
             case START:
-                if (robot.vision == null ||
-                    robot.vision.leftShooterVision == null && robot.vision.rightShooterVision == null)
+                if (!robot.shooterSubsystem.isGoalTrackingEnabled())
                 {
-                    tracer.traceWarn(moduleName, "***** Shooter Vision is not enabled, quit.");
-                    sm.setState(State.DONE);
+                    // If GoalTracking is not already ON, turn it ON now.
+                    tracer.traceInfo(moduleName, "***** Turn ON GoalTracking.");
+                    robot.shooterSubsystem.setGoalTrackingEnabled(
+                        taskParams.passMode? Shooter.TrackingMode.AllianceFloor: Shooter.TrackingMode.AllianceHub);
                 }
-                else
+
+                if (robot.leftShooter != null)
                 {
-                    tracer.traceInfo(moduleName, "***** Using Shooter Vision.");
-                    visionExpiredTime = null;
-                    aimInfo = null;
-                    sm.setState(State.DO_VISION);
+                    tracer.traceInfo(moduleName, "***** Wait for left Shooter ready.");
+                    leftShooterReadyEvent.clear();
+                    sm.addEvent(leftShooterReadyEvent);
+                    robot.leftShooter.waitForShooterReady(leftShooterReadyEvent);
                 }
+
+                if (robot.rightShooter != null)
+                {
+                    tracer.traceInfo(moduleName, "***** Wait for right Shooter ready.");
+                    rightShooterReadyEvent.clear();
+                    sm.addEvent(rightShooterReadyEvent);
+                    robot.rightShooter.waitForShooterReady(rightShooterReadyEvent);
+                }
+
+                sm.waitForEvents(State.SHOOT, false, false);
                 break;
 
-            case DO_VISION:
-                if (aimInfo == null)
-                {
-                    int[] goalAprilTags =
-                        taskParams.alliance == null? RobotParams.Game.anyHubAprilTags:
-                        taskParams.alliance == Alliance.Blue ?
-                            RobotParams.Game.blueHubAprilTags: RobotParams.Game.redHubAprilTags;
-                    FrcPhotonVision.DetectedObject aprilTagInfo =
-                        robot.vision.getBestDetectedAprilTag(null, goalAprilTags);
-                    if (aprilTagInfo != null)
-                    {
-                        int aprilTagId = aprilTagInfo.target.getFiducialId();
-                        TrcPose2D aprilTagPose = aprilTagInfo.getObjectPose();
-                        tracer.traceInfo(
-                            moduleName, "***** Vision found AprilTag " + aprilTagId + ": aprilTagPose=" + aprilTagPose);
-                        // aimInfo = robot.photonVisionFront.getAimInfoByVision(aprilTagInfo); // TODO: Add when implemented
-                    }
-                    else
-                    {
-                        tracer.traceInfo(
-                            moduleName, "***** Can't find AprilTag"); // TODO: Report turret angle if needed
-                    }
-                }
-                if (aimInfo != null)
-                {
-                    sm.setState(State.AIM);
-                }
-                else if (visionExpiredTime == null)
-                {
-                    // Can't find AprilTag, set a timeout and try again.
-                    visionExpiredTime = TrcTimer.getCurrentTime() + 1.0;
-                }
-                else if (TrcTimer.getCurrentTime() >= visionExpiredTime)
-                {
-                    // Timed out, moving on.
-                    tracer.traceInfo(moduleName, "***** Vision timed out.");
-                    sm.setState(State.DONE);
-                }
-                break;
-
-            case AIM:
-                if (aimInfo != null)
-                {
-                    // GoalTracking is not ON but vision detected AprilTag, we can aim according to vision info.
-                    // Spin the shooter flywheel up to speed and the turret pointing to the target.
-                    event.clear();
-                    sm.addEvent(event);
-                    // TODO: Fix shoot params when table for FRC is created
-                    double targetDistance = TrcUtil.magnitude(aimInfo.targetPose.x, aimInfo.targetPose.y);
-                    TrcLookupTable.Entry shootParams =
-                        Shooter.shootParamsTable.get(targetDistance, taskParams.useRegression);
-                    tracer.traceInfo(
-                        moduleName, "***** ShootParams: dist=%f, bearing=%f, shootParams=%s, event=%s",
-                        targetDistance, aimInfo.panAngle, shootParams, event);
-                    // robot.shooter.setTiltAngle(shootParams.region.value);
-                    // robot.shooter.aimShooter(
-                    //     owner, shootParams.outputs[0]/60.0, 0.0, null, aimInfo[1], event, 0.0, null, 0.0);
-                }
-                sm.waitForSingleEvent(event, State.SHOOT);
-                break;
-            
             case SHOOT:
-                tracer.traceInfo(
-                    moduleName,
-                    "***** Shooting fuel");
-                robot.shooterSubsystem.shoot(owner, robot.leftFeeder, event);
-                sm.waitForSingleEvent(event, State.DONE);
+                if (robot.leftShooter != null &&  !leftShooterShooting && leftShooterReadyEvent.isSignaled())
+                {
+                    tracer.traceInfo(moduleName, "***** Start left shooter shooting.");
+                    leftShooterDone.clear();
+                    sm.addEvent(leftShooterDone);
+                    // TODO: Arm left Shooter velocity trigger to detect hopper empty.
+                    // TODO: Set left Shooter to shoot.
+                    leftShooterShooting = true;
+                }
+
+                if (robot.rightShooter != null && !rightShooterShooting && rightShooterReadyEvent.isSignaled())
+                {
+                    tracer.traceInfo(moduleName, "***** Start right shooter shooting.");
+                    rightShooterDone.clear();
+                    sm.addEvent(rightShooterDone);
+                    // TODO: Arm right Shooter velocity trigger to detect hopper empty.
+                    // TODO: Set right shooter to shoot.
+                    rightShooterShooting = true;
+                }
+
+                if ((robot.leftShooter == null || leftShooterShooting) &&
+                    (robot.rightShooter != null || rightShooterShooting))
+                {
+                    // Wait for both shooters done.
+                    sm.waitForEvents(State.DONE, false, true);
+                }
                 break;
 
             case DONE:

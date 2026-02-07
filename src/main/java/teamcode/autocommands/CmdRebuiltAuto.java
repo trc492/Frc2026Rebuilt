@@ -67,8 +67,6 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
 
     private FrcAuto.AutoStartPos startPos;
     private Alliance alliance;
-    private boolean useVision;
-    private boolean relocalize;
     private boolean depotPickup;
     private boolean outpostPickup;
     private boolean neutralZonePickup;
@@ -145,8 +143,6 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                      // Retrieve auto choice options.
                     startPos = autoChoices.getStartPos();
                     alliance = autoChoices.getAlliance();
-                    useVision = autoChoices.useVision();
-                    relocalize = autoChoices.getRelocalize();
                     depotPickup = autoChoices.depotPickup();
                     outpostPickup = autoChoices.outpostPickup();
                     neutralZonePickup = autoChoices.neutralZonePickup();
@@ -169,7 +165,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
 
                 case SHOOT_PRELOAD:
                     // TODO: How to determine certain params such as useRegression and flywheelTracking?
-                    robot.autoScoreTask.autoScore(null, event, alliance, false, true, relocalize, false);
+                    robot.autoScoreTask.autoScore(null, event, alliance, false);
                     State nextState;
                     if ((startPos == AutoStartPos.START_POS_DEPOT || (startPos == AutoStartPos.START_POS_CENTER && moveTo == MoveTo.DEPOT)) && depotPickup)
                     {
@@ -280,7 +276,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     break;
                 
                 case SHOOT_FUEL:
-                    robot.autoScoreTask.autoScore(null, event, alliance, false, true, relocalize, false);
+                    robot.autoScoreTask.autoScore(null, event, alliance, false);
                     if (climb)
                     {
                         sm.waitForSingleEvent(event, State.GO_TO_CLIMB_POS);
@@ -341,7 +337,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     robot.intake.intake(1.0);
                     if (passBack == PassBack.PASS_BACK)
                     {
-                        robot.autoScoreTask.autoScore(null, event, alliance, false, true, relocalize, true);
+                        robot.autoScoreTask.autoScore(null, event, alliance, true);
                     }
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
@@ -380,7 +376,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     break;
                 
                 case SHOOT_NEUTRAL_FUEL:
-                    robot.autoScoreTask.autoScore(null, event, alliance, false, true, relocalize, false);
+                    robot.autoScoreTask.autoScore(null, event, alliance, false);
                     if (climb)
                     {
                         sm.waitForSingleEvent(event, State.GO_TO_CLIMB_POS);

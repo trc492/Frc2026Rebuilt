@@ -37,7 +37,6 @@ import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
 import trclib.robotcore.TrcEvent;
 import trclib.subsystem.TrcShooter;
-import trclib.subsystem.TrcShooter.AimConvergenceStats;
 import trclib.subsystem.TrcShooter.AimInfo;
 import trclib.subsystem.TrcSubsystem;
 
@@ -240,12 +239,16 @@ public class Shooter extends TrcSubsystem
     private static class GoalTrackingState
     {
         TrcPose2D goalFieldPose = null;
-        boolean paused = false;
         AimInfo rightShooterAimInfo = null;
     }   //class GoalTrackingState
 
+    public enum TrackingMode
+    {
+        AllianceHub,
+        AllianceFloor
+    }   //enum TrackingMode
+
     private final GoalTrackingState goalTrackingState = new GoalTrackingState();
-    private final AimConvergenceStats aimConvergenceStats = new AimConvergenceStats();
     private final FrcDashboard dashboard;
     private final Robot robot;
     private final TrcShooter leftShooter;
@@ -578,34 +581,21 @@ public class Shooter extends TrcSubsystem
     }   //isGoalTrackingEnabled
 
     /**
-     * This method checks if Goal Tracking is paused.
-     *
-     * @return true if goal tracking is enabled but paused, false otherwise.
-     */
-    public boolean isGoalTrackingPaused()
-    {
-        synchronized (goalTrackingState)
-        {
-            return goalTrackingState.goalFieldPose != null && goalTrackingState.paused;
-        }
-    }   //isGoalTrackingPaused
-
-    /**
      * This method enables/disables Goal Tracking.
      *
-     * @param enabled specifies true to enable GoalTracking, false to disable.
+     * @param trackingMode specifies tracking mode, null to disable.
      */
-    public void setGoalTrackingEnabled(boolean enabled)
+    public void setGoalTrackingEnabled(TrackingMode trackingMode)
     {
         synchronized (goalTrackingState)
         {
-            if (goalTrackingState.goalFieldPose == null && enabled)
+            if (goalTrackingState.goalFieldPose == null && trackingMode != null)
             {
                 // Enabling GoalTracking.
                 tracer.traceInfo(instanceName, "Enabling GoalTracking.");
-                goalTrackingState.goalFieldPose =
-                    robot.adjustPoseByAlliance(RobotParams.Game.blueHubPose, FrcAuto.autoChoices.getAlliance());
-                goalTrackingState.paused = false;
+                goalTrackingState.goalFieldPose = trackingMode == TrackingMode.AllianceHub?
+                    robot.adjustPoseByAlliance(RobotParams.Game.blueHubPose, FrcAuto.autoChoices.getAlliance()):
+                    null;   // TODO: How do we change floor location?
                 goalTrackingState.rightShooterAimInfo = null;
                 if (leftShooter != null)
                 {
@@ -616,11 +606,10 @@ public class Shooter extends TrcSubsystem
                     rightShooter.setGoalTrackingEnabled(this::getRightShooterAimInfo);
                 }
             }
-            else if (goalTrackingState.goalFieldPose != null && !enabled)
+            else if (goalTrackingState.goalFieldPose != null && trackingMode == null)
             {
                 tracer.traceInfo(instanceName, "Disabling GoalTracking.");
                 goalTrackingState.goalFieldPose = null;
-                goalTrackingState.paused = false;
                 goalTrackingState.rightShooterAimInfo = null;
                 if (leftShooter != null)
                 {
@@ -633,39 +622,6 @@ public class Shooter extends TrcSubsystem
             }
         }
     }   //setGoalTrackingEnabled
-
-    /**
-     * This method pauses Goal Tracking so that we can perform other operations such as aimShooter that needs the
-     * control of the shooter.
-     */
-    public void pauseGoalTracking()
-    {
-        synchronized (goalTrackingState)
-        {
-            if (goalTrackingState.goalFieldPose != null)
-            {
-                tracer.traceInfo(instanceName, "Pause GoalTracking.");
-                goalTrackingState.paused = true;
-                goalTrackingState.rightShooterAimInfo = null;
-            }
-        }
-    }   //pauseGoalTracking
-
-    /**
-     * This method resumes Goal Tracking from a previous pause.
-     */
-    public void resumeGoalTracking()
-    {
-        synchronized (goalTrackingState)
-        {
-            if (isGoalTrackingPaused())
-            {
-                tracer.traceInfo(instanceName, "Resume GoalTracking.");
-                goalTrackingState.paused = false;
-                goalTrackingState.rightShooterAimInfo = null;
-            }
-        }
-    }   //resumeGoalTracking
 
     /**
      * This method is called by left shooter GoalTracking to get AimInfo for aiming at the target.
@@ -719,8 +675,7 @@ public class Shooter extends TrcSubsystem
                 {
                     // Compensate for robot motion.
                     aimInfo = leftShooter.compensateRobotMotion(
-                        robot.robotBase.driveBase, this::getLeftShooterAimInfo, aimInfo, 0.5, 3,
-                        aimConvergenceStats);
+                        robot.robotBase.driveBase, this::getLeftShooterAimInfo, aimInfo, 0.5, 3);
                 }
                 goalTrackingState.rightShooterAimInfo = aimInfo.clone();
                 goalTrackingState.rightShooterAimInfo.flywheel1RPM = rightFlywheelRPM;
