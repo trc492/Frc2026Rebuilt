@@ -277,10 +277,10 @@ public class Shooter extends TrcSubsystem
             FrcShooter.Params lShooterParams = new FrcShooter.Params()
                 .setShooterMotor1(
                     Params.LSHOOTER_PRIMARY_MOTOR_NAME, Params.SHOOTER_MOTOR_TYPE, Params.LSHOOTER_PRIMARY_MOTOR_INVERTED,
-                    Params.LSHOOTER_PRIMARY_MOTOR_CANID, Params.CANBUS_NAME, null)
+                    Params.LSHOOTER_PRIMARY_MOTOR_CANID, Params.CANBUS_NAME, null, true)
                 .setShooterMotor2(
                     Params.LSHOOTER_FOLLOWER_MOTOR_NAME, Params.SHOOTER_MOTOR_TYPE, Params.LSHOOTER_FOLLOWER_MOTOR_INVERTED,
-                    Params.LSHOOTER_FOLLOWER_MOTOR_CANID, Params.CANBUS_NAME, null, true);
+                    Params.LSHOOTER_FOLLOWER_MOTOR_CANID, Params.CANBUS_NAME, null, true, true);
             if (Params.SHOOTER_HAS_TILT)
             {
                 lShooterParams
@@ -369,11 +369,11 @@ public class Shooter extends TrcSubsystem
                 .setShooterMotor1(
                     Params.RSHOOTER_PRIMARY_MOTOR_NAME, Params.SHOOTER_MOTOR_TYPE,
                     Params.RSHOOTER_PRIMARY_MOTOR_INVERTED, Params.RSHOOTER_PRIMARY_MOTOR_CANID, Params.CANBUS_NAME,
-                    null)
+                    null, true)
                 .setShooterMotor2(
                     Params.RSHOOTER_FOLLOWER_MOTOR_NAME, Params.SHOOTER_MOTOR_TYPE,
                     Params.RSHOOTER_FOLLOWER_MOTOR_INVERTED, Params.RSHOOTER_FOLLOWER_MOTOR_CANID, Params.CANBUS_NAME,
-                    null, true);
+                    null, true, true);
             if (Params.SHOOTER_HAS_TILT)
             {
                 rShooterParams
