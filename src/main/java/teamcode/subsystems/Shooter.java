@@ -36,9 +36,12 @@ import trclib.motor.TrcMotor;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
 import trclib.robotcore.TrcEvent;
+import trclib.sensor.TrcTriggerThresholdRange;
+import trclib.sensor.TrcTrigger.TriggerMode;
 import trclib.subsystem.TrcShooter;
 import trclib.subsystem.TrcShooter.AimInfo;
 import trclib.subsystem.TrcSubsystem;
+import trclib.timer.TrcTimer;
 
 public class Shooter extends TrcSubsystem
 {
@@ -110,6 +113,8 @@ public class Shooter extends TrcSubsystem
         public static final boolean SHOOTER_SOFTWARE_PID_ENABLED= false;
         public static final double SHOOTER_MOTOR_OFF_DELAY      = 0.5;         // in sec
         public static final double SHOOTER_VEL_TRIGGER_THRESHOLD= 350.0;       // in RPM
+        public static final double SHOOTER_VEL_TRIGGER_SETTLING = 0.0;
+        public static final double SHOOTER_VEL_TRIGGER_TIMEOUT  = 1.0;
         // Left Shooter Motor Characteristics
         public static final String LSHOOTER_PRIMARY_MOTOR_NAME  = SUBSYSTEM_NAME + ".LeftPrimaryMotor";
         public static final boolean LSHOOTER_PRIMARY_MOTOR_INVERTED = false;
@@ -242,6 +247,19 @@ public class Shooter extends TrcSubsystem
         AimInfo rightShooterAimInfo = null;
     }   //class GoalTrackingState
 
+    private static class ShooterContext
+    {
+        TrcShooter shooter;
+        TrcMotor feeder;
+        TrcTimer timer;
+        ShooterContext(TrcShooter shooter, TrcMotor feeder, TrcTimer timer)
+        {
+            this.shooter = shooter;
+            this.feeder = feeder;
+            this.timer = timer;
+        }
+    }
+
     public enum TrackingMode
     {
         AllianceHub,
@@ -256,6 +274,9 @@ public class Shooter extends TrcSubsystem
     private final TrcMotor leftFeeder;
     private final TrcMotor rightFeeder;
     private final TrcDbgTrace tracer;
+
+    private final ShooterContext leftShooterContext;
+    private final ShooterContext rightShooterContext;
 
     private TrcEvent zeroCalCompletionEvent = null;
 
@@ -455,6 +476,9 @@ public class Shooter extends TrcSubsystem
             rightShooter = null;
             rightFeeder = null;
         }
+
+        leftShooterContext = new ShooterContext(leftShooter, leftFeeder, new TrcTimer(instanceName + ".leftTriggerTimer"));
+        rightShooterContext = new ShooterContext(rightShooter, rightFeeder, new TrcTimer(instanceName + ".rightTriggerTimer"));
 
         tracer = leftShooter != null? leftShooter.tracer: rightShooter.tracer;
     }   //Shooter
@@ -753,11 +777,21 @@ public class Shooter extends TrcSubsystem
      * @param feeder specifies the feeder to launch fuel.
      * @param completionEvent specifies the event to signal when shooting is done, can be null.
      */
-    public void shoot(String owner, TrcMotor feeder, TrcEvent completionEvent)
+    public void shoot(String owner, TrcShooter shooter, TrcEvent completionEvent)
     {
-        if (feeder != null)
+        if (shooter != null)
         {
-            tracer.traceInfo(instanceName, "shoot(owner=%s, feeder=%s, event=%s)", owner, feeder, completionEvent);
+            ShooterContext shooterContext = shooter == leftShooter ? leftShooterContext: rightShooterContext;
+            TrcTriggerThresholdRange velTrigger = (TrcTriggerThresholdRange) shooter.shooterMotor1VelTrigger;
+            tracer.traceInfo(instanceName, "shoot(owner=%s, shooter=%s, event=%s)", owner, shooter, completionEvent);
+            double currFlywheelRPM = shooter.getShooterMotor1TargetRPM();
+            velTrigger.setTrigger(currFlywheelRPM - Params.SHOOTER_VEL_TRIGGER_THRESHOLD, 
+                currFlywheelRPM + Params.SHOOTER_VEL_TRIGGER_THRESHOLD, Params.SHOOTER_VEL_TRIGGER_SETTLING);
+            shooterContext.timer.set(Params.SHOOTER_VEL_TRIGGER_TIMEOUT, this::velTriggerTimeout, shooterContext);
+            velTrigger.enableTrigger(0.0, TriggerMode.OnBoth, this::velTriggerCallback);
+
+            shooterContext.feeder.setPower(1.0);
+            
         //     if (robot.spindexerSubsystem != null)
         //     {
         //         // Enable Spindexer exit trigger.
@@ -845,6 +879,23 @@ public class Shooter extends TrcSubsystem
     //     launcher.setPosition(
     //         launchOwner, 0.0, launcherTuneParams.restPos, callbackEvent, launcherTuneParams.retractTime);
     // }   //velTriggerCallback
+
+    private void velTriggerCallback(Object context, boolean canceled)
+    {
+        if (!canceled)
+        {
+            ShooterContext shooterContext = (ShooterContext) context;
+            shooterContext.timer.set(Params.SHOOTER_VEL_TRIGGER_TIMEOUT, this::velTriggerTimeout, shooterContext);
+        }
+    }
+
+    private void velTriggerTimeout(Object context, boolean canceled)
+    {
+        ShooterContext shooterContext = (ShooterContext) context;
+        shooterContext.shooter.cancel();
+        shooterContext.shooter.shooterMotor1VelTrigger.disableTrigger();
+        shooterContext.feeder.cancel();
+    }
 
     //
     // Implements TrcSubsystem abstract methods.
