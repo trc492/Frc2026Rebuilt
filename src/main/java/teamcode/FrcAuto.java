@@ -105,8 +105,6 @@ public class FrcAuto implements TrcRobot.RobotMode
         private static final String DBKEY_AUTO_START_POS = "Auto/StartPos";                 //Choices
         private static final String DBKEY_AUTO_START_DELAY = "Auto/StartDelay";             //Number
 
-        private static final String DBKEY_AUTO_USE_VISION   = "Auto/UseVision";             //Boolean
-        private static final String DBKEY_AUTO_RELOCALIZE = "Auto/Relocalize";              //Boolean
         private static final String DBKEY_AUTO_DEPOT_PICKUP = "Auto/DepotPickup";           //Boolean
         private static final String DBKEY_AUTO_OUTPOST_PICKUP = "Auto/OutpostPickup";       //Boolean
         private static final String DBKEY_AUTO_NEUTRAL_ZONE_PICKUP = "Auto/NeutralZonePickup"; //Boolean
@@ -179,8 +177,6 @@ public class FrcAuto implements TrcRobot.RobotMode
             userChoices.addChoiceMenu(DBKEY_AUTO_START_POS, autoStartPosMenu);
             userChoices.addNumber(DBKEY_AUTO_START_DELAY, 0.0);
 
-            userChoices.addBoolean(DBKEY_AUTO_USE_VISION, true);
-            userChoices.addBoolean(DBKEY_AUTO_RELOCALIZE, true);
             userChoices.addBoolean(DBKEY_AUTO_DEPOT_PICKUP, false);
             userChoices.addBoolean(DBKEY_AUTO_OUTPOST_PICKUP, false);
             userChoices.addBoolean(DBKEY_AUTO_NEUTRAL_ZONE_PICKUP, false);
@@ -221,16 +217,6 @@ public class FrcAuto implements TrcRobot.RobotMode
         {
             return userChoices.getUserNumber(DBKEY_AUTO_START_DELAY);
         }   //getStartDelay
-
-        public boolean useVision()
-        {
-            return userChoices.getUserBoolean(DBKEY_AUTO_USE_VISION);
-        }   //useVision
-
-        public boolean getRelocalize()
-        {
-            return userChoices.getUserBoolean(DBKEY_AUTO_RELOCALIZE);
-        }   //useVision
 
         public boolean depotPickup()
         {
@@ -300,8 +286,6 @@ public class FrcAuto implements TrcRobot.RobotMode
                    "startPos=\"" + getStartPos() + "\" " +
                    "startDelay=" + getStartDelay() + " sec " +
 
-                   "useVision=\""  + useVision() + "\" " +
-                   "relocalize=\"" + getRelocalize() + "\" " +
                    "depotPickup=\"" + depotPickup() + "\" " +
                    "outpostPickup=\"" + outpostPickup() + "\" " +
                    "neutralZonePickup=\"" + neutralZonePickup() + "\" " +
