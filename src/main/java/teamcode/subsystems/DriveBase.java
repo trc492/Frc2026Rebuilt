@@ -44,7 +44,6 @@ import trclib.robotcore.TrcDbgTrace;
 import trclib.robotcore.TrcEvent;
 import trclib.sensor.TrcEncoder;
 import trclib.subsystem.TrcSubsystem;
-import trclib.vision.TrcVision;
 
 /**
  * This class creates the appropriate Robot Drive Base according to the specified robot type.
