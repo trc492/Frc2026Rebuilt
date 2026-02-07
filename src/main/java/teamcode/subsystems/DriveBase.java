@@ -71,11 +71,13 @@ public class DriveBase extends TrcSubsystem
      */
     public static class RebuiltRobotInfo extends FrcSwerveBase.SwerveInfo
     {
-        public final double FALCON_MAX_RPM                      = 6380.0;
-        public final double DRIVE_MOTOR_GEAR_RATIO              = 5.6;
-        public final double DRIVE_WHEEL_DIAMETER                = 3.9326556997620689090425924610785;    // inches
-        public final double STEER_MOTOR_GEAR_RATIO              = 13.3714;
+        public final static double FALCON_MAX_RPM               = 6380.0;
+        public final static double DRIVE_MOTOR_GEAR_RATIO       = 5.6;
+        public final static double DRIVE_WHEEL_DIAMETER         = 3.9326556997620689090425924610785;    // inches
+        public final static double STEER_MOTOR_GEAR_RATIO       = 13.3714;
 
+        private static final TrcPidController.PidCoefficients driveMotorVelPidCoeffs =
+            new TrcPidController.PidCoefficients(0.35, 0.0, 0.0, 0.12, 0.0);
         private static final TrcPidController.PidCoefficients drivePidCoeffs =
             new TrcPidController.PidCoefficients(0.02, 0.0, 0.002, 0.0, 0.0);
         private static final TrcPidController.PidCoefficients turnPidCoeffs =
@@ -86,6 +88,8 @@ public class DriveBase extends TrcSubsystem
             new TrcPidController.PidCoefficients(3.0, 0.0, 0.0, 0.0, 0.0);
 
         public static TrcDriveBase.BaseParams baseParams = new TrcDriveBase.BaseParams()
+            .setDriveMotorVelocityControl(
+                driveMotorVelPidCoeffs, DRIVE_WHEEL_DIAMETER * Math.PI / DRIVE_MOTOR_GEAR_RATIO, false)
             .setPidTolerances(1.0, 1.0)
             .setXPidParams(drivePidCoeffs, 0.5)
             .setYPidParams(drivePidCoeffs, 0.5)
@@ -119,8 +123,7 @@ public class DriveBase extends TrcSubsystem
                 .setPidStallDetectionEnabled(true)
                 .setPidDriveParams(false)
                 .setPurePursuitDriveParams(10.0, true, false)
-                .setVisionInfo(
-                    new TrcVision.CameraInfo[] {Vision.leftShooterCamInfo, Vision.rightShooterCamInfo})
+                .setVisionInfo(Vision.leftShooterCamInfo, Vision.rightShooterCamInfo)
                 .setIndicators(
                     new LEDInfo("LED", HwConfig.PWM_CHANNEL_LED, HwConfig.NUM_LEDS));
             this.setSwerveParams(swerveParams)
@@ -151,11 +154,13 @@ public class DriveBase extends TrcSubsystem
      */
     public static class ReefscapeRobotInfo extends FrcSwerveBase.SwerveInfo
     {
-        public final double FALCON_MAX_RPM                      = 6380.0;
-        public final double DRIVE_MOTOR_GEAR_RATIO              = 5.6;
-        public final double DRIVE_WHEEL_DIAMETER                = 3.9326556997620689090425924610785;    // inches
-        public final double STEER_MOTOR_GEAR_RATIO              = 13.3714;
+        public static final double FALCON_MAX_RPM               = 6380.0;
+        public static final double DRIVE_MOTOR_GEAR_RATIO       = 5.6;
+        public static final double DRIVE_WHEEL_DIAMETER         = 3.90408922;    // inches
+        public static final double STEER_MOTOR_GEAR_RATIO       = 13.3714;
 
+        private static final TrcPidController.PidCoefficients driveMotorVelPidCoeffs =
+            new TrcPidController.PidCoefficients(0.35, 0.0, 0.0, 0.12, 0.0);
         private static final TrcPidController.PidCoefficients drivePidCoeffs =
             new TrcPidController.PidCoefficients(0.02, 0.0, 0.002, 0.0, 0.0);
         private static final TrcPidController.PidCoefficients turnPidCoeffs =
@@ -166,6 +171,8 @@ public class DriveBase extends TrcSubsystem
             new TrcPidController.PidCoefficients(3.0, 0.0, 0.0, 0.0, 0.0);
 
         public static TrcDriveBase.BaseParams baseParams = new TrcDriveBase.BaseParams()
+            .setDriveMotorVelocityControl(
+                driveMotorVelPidCoeffs, DRIVE_WHEEL_DIAMETER * Math.PI / DRIVE_MOTOR_GEAR_RATIO, false)
             .setPidTolerances(1.0, 1.0)
             .setXPidParams(drivePidCoeffs, 0.5)
             .setYPidParams(drivePidCoeffs, 0.5)
@@ -199,8 +206,7 @@ public class DriveBase extends TrcSubsystem
                 .setPidStallDetectionEnabled(true)
                 .setPidDriveParams(false)
                 .setPurePursuitDriveParams(10.0, true, false)
-                .setVisionInfo(
-                    new TrcVision.CameraInfo[] {Vision.reefscapeFrontCamInfo, Vision.reefscapeBackCamInfo})
+                .setVisionInfo(Vision.reefscapeFrontCamInfo, Vision.reefscapeBackCamInfo)
                 .setIndicators(
                     new LEDInfo("LED", HwConfig.PWM_CHANNEL_LED, HwConfig.NUM_LEDS));
             this.setSwerveParams(swerveParams)
@@ -235,8 +241,7 @@ public class DriveBase extends TrcSubsystem
         public VisionOnlyInfo()
         {
             this.setRobotInfo("VisionOnly")
-                .setVisionInfo(
-                    new TrcVision.CameraInfo[] {Vision.leftShooterCamInfo, Vision.rightShooterCamInfo});
+                .setVisionInfo(Vision.leftShooterCamInfo, Vision.rightShooterCamInfo);
         }   //VisionOnlyInfo
     }   //class VisionOnlyInfo
 
