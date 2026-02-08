@@ -33,7 +33,9 @@ import teamcode.indicators.LEDIndicator;
 import trclib.motor.TrcMotor;
 import trclib.motor.TrcMotor.PidParams;
 import trclib.robotcore.TrcEvent;
+import trclib.sensor.TrcTrigger.TriggerMode;
 import trclib.subsystem.TrcRollerIntake;
+import trclib.subsystem.TrcRollerIntake.TriggerAction;
 import trclib.subsystem.TrcSubsystem;
 
 public class Intake extends TrcSubsystem
@@ -60,10 +62,13 @@ public class Intake extends TrcSubsystem
         public static final int INTAKE_FOLLOWER_MOTOR_CANID     = RobotParams.HwConfig.CANID_INTAKE_FOLLOWER_MOTOR;
         // Intake Parameters
         public static final double INTAKE_POWER                 = 0.5;
-        public static final double EJECT_POWER                  = -0.5;
-        public static final double RETAIN_POWER                 = 0.0;
+        public static final double INTAKE_EJECT_POWER           = -0.5;
+        public static final double INTAKE_RETAIN_POWER          = 0.0;
         public static final double INTAKE_FINISH_DELAY          = 0.5;
         public static final double EJECT_FINISH_DELAY           = 0.5;
+        public static final String INTAKE_BACK_SENSOR_NAME      = SUBSYSTEM_NAME + "IntakeBackSensor";
+        public static final int INTAKE_BACK_SENSOR_CHANNEL      = RobotParams.HwConfig.DIO_INTAKE_BACK_SENSOR;
+        public static final boolean INTAKE_BACK_SENSOR_INVERTED = false;
 
         // Deployer:
         // Motor Characteristics
@@ -119,8 +124,13 @@ public class Intake extends TrcSubsystem
             .setPrimaryMotor(
                 Params.INTAKE_PRIMARY_MOTOR_NAME, Params.INTAKE_MOTOR_TYPE, Params.INTAKE_PRIMARY_MOTOR_INVERTED,
                 Params.INTAKE_PRIMARY_MOTOR_CANID, Params.CANBUS_NAME, null)
-            .setPowerLevels(Params.INTAKE_POWER, Params.EJECT_POWER, Params.RETAIN_POWER)
-            .setFinishDelays(Params.INTAKE_FINISH_DELAY, Params.EJECT_FINISH_DELAY);
+            .setPowerLevels(Params.INTAKE_POWER, Params.INTAKE_EJECT_POWER, Params.INTAKE_RETAIN_POWER)
+            .setFinishDelays(Params.INTAKE_FINISH_DELAY, Params.EJECT_FINISH_DELAY)
+            .setBackDigitalInputTrigger(
+                Params.INTAKE_BACK_SENSOR_NAME, Params.INTAKE_BACK_SENSOR_CHANNEL,
+                Params.INTAKE_BACK_SENSOR_INVERTED, TriggerAction.FinishOnTrigger, TriggerMode.OnActive,
+                null, null);
+
         if (Params.HAS_TWO_INTAKE_MOTORS)
         {
             intakeParams.setFollowerMotor(

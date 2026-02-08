@@ -129,15 +129,15 @@ public class RobotParams
         public static final int CANID_LSHOOTER_FOLLOWER_MOTOR   = 8;    //Gray
         public static final int CANID_LSHOOTER_TILT_MOTOR       = 9;    //White
         public static final int CANID_LSHOOTER_TURRET_MOTOR     = 17;   //Purple
-        public static final int CANID_LSHOOTER_LOWER_FEEDER_MOTOR = 18; //Gray
-        public static final int CANID_LSHOOTER_UPPER_FEEDER_MOTOR = 19; //White
+        public static final int CANID_LFEEDER_UPPER_MOTOR       = 18; //Gray
+        public static final int CANID_LFEEDER_LOWER_MOTOR       = 19; //White
         // Right Shooter CAN IDs.
         public static final int CANID_RSHOOTER_PRIMARY_MOTOR    = 27;   //Purple
         public static final int CANID_RSHOOTER_FOLLOWER_MOTOR   = 28;   //Gray
         public static final int CANID_RSHOOTER_TILT_MOTOR       = 29;   //White
         public static final int CANID_RSHOOTER_TURRET_MOTOR     = 37;   //Purple
-        public static final int CANID_RSHOOTER_LOWER_FEEDER_MOTOR = 38; //Gray
-        public static final int CANID_RSHOOTER_UPPER_FEEDER_MOTOR = 39; //White
+        public static final int CANID_RFEEDER_UPPER_MOTOR       = 38; //Gray
+        public static final int CANID_RFEEDER_LOWER_MOTOR       = 39; //White
         // Intake CAN IDs
         public static final int CANID_INTAKE_PRIMARY_MOTOR      = 47;   //Purple
         public static final int CANID_INTAKE_FOLLOWER_MOTOR     = 48;   //Gray
@@ -152,6 +152,7 @@ public class RobotParams
         // Digital Input/Output ports.
         public static final int DIO_LFEEDER_BACK_SENSOR         = 0;
         public static final int DIO_RFEEDER_BACK_SENSOR         = 1;
+        public static final int DIO_INTAKE_BACK_SENSOR          = 2;
 
         // PWM channels.
         public static final int NUM_LEDS                        = 30;

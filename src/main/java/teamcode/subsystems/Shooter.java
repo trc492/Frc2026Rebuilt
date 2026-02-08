@@ -226,7 +226,6 @@ public class Shooter extends TrcSubsystem
         // Common Feeder Motor Characteristics
         public static final MotorType FEEDER_MOTOR_TYPE         = MotorType.CanSparkMax;
         public static final SparkMaxMotorParams FEEDER_SPARKMAX_PARAMS = new SparkMaxMotorParams(true, false);
-        public static final double FEEDER_POWER_LIMIT           = 1.0;
         public static final double FEEDER_INTAKE_POWER          = 1.0;
         public static final double FEEDER_EJECT_POWER           = 0.5;
         public static final double FEEDER_RETAIN_POWER          = 0.0;
@@ -236,10 +235,10 @@ public class Shooter extends TrcSubsystem
         public static final String LFEEDER_NAME                 = SUBSYSTEM_NAME + ".LeftFeeder";
         public static final String LFEEDER_UPPER_MOTOR_NAME     = SUBSYSTEM_NAME + ".LeftFeederUpperMotor";
         public static final boolean LFEEDER_UPPER_MOTOR_INVERTED= true;
-        public static final int LFEEDER_UPPER_MOTOR_CANID       = RobotParams.HwConfig.CANID_LSHOOTER_UPPER_FEEDER_MOTOR;
+        public static final int LFEEDER_UPPER_MOTOR_CANID       = RobotParams.HwConfig.CANID_LFEEDER_UPPER_MOTOR;
         public static final String LFEEDER_LOWER_MOTOR_NAME     = SUBSYSTEM_NAME + ".LeftFeederLowerMotor";
         public static final boolean LFEEDER_LOWER_MOTOR_INVERTED= false;
-        public static final int LFEEDER_LOWER_MOTOR_CANID       = RobotParams.HwConfig.CANID_LSHOOTER_LOWER_FEEDER_MOTOR;
+        public static final int LFEEDER_LOWER_MOTOR_CANID       = RobotParams.HwConfig.CANID_LFEEDER_LOWER_MOTOR;
         public static final String LFEEDER_BACK_SENSOR_NAME     = SUBSYSTEM_NAME + "LeftFeederBackSensor";
         public static final int LFEEDER_BACK_SENSOR_CHANNEL     = RobotParams.HwConfig.DIO_LFEEDER_BACK_SENSOR;
         public static final boolean LFEEDER_BACK_SENSOR_INVERTED= false;
@@ -247,10 +246,10 @@ public class Shooter extends TrcSubsystem
         public static final String RFEEDER_NAME                 = SUBSYSTEM_NAME + ".RightFeeder";
         public static final String RFEEDER_UPPER_MOTOR_NAME     = SUBSYSTEM_NAME + ".RightFeederUpperMotor";
         public static final boolean RFEEDER_UPPER_MOTOR_INVERTED= true;
-        public static final int RFEEDER_UPPER_MOTOR_CANID       = RobotParams.HwConfig.CANID_RSHOOTER_UPPER_FEEDER_MOTOR;
+        public static final int RFEEDER_UPPER_MOTOR_CANID       = RobotParams.HwConfig.CANID_RFEEDER_UPPER_MOTOR;
         public static final String RFEEDER_LOWER_MOTOR_NAME     = SUBSYSTEM_NAME + ".RightFeederLowerMotor";
         public static final boolean RFEEDER_LOWER_MOTOR_INVERTED= false;
-        public static final int RFEEDER_LOWER_MOTOR_CANID       = RobotParams.HwConfig.CANID_RSHOOTER_LOWER_FEEDER_MOTOR;
+        public static final int RFEEDER_LOWER_MOTOR_CANID       = RobotParams.HwConfig.CANID_RFEEDER_LOWER_MOTOR;
         public static final String RFEEDER_BACK_SENSOR_NAME     = SUBSYSTEM_NAME + "RightFeederBackSensor";
         public static final int RFEEDER_BACK_SENSOR_CHANNEL     = RobotParams.HwConfig.DIO_RFEEDER_BACK_SENSOR;
         public static final boolean RFEEDER_BACK_SENSOR_INVERTED= false;
