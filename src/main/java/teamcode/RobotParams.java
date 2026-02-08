@@ -210,7 +210,7 @@ public class RobotParams
             for (int i = 0; i < poses.length; i++)
             {
                 poses[i] = FrcField.getAprilTagFieldPose(i + 1);
-                TrcDbgTrace.globalTraceDebug("AprilTagPoses", "[%d] %s", poses[i]);
+                TrcDbgTrace.globalTraceDebug("AprilTagPoses", "[%d] %s", i, poses[i]);
             }
 
             return poses;
