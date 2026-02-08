@@ -219,8 +219,7 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
                     tracer.traceInfo(moduleName, "***** Start left shooter shooting.");
                     leftShooterDone.clear();
                     sm.addEvent(leftShooterDone);
-                    // TODO: Arm left Shooter velocity trigger to detect hopper empty.
-                    // TODO: Set left Shooter to shoot.
+                    robot.shooterSubsystem.shoot(owner, robot.leftShooter, leftShooterDone);
                     leftShooterShooting = true;
                 }
 
@@ -229,13 +228,12 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
                     tracer.traceInfo(moduleName, "***** Start right shooter shooting.");
                     rightShooterDone.clear();
                     sm.addEvent(rightShooterDone);
-                    // TODO: Arm right Shooter velocity trigger to detect hopper empty.
-                    // TODO: Set right shooter to shoot.
+                    robot.shooterSubsystem.shoot(owner, robot.rightShooter, rightShooterDone);
                     rightShooterShooting = true;
                 }
 
                 if ((robot.leftShooter == null || leftShooterShooting) &&
-                    (robot.rightShooter != null || rightShooterShooting))
+                    (robot.rightShooter == null || rightShooterShooting))
                 {
                     // Wait for both shooters done.
                     sm.waitForEvents(State.DONE, false, true);

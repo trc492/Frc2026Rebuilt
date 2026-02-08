@@ -31,11 +31,13 @@ import teamcode.FrcAuto;
 import teamcode.FrcTest;
 import teamcode.Robot;
 import teamcode.RobotParams;
+import teamcode.FrcAuto.AutoStartPos;
 import trclib.dataprocessor.TrcLookupTable;
 import trclib.motor.TrcMotor;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
 import trclib.robotcore.TrcEvent;
+import trclib.robotcore.TrcRobot;
 import trclib.sensor.TrcTriggerThresholdRange;
 import trclib.sensor.TrcTrigger.TriggerMode;
 import trclib.subsystem.TrcRollerIntake;
@@ -919,11 +921,23 @@ public class Shooter extends TrcSubsystem
     {
         if (!canceled)
         {
+            TrcRobot.RunMode runMode = TrcRobot.getRunMode();
+            FrcAuto.AutoStartPos startPos = runMode == TrcRobot.RunMode.AUTO_MODE ? FrcAuto.autoChoices.getStartPos() : null;
+            double finalTurretPos = (runMode != TrcRobot.RunMode.AUTO_MODE || startPos == AutoStartPos.START_POS_CENTER) ? 0.0:
+                startPos == AutoStartPos.START_POS_DEPOT ? 45.0: -45.0;
             TrcEvent theOtherTurretEvent = (TrcEvent) context;
             if (theOtherTurretEvent == null || theOtherTurretEvent.isSignaled())
             {
                 if (zeroCalCompletionEvent != null)
                 {
+                    if (leftShooter != null)
+                    {
+                        leftShooter.setPanAngle(finalTurretPos);
+                    }
+                    if (rightShooter != null)
+                    {
+                        rightShooter.setPanAngle(finalTurretPos);
+                    }
                     zeroCalCompletionEvent.signal();
                     zeroCalCompletionEvent = null;
                 }
