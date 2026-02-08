@@ -129,21 +129,21 @@ public class RobotParams
         public static final int CANID_LSHOOTER_FOLLOWER_MOTOR   = 8;    //Gray
         public static final int CANID_LSHOOTER_TILT_MOTOR       = 9;    //White
         public static final int CANID_LSHOOTER_TURRET_MOTOR     = 17;   //Purple
-        public static final int CANID_LFEEDER_UPPER_MOTOR       = 18; //Gray
-        public static final int CANID_LFEEDER_LOWER_MOTOR       = 19; //White
+        public static final int CANID_LFEEDER_UPPER_MOTOR       = 18;   //Gray
+        public static final int CANID_LFEEDER_LOWER_MOTOR       = 19;   //White
         // Right Shooter CAN IDs.
         public static final int CANID_RSHOOTER_PRIMARY_MOTOR    = 27;   //Purple
         public static final int CANID_RSHOOTER_FOLLOWER_MOTOR   = 28;   //Gray
         public static final int CANID_RSHOOTER_TILT_MOTOR       = 29;   //White
         public static final int CANID_RSHOOTER_TURRET_MOTOR     = 37;   //Purple
-        public static final int CANID_RFEEDER_UPPER_MOTOR       = 38; //Gray
-        public static final int CANID_RFEEDER_LOWER_MOTOR       = 39; //White
+        public static final int CANID_RFEEDER_UPPER_MOTOR       = 38;   //Gray
+        public static final int CANID_RFEEDER_LOWER_MOTOR       = 39;   //White
         // Intake CAN IDs
         public static final int CANID_INTAKE_PRIMARY_MOTOR      = 47;   //Purple
         public static final int CANID_INTAKE_FOLLOWER_MOTOR     = 48;   //Gray
         public static final int CANID_INTAKE_DEPLOYER_MOTOR     = 49;   //White
         // Climber CAN IDs
-        public static final int CANID_CLIMBER_MOTOR             = 50;   // don't know id
+        public static final int CANID_CLIMBER_MOTOR             = 57;   //Purple
 
         // Analog Input ports.
         public static final int AIN_ULTRASONIC                  = 0;
@@ -163,30 +163,9 @@ public class RobotParams
         // Pneumatic channels.
 
         // PDP Channels.
-        // Drive Base PDP Channels.
         public static final ModuleType PDP_MODULE_TYPE          = ModuleType.kRev;
-        public static final int PDP_CHANNEL_LFDRIVE_MOTOR       = 11;
-        public static final int PDP_CHANNEL_RFDRIVE_MOTOR       = 5;
-        public static final int PDP_CHANNEL_LBDRIVE_MOTOR       = 13;
-        public static final int PDP_CHANNEL_RBDRIVE_MOTOR       = 3;
-        public static final int PDP_CHANNEL_LFSTEER_MOTOR       = 10;
-        public static final int PDP_CHANNEL_RFSTEER_MOTOR       = 6;
-        public static final int PDP_CHANNEL_LBSTEER_MOTOR       = 12;
-        public static final int PDP_CHANNEL_RBSTEER_MOTOR       = 4;
-        // Miscellaneous PDP Channels.
-        public static final int PDP_CHANNEL_ROBORIO             = 20;
-        public static final int PDP_CHANNEL_VRM                 = 18;
-        public static final int PDP_CHANNEL_PCM                 = 19;
-        public static final int PDP_CHANNEL_RADIO_POE           = 22;
-        public static final int PDP_CHANNEL_ETHERNET_SWITCH     = 21;
-        public static final int PDP_CHANNEL_CAMERA              = 0;
-        public static final int PDP_CHANNEL_LED                 = 14;
 
         public static final double BATTERY_CAPACITY_WATT_HOUR   = 18.0*12.0;
-
-        // Ultrasonic sensors.
-        // public static final double SONAR_INCHES_PER_VOLT        = 1.0/0.0098; //9.8mV per inch
-        // public static final double SONAR_ERROR_THRESHOLD        = 50.0; //value should not jump 50-in per time slice.
     }   //class HwConfig
 
     /**
