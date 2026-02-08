@@ -143,7 +143,7 @@ public class DriveBase extends TrcSubsystem
                         HwConfig.CANID_BLSTEER_MOTOR, HwConfig.CANID_BRSTEER_MOTOR},
                     new boolean[] {false, false, false, false})
                 .setSwerveBaseCharacteristics(
-                    23.2, 23.2, DRIVE_MOTOR_GEAR_RATIO, STEER_MOTOR_GEAR_RATIO, 360.0 / steerGearRatio)
+                    23.2, 23.2, DRIVE_MOTOR_GEAR_RATIO, STEER_MOTOR_GEAR_RATIO, 360.0 / STEER_MOTOR_GEAR_RATIO)
                 .setSwerveModuleNames(new String[] {"flWheel", "frWheel", "blWheel", "brWheel"});
         }   //RebuiltRobotInfo
     }   //class RebuiltRobotInfo
@@ -226,7 +226,7 @@ public class DriveBase extends TrcSubsystem
                         HwConfig.CANID_BLSTEER_MOTOR, HwConfig.CANID_BRSTEER_MOTOR},
                     new boolean[] {false, false, false, false})
                 .setSwerveBaseCharacteristics(
-                    23.2, 23.2, DRIVE_MOTOR_GEAR_RATIO, STEER_MOTOR_GEAR_RATIO, 360.0 / steerGearRatio)
+                    23.2, 23.2, DRIVE_MOTOR_GEAR_RATIO, STEER_MOTOR_GEAR_RATIO, 360.0 / STEER_MOTOR_GEAR_RATIO)
                 .setSwerveModuleNames(new String[] {"flWheel", "frWheel", "blWheel", "brWheel"});
         }   //ReefscapeRobotInfo
     }   //class ReefscapeRobotInfo
