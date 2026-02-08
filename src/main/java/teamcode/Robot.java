@@ -53,6 +53,7 @@ import teamcode.autotasks.TaskAutoClimb;
 import teamcode.autotasks.TaskAutoPickup;
 import teamcode.autotasks.TaskAutoScore;
 import teamcode.indicators.LEDIndicator;
+import teamcode.subsystems.Climber;
 import teamcode.subsystems.DriveBase;
 import teamcode.subsystems.Intake;
 import teamcode.subsystems.Shooter;
@@ -111,6 +112,8 @@ public class Robot extends FrcRobot
     public Intake intakeSubsystem;
     public TrcRollerIntake intake;
     public TrcMotor intakeDeployer;
+    public Climber climberSubsystem;
+    public TrcMotor climber;
     // Auto Tasks.
     public TaskAutoScore autoScoreTask;
     public TaskAutoPickup autoPickupTask;
@@ -223,6 +226,12 @@ public class Robot extends FrcRobot
                     intakeSubsystem = new Intake(this);
                     intake = intakeSubsystem.getIntake();
                     intakeDeployer = intakeSubsystem.getDeployer();
+                }
+
+                if (RobotParams.Preferences.useClimber)
+                {
+                    climberSubsystem = new Climber();
+                    climber = climberSubsystem.getClimber();
                 }
 
                 TrcSubsystem.updateSubsystemParamsToDashboard();

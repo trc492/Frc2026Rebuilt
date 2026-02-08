@@ -41,7 +41,7 @@ import trclib.subsystem.TrcSubsystem;
 public class Intake extends TrcSubsystem
 {
     public static final String SUBSYSTEM_NAME = "Intake";
-    private static final boolean NEED_ZERO_CAL = false;
+    private static final boolean NEED_ZERO_CAL = true;
     private static final String DBKEY_PREFERENCE_SHOW_STATUS = SUBSYSTEM_NAME + "/ShowStatus";
     private static final String DBKEY_PREFERENCE_SHOW_GRAPHS = SUBSYSTEM_NAME + "/ShowGraphs";
 
@@ -251,7 +251,7 @@ public class Intake extends TrcSubsystem
         // Intake does not need zero calibration.
         if (deployer != null)
         {
-            deployer.zeroCalibrate(Params.DEPLOYER_ZERO_CAL_POWER, event);
+            deployer.zeroCalibrate(owner, Params.DEPLOYER_ZERO_CAL_POWER, event);
         }
     }   //zeroCalibrate
 
