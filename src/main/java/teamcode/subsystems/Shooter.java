@@ -23,9 +23,9 @@
 package teamcode.subsystems;
 
 import frclib.driverio.FrcDashboard;
-import frclib.motor.FrcMotorActuator;
 import frclib.motor.FrcMotorActuator.MotorType;
 import frclib.motor.FrcMotorActuator.SparkMaxMotorParams;
+import frclib.subsystem.FrcRollerIntake;
 import frclib.subsystem.FrcShooter;
 import teamcode.FrcAuto;
 import teamcode.FrcTest;
@@ -38,6 +38,8 @@ import trclib.robotcore.TrcDbgTrace;
 import trclib.robotcore.TrcEvent;
 import trclib.sensor.TrcTriggerThresholdRange;
 import trclib.sensor.TrcTrigger.TriggerMode;
+import trclib.subsystem.TrcRollerIntake;
+import trclib.subsystem.TrcRollerIntake.TriggerAction;
 import trclib.subsystem.TrcShooter;
 import trclib.subsystem.TrcShooter.AimInfo;
 import trclib.subsystem.TrcSubsystem;
@@ -225,20 +227,33 @@ public class Shooter extends TrcSubsystem
         public static final MotorType FEEDER_MOTOR_TYPE         = MotorType.CanSparkMax;
         public static final SparkMaxMotorParams FEEDER_SPARKMAX_PARAMS = new SparkMaxMotorParams(true, false);
         public static final double FEEDER_POWER_LIMIT           = 1.0;
+        public static final double FEEDER_INTAKE_POWER          = 1.0;
+        public static final double FEEDER_EJECT_POWER           = 0.5;
+        public static final double FEEDER_RETAIN_POWER          = 0.0;
+        public static final double FEEDER_INTAKE_FINISH_DELAY   = 0.0;
+        public static final double FEEDER_EJECT_FINISH_DELAY    = 0.0;
         // Left Feeder Motor Characteristics
-        public static final String LFEEDER_LOWER_MOTOR_NAME     = SUBSYSTEM_NAME + ".LeftFeederLowerMotor";
-        public static final boolean LFEEDER_LOWER_MOTOR_INVERTED= false;
-        public static final int LFEEDER_LOWER_MOTOR_CANID       = RobotParams.HwConfig.CANID_LSHOOTER_LOWER_FEEDER_MOTOR;
+        public static final String LFEEDER_NAME                 = SUBSYSTEM_NAME + ".LeftFeeder";
         public static final String LFEEDER_UPPER_MOTOR_NAME     = SUBSYSTEM_NAME + ".LeftFeederUpperMotor";
         public static final boolean LFEEDER_UPPER_MOTOR_INVERTED= true;
         public static final int LFEEDER_UPPER_MOTOR_CANID       = RobotParams.HwConfig.CANID_LSHOOTER_UPPER_FEEDER_MOTOR;
+        public static final String LFEEDER_LOWER_MOTOR_NAME     = SUBSYSTEM_NAME + ".LeftFeederLowerMotor";
+        public static final boolean LFEEDER_LOWER_MOTOR_INVERTED= false;
+        public static final int LFEEDER_LOWER_MOTOR_CANID       = RobotParams.HwConfig.CANID_LSHOOTER_LOWER_FEEDER_MOTOR;
+        public static final String LFEEDER_BACK_SENSOR_NAME     = SUBSYSTEM_NAME + "LeftFeederBackSensor";
+        public static final int LFEEDER_BACK_SENSOR_CHANNEL     = RobotParams.HwConfig.DIO_LFEEDER_BACK_SENSOR;
+        public static final boolean LFEEDER_BACK_SENSOR_INVERTED= false;
         // Right Feeder Motor Characteristics
-        public static final String RFEEDER_LOWER_MOTOR_NAME     = SUBSYSTEM_NAME + ".RightFeederLowerMotor";
-        public static final boolean RFEEDER_LOWER_MOTOR_INVERTED= false;
-        public static final int RFEEDER_LOWER_MOTOR_CANID       = RobotParams.HwConfig.CANID_RSHOOTER_LOWER_FEEDER_MOTOR;
+        public static final String RFEEDER_NAME                 = SUBSYSTEM_NAME + ".RightFeeder";
         public static final String RFEEDER_UPPER_MOTOR_NAME     = SUBSYSTEM_NAME + ".RightFeederUpperMotor";
         public static final boolean RFEEDER_UPPER_MOTOR_INVERTED= true;
         public static final int RFEEDER_UPPER_MOTOR_CANID       = RobotParams.HwConfig.CANID_RSHOOTER_UPPER_FEEDER_MOTOR;
+        public static final String RFEEDER_LOWER_MOTOR_NAME     = SUBSYSTEM_NAME + ".RightFeederLowerMotor";
+        public static final boolean RFEEDER_LOWER_MOTOR_INVERTED= false;
+        public static final int RFEEDER_LOWER_MOTOR_CANID       = RobotParams.HwConfig.CANID_RSHOOTER_LOWER_FEEDER_MOTOR;
+        public static final String RFEEDER_BACK_SENSOR_NAME     = SUBSYSTEM_NAME + "RightFeederBackSensor";
+        public static final int RFEEDER_BACK_SENSOR_CHANNEL     = RobotParams.HwConfig.DIO_RFEEDER_BACK_SENSOR;
+        public static final boolean RFEEDER_BACK_SENSOR_INVERTED= false;
     }   //class Params
 
     private static class GoalTrackingState
@@ -250,15 +265,16 @@ public class Shooter extends TrcSubsystem
     private static class ShooterContext
     {
         TrcShooter shooter;
-        TrcMotor feeder;
+        TrcRollerIntake feeder;
         TrcTimer timer;
-        ShooterContext(TrcShooter shooter, TrcMotor feeder, TrcTimer timer)
+
+        ShooterContext(TrcShooter shooter, TrcRollerIntake feeder, TrcTimer timer)
         {
             this.shooter = shooter;
             this.feeder = feeder;
             this.timer = timer;
         }
-    }
+    }   //class ShooterContext
 
     public enum TrackingMode
     {
@@ -271,12 +287,11 @@ public class Shooter extends TrcSubsystem
     private final Robot robot;
     private final TrcShooter leftShooter;
     private final TrcShooter rightShooter;
-    private final TrcMotor leftFeeder;
-    private final TrcMotor rightFeeder;
-    private final TrcDbgTrace tracer;
-
+    private final TrcRollerIntake leftFeeder;
+    private final TrcRollerIntake rightFeeder;
     private final ShooterContext leftShooterContext;
     private final ShooterContext rightShooterContext;
+    private final TrcDbgTrace tracer;
 
     private TrcEvent zeroCalCompletionEvent = null;
 
@@ -364,24 +379,33 @@ public class Shooter extends TrcSubsystem
             }
             if (Params.SHOOTER_HAS_FEEDER)
             {
-                FrcMotorActuator.Params feederParams = new FrcMotorActuator.Params()
+                FrcRollerIntake.Params feederParams = new FrcRollerIntake.Params()
                     .setPrimaryMotor(
-                        Params.LFEEDER_LOWER_MOTOR_NAME, Params.FEEDER_MOTOR_TYPE, Params.LFEEDER_LOWER_MOTOR_INVERTED,
-                        true, true, Params.LFEEDER_LOWER_MOTOR_CANID, Params.CANBUS_NAME, Params.FEEDER_SPARKMAX_PARAMS)
-                    .addFollowerMotor(
                         Params.LFEEDER_UPPER_MOTOR_NAME, Params.FEEDER_MOTOR_TYPE, Params.LFEEDER_UPPER_MOTOR_INVERTED,
-                        Params.LFEEDER_UPPER_MOTOR_CANID, Params.CANBUS_NAME, Params.FEEDER_SPARKMAX_PARAMS); 
-                leftFeeder = new FrcMotorActuator(feederParams).getMotor();
+                        Params.LFEEDER_UPPER_MOTOR_CANID, Params.CANBUS_NAME, Params.FEEDER_SPARKMAX_PARAMS)
+                    .setFollowerMotor(
+                        Params.LFEEDER_LOWER_MOTOR_NAME, Params.FEEDER_MOTOR_TYPE, Params.LFEEDER_LOWER_MOTOR_INVERTED,
+                        Params.LFEEDER_LOWER_MOTOR_CANID, Params.CANBUS_NAME, Params.FEEDER_SPARKMAX_PARAMS)
+                    .setPowerLevels(Params.FEEDER_INTAKE_POWER, Params.FEEDER_EJECT_POWER, Params.FEEDER_RETAIN_POWER)
+                    .setFinishDelays(Params.FEEDER_INTAKE_FINISH_DELAY, Params.FEEDER_EJECT_FINISH_DELAY)
+                    .setBackDigitalInputTrigger(
+                        Params.LFEEDER_BACK_SENSOR_NAME, Params.LFEEDER_BACK_SENSOR_CHANNEL,
+                        Params.LFEEDER_BACK_SENSOR_INVERTED, TriggerAction.FinishOnTrigger, TriggerMode.OnActive,
+                        null, null);
+                leftFeeder = new FrcRollerIntake(Params.LFEEDER_NAME, feederParams).getIntake();
             }
             else
             {
                 leftFeeder = null;
             }
+            leftShooterContext = new ShooterContext(
+                leftShooter, leftFeeder, new TrcTimer(instanceName + ".leftTriggerTimer"));
         }
         else
         {
             leftShooter = null;
             leftFeeder = null;
+            leftShooterContext = null;
         }
 
         if (RobotParams.Preferences.useRightShooter)
@@ -457,28 +481,35 @@ public class Shooter extends TrcSubsystem
             }
             if (Params.SHOOTER_HAS_FEEDER)
             {
-                FrcMotorActuator.Params feederParams = new FrcMotorActuator.Params()
+                FrcRollerIntake.Params feederParams = new FrcRollerIntake.Params()
                     .setPrimaryMotor(
-                        Params.RFEEDER_LOWER_MOTOR_NAME, Params.FEEDER_MOTOR_TYPE, Params.RFEEDER_LOWER_MOTOR_INVERTED,
-                        true, true, Params.RFEEDER_LOWER_MOTOR_CANID, Params.CANBUS_NAME, Params.FEEDER_SPARKMAX_PARAMS)
-                    .addFollowerMotor(
                         Params.RFEEDER_UPPER_MOTOR_NAME, Params.FEEDER_MOTOR_TYPE, Params.RFEEDER_UPPER_MOTOR_INVERTED,
-                        Params.RFEEDER_UPPER_MOTOR_CANID, Params.CANBUS_NAME, Params.FEEDER_SPARKMAX_PARAMS); 
-                rightFeeder = new FrcMotorActuator(feederParams).getMotor();
+                        Params.RFEEDER_UPPER_MOTOR_CANID, Params.CANBUS_NAME, Params.FEEDER_SPARKMAX_PARAMS)
+                    .setFollowerMotor(
+                        Params.RFEEDER_LOWER_MOTOR_NAME, Params.FEEDER_MOTOR_TYPE, Params.RFEEDER_LOWER_MOTOR_INVERTED,
+                        Params.RFEEDER_LOWER_MOTOR_CANID, Params.CANBUS_NAME, Params.FEEDER_SPARKMAX_PARAMS)
+                    .setPowerLevels(Params.FEEDER_INTAKE_POWER, Params.FEEDER_EJECT_POWER, Params.FEEDER_RETAIN_POWER)
+                    .setFinishDelays(Params.FEEDER_INTAKE_FINISH_DELAY, Params.FEEDER_EJECT_FINISH_DELAY)
+                    .setBackDigitalInputTrigger(
+                        Params.RFEEDER_BACK_SENSOR_NAME, Params.RFEEDER_BACK_SENSOR_CHANNEL,
+                        Params.RFEEDER_BACK_SENSOR_INVERTED, TriggerAction.FinishOnTrigger, TriggerMode.OnActive,
+                        null, null);
+                rightFeeder = new FrcRollerIntake(Params.RFEEDER_NAME, feederParams).getIntake();
             }
             else
             {
                 rightFeeder = null;
             }
+            rightShooterContext = new ShooterContext(
+                rightShooter, rightFeeder, new TrcTimer(instanceName + ".rightTriggerTimer"));
         }
         else
         {
             rightShooter = null;
             rightFeeder = null;
+            rightShooterContext = null;
         }
 
-        leftShooterContext = new ShooterContext(leftShooter, leftFeeder, new TrcTimer(instanceName + ".leftTriggerTimer"));
-        rightShooterContext = new ShooterContext(rightShooter, rightFeeder, new TrcTimer(instanceName + ".rightTriggerTimer"));
 
         tracer = leftShooter != null? leftShooter.tracer: rightShooter.tracer;
     }   //Shooter
@@ -508,7 +539,7 @@ public class Shooter extends TrcSubsystem
      *
      * @return created feeder.
      */
-    public TrcMotor getLeftFeeder()
+    public TrcRollerIntake getLeftFeeder()
     {
         return leftFeeder;
     }   //getLeftFeeder
@@ -518,7 +549,7 @@ public class Shooter extends TrcSubsystem
      *
      * @return created feeder.
      */
-    public TrcMotor getRightFeeder()
+    public TrcRollerIntake getRightFeeder()
     {
         return rightFeeder;
     }   //getRightFeeder
@@ -783,33 +814,50 @@ public class Shooter extends TrcSubsystem
         {
             ShooterContext shooterContext = shooter == leftShooter ? leftShooterContext: rightShooterContext;
             TrcTriggerThresholdRange velTrigger = (TrcTriggerThresholdRange) shooter.shooterMotor1VelTrigger;
-            tracer.traceInfo(instanceName, "shoot(owner=%s, shooter=%s, event=%s)", owner, shooter, completionEvent);
             double currFlywheelRPM = shooter.getShooterMotor1TargetRPM();
-            velTrigger.setTrigger(currFlywheelRPM - Params.SHOOTER_VEL_TRIGGER_THRESHOLD, 
-                currFlywheelRPM + Params.SHOOTER_VEL_TRIGGER_THRESHOLD, Params.SHOOTER_VEL_TRIGGER_SETTLING);
+
+            tracer.traceInfo(instanceName, "shoot(owner=%s, shooter=%s, event=%s)", owner, shooter, completionEvent);
+            velTrigger.setTrigger(
+                currFlywheelRPM - Params.SHOOTER_VEL_TRIGGER_THRESHOLD,
+                currFlywheelRPM + Params.SHOOTER_VEL_TRIGGER_THRESHOLD,
+                Params.SHOOTER_VEL_TRIGGER_SETTLING);
             shooterContext.timer.set(Params.SHOOTER_VEL_TRIGGER_TIMEOUT, this::velTriggerTimeout, shooterContext);
             velTrigger.enableTrigger(0.0, TriggerMode.OnBoth, this::velTriggerCallback);
 
-            shooterContext.feeder.setPower(1.0);
+            shooterContext.feeder.intake(owner, Params.FEEDER_INTAKE_POWER, 0.0, null);
         }
     }
 
+    /**
+     * This method is called when the shooter velocity is triggered usually means a ball has been shot out.
+     *
+     * @param context specifies the ShooterContext object.
+     * @param canceled specifies true if the trigger is canceled, false otherwise.
+     */
     private void velTriggerCallback(Object context, boolean canceled)
     {
         if (!canceled)
         {
             ShooterContext shooterContext = (ShooterContext) context;
+            // Keep resetting trigger timeout as long as balls are shot. It times out when there is no more balls.
             shooterContext.timer.set(Params.SHOOTER_VEL_TRIGGER_TIMEOUT, this::velTriggerTimeout, shooterContext);
         }
-    }
+    }   //velTriggerCallback
 
+    /**
+     * This method is called when the timer has timed out and there is no more balls.
+     *
+     * @param context specifies the ShooterContext object.
+     * @param canceled specifies true if the timer is canceled, false otherwise.
+     */
     private void velTriggerTimeout(Object context, boolean canceled)
     {
         ShooterContext shooterContext = (ShooterContext) context;
-        shooterContext.shooter.cancel();
+        // Stop everything.
         shooterContext.shooter.shooterMotor1VelTrigger.disableTrigger();
+        shooterContext.shooter.cancel();
         shooterContext.feeder.cancel();
-    }
+    }   //velTriggerTimeout
 
     //
     // Implements TrcSubsystem abstract methods.
@@ -825,6 +873,16 @@ public class Shooter extends TrcSubsystem
         if (rightShooter != null) rightShooter.cancel();
         if (leftFeeder != null) leftFeeder.cancel();
         if (rightFeeder != null) rightFeeder.cancel();
+        if (leftShooterContext != null)
+        {
+            leftShooterContext.timer.cancel();
+            leftShooter.shooterMotor1VelTrigger.disableTrigger();
+        }
+        if (rightShooterContext != null)
+        {
+            rightShooterContext.timer.cancel();
+            rightShooter.shooterMotor1VelTrigger.disableTrigger();
+        }
     }   //cancel
 
     /**

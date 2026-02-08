@@ -106,8 +106,8 @@ public class Robot extends FrcRobot
     public Shooter shooterSubsystem;
     public TrcShooter leftShooter;
     public TrcShooter rightShooter;
-    public TrcMotor leftFeeder;
-    public TrcMotor rightFeeder;
+    public TrcRollerIntake leftFeeder;
+    public TrcRollerIntake rightFeeder;
     public Intake intakeSubsystem;
     public TrcRollerIntake intake;
     public TrcMotor intakeDeployer;

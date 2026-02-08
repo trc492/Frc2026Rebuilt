@@ -150,6 +150,8 @@ public class RobotParams
         public static final int AIN_PRESSURE_SENSOR             = 0;
 
         // Digital Input/Output ports.
+        public static final int DIO_LFEEDER_BACK_SENSOR         = 0;
+        public static final int DIO_RFEEDER_BACK_SENSOR         = 1;
 
         // PWM channels.
         public static final int NUM_LEDS                        = 30;
