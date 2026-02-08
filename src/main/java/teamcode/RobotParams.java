@@ -27,6 +27,7 @@ import frclib.robotcore.FrcField;
 import teamcode.subsystems.DriveBase.RobotType;
 import teamcode.subsystems.Shooter;
 import trclib.pathdrive.TrcPose2D;
+import trclib.robotcore.TrcDbgTrace;
 
 /**
  * This class contains robot and subsystem constants and parameters.
@@ -209,6 +210,7 @@ public class RobotParams
             for (int i = 0; i < poses.length; i++)
             {
                 poses[i] = FrcField.getAprilTagFieldPose(i + 1);
+                TrcDbgTrace.globalTraceDebug("AprilTagPoses", "[%d] %s", poses[i]);
             }
 
             return poses;
@@ -219,10 +221,6 @@ public class RobotParams
         public static final int[] redHubAprilTags               = new int[] {26, 18, 21, 25, 24, 27, 19, 20};
         public static final int[] anyHubAprilTags               =
             new int[] {10, 26, 2, 18, 5, 21, 9, 25, 11, 24, 8, 27, 3, 19, 4, 20};
-        //
-        // Game element locations and dimensions.
-        //
-        public static final TrcPose2D blueHubPose               = new TrcPose2D(-158.32, 181.56, 0.0);
         //
         // Robot starting positions.
         //
@@ -237,24 +235,20 @@ public class RobotParams
         {
             STARTPOS_BLUE_OUTPOST, STARTPOS_BLUE_CENTER, STARTPOS_BLUE_DEPOT
         };
-
         //
         // Robot field positions.
         //
-
+        public static final TrcPose2D BLUE_HUB_POSE             = new TrcPose2D(-158.32, 181.56, 0.0);
         public static final TrcPose2D BLUE_OUTPOST_PICKUP_POSE  =
             new TrcPose2D(-26.22, 90.0, 0.0); // TODO: Fine tune x and y
         public static final TrcPose2D BLUE_DEPOT_PICKUP_POSE    =
             new TrcPose2D(-fieldWidth + 40.0, Robot.ROBOT_WIDTH / 2.0, -90.0); // TODO: Fine tune x and y
-
         public static final TrcPose2D BLUE_OUTPOST_NEUTRAL_PICKUP_POSE =
             new TrcPose2D(-30.0, fieldLength / 2.0, 90.0); // TODO: Fine tune x and y
         public static final TrcPose2D BLUE_DEPOT_NEUTRAL_PICKUP_POSE =
             new TrcPose2D(-fieldWidth + 30.0, fieldLength / 2.0, -90.0); // TODO: Fine tune x and y
-
         public static final TrcPose2D BLUE_CLIMB_POSE           =
             new TrcPose2D(170.22, fieldLength / 4.0, 0.0); // TODO: Fine tune x and y
-
     }   //class Game
 
 }   //class RobotParams

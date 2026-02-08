@@ -648,7 +648,7 @@ public class Shooter extends TrcSubsystem
                 // Enabling GoalTracking.
                 tracer.traceInfo(instanceName, "Enabling GoalTracking.");
                 goalTrackingState.goalFieldPose = trackingMode == TrackingMode.AllianceHub?
-                    robot.adjustPoseByAlliance(RobotParams.Game.blueHubPose, FrcAuto.autoChoices.getAlliance()):
+                    robot.adjustPoseByAlliance(RobotParams.Game.BLUE_HUB_POSE, FrcAuto.autoChoices.getAlliance()):
                     null;   // TODO: How do we change floor location?
                 goalTrackingState.rightShooterAimInfo = null;
                 if (leftShooter != null)
