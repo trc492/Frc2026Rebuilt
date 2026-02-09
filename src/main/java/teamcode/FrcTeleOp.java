@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcXboxController;
 import frclib.vision.FrcPhotonVision.DetectedObject;
+import teamcode.subsystems.Shooter;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
 import trclib.drivebase.TrcSwerveDrive;
 import trclib.driverio.TrcGameController.DriveMode;
@@ -67,6 +68,8 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     private boolean relocalizing = false;
     private TrcPose2D robotFieldPose = null;
     private boolean rumbling = false;
+    private double prevPanPower = 0.0;
+    private Double prevTiltPower = 0.0;
 
     /**
      * Constructor: Create an instance of the object.
@@ -236,6 +239,60 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 if (RobotParams.Preferences.useSubsystems)
                 {
                     // Analog control of subsystems.
+                    if (robot.turret != null)
+                    {
+                        double panPower = robot.operatorController.getRightStickX(true);
+
+                        if (panPower != prevPanPower)
+                        {
+                            if (operatorAltFunc)
+                            {
+                                robot.turret.setPower(panPower);
+                            }
+                            else
+                            {
+                                robot.turret.setPidPower(
+                                    panPower, Shooter.Params.TURRET_MIN_POS, Shooter.Params.TURRET_MAX_POS, true);
+                            }
+                            prevPanPower = panPower;
+                        }
+                    }
+
+                    if (robot.leftShooter != null || robot.rightShooter != null)
+                    {
+                        double tiltPower = robot.operatorController.getLeftStickY(true);
+
+                        if (tiltPower != prevTiltPower)
+                        {
+                            if (operatorAltFunc)
+                            {
+                                if (robot.leftShooter != null)
+                                {
+                                    robot.leftShooter.tiltMotor.setPower(tiltPower);
+                                }
+
+                                if (robot.rightShooter != null)
+                                {
+                                    robot.rightShooter.tiltMotor.setPower(tiltPower);
+                                }
+                            }
+                            else
+                            {
+                                if (robot.leftShooter != null)
+                                {
+                                    robot.leftShooter.tiltMotor.setPidPower(
+                                        tiltPower, Shooter.Params.TILT_MIN_POS, Shooter.Params.TILT_MAX_POS, true);
+                                }
+
+                                if (robot.rightShooter != null)
+                                {
+                                    robot.rightShooter.tiltMotor.setPidPower(
+                                        tiltPower, Shooter.Params.TILT_MIN_POS, Shooter.Params.TILT_MAX_POS, true);
+                                }
+                            }
+                            prevTiltPower = tiltPower;
+                        }
+                    }
                 }
 
                 if (RobotParams.Preferences.useRumble && robot.driverController != null)

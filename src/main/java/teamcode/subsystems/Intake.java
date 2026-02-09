@@ -48,18 +48,14 @@ public class Intake extends TrcSubsystem
     public static final class Params
     {
         public static final String CANBUS_NAME                  = RobotParams.HwConfig.CANBUS_CANIVORE;
-        public static final boolean HAS_TWO_INTAKE_MOTORS       = false;
         public static final boolean HAS_DEPLOYER                = false;
 
         // Intake:
         // Motor Characteristics
         public static final MotorType INTAKE_MOTOR_TYPE         = MotorType.CanTalonFx;
-        public static final String INTAKE_PRIMARY_MOTOR_NAME    = SUBSYSTEM_NAME + ".PrimaryMotor";
-        public static final boolean INTAKE_PRIMARY_MOTOR_INVERTED = false;
-        public static final int INTAKE_PRIMARY_MOTOR_CANID      = RobotParams.HwConfig.CANID_INTAKE_PRIMARY_MOTOR;
-        public static final String INTAKE_FOLLOWER_MOTOR_NAME   = SUBSYSTEM_NAME + ".FollowerMotor";
-        public static final boolean INTAKE_FOLLOWER_MOTOR_INVERTED = false;
-        public static final int INTAKE_FOLLOWER_MOTOR_CANID     = RobotParams.HwConfig.CANID_INTAKE_FOLLOWER_MOTOR;
+        public static final String INTAKE_MOTOR_NAME            = SUBSYSTEM_NAME + ".Motor";
+        public static final boolean INTAKE_MOTOR_INVERTED       = false;
+        public static final int INTAKE_MOTOR_CANID              = RobotParams.HwConfig.CANID_INTAKE_MOTOR;
         // Intake Parameters
         public static final double INTAKE_POWER                 = 0.5;
         public static final double INTAKE_EJECT_POWER           = -0.5;
@@ -122,21 +118,14 @@ public class Intake extends TrcSubsystem
 
         FrcRollerIntake.Params intakeParams = new FrcRollerIntake.Params()
             .setPrimaryMotor(
-                Params.INTAKE_PRIMARY_MOTOR_NAME, Params.INTAKE_MOTOR_TYPE, Params.INTAKE_PRIMARY_MOTOR_INVERTED,
-                Params.INTAKE_PRIMARY_MOTOR_CANID, Params.CANBUS_NAME, null)
+                Params.INTAKE_MOTOR_NAME, Params.INTAKE_MOTOR_TYPE, Params.INTAKE_MOTOR_INVERTED,
+                Params.INTAKE_MOTOR_CANID, Params.CANBUS_NAME, null)
             .setPowerLevels(Params.INTAKE_POWER, Params.INTAKE_EJECT_POWER, Params.INTAKE_RETAIN_POWER)
             .setFinishDelays(Params.INTAKE_FINISH_DELAY, Params.EJECT_FINISH_DELAY)
             .setBackDigitalInputTrigger(
                 Params.INTAKE_BACK_SENSOR_NAME, Params.INTAKE_BACK_SENSOR_CHANNEL,
                 Params.INTAKE_BACK_SENSOR_INVERTED, TriggerAction.FinishOnTrigger, TriggerMode.OnActive,
                 null, null);
-
-        if (Params.HAS_TWO_INTAKE_MOTORS)
-        {
-            intakeParams.setFollowerMotor(
-                Params.INTAKE_FOLLOWER_MOTOR_NAME, Params.INTAKE_MOTOR_TYPE, Params.INTAKE_FOLLOWER_MOTOR_INVERTED,
-                Params.INTAKE_FOLLOWER_MOTOR_CANID, Params.CANBUS_NAME, null);
-        }
         intake = new FrcRollerIntake(SUBSYSTEM_NAME, intakeParams).getIntake();
 
         if (Params.HAS_DEPLOYER)
@@ -148,15 +137,17 @@ public class Intake extends TrcSubsystem
                 .setPositionScaleAndOffset(Params.DEPLOYER_INCHES_PER_COUNT, Params.DEPLOYER_POS_OFFSET);
             deployer = new FrcMotorActuator(deployerParams).getMotor();
             deployer.setPositionPidParameters(
-                new PidParams().setPidCoefficients(
-                    Params.DEPLOYER_MOTOR_PID_KP, Params.DEPLOYER_MOTOR_PID_KI, Params.DEPLOYER_MOTOR_PID_KD,
-                    Params.DEPLOYER_MOTOR_PID_KF, Params.DEPLOYER_MOTOR_PID_IZONE), null);
+                new PidParams()
+                    .setPidCoefficients(
+                        Params.DEPLOYER_MOTOR_PID_KP, Params.DEPLOYER_MOTOR_PID_KI, Params.DEPLOYER_MOTOR_PID_KD,
+                        Params.DEPLOYER_MOTOR_PID_KF, Params.DEPLOYER_MOTOR_PID_IZONE)
+                    .setPidControlParams(Params.DEPLOYER_PID_TOLERANCE, false), null);
             // There is no lower limit switch, enable stall detection for zero calibration and soft limits for
             // protection.
+            deployer.setSoftPositionLimits(Params.DEPLOYER_MIN_POS, Params.DEPLOYER_MAX_POS, false);
             deployer.setStallProtection(
                 Params.DEPLOYER_STALL_MIN_POWER, Params.DEPLOYER_STALL_TOLERANCE, Params.DEPLOYER_STALL_TIMEOUT,
                 Params.DEPLOYER_STALL_RESET_TIMEOUT);
-            deployer.setSoftPositionLimits(Params.DEPLOYER_MIN_POS, Params.DEPLOYER_MAX_POS, false);
         }
         else
         {
@@ -279,14 +270,13 @@ public class Intake extends TrcSubsystem
             if (slowLoop)
             {
                 dashboard.displayPrintf(
-                    lineNum++, "%s: power=%.1f, current=%.1f, auto=%s",
-                    Params.INTAKE_PRIMARY_MOTOR_NAME, intake.getPower(), intake.getCurrent(), intake.isAutoActive());
+                    lineNum++, "Intake: power=%.1f, current=%.1f, auto=%s",
+                    intake.getPower(), intake.getCurrent(), intake.isAutoActive());
                 if (deployer != null)
                 {
                     dashboard.displayPrintf(
-                        lineNum++, "%s: power=%.1f, current=%.1f, pos=%f/%f",
-                        Params.DEPLOYER_MOTOR_NAME, deployer.getPower(), deployer.getCurrent(),
-                        deployer.getPosition(), deployer.getPidTarget());
+                        lineNum++, "Deployer: power=%.1f, current=%.1f, pos=%f/%f",
+                        deployer.getPower(), deployer.getCurrent(), deployer.getPosition(), deployer.getPidTarget());
                 }
             }
         }

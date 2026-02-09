@@ -129,19 +129,17 @@ public class RobotParams
         public static final int CANID_LSHOOTER_PRIMARY_MOTOR    = 7;    //Purple
         public static final int CANID_LSHOOTER_FOLLOWER_MOTOR   = 8;    //Gray
         public static final int CANID_LSHOOTER_TILT_MOTOR       = 9;    //White
-        public static final int CANID_LSHOOTER_TURRET_MOTOR     = 17;   //Purple
-        public static final int CANID_LFEEDER_UPPER_MOTOR       = 18;   //Gray
-        public static final int CANID_LFEEDER_LOWER_MOTOR       = 19;   //White
+        public static final int CANID_LOUTAKE_MOTOR             = 37;   //Purple
         // Right Shooter CAN IDs.
         public static final int CANID_RSHOOTER_PRIMARY_MOTOR    = 27;   //Purple
         public static final int CANID_RSHOOTER_FOLLOWER_MOTOR   = 28;   //Gray
         public static final int CANID_RSHOOTER_TILT_MOTOR       = 29;   //White
-        public static final int CANID_RSHOOTER_TURRET_MOTOR     = 37;   //Purple
-        public static final int CANID_RFEEDER_UPPER_MOTOR       = 38;   //Gray
-        public static final int CANID_RFEEDER_LOWER_MOTOR       = 39;   //White
+        public static final int CANID_ROUTAKE_MOTOR             = 38;   //Gray
+        // Common Shooter CAN IDs.
+        public static final int CANID_TURRET_MOTOR              = 39;   //White
+        public static final int CANID_FEEDER_MOTOR              = 47;   //Purple
         // Intake CAN IDs
-        public static final int CANID_INTAKE_PRIMARY_MOTOR      = 47;   //Purple
-        public static final int CANID_INTAKE_FOLLOWER_MOTOR     = 48;   //Gray
+        public static final int CANID_INTAKE_MOTOR              = 48;   //Gray
         public static final int CANID_INTAKE_DEPLOYER_MOTOR     = 49;   //White
         // Climber CAN IDs
         public static final int CANID_CLIMBER_MOTOR             = 57;   //Purple
@@ -151,9 +149,10 @@ public class RobotParams
         public static final int AIN_PRESSURE_SENSOR             = 0;
 
         // Digital Input/Output ports.
-        public static final int DIO_LFEEDER_BACK_SENSOR         = 0;
-        public static final int DIO_RFEEDER_BACK_SENSOR         = 1;
+        public static final int DIO_LOUTAKE_BACK_SENSOR         = 0;
+        public static final int DIO_ROUTAKE_BACK_SENSOR         = 1;
         public static final int DIO_INTAKE_BACK_SENSOR          = 2;
+        public static final int DIO_CLIMBER_LOWER_LIMITSW       = 3;
 
         // PWM channels.
         public static final int NUM_LEDS                        = 30;
@@ -239,6 +238,10 @@ public class RobotParams
         // Robot field positions.
         //
         public static final TrcPose2D BLUE_HUB_POSE             = new TrcPose2D(-158.32, 181.56, 0.0);
+        public static final TrcPose2D BLUE_PASSBACK_AUDIENCE_SIDE =
+            new TrcPose2D(0.0, 0.0, 0.0);
+        public static final TrcPose2D BLUE_PASSBACK_SCORETABLE_SIDE =
+            new TrcPose2D(0.0, 0.0, 0.0);
         public static final TrcPose2D BLUE_OUTPOST_PICKUP_POSE  =
             new TrcPose2D(-26.22, 90.0, 0.0); // TODO: Fine tune x and y
         public static final TrcPose2D BLUE_DEPOT_PICKUP_POSE    =

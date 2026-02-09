@@ -854,6 +854,42 @@ public class FrcTest extends FrcTeleOp
                                 robot.rightShooter.setShooterMotorRPM(flywheelRPM, null);
                             }
                         }
+                        else if (robot.leftOutake != null &&
+                                 subsystemName.equalsIgnoreCase(Shooter.Params.LOUTAKE_MOTOR_NAME))
+                        {
+                            if (robot.leftOutake.isActive())
+                            {
+                                robot.leftOutake.cancel();
+                            }
+                            else
+                            {
+                                robot.leftOutake.autoIntake(null);
+                            }
+                        }
+                        else if (robot.rightOutake != null &&
+                                 subsystemName.equalsIgnoreCase(Shooter.Params.ROUTAKE_MOTOR_NAME))
+                        {
+                            if (robot.rightOutake.isActive())
+                            {
+                                robot.rightOutake.cancel();
+                            }
+                            else
+                            {
+                                robot.rightOutake.autoIntake(null);
+                            }
+                        }
+                        else if (robot.feeder != null &&
+                                 subsystemName.equalsIgnoreCase(Shooter.Params.FEEDER_MOTOR_NAME))
+                        {
+                            if (robot.feeder.getPower() != 0.0)
+                            {
+                                robot.feeder.setPower(0.0);
+                            }
+                            else
+                            {
+                                robot.feeder.setPower(1.0);
+                            }
+                        }
                     }
                     passToTeleOp = false;
                 }
@@ -883,15 +919,10 @@ public class FrcTest extends FrcTeleOp
                         {
                             robot.rightShooter.tiltMotor.presetPositionUp(moduleName, Shooter.Params.TILT_POWER_LIMIT);
                         }
-                        else if (robot.leftShooter.panMotor != null &&
-                                 subsystemName.equalsIgnoreCase(Shooter.Params.LTURRET_MOTOR_NAME))
+                        else if (robot.turret != null &&
+                                 subsystemName.equalsIgnoreCase(Shooter.Params.TURRET_MOTOR_NAME))
                         {
-                            robot.leftShooter.panMotor.presetPositionUp(moduleName, Shooter.Params.TURRET_POWER_LIMIT);
-                        }
-                        else if (robot.rightShooter != null && robot.rightShooter.panMotor != null &&
-                                 subsystemName.equalsIgnoreCase(Shooter.Params.RTURRET_MOTOR_NAME))
-                        {
-                            robot.rightShooter.panMotor.presetPositionUp(moduleName, Shooter.Params.TURRET_POWER_LIMIT);
+                            robot.turret.presetPositionUp(moduleName, Shooter.Params.TURRET_POWER_LIMIT);
                         }
                     }
                     passToTeleOp = false;
@@ -915,15 +946,10 @@ public class FrcTest extends FrcTeleOp
                         {
                             robot.rightShooter.tiltMotor.presetPositionDown(moduleName, Shooter.Params.TILT_POWER_LIMIT);
                         }
-                        else if (robot.leftShooter.panMotor != null &&
-                                 subsystemName.equalsIgnoreCase(Shooter.Params.LTURRET_MOTOR_NAME))
+                        else if (robot.turret != null &&
+                                 subsystemName.equalsIgnoreCase(Shooter.Params.TURRET_MOTOR_NAME))
                         {
-                            robot.leftShooter.panMotor.presetPositionDown(moduleName, Shooter.Params.TURRET_POWER_LIMIT);
-                        }
-                        else if (robot.rightShooter != null && robot.rightShooter.panMotor != null &&
-                                 subsystemName.equalsIgnoreCase(Shooter.Params.RTURRET_MOTOR_NAME))
-                        {
-                            robot.rightShooter.panMotor.presetPositionDown(moduleName, Shooter.Params.TURRET_POWER_LIMIT);
+                            robot.turret.presetPositionDown(moduleName, Shooter.Params.TURRET_POWER_LIMIT);
                         }
                     }
                     passToTeleOp = false;

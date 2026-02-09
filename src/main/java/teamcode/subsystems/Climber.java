@@ -51,6 +51,9 @@ public class Climber extends TrcSubsystem
         public static final String CLIMBER_MOTOR_NAME           = SUBSYSTEM_NAME + ".Motor";
         public static final boolean CLIMBER_MOTOR_INVERTED      = false;
         public static final int CLIMBER_MOTOR_CANID             = RobotParams.HwConfig.CANID_CLIMBER_MOTOR;
+        public static final String CLIMBER_LOWER_LIMITSW_NAME   = SUBSYSTEM_NAME + ".LowerLimitSw";
+        public static final int CLIMBER_LOWER_LIMITSW_CHANNEL   = RobotParams.HwConfig.DIO_CLIMBER_LOWER_LIMITSW;
+        public static final boolean CLIMBER_LOWER_LIMITSW_INVERTED = false;
         // PID Parameters
         public static final double CLIMBER_MOTOR_PID_KP         = 0.0;
         public static final double CLIMBER_MOTOR_PID_KI         = 0.0;
@@ -96,18 +99,17 @@ public class Climber extends TrcSubsystem
             .setPrimaryMotor(
                 Params.CLIMBER_MOTOR_NAME, Params.CLIMBER_MOTOR_TYPE, Params.CLIMBER_MOTOR_INVERTED, true, true,
                 Params.CLIMBER_MOTOR_CANID, Params.CANBUS_NAME, Params.CLIMBER_SPARKMAX_PARAMS)
+            .setLowerLimitSwitch(
+                Params.CLIMBER_LOWER_LIMITSW_NAME, Params.CLIMBER_LOWER_LIMITSW_CHANNEL,
+                Params.CLIMBER_LOWER_LIMITSW_INVERTED)
             .setPositionScaleAndOffset(Params.CLIMBER_INCHES_PER_COUNT, Params.CLIMBER_POS_OFFSET);
         climber = new FrcMotorActuator(climberMotorParams).getMotor();
         climber.setPositionPidParameters(
-            new PidParams().setPidCoefficients(
-                Params.CLIMBER_MOTOR_PID_KP, Params.CLIMBER_MOTOR_PID_KI, Params.CLIMBER_MOTOR_PID_KD,
-                Params.CLIMBER_MOTOR_PID_KF, Params.CLIMBER_MOTOR_PID_IZONE), null);
-        // There is no lower limit switch, enable stall detection for zero calibration and soft limits for
-        // protection.
-        climber.setStallProtection(
-            Params.CLIMBER_STALL_MIN_POWER, Params.CLIMBER_STALL_TOLERANCE, Params.CLIMBER_STALL_TIMEOUT,
-            Params.CLIMBER_STALL_RESET_TIMEOUT);
-        climber.setSoftPositionLimits(Params.CLIMBER_MIN_POS, Params.CLIMBER_MAX_POS, false);
+            new PidParams()
+                .setPidCoefficients(
+                    Params.CLIMBER_MOTOR_PID_KP, Params.CLIMBER_MOTOR_PID_KI, Params.CLIMBER_MOTOR_PID_KD,
+                    Params.CLIMBER_MOTOR_PID_KF, Params.CLIMBER_MOTOR_PID_IZONE)
+                .setPidControlParams(Params.CLIMBER_PID_TOLERANCE, false), null);
     }   //Climber
 
     public TrcMotor getClimber()

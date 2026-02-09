@@ -191,7 +191,7 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
                     // If GoalTracking is not already ON, turn it ON now.
                     tracer.traceInfo(moduleName, "***** Turn ON GoalTracking.");
                     robot.shooterSubsystem.setGoalTrackingEnabled(
-                        taskParams.passMode? Shooter.TrackingMode.AllianceFloor: Shooter.TrackingMode.AllianceHub);
+                        taskParams.passMode? Shooter.TrackingMode.Passback: Shooter.TrackingMode.AllianceHub);
                 }
 
                 if (robot.leftShooter != null)

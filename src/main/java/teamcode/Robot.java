@@ -107,8 +107,10 @@ public class Robot extends FrcRobot
     public Shooter shooterSubsystem;
     public TrcShooter leftShooter;
     public TrcShooter rightShooter;
-    public TrcRollerIntake leftFeeder;
-    public TrcRollerIntake rightFeeder;
+    public TrcRollerIntake leftOutake;
+    public TrcRollerIntake rightOutake;
+    public TrcMotor turret;
+    public TrcMotor feeder;
     public Intake intakeSubsystem;
     public TrcRollerIntake intake;
     public TrcMotor intakeDeployer;
@@ -217,8 +219,10 @@ public class Robot extends FrcRobot
                     shooterSubsystem = new Shooter(this);
                     leftShooter = shooterSubsystem.getLeftShooter();
                     rightShooter = shooterSubsystem.getRightShooter();
-                    leftFeeder = shooterSubsystem.getLeftFeeder();
-                    rightFeeder = shooterSubsystem.getRightFeeder();
+                    leftOutake = shooterSubsystem.getLeftOutake();
+                    rightOutake = shooterSubsystem.getRightOutake();
+                    turret = shooterSubsystem.getTurret();
+                    feeder = shooterSubsystem.getFeeder();
                 }
 
                 if (RobotParams.Preferences.useIntake)
