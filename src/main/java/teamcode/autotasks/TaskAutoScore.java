@@ -25,8 +25,10 @@ package teamcode.autotasks;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import teamcode.Robot;
 import teamcode.subsystems.Shooter;
+import teamcode.subsystems.Shooter.TrackingMode;
 import trclib.robotcore.TrcAutoTask;
 import trclib.robotcore.TrcEvent;
+import trclib.robotcore.TrcOwnershipMgr;
 import trclib.robotcore.TrcRobot;
 import trclib.robotcore.TrcTaskMgr;
 
@@ -40,25 +42,23 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
     public enum State
     {
         START,
-        DO_VISION,
-        AIM,
         SHOOT,
         DONE
     }   //enum State
 
     private static class TaskParams
     {
-        public boolean passMode = false;
+        public boolean passback = false;
 
-        public TaskParams setPassMode(boolean passMode)
+        public TaskParams setPassback(boolean passback)
         {
-            this.passMode = passMode;
+            this.passback = passback;
             return this;
-        }   //setPassMode
+        }   //setPassback
 
         public String toString()
         {
-            return "(passMode" + passMode + ")";
+            return "(passback=" + passback + ")";
         }   //toString
     }   //class TaskParams
 
@@ -66,10 +66,11 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
     private final Robot robot;
     private final TrcEvent leftShooterReadyEvent;
     private final TrcEvent rightShooterReadyEvent;
+    private final TrcEvent turretReadyEvent;
     private final TrcEvent leftShooterDone;
     private final TrcEvent rightShooterDone;
 
-    private boolean enabledGoalTracking = false;
+    private TrackingMode prevGoalTrackingMode = null;
     private boolean leftShooterShooting = false;
     private boolean rightShooterShooting = false;
 
@@ -84,6 +85,7 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
         this.robot = robot;
         this.leftShooterReadyEvent = new TrcEvent(moduleName + ".leftShooterReady");
         this.rightShooterReadyEvent = new TrcEvent(moduleName + ".rightShooterReady");
+        this.turretReadyEvent = new TrcEvent(moduleName + ".turretReady");
         this.leftShooterDone = new TrcEvent(moduleName + ".leftShooterDone");
         this.rightShooterDone = new TrcEvent(moduleName + ".rightShooterDone");
     }   //TaskAutoScore
@@ -93,14 +95,17 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
      *
      * @param owner specifies the owner to acquire subsystem ownerships, can be null if not requiring ownership.
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
+     * @param passback specifies true to set GoalTracking to Passback mode, false otherwise.
      */
     public void autoScore(
-        String owner, TrcEvent completionEvent, Alliance alliance, boolean passMode)
+        String owner, TrcEvent completionEvent, Alliance alliance, boolean passback)
     {
-        autoScoreParams.setPassMode(passMode);
+        autoScoreParams.setPassback(passback);
         tracer.traceInfo(
             moduleName,
             "autoScore(owner=" + owner + ", event=" + completionEvent + ", taskParams=" + autoScoreParams + ")");
+        prevGoalTrackingMode = robot.shooterSubsystem.getGoalTrackingMode();
+        tracer.traceInfo(moduleName, "prevGoalTrackingMode=%s", prevGoalTrackingMode);
         startAutoTask(owner, State.START, autoScoreParams, completionEvent);
     }   //autoScore
 
@@ -119,12 +124,12 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
     @Override
     protected boolean acquireSubsystemsOwnership(String owner)
     {
-        // Call each subsystem.acquireExclusiveAccess(owner) and return true only if all acquires returned true.
-        // For example:
-        // return owner == null ||
-        //        subsystem1.acquireExclusiveAccess(owner) && subsystem2.acquireExclusiveAccess(owner);
-        // return owner == null || robot.robotBase.driveBase.acquireExclusiveAccess(owner);
-        return true;
+        // Shooters and turret are controlled by GoalTracking, so don't take ownership here.
+        // AutoShoot involves outakes and feeder, take their ownership here.
+        return owner == null ||
+               (robot.leftOutake == null || robot.leftOutake.acquireExclusiveAccess(owner)) &&
+               (robot.rightOutake == null || robot.rightOutake.acquireExclusiveAccess(owner)) &&
+               (robot.feeder == null) || robot.feeder.acquireExclusiveAccess(owner);
     }   //acquireSubsystemsOwnership
 
     /**
@@ -136,15 +141,19 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
     @Override
     protected void releaseSubsystemsOwnership(String owner)
     {
-        // if (owner != null)
-        // {
-        //     TrcOwnershipMgr ownershipMgr = TrcOwnershipMgr.getInstance();
-        //     tracer.traceInfo(
-        //         moduleName,
-        //         "Releasing subsystem ownership on behalf of " + owner +
-        //         "\n\trobotDrive=" + ownershipMgr.getOwner(robot.robotBase.driveBase));
-        //     robot.robotBase.driveBase.releaseExclusiveAccess(owner);
-        // }
+        if (owner != null)
+        {
+            TrcOwnershipMgr ownershipMgr = TrcOwnershipMgr.getInstance();
+            tracer.traceInfo(
+                moduleName,
+                "Releasing subsystem ownership on behalf of " + owner +
+                "\n\tleftOutake=" + ownershipMgr.getOwner(robot.leftOutake) +
+                "\n\trightOutake=" + ownershipMgr.getOwner(robot.rightOutake) +
+                "\n\tfeeder=" + ownershipMgr.getOwner(robot.feeder));
+            robot.leftOutake.releaseExclusiveAccess(owner);
+            robot.rightOutake.releaseExclusiveAccess(owner);
+            robot.feeder.releaseExclusiveAccess(owner);
+        }
     }   //releaseSubsystemsOwnership
 
     /**
@@ -157,12 +166,11 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
     protected void stopSubsystems(String owner)
     {
         tracer.traceInfo(moduleName, "Stopping subsystems.");
-        if (enabledGoalTracking)
-        {
-            robot.shooterSubsystem.setGoalTrackingEnabled(null);
-            enabledGoalTracking = false;
-        }
-        // robot.robotBase.cancel(owner);
+        if (robot.leftOutake != null) robot.leftOutake.cancel();
+        if (robot.rightOutake != null) robot.rightOutake.cancel();
+        if (robot.feeder != null) robot.feeder.cancel();
+        robot.shooterSubsystem.setGoalTrackingEnabled(prevGoalTrackingMode);
+        prevGoalTrackingMode = null;
     }   //stopSubsystems
 
     /**
@@ -186,13 +194,10 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
         switch (state)
         {
             case START:
-                if (!robot.shooterSubsystem.isGoalTrackingEnabled())
-                {
-                    // If GoalTracking is not already ON, turn it ON now.
-                    tracer.traceInfo(moduleName, "***** Turn ON GoalTracking.");
-                    robot.shooterSubsystem.setGoalTrackingEnabled(
-                        taskParams.passMode? Shooter.TrackingMode.Passback: Shooter.TrackingMode.AllianceHub);
-                }
+                tracer.traceInfo(
+                    moduleName, "***** Setting GoalTrackingMode (passback=%s).", taskParams.passback);
+                robot.shooterSubsystem.setGoalTrackingEnabled(
+                    taskParams.passback? Shooter.TrackingMode.Passback: Shooter.TrackingMode.AllianceHub);
 
                 if (robot.leftShooter != null)
                 {
@@ -210,11 +215,20 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
                     robot.rightShooter.waitForShooterReady(rightShooterReadyEvent);
                 }
 
+                if (robot.turret != null)
+                {
+                    tracer.traceInfo(moduleName, "***** Wait for Turret ready.");
+                    turretReadyEvent.clear();
+                    sm.addEvent(turretReadyEvent);
+                    robot.shooterSubsystem.waitForTurretReady(turretReadyEvent);
+                }
+
                 sm.waitForEvents(State.SHOOT, false, false);
                 break;
 
             case SHOOT:
-                if (robot.leftShooter != null &&  !leftShooterShooting && leftShooterReadyEvent.isSignaled())
+                if (robot.leftShooter != null &&  !leftShooterShooting &&
+                    leftShooterReadyEvent.isSignaled() && turretReadyEvent.isSignaled())
                 {
                     tracer.traceInfo(moduleName, "***** Start left shooter shooting.");
                     leftShooterDone.clear();
@@ -223,7 +237,8 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
                     leftShooterShooting = true;
                 }
 
-                if (robot.rightShooter != null && !rightShooterShooting && rightShooterReadyEvent.isSignaled())
+                if (robot.rightShooter != null && !rightShooterShooting &&
+                    rightShooterReadyEvent.isSignaled() && turretReadyEvent.isSignaled())
                 {
                     tracer.traceInfo(moduleName, "***** Start right shooter shooting.");
                     rightShooterDone.clear();

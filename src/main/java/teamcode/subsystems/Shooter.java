@@ -60,8 +60,8 @@ public class Shooter extends TrcSubsystem
     private static final String DBKEY_PREFERENCE_USE_MOTION_COMPENSATION = SUBSYSTEM_NAME + "/UseMotionCompensation";
     private static final String DBKEY_SHOOTER_CURRENT = "Shooter/ShooterCurrent";
 
-    public static final String GOAL_ZONE_SHOOT_POINT = "GoalZoneShootPoint";
-    public static final String FAR_ZONE_SHOOT_POINT = "FarZoneShootPoint";
+    public static final String HUB_SHOOT_POINT = "HubShootPoint";
+    public static final String TOWER_SHOOT_POINT = "TowerShootPoint";
 
     public static final TrcLookupTable.Region[] shootRegions =
     {
@@ -84,7 +84,7 @@ public class Shooter extends TrcSubsystem
         .addEntry(null,                     29.9,       shootRegions[0],    3600.0)
         .addEntry(null,                     35.25,      shootRegions[0],    3650.0)
         // Region 2: tilt 30°
-        .addEntry(GOAL_ZONE_SHOOT_POINT,    35.2500001, shootRegions[1],    3600.0)
+        .addEntry(HUB_SHOOT_POINT,    35.2500001, shootRegions[1],    3600.0)
         .addEntry(null,                     44.0,       shootRegions[1],    3650.0)
         // Region 3: tilt 33°
         .addEntry(null,                     44.0000001, shootRegions[2],    3700.0)
@@ -97,7 +97,7 @@ public class Shooter extends TrcSubsystem
         // Region 5: tilt 45°
         .addEntry(null,                     91.1000001, shootRegions[4],    4636.76363)
         .addEntry(null,                     100.8,      shootRegions[4],    4780.35893)
-        .addEntry(FAR_ZONE_SHOOT_POINT,     110.7,      shootRegions[4],    4926.91497)
+        .addEntry(TOWER_SHOOT_POINT,     110.7,      shootRegions[4],    4926.91497)
         .addEntry(null,                     123.8,      shootRegions[4],    5120.84265)
         .addEntry(null,                     133.5,      shootRegions[4],    5264.43796)
         .addEntry(null,                     144.3,      shootRegions[4],    5424.31727)
@@ -210,6 +210,7 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_STALL_TOLERANCE       = 0.1;
         public static final double TURRET_STALL_TIMEOUT         = 0.1;
         public static final double TURRET_STALL_RESET_TIMEOUT   = 0.0;
+
         public static final double LTURRET_X_OFFSET             = 0.0;      // inches from robot center
         public static final double LTURRET_Y_OFFSET             = -3.246;   // inches from robot center
         public static double LCAM_DISTANCE_FROM_TURRET          = 2.9837;   // inches from turret center
@@ -248,13 +249,13 @@ public class Shooter extends TrcSubsystem
         public static final String FEEDER_MOTOR_NAME            = SUBSYSTEM_NAME + ".FeederMotor";
         public static final boolean FEEDER_MOTOR_INVERTED       = true;
         public static final int FEEDER_MOTOR_CANID              = RobotParams.HwConfig.CANID_FEEDER_MOTOR;
-        public static final SparkMaxMotorParams FEEDER_SPARKMAX_PARAMS =
-            new SparkMaxMotorParams(true, false);
+        public static final SparkMaxMotorParams FEEDER_SPARKMAX_PARAMS = new SparkMaxMotorParams(true, false);
         public static final double FEEDER_POWER                 = 1.0;
     }   //class Params
 
     private static class GoalTrackingState
     {
+        TrackingMode trackingMode = null;
         TrcPose2D goalFieldPose = null;
         AimInfo rightShooterAimInfo = null;
     }   //class GoalTrackingState
@@ -292,6 +293,7 @@ public class Shooter extends TrcSubsystem
     private final ShooterContext rightShooterContext;
     private final TrcEvent zeroCalCallbackEvent;
     private final TrcDbgTrace tracer;
+    private TrcEvent turretReadyEvent = null;
 
     /**
      * Constructor: Creates an instance of the object.
@@ -629,9 +631,22 @@ public class Shooter extends TrcSubsystem
     {
         synchronized (goalTrackingState)
         {
-            return goalTrackingState.goalFieldPose != null;
+            return goalTrackingState.trackingMode != null;
         }
     }   //isGoalTrackingEnabled
+
+    /**
+     * This method returns the tracking mode.
+     *
+     * @return goal tracking mode.
+     */
+    public TrackingMode getGoalTrackingMode()
+    {
+        synchronized (goalTrackingState)
+        {
+            return goalTrackingState.trackingMode;
+        }
+    }   //getGoalTrackingMode
 
     /**
      * This method enables/disables Goal Tracking.
@@ -642,12 +657,14 @@ public class Shooter extends TrcSubsystem
     {
         synchronized (goalTrackingState)
         {
-            if (goalTrackingState.goalFieldPose == null && trackingMode != null)
+            if (goalTrackingState.trackingMode == null && trackingMode != null ||
+                goalTrackingState.trackingMode != null && trackingMode != goalTrackingState.trackingMode)
             {
-                // Enabling GoalTracking.
+                // Enabling GoalTracking or changing tracking mode.
                 Alliance alliance = FrcAuto.autoChoices.getAlliance();
 
-                tracer.traceInfo(instanceName, "Enabling GoalTracking.");
+                tracer.traceInfo(instanceName, "Enabling GoalTracking (trackingMode=%s).", trackingMode);
+                goalTrackingState.trackingMode = trackingMode;
                 if (trackingMode == TrackingMode.AllianceHub)
                 {
                     goalTrackingState.goalFieldPose =
@@ -655,7 +672,7 @@ public class Shooter extends TrcSubsystem
                 }
                 else
                 {
-                    // Passback mode.
+                    // Passback tracking mode.
                     TrcPose2D robotPose = robot.robotBase.driveBase.getFieldPosition();
                     goalTrackingState.goalFieldPose =
                         robot.adjustPoseByAlliance(
@@ -674,9 +691,10 @@ public class Shooter extends TrcSubsystem
                     rightShooter.setGoalTrackingEnabled(this::getRightShooterAimInfo);
                 }
             }
-            else if (goalTrackingState.goalFieldPose != null && trackingMode == null)
+            else if (goalTrackingState.trackingMode != null && trackingMode == null)
             {
                 tracer.traceInfo(instanceName, "Disabling GoalTracking.");
+                goalTrackingState.trackingMode = null;
                 goalTrackingState.goalFieldPose = null;
                 goalTrackingState.rightShooterAimInfo = null;
                 if (leftShooter != null)
@@ -752,6 +770,7 @@ public class Shooter extends TrcSubsystem
             {
                 // Get AimInfo by Oodometry.
                 TrcPose2D robotPose = robot.robotBase.driveBase.getFieldPosition();
+                // getLeftShooterAimInfo is called by GoalTracking, therefore goalFieldPose should not be null.
                 targetPose = goalTrackingState.goalFieldPose.relativeTo(robotPose);
                 shootParams = shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), useRegression);
                 double targetPanAngle = targetPose.angle % 360.0;
@@ -792,7 +811,8 @@ public class Shooter extends TrcSubsystem
                 // Shooter aim only controls flywheel RPM and tilt angle, we control the turret position here.
                 if (turret != null)
                 {
-                    turret.setPosition(aimInfo.panAngle);
+                    turret.setPosition(0.0, aimInfo.panAngle, true, Params.TURRET_POWER_LIMIT, turretReadyEvent);
+                    turretReadyEvent = null;
                 }
             }
             else
@@ -829,6 +849,16 @@ public class Shooter extends TrcSubsystem
             return goalTrackingState.rightShooterAimInfo;
         }
     }   //getRightShooterAimInfo
+
+    /**
+     * This method waits for the turret finished aiming the target and will signal the given event.
+     *
+     * @param event specifies the event to signal when aiming is on-target.
+     */
+    public void waitForTurretReady(TrcEvent event)
+    {
+        turretReadyEvent = event;
+    }   //waitForTurretReady
 
     /**
      * This method is called to launch the fuel into the shooter, typically when TrcShooter has reached shooting

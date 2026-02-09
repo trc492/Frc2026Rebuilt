@@ -50,14 +50,14 @@ public class LEDIndicator
 
     private static final TrcAddressableLED.LedPattern aprilTagLockedPattern =   // Green
         new TrcAddressableLED.LedPattern(APRILTAG_LOCKED, new FrcColor(0, 63, 0), RobotParams.HwConfig.NUM_LEDS);
-    private static final TrcAddressableLED.LedPattern aprilTagFoundPattern =    // Magenta
-        new TrcAddressableLED.LedPattern(APRILTAG_FOUND, new FrcColor(63, 0, 63), RobotParams.HwConfig.NUM_LEDS);
+    private static final TrcAddressableLED.LedPattern aprilTagFoundPattern =    // Green
+        new TrcAddressableLED.LedPattern(APRILTAG_FOUND, new FrcColor(0, 63, 0), RobotParams.HwConfig.NUM_LEDS);
     private static final TrcAddressableLED.LedPattern yellowBlobPattern =       // Yellow
         new TrcAddressableLED.LedPattern(YELLOW_BLOB, new FrcColor(63, 63, 0), RobotParams.HwConfig.NUM_LEDS);
     private static final TrcAddressableLED.LedPattern notFoundPattern =         // Red
         new TrcAddressableLED.LedPattern(NOT_FOUND, new FrcColor(63, 0, 0), RobotParams.HwConfig.NUM_LEDS);
-    private static final TrcAddressableLED.LedPattern intakeOnPattern =   // Cyan
-        new TrcAddressableLED.LedPattern(DRIVE_FIELD_MODE, new FrcColor(0, 63, 63), RobotParams.HwConfig.NUM_LEDS);
+    private static final TrcAddressableLED.LedPattern intakeOnPattern =         // Magenta
+        new TrcAddressableLED.LedPattern(DRIVE_FIELD_MODE, new FrcColor(63, 0, 63), RobotParams.HwConfig.NUM_LEDS);
     private static final TrcAddressableLED.LedPattern driveFieldModePattern =   // Cyan
         new TrcAddressableLED.LedPattern(DRIVE_FIELD_MODE, new FrcColor(0, 63, 63), RobotParams.HwConfig.NUM_LEDS);
     private static final TrcAddressableLED.LedPattern driveRobotModePattern =   // White
@@ -70,10 +70,10 @@ public class LEDIndicator
     private static final TrcAddressableLED.Pattern[] priorities =
     {
         // Highest priority
-        new TrcPriorityIndicator.Pattern(APRILTAG_LOCKED, aprilTagLockedPattern, 0.5, 0.0),
-        new TrcPriorityIndicator.Pattern(APRILTAG_FOUND, aprilTagFoundPattern, 0.5, 0.0),
         new TrcPriorityIndicator.Pattern(YELLOW_BLOB, yellowBlobPattern, 0.5, 0.0),
         new TrcPriorityIndicator.Pattern(NOT_FOUND, notFoundPattern, 0.5, 0.0),
+        new TrcPriorityIndicator.Pattern(APRILTAG_LOCKED, aprilTagLockedPattern),
+        new TrcPriorityIndicator.Pattern(APRILTAG_FOUND, aprilTagFoundPattern, 0.25, 0.25),
         new TrcPriorityIndicator.Pattern(INTAKE_ON, intakeOnPattern, 0.25, 0.25),
         new TrcPriorityIndicator.Pattern(DRIVE_FIELD_MODE, driveFieldModePattern),
         new TrcPriorityIndicator.Pattern(DRIVE_ROBOT_MODE, driveRobotModePattern),
