@@ -388,19 +388,18 @@ public class Robot extends FrcRobot
 
             if (aprilTagObj != null)
             {
+                TrcPose2D robotVel = robotBase.driveBase.getFieldVelocity();
                 TrcPose2D relocalizedPose =
-                    visionRelocalize.getRelocalizedPose(aprilTagObj.timestamp, aprilTagObj.robotPose, robotPose);
+                    Math.hypot(robotVel.x, robotVel.y) > 0.01 || Math.abs(robotVel.angle) > 1.0?
+                        visionRelocalize.getRelocalizedPose(aprilTagObj.timestamp, aprilTagObj.robotPose, robotPose):
+                        aprilTagObj.robotPose;
+
                 robotBase.driveBase.setFieldPosition(relocalizedPose);
                 globalTracer.traceDebug(
                     moduleName,
                     "VisionRelocalize: Time=%.6f, Relocalize %s->%s, VisionPose[%d](time=%.6f, pose=%s)",
                     fpgaTime, robotPose, relocalizedPose, aprilTagObj.target.getFiducialId(),
                     aprilTagObj.timestamp, aprilTagObj.robotPose);
-                // TrcPose2D diffPose = relocalizedPose.relativeTo(robotPose);
-                // if (TrcUtil.magnitude(diffPose.x, diffPose.y) > 12.0)
-                // {
-                //     robotBase.driveBase.setFieldPosition(relocalizedPose);
-                // }
             }
         }
 
