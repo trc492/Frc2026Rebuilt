@@ -54,7 +54,7 @@ public class Climber extends TrcSubsystem
         public static final String CLIMBER_LOWER_LIMITSW_NAME   = SUBSYSTEM_NAME + ".LowerLimitSw";
         public static final int CLIMBER_LOWER_LIMITSW_CHANNEL   = RobotParams.HwConfig.DIO_CLIMBER_LOWER_LIMITSW;
         public static final boolean CLIMBER_LOWER_LIMITSW_INVERTED = false;
-        // PID Parameters
+        // PID Parameters (TODO: Do we have a separate PID for climbing?)
         public static final double CLIMBER_MOTOR_PID_KP         = 0.0;
         public static final double CLIMBER_MOTOR_PID_KI         = 0.0;
         public static final double CLIMBER_MOTOR_PID_KD         = 0.0;

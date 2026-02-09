@@ -48,12 +48,12 @@ public class Intake extends TrcSubsystem
     public static final class Params
     {
         public static final String CANBUS_NAME                  = RobotParams.HwConfig.CANBUS_CANIVORE;
-        public static final boolean HAS_DEPLOYER                = false;
+        public static final boolean HAS_DEPLOYER                = true;
 
         // Intake:
         // Motor Characteristics
         public static final MotorType INTAKE_MOTOR_TYPE         = MotorType.CanTalonFx;
-        public static final String INTAKE_MOTOR_NAME            = SUBSYSTEM_NAME + ".Motor";
+        public static final String INTAKE_MOTOR_NAME            = SUBSYSTEM_NAME + ".IntakeMotor";
         public static final boolean INTAKE_MOTOR_INVERTED       = false;
         public static final int INTAKE_MOTOR_CANID              = RobotParams.HwConfig.CANID_INTAKE_MOTOR;
         // Intake Parameters
@@ -165,18 +165,18 @@ public class Intake extends TrcSubsystem
         return deployer;
     } //getDeployer
 
-    public void retractDeployer()
+    public void retract()
     {
         deployer.setPosition(Params.DEPLOYER_RETRACT_POS);
-    }   //retractDeployer
+    }   //retract
 
-    public void extendDeployer()
+    public void extend()
     {
         if(deployer != null)
         {
             deployer.setPosition(Params.DEPLOYER_EXTEND_POS);
         }
-    }   // extendDeployer
+    }   // extend
 
     /**
      * This method enables/disable intake of fuels. When enabled, it turns on manual intake.

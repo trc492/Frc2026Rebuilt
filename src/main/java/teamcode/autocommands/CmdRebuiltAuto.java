@@ -220,7 +220,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                                 if (i == 2)
                                 {
                                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
-                                    robot.intakeSubsystem.extendDeployer();
+                                    robot.intakeSubsystem.extend();
                                     robot.intake.intake(1.0);
                                 }
                             });
@@ -254,7 +254,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                                 if (i == 1)
                                 {
                                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
-                                    robot.intakeSubsystem.extendDeployer();
+                                    robot.intakeSubsystem.extend();
                                     robot.intake.intake(1.0);
                                 }
                             });
@@ -333,7 +333,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     double endXOffset = (depotSide) ? 35.0 : -35.0;
                     neutralEndPose.x += (alliance == Alliance.Blue) ? endXOffset : -endXOffset;
 
-                    robot.intakeSubsystem.extendDeployer();
+                    robot.intakeSubsystem.extend();
                     robot.intake.intake(1.0);
                     if (passBack == PassBack.PASS_BACK)
                     {
