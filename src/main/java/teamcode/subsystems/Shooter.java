@@ -42,6 +42,7 @@ import trclib.robotcore.TrcDbgTrace;
 import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcRobot;
 import trclib.sensor.TrcTriggerThresholdRange;
+import trclib.sensor.TrcTriggerThresholdZones;
 import trclib.sensor.TrcTrigger.TriggerMode;
 import trclib.subsystem.TrcRollerIntake;
 import trclib.subsystem.TrcRollerIntake.TriggerAction;
@@ -255,9 +256,10 @@ public class Shooter extends TrcSubsystem
 
     private static class GoalTrackingState
     {
-        TrackingMode trackingMode = null;
+        TrackingMode trackingMode = TrackingMode.Disabled;
         TrcPose2D goalFieldPose = null;
         AimInfo rightShooterAimInfo = null;
+        TrcTriggerThresholdZones halfFieldTrigger = null;
     }   //class GoalTrackingState
 
     private static class ShooterContext
@@ -276,6 +278,7 @@ public class Shooter extends TrcSubsystem
 
     public enum TrackingMode
     {
+        Disabled,
         AllianceHub,
         Passback
     }   //enum TrackingMode
@@ -492,6 +495,16 @@ public class Shooter extends TrcSubsystem
 
         zeroCalCallbackEvent = new TrcEvent(instanceName + ".ZeroCalCallback");
         tracer = leftShooter != null? leftShooter.tracer: rightShooter.tracer;
+
+        synchronized (goalTrackingState)
+        {
+            if (robot.robotBase != null)
+            {
+                goalTrackingState.halfFieldTrigger = new TrcTriggerThresholdZones(
+                    instanceName + "HalfFieldTrigger", () -> robot.robotBase.driveBase.getXPosition(),
+                    RobotParams.Game.fieldWidth / 2.0);
+            }
+        }
     }   //Shooter
 
     /**
@@ -631,7 +644,7 @@ public class Shooter extends TrcSubsystem
     {
         synchronized (goalTrackingState)
         {
-            return goalTrackingState.trackingMode != null;
+            return goalTrackingState.trackingMode != TrackingMode.Disabled;
         }
     }   //isGoalTrackingEnabled
 
@@ -657,54 +670,79 @@ public class Shooter extends TrcSubsystem
     {
         synchronized (goalTrackingState)
         {
-            if (goalTrackingState.trackingMode == null && trackingMode != null ||
-                goalTrackingState.trackingMode != null && trackingMode != goalTrackingState.trackingMode)
+            if (trackingMode != goalTrackingState.trackingMode)
             {
-                // Enabling GoalTracking or changing tracking mode.
-                Alliance alliance = FrcAuto.autoChoices.getAlliance();
-
-                tracer.traceInfo(instanceName, "Enabling GoalTracking (trackingMode=%s).", trackingMode);
-                goalTrackingState.trackingMode = trackingMode;
-                if (trackingMode == TrackingMode.AllianceHub)
+                // Changing TrackingMode.
+                if (trackingMode != null)
                 {
-                    goalTrackingState.goalFieldPose =
-                        robot.adjustPoseByAlliance(RobotParams.Game.BLUE_HUB_POSE, alliance);
+                    // Enabling GoalTracking or changing tracking mode.
+                    Alliance alliance = FrcAuto.autoChoices.getAlliance();
+
+                    tracer.traceInfo(instanceName, "Enabling GoalTracking (trackingMode=%s).", trackingMode);
+                    if (trackingMode == TrackingMode.AllianceHub)
+                    {
+                        goalTrackingState.goalFieldPose =
+                            robot.adjustPoseByAlliance(RobotParams.Game.BLUE_HUB_POSE, alliance);
+                    }
+                    else
+                    {
+                        // Passback tracking mode.
+                        TrcPose2D robotPose = robot.robotBase.driveBase.getFieldPosition();
+                        goalTrackingState.goalFieldPose =
+                            robot.adjustPoseByAlliance(
+                                robotPose.x < RobotParams.Game.fieldWidth / 2.0?
+                                    RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
+                                    RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE,
+                                alliance);
+                        if (goalTrackingState.halfFieldTrigger != null)
+                        {
+                            goalTrackingState.halfFieldTrigger.enableTrigger(
+                                TriggerMode.OnBoth,
+                                (ctxt, canceled) ->
+                                {
+                                    if (!canceled)
+                                    {
+                                        TrcTriggerThresholdZones.CallbackContext context =
+                                            (TrcTriggerThresholdZones.CallbackContext) ctxt;
+                                        goalTrackingState.goalFieldPose =
+                                            robot.adjustPoseByAlliance(
+                                                context.currZone == 0?
+                                                    RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
+                                                    RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE,
+                                                FrcAuto.autoChoices.getAlliance());
+                                    }
+                                });
+                        }
+                    }
+                    goalTrackingState.rightShooterAimInfo = null;
+                    if (leftShooter != null)
+                    {
+                        leftShooter.setGoalTrackingEnabled(this::getLeftShooterAimInfo);
+                    }
+                    if (rightShooter != null)
+                    {
+                        rightShooter.setGoalTrackingEnabled(this::getRightShooterAimInfo);
+                    }
                 }
                 else
                 {
-                    // Passback tracking mode.
-                    TrcPose2D robotPose = robot.robotBase.driveBase.getFieldPosition();
-                    goalTrackingState.goalFieldPose =
-                        robot.adjustPoseByAlliance(
-                            robotPose.x < RobotParams.Game.fieldWidth / 2.0?
-                                RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
-                                RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE,
-                            alliance);
+                    tracer.traceInfo(instanceName, "Disabling GoalTracking.");
+                    goalTrackingState.goalFieldPose = null;
+                    goalTrackingState.rightShooterAimInfo = null;
+                    if (leftShooter != null)
+                    {
+                        leftShooter.setGoalTrackingEnabled(null);
+                    }
+                    if (rightShooter != null)
+                    {
+                        rightShooter.setGoalTrackingEnabled(null);
+                    }
                 }
-                goalTrackingState.rightShooterAimInfo = null;
-                if (leftShooter != null)
+                if (trackingMode != TrackingMode.Passback && goalTrackingState.halfFieldTrigger != null)
                 {
-                    leftShooter.setGoalTrackingEnabled(this::getLeftShooterAimInfo);
+                    goalTrackingState.halfFieldTrigger.disableTrigger();
                 }
-                if (rightShooter != null)
-                {
-                    rightShooter.setGoalTrackingEnabled(this::getRightShooterAimInfo);
-                }
-            }
-            else if (goalTrackingState.trackingMode != null && trackingMode == null)
-            {
-                tracer.traceInfo(instanceName, "Disabling GoalTracking.");
-                goalTrackingState.trackingMode = null;
-                goalTrackingState.goalFieldPose = null;
-                goalTrackingState.rightShooterAimInfo = null;
-                if (leftShooter != null)
-                {
-                    leftShooter.setGoalTrackingEnabled(null);
-                }
-                if (rightShooter != null)
-                {
-                    rightShooter.setGoalTrackingEnabled(null);
-                }
+                goalTrackingState.trackingMode = trackingMode;
             }
         }
     }   //setGoalTrackingEnabled

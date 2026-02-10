@@ -190,7 +190,7 @@ public class Robot extends FrcRobot
         {
             vision = new Vision(robotInfo.camInfos, ledIndicator);
 
-            if (RobotParams.Preferences.doVisionRelocalize)
+            if (RobotParams.Preferences.useVisionRelocalize)
             {
                 visionRelocalize = new TrcVisionRelocalize(100);
             }
@@ -379,7 +379,8 @@ public class Robot extends FrcRobot
     @Override
     public void robotPeriodic(RunMode runMode, boolean slowPeriodicLoop)
     {
-        if (visionRelocalize != null && vision != null)
+        if (visionRelocalize != null && vision != null &&
+            dashboard.getBoolean(Vision.DBKEY_VISION_RELOCALIZE, RobotParams.Preferences.visionRelocalizeEnabled))
         {
             double fpgaTime = Timer.getFPGATimestamp();
             TrcPose2D robotPose = robotBase.driveBase.getFieldPosition();

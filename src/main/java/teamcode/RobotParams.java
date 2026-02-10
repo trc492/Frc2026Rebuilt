@@ -67,7 +67,8 @@ public class RobotParams
         public static final boolean useWebcamColorBlobVision    = false;
         public static final boolean useSolvePnp                 = false;
         public static final boolean useStreamCamera             = false;
-        public static final boolean doVisionRelocalize          = true;
+        public static final boolean useVisionRelocalize         = true;
+        public static final boolean visionRelocalizeEnabled     = true;
         // Master switches for Subsystems
         public static final boolean useSubsystems               = robotType == RobotType.RebuiltRobot;
         public static final boolean showSubsystems              = true;

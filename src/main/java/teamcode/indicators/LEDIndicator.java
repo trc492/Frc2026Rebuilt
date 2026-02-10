@@ -176,6 +176,8 @@ public class LEDIndicator
     {
         if (pipelineType == null || detectedObj == null)
         {
+            leds[0].setPatternState(APRILTAG_LOCKED, false);
+            leds[0].setPatternState(APRILTAG_FOUND, false);
             leds[0].setPatternState(NOT_FOUND, true);
         }
         else
@@ -186,11 +188,13 @@ public class LEDIndicator
                     if (Math.abs(Math.toDegrees(Math.atan2(detectedObj.targetPose.x, detectedObj.targetPose.y))) <
                         Vision.ONTARGET_THRESHOLD)
                     {
+                        leds[0].setPatternState(APRILTAG_FOUND, false);
                         leds[0].setPatternState(APRILTAG_LOCKED, true);
                     }
                     else
                     {
                         leds[0].setPatternState(APRILTAG_FOUND, true);
+                        leds[0].setPatternState(APRILTAG_LOCKED, false);
                     }
                     break;
 

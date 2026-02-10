@@ -63,7 +63,8 @@ public class Vision //implements TrcVision.ObjectInfo
         .setCameraInfo("BackOV9782", 1280, 800)
         .setCameraPose(0.0, -1.563, 41.374, 180.0, 9.1241, 0.0);
 
-    private static final String DBKEY_PREFIX                = "Vision/";
+    public static final String DBKEY_PREFIX                 = "Vision/";
+    public static final String DBKEY_VISION_RELOCALIZE      = DBKEY_PREFIX + "Relocalizate";
     public static final double ONTARGET_THRESHOLD           = 0.5;      // in degrees
 
     public enum PipelineType
@@ -105,6 +106,7 @@ public class Vision //implements TrcVision.ObjectInfo
         this.dashboard = FrcDashboard.getInstance();
         this.ledIndicator = ledIndicator;
 
+        dashboard.refreshKey(DBKEY_VISION_RELOCALIZE, RobotParams.Preferences.visionRelocalizeEnabled);
         if (camInfos.length > 0 && camInfos[0] != null)
         {
             tracer.traceInfo(moduleName, "Creating LeftShooterVision for camera %s.", camInfos[0].camName);

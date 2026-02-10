@@ -27,6 +27,7 @@ import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcXboxController;
 import frclib.vision.FrcPhotonVision.DetectedObject;
 import teamcode.subsystems.Shooter;
+import teamcode.subsystems.Shooter.TrackingMode;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
 import trclib.drivebase.TrcSwerveDrive;
 import trclib.driverio.TrcGameController.DriveMode;
@@ -378,6 +379,27 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 break;
 
             case B:
+                if (robot.shooterSubsystem != null)
+                {
+                    if (pressed)
+                    {
+                        TrackingMode trackingMode = robot.shooterSubsystem.getGoalTrackingMode();
+
+                        switch (trackingMode)
+                        {
+                            case Disabled:
+                                trackingMode = TrackingMode.AllianceHub;
+                                break;
+                            case AllianceHub:
+                                trackingMode = TrackingMode.Passback;
+                                break;
+                            case Passback:
+                                trackingMode = TrackingMode.Disabled;
+                                break;
+                        }
+                        robot.shooterSubsystem.setGoalTrackingEnabled(TrackingMode.AllianceHub);
+                    }
+                }
                 break;
 
             case X:
