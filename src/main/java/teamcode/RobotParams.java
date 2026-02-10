@@ -221,6 +221,8 @@ public class RobotParams
         public static final int[] redHubAprilTags               = new int[] {26, 18, 21, 25, 24, 27, 19, 20};
         public static final int[] anyHubAprilTags               =
             new int[] {10, 26, 2, 18, 5, 21, 9, 25, 11, 24, 8, 27, 3, 19, 4, 20};
+        public static final int[] blueTowerAprilTags            = new int[] {31, 32};
+        public static final int[] redTowerAprilTags             = new int[] {15, 16};
         //
         // Robot starting positions.
         //
