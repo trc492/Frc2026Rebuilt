@@ -137,7 +137,7 @@ public class DriveBase extends TrcSubsystem
                     RobotParams.Robot.STEER_ZERO_CAL_FILE)
                 .setSteerMotorInfo(
                     MotorType.CanTalonFx, null,
-                    new String[] {"flSteerServo", "frSteerServo", "blSteerServo", "brSteerServo"},
+                    new String[] {"flSteerMotor", "frSteerMotor", "blSteerMotor", "brSteerMotor"},
                     new int[] {
                         HwConfig.CANID_FLSTEER_MOTOR, HwConfig.CANID_FRSTEER_MOTOR,
                         HwConfig.CANID_BLSTEER_MOTOR, HwConfig.CANID_BRSTEER_MOTOR},
@@ -220,7 +220,7 @@ public class DriveBase extends TrcSubsystem
                     RobotParams.Robot.STEER_ZERO_CAL_FILE)
                 .setSteerMotorInfo(
                     MotorType.CanTalonFx, null,
-                    new String[] {"flSteerServo", "frSteerServo", "blSteerServo", "brSteerServo"},
+                    new String[] {"flSteerMotor", "frSteerMotor", "blSteerMotor", "brSteerMotor"},
                     new int[] {
                         HwConfig.CANID_FLSTEER_MOTOR, HwConfig.CANID_FRSTEER_MOTOR,
                         HwConfig.CANID_BLSTEER_MOTOR, HwConfig.CANID_BRSTEER_MOTOR},
