@@ -62,6 +62,7 @@ public class DriveBase extends TrcSubsystem
         // Generic Swerve Drive Base Robot
         RebuiltRobot,
         ReefscapeRobot,
+        MaestroRobot,
         VisionOnly
     }   //enum RobotType
 
@@ -232,6 +233,89 @@ public class DriveBase extends TrcSubsystem
     }   //class ReefscapeRobotInfo
 
     /**
+     * This class contains the Maestro Robot Parameters.
+     */
+    public static class MaestroRobotInfo extends FrcSwerveBase.SwerveInfo
+    {
+        public static final double FALCON_MAX_RPM               = 6380.0;
+        public static final double DRIVE_MOTOR_GEAR_RATIO       = 6.75;
+        public static final double DRIVE_WHEEL_DIAMETER         = 3.9326556997620689090425924610785;    // inches
+        public static final double STEER_MOTOR_GEAR_RATIO       = 15.43;
+
+        private static final TrcPidController.PidCoefficients driveMotorVelPidCoeffs =
+            new TrcPidController.PidCoefficients(0.35, 0.0, 0.0, 0.12, 0.0);
+        private static final TrcPidController.PidCoefficients drivePidCoeffs =
+            new TrcPidController.PidCoefficients(0.017, 0.0, 0.0025, 0.0, 5.0);
+        private static final TrcPidController.PidCoefficients turnPidCoeffs =
+            new TrcPidController.PidCoefficients(0.0065, 0.0, 0.0004, 0.0, 10.0);
+        private static final TrcPidController.PidCoefficients velPidCoeffs =
+            new TrcPidController.PidCoefficients(0.0, 0.0, 0.0, 1.0/171.0, 0.0);
+        private static final TrcPidController.PidCoefficients steerPidCoeffs =
+            new TrcPidController.PidCoefficients(3.0, 0.0, 0.0, 0.0, 0.0);
+
+        public static TrcDriveBase.BaseParams baseParams = new TrcDriveBase.BaseParams()
+            .setDriveMotorVelocityControl(
+                driveMotorVelPidCoeffs, DRIVE_WHEEL_DIAMETER * Math.PI / DRIVE_MOTOR_GEAR_RATIO, false)
+            .setPidTolerances(1.0, 2.0)
+            .setXPidParams(drivePidCoeffs, 0.5)
+            .setYPidParams(drivePidCoeffs, 0.5)
+            .setTurnPidParams(turnPidCoeffs, 1.0)
+            .setVelocityPidParams(velPidCoeffs)
+            .setDriveCharacteristics(157.48, 10000.0, 10000.0, 180.0);
+        public static TrcSwerveDrive.SwerveParams swerveParams = new TrcSwerveDrive.SwerveParams()
+            .setSteerMotorPidParams(
+                new TrcMotor.PidParams()
+                    .setPidCoefficients(steerPidCoeffs)
+                    .setPidControlParams(0.5, false));
+
+        public MaestroRobotInfo()
+        {
+            this.setBaseParams(baseParams)
+                .setRobotInfo(
+                    RobotType.MaestroRobot.toString(), RobotParams.Robot.ROBOT_LENGTH, RobotParams.Robot.ROBOT_WIDTH,
+                    23.25, 23.25)
+                .setNavXImuInfo("NavX", NavXComType.kMXP_SPI)
+                .setDriveMotorInfo(
+                    MotorType.CanTalonFx, null, null,
+                    new String[] {"flDriveMotor", "frDriveMotor", "blDriveMotor", "brDriveMotor"},
+                    new int[] {
+                        HwConfig.CANID_FLDRIVE_MOTOR, HwConfig.CANID_FRDRIVE_MOTOR,
+                        HwConfig.CANID_BLDRIVE_MOTOR, HwConfig.CANID_BRDRIVE_MOTOR},
+                    new boolean[] {false, false, false, false})
+                .setDriveMotorCurrentLimits(40.0, 45.0, 0.2, 55.0)
+                .setWpiOdometry(DRIVE_WHEEL_DIAMETER * Math.PI / DRIVE_MOTOR_GEAR_RATIO)
+                .setPidRampRates(0.5, 0.5, 1.0)
+                .setDriveRampRate(0.25, 0.02)
+                .setPidStallDetectionEnabled(true)
+                .setPidDriveParams(false)
+                .setPurePursuitDriveParams(10.0, true, false)
+                .setVisionInfo(Vision.reefscapeFrontCamInfo, Vision.reefscapeBackCamInfo)
+                .setIndicators(
+                    new LEDInfo("LED", HwConfig.PWM_CHANNEL_LED, HwConfig.NUM_LEDS));
+            this.setSwerveParams(swerveParams)
+                .setSteerEncoderInfo(
+                    EncoderType.Canandmag,
+                    new String[] {"flSteerEncoder", "frSteerEncoder", "blSteerEncoder", "brSteerEncoder"},
+                    new int[] {
+                        HwConfig.CANID_FLSTEER_ENCODER, HwConfig.CANID_FRSTEER_ENCODER,
+                        HwConfig.CANID_BLSTEER_ENCODER, HwConfig.CANID_BRSTEER_ENCODER},
+                    new boolean[] {false, false, false, false},
+                    new double[] {0.0, 0.0, 0.0, 0.0}, true,
+                    RobotParams.Robot.STEER_ZERO_CAL_FILE)
+                .setSteerMotorInfo(
+                    MotorType.CanTalonFx, null,
+                    new String[] {"flSteerMotor", "frSteerMotor", "blSteerMotor", "brSteerMotor"},
+                    new int[] {
+                        HwConfig.CANID_FLSTEER_MOTOR, HwConfig.CANID_FRSTEER_MOTOR,
+                        HwConfig.CANID_BLSTEER_MOTOR, HwConfig.CANID_BRSTEER_MOTOR},
+                    new boolean[] {false, false, false, false})
+                .setSwerveBaseCharacteristics(
+                    23.25, 23.25, DRIVE_MOTOR_GEAR_RATIO, STEER_MOTOR_GEAR_RATIO, 360.0 / STEER_MOTOR_GEAR_RATIO)
+                .setSwerveModuleNames(new String[] {"flWheel", "frWheel", "blWheel", "brWheel"});
+        }   //ReefscapeRobotInfo
+    }   //class MaestroRobotInfo
+
+    /**
      * This class contains the VisionOnly Parameters. This is for tuning vision with only the Control Hub and no
      * robot.
      */
@@ -282,6 +366,11 @@ public class DriveBase extends TrcSubsystem
             case ReefscapeRobot:
                 robotInfo = new ReefscapeRobotInfo();
                 robotBase = RobotParams.Preferences.useDriveBase? new FrcSwerveBase((ReefscapeRobotInfo) robotInfo): null;
+                break;
+
+            case MaestroRobot:
+                robotInfo = new ReefscapeRobotInfo();
+                robotBase = RobotParams.Preferences.useDriveBase? new FrcSwerveBase((MaestroRobotInfo) robotInfo): null;
                 break;
 
             case VisionOnly:

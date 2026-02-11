@@ -43,7 +43,7 @@ public class RobotParams
     public static class Preferences
     {
         // Global config
-        public static final RobotType robotType                 = RobotType.ReefscapeRobot;
+        public static final RobotType robotType                 = RobotType.MaestroRobot;
         public static final boolean inCompetition               = false;
         public static final boolean hybridMode                  = false;
         public static final boolean useTraceLog                 = true;
@@ -56,7 +56,7 @@ public class RobotParams
         public static final boolean updateDashboard             = !inCompetition;   // Start up default value.
         public static final boolean useLED                      = false;
         public static final boolean useRumble                   = false;
-        public static final boolean hasDriverGameController     = robotType == RobotType.ReefscapeRobot;
+        public static final boolean hasDriverGameController     = robotType != RobotType.RebuiltRobot;
         public static final boolean hasOperatorGameController   = robotType == RobotType.RebuiltRobot;
         // Vision
         public static final boolean useVision                   = robotType == RobotType.ReefscapeRobot;
@@ -75,7 +75,7 @@ public class RobotParams
         public static final boolean showSubsystemGraphs         = true;
         public static final String testSubsystemName            = Shooter.Params.LSHOOTER_PRIMARY_MOTOR_NAME;
         // Drive Base Subsystem
-        public static final boolean useDriveBase                = robotType == RobotType.ReefscapeRobot;
+        public static final boolean useDriveBase                = robotType != RobotType.RebuiltRobot;
         public static final boolean showDriveBaseStatus         = true;
         public static final boolean debugDriveBase              = false;
         public static final boolean debugPidDrive               = false;
