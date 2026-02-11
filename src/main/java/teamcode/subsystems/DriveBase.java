@@ -369,7 +369,7 @@ public class DriveBase extends TrcSubsystem
                 break;
 
             case MaestroRobot:
-                robotInfo = new ReefscapeRobotInfo();
+                robotInfo = new MaestroRobotInfo();
                 robotBase = RobotParams.Preferences.useDriveBase? new FrcSwerveBase((MaestroRobotInfo) robotInfo): null;
                 break;
 
