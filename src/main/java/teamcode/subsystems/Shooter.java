@@ -152,7 +152,7 @@ public class Shooter extends TrcSubsystem
         // Common Tilt Motor Characteristics
         public static final MotorType TILT_MOTOR_TYPE           = MotorType.CanSparkMax;
         public static final SparkMaxMotorParams TILT_SPARKMAX_PARAMS = new SparkMaxMotorParams(true, false);
-        public static final double TILT_MOTOR_GEAR_RATIO        = 20.0*21.0/23.0*190.0/16.0;    // Load/Motor
+        public static final double TILT_MOTOR_GEAR_RATIO        = 216.84782608695652173913043478261;    // Load/Motor
         public static final double TILT_MOTOR_DEG_PER_COUNT     = 360.0/TILT_MOTOR_GEAR_RATIO;
         public static final double TILT_PID_TOLERANCE           = 1.0;
         public static final boolean TILT_SOFTWARE_PID_ENABLED   = false;
