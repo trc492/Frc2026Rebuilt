@@ -115,7 +115,7 @@ public class Shooter extends TrcSubsystem
 
         // Common Shooter Motor Characteristics
         public static final MotorType SHOOTER_MOTOR_TYPE        = MotorType.CanTalonFx;
-        public static final double SHOOTER_MOTOR_GEAR_RATIO     = 27.0/42.0;    // Load/Motor
+        public static final double SHOOTER_MOTOR_GEAR_RATIO     = 26.0/42.0;    // Load/Motor
         public static final double SHOOTER_MOTOR_REV_PER_COUNT  = 1.0/SHOOTER_MOTOR_GEAR_RATIO;
         public static final double SHOOTER_MOTOR_MAX_VEL        = 6000.0;
         public static final double SHOOTER_PID_TOLERANCE_RPM    = 100.0;
@@ -152,7 +152,7 @@ public class Shooter extends TrcSubsystem
         // Common Tilt Motor Characteristics
         public static final MotorType TILT_MOTOR_TYPE           = MotorType.CanSparkMax;
         public static final SparkMaxMotorParams TILT_SPARKMAX_PARAMS = new SparkMaxMotorParams(true, false);
-        public static final double TILT_MOTOR_GEAR_RATIO        = 1.0;      // Load/Motor
+        public static final double TILT_MOTOR_GEAR_RATIO        = 20.0*21.0/23.0*190.0/16.0;    // Load/Motor
         public static final double TILT_MOTOR_DEG_PER_COUNT     = 360.0/TILT_MOTOR_GEAR_RATIO;
         public static final double TILT_PID_TOLERANCE           = 1.0;
         public static final boolean TILT_SOFTWARE_PID_ENABLED   = false;
@@ -162,6 +162,11 @@ public class Shooter extends TrcSubsystem
         public static final double TILT_MAX_POS                 = 45.0;
         public static final double TILT_POS_PRESET_TOLERANCE    = 2.0;
         public static final double[] TILT_POS_PRESETS           = {TILT_MIN_POS, 30.0, 35.0, 40.0, TILT_MAX_POS};
+        public static final double TILT_ZERO_CAL_POWER          = -0.2;
+        public static final double TILT_STALL_MIN_POWER         = Math.abs(TILT_ZERO_CAL_POWER);
+        public static final double TILT_STALL_TOLERANCE         = 0.1;
+        public static final double TILT_STALL_TIMEOUT           = 0.1;
+        public static final double TILT_STALL_RESET_TIMEOUT     = 0.0;
         // Left Tilt Motor Characteristics
         public static final String LTILT_MOTOR_NAME             = SUBSYSTEM_NAME + ".LeftTiltMotor";
         public static final boolean LTILT_MOTOR_INVERTED        = false;
@@ -193,7 +198,7 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_MOTOR_PID_KD          = 0.0;
         public static final double TURRET_MOTOR_PID_KF          = 0.0;
         public static final double TURRET_MOTOR_PID_IZONE       = 5.0;
-        public static final double TURRET_MOTOR_GEAR_RATIO      = 75.0/26.0;    // Load/Motor
+        public static final double TURRET_MOTOR_GEAR_RATIO      = 130.0/40.0;   // Load/Motor
         public static final double TURRET_MOTOR_DEG_PER_COUNT   = 360.0/TURRET_MOTOR_GEAR_RATIO;
         public static final double TURRET_PID_TOLERANCE         = 1.0;
         public static final boolean TURRET_SOFTWARE_PID_ENABLED = false;
@@ -235,7 +240,6 @@ public class Shooter extends TrcSubsystem
         public static final boolean LOUTAKE_MOTOR_INVERTED      = true;
         public static final int LOUTAKE_MOTOR_CANID             = RobotParams.HwConfig.CANID_LOUTAKE_MOTOR;
         public static final String LOUTAKE_BACK_SENSOR_NAME     = SUBSYSTEM_NAME + "LeftOutakeBackSensor";
-        public static final int LOUTAKE_BACK_SENSOR_CHANNEL     = RobotParams.HwConfig.DIO_LOUTAKE_BACK_SENSOR;
         public static final boolean LOUTAKE_BACK_SENSOR_INVERTED= false;
         // Right Outake Motor Characteristics
         public static final String ROUTAKE_NAME                 = SUBSYSTEM_NAME + ".RightOutake";
@@ -243,14 +247,13 @@ public class Shooter extends TrcSubsystem
         public static final boolean ROUTAKE_MOTOR_INVERTED      = true;
         public static final int ROUTAKE_UPPER_MOTOR_CANID       = RobotParams.HwConfig.CANID_ROUTAKE_MOTOR;
         public static final String ROUTAKE_BACK_SENSOR_NAME     = SUBSYSTEM_NAME + "RightOutakeBackSensor";
-        public static final int ROUTAKE_BACK_SENSOR_CHANNEL     = RobotParams.HwConfig.DIO_ROUTAKE_BACK_SENSOR;
         public static final boolean ROUTAKE_BACK_SENSOR_INVERTED= false;
         // Feeder Motor Characteristics
         public static final MotorType FEEDER_MOTOR_TYPE         = MotorType.CanSparkMax;
+        public static final SparkMaxMotorParams FEEDER_SPARKMAX_PARAMS = new SparkMaxMotorParams(true, false);
         public static final String FEEDER_MOTOR_NAME            = SUBSYSTEM_NAME + ".FeederMotor";
         public static final boolean FEEDER_MOTOR_INVERTED       = true;
         public static final int FEEDER_MOTOR_CANID              = RobotParams.HwConfig.CANID_FEEDER_MOTOR;
-        public static final SparkMaxMotorParams FEEDER_SPARKMAX_PARAMS = new SparkMaxMotorParams(true, false);
         public static final double FEEDER_POWER                 = 1.0;
     }   //class Params
 
@@ -350,7 +353,12 @@ public class Shooter extends TrcSubsystem
                             Params.LTILT_MOTOR_PID_KF, Params.LTILT_MOTOR_PID_IZONE)
                         .setPidControlParams(Params.TILT_PID_TOLERANCE, Params.TILT_SOFTWARE_PID_ENABLED),
                     null);
+                // There is no lower limit switch, enable stall detection for zero calibration and soft limits for
+                // protection.
                 motor.setSoftPositionLimits(Params.TILT_MIN_POS, Params.TILT_MAX_POS, false);
+                motor.setStallProtection(
+                    Params.TILT_STALL_MIN_POWER, Params.TILT_STALL_TOLERANCE, Params.TILT_STALL_TIMEOUT,
+                    Params.TILT_STALL_RESET_TIMEOUT);
             }
             if (Params.SHOOTER_HAS_OUTAKE)
             {
@@ -361,9 +369,9 @@ public class Shooter extends TrcSubsystem
                     .setPowerLevels(
                         Params.OUTAKE_INTAKE_POWER, Params.OUTAKE_EJECT_POWER, Params.OUTAKE_RETAIN_POWER)
                     .setFinishDelays(Params.OUTAKE_INTAKE_FINISH_DELAY, Params.OUTAKE_EJECT_FINISH_DELAY)
-                    .setBackDigitalInputTrigger(
-                        Params.LOUTAKE_BACK_SENSOR_NAME, Params.LOUTAKE_BACK_SENSOR_CHANNEL,
-                        Params.LOUTAKE_BACK_SENSOR_INVERTED, TriggerAction.FinishOnTrigger, TriggerMode.OnActive,
+                    .setBackDigitalSourceTrigger(
+                        Params.LOUTAKE_BACK_SENSOR_NAME, this::getLeftOutakeSensorState,
+                        TriggerAction.FinishOnTrigger, TriggerMode.OnActive,
                         null, null);
                 leftOutake = new FrcRollerIntake(Params.LOUTAKE_NAME, outakeParams).getIntake();
             }
@@ -397,7 +405,7 @@ public class Shooter extends TrcSubsystem
                 rShooterParams
                     .setTiltMotor(
                         Params.RTILT_MOTOR_NAME, Params.TILT_MOTOR_TYPE, Params.RTILT_MOTOR_INVERTED,
-                        Params.RTILT_MOTOR_CANID, Params.CANBUS_NAME, null,
+                        Params.RTILT_MOTOR_CANID, Params.CANBUS_NAME, Params.TILT_SPARKMAX_PARAMS,
                         new TrcShooter.PanTiltParams(Params.TILT_POWER_LIMIT, Params.TILT_MIN_POS, Params.TILT_MAX_POS))
                     .setTiltMotorPosPresets(Params.TILT_POS_PRESET_TOLERANCE, Params.TILT_POS_PRESETS);
             }
@@ -422,7 +430,12 @@ public class Shooter extends TrcSubsystem
                             Params.RTILT_MOTOR_PID_KF, Params.RTILT_MOTOR_PID_IZONE)
                         .setPidControlParams(Params.TILT_PID_TOLERANCE, Params.TILT_SOFTWARE_PID_ENABLED),
                     null);
+                // There is no lower limit switch, enable stall detection for zero calibration and soft limits for
+                // protection.
                 motor.setSoftPositionLimits(Params.TILT_MIN_POS, Params.TILT_MAX_POS, false);
+                motor.setStallProtection(
+                    Params.TILT_STALL_MIN_POWER, Params.TILT_STALL_TOLERANCE, Params.TILT_STALL_TIMEOUT,
+                    Params.TILT_STALL_RESET_TIMEOUT);
             }
             if (Params.SHOOTER_HAS_OUTAKE)
             {
@@ -433,9 +446,9 @@ public class Shooter extends TrcSubsystem
                     .setPowerLevels(
                         Params.OUTAKE_INTAKE_POWER, Params.OUTAKE_EJECT_POWER, Params.OUTAKE_RETAIN_POWER)
                     .setFinishDelays(Params.OUTAKE_INTAKE_FINISH_DELAY, Params.OUTAKE_EJECT_FINISH_DELAY)
-                    .setBackDigitalInputTrigger(
-                        Params.ROUTAKE_BACK_SENSOR_NAME, Params.ROUTAKE_BACK_SENSOR_CHANNEL,
-                        Params.ROUTAKE_BACK_SENSOR_INVERTED, TriggerAction.FinishOnTrigger, TriggerMode.OnActive,
+                    .setBackDigitalSourceTrigger(
+                        Params.ROUTAKE_BACK_SENSOR_NAME, this::getRightOutakeSensorState,
+                        TriggerAction.FinishOnTrigger, TriggerMode.OnActive,
                         null, null);
                 rightOutake = new FrcRollerIntake(Params.ROUTAKE_NAME, outakeParams).getIntake();
             }
@@ -468,9 +481,9 @@ public class Shooter extends TrcSubsystem
                         Params.TURRET_MOTOR_PID_KP, Params.TURRET_MOTOR_PID_KI, Params.TURRET_MOTOR_PID_KD,
                         Params.TURRET_MOTOR_PID_KF, Params.TURRET_MOTOR_PID_IZONE)
                     .setPidControlParams(Params.TURRET_PID_TOLERANCE, Params.TURRET_SOFTWARE_PID_ENABLED), null);
-            turret.setSoftPositionLimits(Params.TURRET_MIN_POS, Params.TURRET_MAX_POS, false);
             // There is no lower limit switch, enable stall detection for zero calibration and soft limits for
             // protection.
+            turret.setSoftPositionLimits(Params.TURRET_MIN_POS, Params.TURRET_MAX_POS, false);
             turret.setStallProtection(
                 Params.TURRET_STALL_MIN_POWER, Params.TURRET_STALL_TOLERANCE, Params.TURRET_STALL_TIMEOUT,
                 Params.TURRET_STALL_RESET_TIMEOUT);
@@ -634,6 +647,26 @@ public class Shooter extends TrcSubsystem
             rightShooter.setShooterMotorRPM(rightFlywheelRPM, null);
         }
     }   //setFlywheelRPM
+
+    /**
+     * This method returns the left outake back sensor state.
+     *
+     * @return outake back sensor state, null if outtake does not exist.
+     */
+    public boolean getLeftOutakeSensorState()
+    {
+        return leftOutake != null && leftOutake.getBackSensorState();
+    }   //getLeftOutakeSensorState
+
+    /**
+     * This method returns the right outake back sensor state.
+     *
+     * @return outake back sensor state, null if outtake does not exist.
+     */
+    public boolean getRightOutakeSensorState()
+    {
+        return leftOutake != null && leftOutake.getBackSensorState();
+    }   //getRightOutakeSensorState
 
     /**
      * This method checks if Goal Tracking is enabled.
@@ -1072,7 +1105,7 @@ public class Shooter extends TrcSubsystem
                         dashboard.displayPrintf(
                             lineNum++, "LeftOutake: power=%.1f, current=%.1f, sensor=%s, active=%s",
                             leftOutake.motor.getPower(), leftOutake.motor.getCurrent(),
-                            leftOutake.getBackTriggerState(), leftOutake.isActive());
+                            leftOutake.getBackSensorState(), leftOutake.isActive());
                     }
                 }
 
@@ -1095,7 +1128,7 @@ public class Shooter extends TrcSubsystem
                         dashboard.displayPrintf(
                             lineNum++, "RightOutake: power=%.1f, current=%.1f, sensor=%s, active=%s",
                             rightOutake.motor.getPower(), rightOutake.motor.getCurrent(),
-                            rightOutake.getBackTriggerState(), rightOutake.isActive());
+                            rightOutake.getBackSensorState(), rightOutake.isActive());
                     }
                 }
 

@@ -46,13 +46,11 @@ public class Climber extends TrcSubsystem
         public static final String CANBUS_NAME                  = RobotParams.HwConfig.CANBUS_CANIVORE;
 
         // Motor Characteristics
-        public static final MotorType CLIMBER_MOTOR_TYPE        = MotorType.CanTalonFx;
+        public static final MotorType CLIMBER_MOTOR_TYPE        = MotorType.CanSparkMax;
         public static final SparkMaxMotorParams CLIMBER_SPARKMAX_PARAMS = new SparkMaxMotorParams(true, false);
         public static final String CLIMBER_MOTOR_NAME           = SUBSYSTEM_NAME + ".Motor";
         public static final boolean CLIMBER_MOTOR_INVERTED      = false;
         public static final int CLIMBER_MOTOR_CANID             = RobotParams.HwConfig.CANID_CLIMBER_MOTOR;
-        public static final String CLIMBER_LOWER_LIMITSW_NAME   = SUBSYSTEM_NAME + ".LowerLimitSw";
-        public static final int CLIMBER_LOWER_LIMITSW_CHANNEL   = RobotParams.HwConfig.DIO_CLIMBER_LOWER_LIMITSW;
         public static final boolean CLIMBER_LOWER_LIMITSW_INVERTED = false;
         // PID Parameters (TODO: Do we have a separate PID for climbing?)
         public static final double CLIMBER_MOTOR_PID_KP         = 0.0;
@@ -99,11 +97,10 @@ public class Climber extends TrcSubsystem
             .setPrimaryMotor(
                 Params.CLIMBER_MOTOR_NAME, Params.CLIMBER_MOTOR_TYPE, Params.CLIMBER_MOTOR_INVERTED, true, true,
                 Params.CLIMBER_MOTOR_CANID, Params.CANBUS_NAME, Params.CLIMBER_SPARKMAX_PARAMS)
-            .setLowerLimitSwitch(
-                Params.CLIMBER_LOWER_LIMITSW_NAME, Params.CLIMBER_LOWER_LIMITSW_CHANNEL,
-                Params.CLIMBER_LOWER_LIMITSW_INVERTED)
             .setPositionScaleAndOffset(Params.CLIMBER_INCHES_PER_COUNT, Params.CLIMBER_POS_OFFSET);
         climber = new FrcMotorActuator(climberMotorParams).getMotor();
+        // Limit switch is connected to motor controller.
+        climber.enableLowerLimitSwitch(!Params.CLIMBER_LOWER_LIMITSW_INVERTED);
         climber.setPositionPidParameters(
             new PidParams()
                 .setPidCoefficients(

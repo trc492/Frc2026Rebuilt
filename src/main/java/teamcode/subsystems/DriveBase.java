@@ -71,10 +71,13 @@ public class DriveBase extends TrcSubsystem
      */
     public static class RebuiltRobotInfo extends FrcSwerveBase.SwerveInfo
     {
-        public final static double FALCON_MAX_RPM               = 6380.0;
-        public final static double DRIVE_MOTOR_GEAR_RATIO       = 5.6;
         public final static double DRIVE_WHEEL_DIAMETER         = 3.9326556997620689090425924610785;    // inches
-        public final static double STEER_MOTOR_GEAR_RATIO       = 13.3714;
+        public final static double DRIVE_MOTOR_GEAR_RATIO       = 4.59;
+        public final static double STEER_MOTOR_GEAR_RATIO       = 468.0/35.1;
+        public final static double ROBOT_WIDTH                  = RobotParams.Robot.ROBOT_WIDTH;
+        public final static double ROBOT_LENGTH                 = RobotParams.Robot.ROBOT_LENGTH;
+        public final static double WHEEL_BASE_WIDTH             = 22.249;
+        public final static double WHEEL_BASE_LENGTH            = 22.249;
 
         private static final TrcPidController.PidCoefficients driveMotorVelPidCoeffs =
             new TrcPidController.PidCoefficients(0.35, 0.0, 0.0, 0.12, 0.0);
@@ -106,8 +109,8 @@ public class DriveBase extends TrcSubsystem
         {
             this.setBaseParams(baseParams)
                 .setRobotInfo(
-                    RobotType.RebuiltRobot.toString(), RobotParams.Robot.ROBOT_LENGTH, RobotParams.Robot.ROBOT_WIDTH,
-                    23.2, 23.2)
+                    RobotType.RebuiltRobot.toString(), ROBOT_WIDTH, ROBOT_LENGTH,
+                    WHEEL_BASE_WIDTH, WHEEL_BASE_LENGTH)
                 .setPigeon2ImuInfo("Pigeon2", RobotParams.HwConfig.CANID_PIGEON2, RobotParams.HwConfig.CANBUS_CANIVORE)
                 .setDriveMotorInfo(
                     MotorType.CanTalonFx, RobotParams.HwConfig.CANBUS_CANIVORE, null,
@@ -128,7 +131,7 @@ public class DriveBase extends TrcSubsystem
                     new LEDInfo("LED", HwConfig.PWM_CHANNEL_LED, HwConfig.NUM_LEDS));
             this.setSwerveParams(swerveParams)
                 .setSteerEncoderInfo(
-                    EncoderType.Canandmag,
+                    EncoderType.CANCoder,
                     new String[] {"flSteerEncoder", "frSteerEncoder", "blSteerEncoder", "brSteerEncoder"},
                     new int[] {
                         HwConfig.CANID_FLSTEER_ENCODER, HwConfig.CANID_FRSTEER_ENCODER,
@@ -144,7 +147,8 @@ public class DriveBase extends TrcSubsystem
                         HwConfig.CANID_BLSTEER_MOTOR, HwConfig.CANID_BRSTEER_MOTOR},
                     new boolean[] {false, false, false, false})
                 .setSwerveBaseCharacteristics(
-                    23.2, 23.2, DRIVE_MOTOR_GEAR_RATIO, STEER_MOTOR_GEAR_RATIO, 360.0 / STEER_MOTOR_GEAR_RATIO)
+                    WHEEL_BASE_WIDTH, WHEEL_BASE_LENGTH, DRIVE_MOTOR_GEAR_RATIO, STEER_MOTOR_GEAR_RATIO,
+                    360.0 / STEER_MOTOR_GEAR_RATIO)
                 .setSwerveModuleNames(new String[] {"flWheel", "frWheel", "blWheel", "brWheel"});
         }   //RebuiltRobotInfo
     }   //class RebuiltRobotInfo
@@ -154,10 +158,13 @@ public class DriveBase extends TrcSubsystem
      */
     public static class ReefscapeRobotInfo extends FrcSwerveBase.SwerveInfo
     {
-        public static final double FALCON_MAX_RPM               = 6380.0;
-        public static final double DRIVE_MOTOR_GEAR_RATIO       = 5.6;
         public static final double DRIVE_WHEEL_DIAMETER         = 3.90408922;    // inches
+        public static final double DRIVE_MOTOR_GEAR_RATIO       = 5.6;
         public static final double STEER_MOTOR_GEAR_RATIO       = 13.3714;
+        public final static double ROBOT_WIDTH                  = RobotParams.Robot.ROBOT_WIDTH;
+        public final static double ROBOT_LENGTH                 = RobotParams.Robot.ROBOT_LENGTH;
+        public final static double WHEEL_BASE_WIDTH             = 23.2;
+        public final static double WHEEL_BASE_LENGTH            = 23.2;
 
         private static final TrcPidController.PidCoefficients driveMotorVelPidCoeffs =
             new TrcPidController.PidCoefficients(0.35, 0.0, 0.0, 0.12, 0.0);
@@ -189,8 +196,8 @@ public class DriveBase extends TrcSubsystem
         {
             this.setBaseParams(baseParams)
                 .setRobotInfo(
-                    RobotType.ReefscapeRobot.toString(), RobotParams.Robot.ROBOT_LENGTH, RobotParams.Robot.ROBOT_WIDTH,
-                    23.2, 23.2)
+                    RobotType.ReefscapeRobot.toString(), ROBOT_WIDTH, ROBOT_LENGTH,
+                    WHEEL_BASE_WIDTH, WHEEL_BASE_LENGTH)
                 .setNavXImuInfo("NavX", NavXComType.kMXP_SPI)
                 .setDriveMotorInfo(
                     MotorType.CanTalonFx, null, null,
@@ -227,7 +234,8 @@ public class DriveBase extends TrcSubsystem
                         HwConfig.CANID_BLSTEER_MOTOR, HwConfig.CANID_BRSTEER_MOTOR},
                     new boolean[] {false, false, false, false})
                 .setSwerveBaseCharacteristics(
-                    23.2, 23.2, DRIVE_MOTOR_GEAR_RATIO, STEER_MOTOR_GEAR_RATIO, 360.0 / STEER_MOTOR_GEAR_RATIO)
+                    WHEEL_BASE_WIDTH, WHEEL_BASE_LENGTH, DRIVE_MOTOR_GEAR_RATIO, STEER_MOTOR_GEAR_RATIO,
+                    360.0 / STEER_MOTOR_GEAR_RATIO)
                 .setSwerveModuleNames(new String[] {"flWheel", "frWheel", "blWheel", "brWheel"});
         }   //ReefscapeRobotInfo
     }   //class ReefscapeRobotInfo
@@ -237,10 +245,13 @@ public class DriveBase extends TrcSubsystem
      */
     public static class MaestroRobotInfo extends FrcSwerveBase.SwerveInfo
     {
-        public static final double FALCON_MAX_RPM               = 6380.0;
-        public static final double DRIVE_MOTOR_GEAR_RATIO       = 6.75;
         public static final double DRIVE_WHEEL_DIAMETER         = 3.9326556997620689090425924610785;    // inches
+        public static final double DRIVE_MOTOR_GEAR_RATIO       = 6.75;
         public static final double STEER_MOTOR_GEAR_RATIO       = 15.43;
+        public final static double ROBOT_WIDTH                  = RobotParams.Robot.ROBOT_WIDTH;
+        public final static double ROBOT_LENGTH                 = RobotParams.Robot.ROBOT_LENGTH;
+        public final static double WHEEL_BASE_WIDTH             = 23.25;
+        public final static double WHEEL_BASE_LENGTH            = 23.25;
 
         private static final TrcPidController.PidCoefficients driveMotorVelPidCoeffs =
             new TrcPidController.PidCoefficients(0.35, 0.0, 0.0, 0.12, 0.0);
@@ -272,8 +283,8 @@ public class DriveBase extends TrcSubsystem
         {
             this.setBaseParams(baseParams)
                 .setRobotInfo(
-                    RobotType.MaestroRobot.toString(), RobotParams.Robot.ROBOT_LENGTH, RobotParams.Robot.ROBOT_WIDTH,
-                    23.25, 23.25)
+                    RobotType.MaestroRobot.toString(), ROBOT_WIDTH, ROBOT_LENGTH,
+                    WHEEL_BASE_WIDTH, WHEEL_BASE_LENGTH)
                 .setNavXImuInfo("NavX", NavXComType.kMXP_SPI)
                 .setDriveMotorInfo(
                     MotorType.CanTalonFx, null, null,
@@ -310,7 +321,8 @@ public class DriveBase extends TrcSubsystem
                         HwConfig.CANID_BLSTEER_MOTOR, HwConfig.CANID_BRSTEER_MOTOR},
                     new boolean[] {false, false, false, false})
                 .setSwerveBaseCharacteristics(
-                    23.25, 23.25, DRIVE_MOTOR_GEAR_RATIO, STEER_MOTOR_GEAR_RATIO, 360.0 / STEER_MOTOR_GEAR_RATIO)
+                    WHEEL_BASE_WIDTH, WHEEL_BASE_LENGTH, DRIVE_MOTOR_GEAR_RATIO, STEER_MOTOR_GEAR_RATIO,
+                    360.0 / STEER_MOTOR_GEAR_RATIO)
                 .setSwerveModuleNames(new String[] {"flWheel", "frWheel", "blWheel", "brWheel"});
         }   //ReefscapeRobotInfo
     }   //class MaestroRobotInfo

@@ -150,10 +150,7 @@ public class RobotParams
         public static final int AIN_PRESSURE_SENSOR             = 0;
 
         // Digital Input/Output ports.
-        public static final int DIO_LOUTAKE_BACK_SENSOR         = 0;
-        public static final int DIO_ROUTAKE_BACK_SENSOR         = 1;
-        public static final int DIO_INTAKE_BACK_SENSOR          = 2;
-        public static final int DIO_CLIMBER_LOWER_LIMITSW       = 3;
+        public static final int DIO_INTAKE_BACK_SENSOR          = 0;
 
         // PWM channels.
         public static final int NUM_LEDS                        = 30;
@@ -179,8 +176,8 @@ public class RobotParams
         public static final String STEER_ZERO_CAL_FILE          = TEAM_FOLDER_PATH + "/SteerZeroCalibration.txt";
         public static final String FIELD_ZERO_CAL_FILE          = TEAM_FOLDER_PATH + "/FieldZeroCalibration.txt";
         public static final String ROBOT_CODEBASE               = "2026Rebuilt";
-        public static final double ROBOT_LENGTH                 = 35.0;
-        public static final double ROBOT_WIDTH                  = 35.0;
+        public static final double ROBOT_WIDTH                  = 22.249;
+        public static final double ROBOT_LENGTH                 = 22.249;
     }   //class Robot
 
     /**
@@ -198,8 +195,8 @@ public class RobotParams
         // Field configuration and dimensions in inches.
         //
         public static final boolean mirroredField               = false;
-        public static final double fieldLength                  = FrcField.getFieldLength();
         public static final double fieldWidth                   = FrcField.getFieldWidth();
+        public static final double fieldLength                  = FrcField.getFieldLength();
         //
         // AprilTag Poses
         //
