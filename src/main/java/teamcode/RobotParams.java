@@ -75,7 +75,7 @@ public class RobotParams
         public static final boolean showSubsystemGraphs         = true;
         public static final String testSubsystemName            = Shooter.Params.LSHOOTER_PRIMARY_MOTOR_NAME;
         // Drive Base Subsystem
-        public static final boolean useDriveBase                = robotType != RobotType.RebuiltRobot;
+        public static final boolean useDriveBase                = true;
         public static final boolean showDriveBaseStatus         = true;
         public static final boolean debugDriveBase              = false;
         public static final boolean debugPidDrive               = false;
@@ -243,7 +243,7 @@ public class RobotParams
         public static final TrcPose2D BLUE_PASSBACK_SCORETABLE_SIDE =
             new TrcPose2D(0.0, 0.0, 0.0);
         public static final TrcPose2D BLUE_OUTPOST_PICKUP_POSE  =
-            new TrcPose2D(-26.22, 90.0, 0.0); // TODO: Fine tune x and y
+            new TrcPose2D(-26.22, (30.0/2.0) + 10.0, -180.0); // TODO: Fine tune x and y
         public static final TrcPose2D BLUE_DEPOT_PICKUP_POSE    =
             new TrcPose2D(-fieldWidth + 40.0, Robot.ROBOT_WIDTH / 2.0, -90.0); // TODO: Fine tune x and y
         public static final TrcPose2D BLUE_OUTPOST_NEUTRAL_PICKUP_POSE =

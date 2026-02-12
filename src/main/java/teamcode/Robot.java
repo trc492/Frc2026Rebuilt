@@ -293,7 +293,7 @@ public class Robot extends FrcRobot
             {
                 robotBase.driveBase.setOdometryEnabled(true, true);
                 // Disable ramp rate control in autonomous.
-                Double rampRate = runMode == RunMode.AUTO_MODE? null: robotInfo.driveOpenLoopRampRate;
+                Double rampRate = runMode == RunMode.AUTO_MODE? 0.0: robotInfo.driveOpenLoopRampRate;
                 for (int i = 0; i < robotBase.driveMotors.length; i++)
                 {
                     robotBase.driveMotors[i].setOpenLoopRampRate(rampRate);

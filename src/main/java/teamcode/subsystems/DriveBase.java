@@ -245,7 +245,7 @@ public class DriveBase extends TrcSubsystem
      */
     public static class MaestroRobotInfo extends FrcSwerveBase.SwerveInfo
     {
-        public static final double DRIVE_WHEEL_DIAMETER         = 3.9326556997620689090425924610785;    // inches
+        public static final double DRIVE_WHEEL_DIAMETER         = 3.572739117;    // inches
         public static final double DRIVE_MOTOR_GEAR_RATIO       = 6.75;
         public static final double STEER_MOTOR_GEAR_RATIO       = 15.43;
         public final static double ROBOT_WIDTH                  = RobotParams.Robot.ROBOT_WIDTH;
