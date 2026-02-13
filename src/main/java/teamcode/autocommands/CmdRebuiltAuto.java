@@ -29,6 +29,7 @@ import teamcode.FrcAuto.MoveTo;
 import teamcode.FrcAuto.PassBack;
 import teamcode.Robot;
 import teamcode.RobotParams;
+import teamcode.autotasks.TaskAutoClimb;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcRobot;
@@ -74,6 +75,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
     private MoveTo moveTo;
     private PassBack passBack;
     private boolean climb;
+    private TaskAutoClimb.ClimbSide climbSide;
 
     /**
      * Constructor: Create an instance of the object.
@@ -151,6 +153,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     moveTo = autoChoices.getMoveTo();
                     passBack = autoChoices.getPassBack();
                     climb = autoChoices.getClimb();
+                    climbSide = autoChoices.getClimbSide();
                     if (robot.intakeSubsystem != null)
                     {
                         robot.intakeSubsystem.extend();
@@ -465,14 +468,14 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         robot.robotInfo.baseParams.profiledMaxDriveVelocity,
                         robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
                         robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
-                        robot.adjustPoseByAlliance(RobotParams.Game.BLUE_CLIMB_POSE, alliance));
+                        robot.adjustPoseByAlliance(RobotParams.Game.BLUE_CLIMB_LOOKOUT_POSE, alliance));
                         sm.waitForSingleEvent(event, State.CLIMB);
                     break;
 
                 case CLIMB:
                     if (robot.climberSubsystem != null)
                     {
-                        robot.autoClimbTask.autoClimb(null, event);
+                        robot.autoClimbTask.autoClimb(null, event, alliance, climbSide);
                         sm.waitForSingleEvent(event, State.DONE);
                     }
                     else

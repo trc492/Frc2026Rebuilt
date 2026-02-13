@@ -250,8 +250,13 @@ public class RobotParams
             new TrcPose2D(-30.0, fieldLength / 2.0, 90.0); // TODO: Fine tune x and y
         public static final TrcPose2D BLUE_DEPOT_NEUTRAL_PICKUP_POSE =
             new TrcPose2D(-fieldWidth + 30.0, fieldLength / 2.0, -90.0); // TODO: Fine tune x and y
-        public static final TrcPose2D BLUE_CLIMB_POSE           =
-            new TrcPose2D(170.22, fieldLength / 4.0, 0.0); // TODO: Fine tune x and y
+
+        public static final TrcPose2D BLUE_CLIMB_LOOKOUT_POSE           =
+            new TrcPose2D(170.22, 65.0, -180.0); // TODO: Fine tune x and y
+        public static final TrcPose2D BLUE_DEPOT_CLIMB_POSE             =
+            new TrcPose2D(0.0, 0.0, 270.0); // TODO: Determine x and y
+        public static final TrcPose2D BLUE_OUTPOST_CLIMB_POSE             =
+            new TrcPose2D(0.0, 0.0, 90.0); // TODO: Determine x and y
     }   //class Game
 
 }   //class RobotParams

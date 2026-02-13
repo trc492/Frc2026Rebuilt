@@ -27,6 +27,7 @@ import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcMatchInfo;
 import frclib.driverio.FrcUserChoices;
 import teamcode.autocommands.CmdRebuiltAuto;
+import teamcode.autotasks.TaskAutoClimb;
 import trclib.command.CmdPidDrive;
 import trclib.command.CmdPurePursuitDrive;
 import trclib.command.CmdTimedDrive;
@@ -111,6 +112,7 @@ public class FrcAuto implements TrcRobot.RobotMode
         private static final String DBKEY_AUTO_MOVE_TO = "Auto/MoveTo";                     //Choices
         private static final String DBKEY_AUTO_PASS_BACK = "Auto/PassBack";                 //Choices
         private static final String DBKEY_AUTO_CLIMB = "Auto/Climb";                        //Boolean
+        private static final String DBKEY_AUTO_CLIMB_SIDE= "Auto/ClimbSide";     //Choices
         
         private static final String DBKEY_AUTO_PATHFILE = "Auto/PathFile";                  //String
         private static final String DBKEY_AUTO_X_DRIVE_DISTANCE = "Auto/XDriveDistance";    //Number
@@ -127,6 +129,7 @@ public class FrcAuto implements TrcRobot.RobotMode
 
         private final FrcChoiceMenu<MoveTo> moveToChoiceMenu;
         private final FrcChoiceMenu<PassBack> passBackChoiceMenu;
+        private final FrcChoiceMenu<TaskAutoClimb.ClimbSide> climbSideChoiceMenu;
 
         public AutoChoices()
         {
@@ -139,6 +142,7 @@ public class FrcAuto implements TrcRobot.RobotMode
 
             moveToChoiceMenu = new FrcChoiceMenu<>(DBKEY_AUTO_MOVE_TO);
             passBackChoiceMenu = new FrcChoiceMenu<>(DBKEY_AUTO_PASS_BACK);
+            climbSideChoiceMenu = new FrcChoiceMenu<>(DBKEY_AUTO_CLIMB_SIDE);
             //
             // Populate autonomous mode choice menus.
             //
@@ -169,6 +173,9 @@ public class FrcAuto implements TrcRobot.RobotMode
             passBackChoiceMenu.addChoice("None", PassBack.NONE, true, false);
             passBackChoiceMenu.addChoice("Hoard", PassBack.HOARD);
             passBackChoiceMenu.addChoice("Pass Back", PassBack.PASS_BACK, false, true);
+
+            climbSideChoiceMenu.addChoice("Depot Side", TaskAutoClimb.ClimbSide.DEPOT, true, false);
+            climbSideChoiceMenu.addChoice("Outpost Side", TaskAutoClimb.ClimbSide.OUTPOST, false, true);
             //
             // Initialize dashboard with default choice values.
             //
@@ -248,6 +255,11 @@ public class FrcAuto implements TrcRobot.RobotMode
             return userChoices.getUserBoolean(DBKEY_AUTO_CLIMB);
         }   //getClimb
 
+        public TaskAutoClimb.ClimbSide getClimbSide()
+        {
+            return climbSideChoiceMenu.getCurrentChoiceObject();
+        }   //getClimbSide
+
         public String getPathFile()
         {
             return userChoices.getUserString(DBKEY_AUTO_PATHFILE);
@@ -292,6 +304,7 @@ public class FrcAuto implements TrcRobot.RobotMode
                    "moveTo=\"" + getMoveTo() + "\" " +
                    "passBack=\"" + getPassBack() + "\" " +
                    "climb=\"" + getClimb() + "\" " +
+                   "climbSide=\"" + getClimbSide() + "\" " +
 
                    "pathFile=\"" + getPathFile() + "\" " +
                    "xDistance=" + getXDriveDistance() + " ft " +
