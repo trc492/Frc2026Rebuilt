@@ -36,8 +36,8 @@ import frclib.robotcore.FrcField;
 import frclib.vision.FrcPhotonVision;
 import frclib.vision.FrcPhotonVision.DetectedObject;
 import teamcode.Dashboard;
+import teamcode.Robot;
 import teamcode.RobotParams;
-import teamcode.indicators.LEDIndicator;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
 import trclib.vision.TrcVision;
@@ -82,7 +82,7 @@ public class Vision //implements TrcVision.ObjectInfo
 
     private final TrcDbgTrace tracer;
     private final FrcDashboard dashboard;
-    private final LEDIndicator ledIndicator;
+    private final Robot robot;
 
     public final FrcPhotonVision leftShooterVision;
     public final FrcPhotonVision rightShooterVision;
@@ -97,28 +97,29 @@ public class Vision //implements TrcVision.ObjectInfo
     /**
      * Constructor: Create an instance of the object.
      *
-     * @param camInfos specifies an array of CameraInfos, one for each camera.
-     * @param ledIndicator specifies the LEDIndicator object, can be null if none provided.
+     * @param robot specifies the robot object for accessing hardware.
      */
-    public Vision(TrcVision.CameraInfo[] camInfos, LEDIndicator ledIndicator)
+    public Vision(Robot robot)
     {
         this.tracer = new TrcDbgTrace();
         this.dashboard = FrcDashboard.getInstance();
-        this.ledIndicator = ledIndicator;
+        this.robot = robot;
 
         dashboard.refreshKey(DBKEY_VISION_RELOCALIZE, RobotParams.Preferences.visionRelocalizeEnabled);
-        if (camInfos.length > 0 && camInfos[0] != null)
+        if (robot.robotInfo.camInfos.length > 0 && robot.robotInfo.camInfos[0] != null)
         {
-            tracer.traceInfo(moduleName, "Creating LeftShooterVision for camera %s.", camInfos[0].camName);
-            leftShooterVision = new FrcPhotonVision(camInfos[0], this::getAprilTagGroundOffset);
+            tracer.traceInfo(
+                moduleName, "Creating LeftShooterVision for camera %s.", robot.robotInfo.camInfos[0].camName);
+            leftShooterVision = new FrcPhotonVision(
+                robot.robotInfo.camInfos[0], this::getAprilTagGroundOffset, this::getLeftShooterRobotToCamera);
             leftShooterCamFromRobot = new Transform3d(
-                new Translation3d(Units.inchesToMeters(camInfos[0].camPose.y),
-                                  -Units.inchesToMeters(camInfos[0].camPose.x),
-                                  Units.inchesToMeters(camInfos[0].camPose.z)),
-                new Rotation3d(Units.degreesToRadians(camInfos[0].camPose.roll),
-                               -Units.degreesToRadians(camInfos[0].camPose.pitch),
-                               -Units.degreesToRadians(camInfos[0].camPose.yaw)));
-            dashboard.refreshKey(DBKEY_PREFIX + camInfos[0].camName, "");
+                new Translation3d(Units.inchesToMeters(robot.robotInfo.camInfos[0].camPose.y),
+                                  -Units.inchesToMeters(robot.robotInfo.camInfos[0].camPose.x),
+                                  Units.inchesToMeters(robot.robotInfo.camInfos[0].camPose.z)),
+                new Rotation3d(Units.degreesToRadians(robot.robotInfo.camInfos[0].camPose.roll),
+                               -Units.degreesToRadians(robot.robotInfo.camInfos[0].camPose.pitch),
+                               -Units.degreesToRadians(robot.robotInfo.camInfos[0].camPose.yaw)));
+            dashboard.refreshKey(DBKEY_PREFIX + robot.robotInfo.camInfos[0].camName, "");
             leftShooterVision.setPipelineIndex(leftShooterPipeline.pipelineIndex);
         }
         else
@@ -127,18 +128,20 @@ public class Vision //implements TrcVision.ObjectInfo
             leftShooterCamFromRobot = null;
         }
 
-        if (camInfos.length > 1 && camInfos[1] != null)
+        if (robot.robotInfo.camInfos.length > 1 && robot.robotInfo.camInfos[1] != null)
         {
-            tracer.traceInfo(moduleName, "Creating RightShooterVision for camera %s.", camInfos[1].camName);
-            rightShooterVision = new FrcPhotonVision(camInfos[1], this::getAprilTagGroundOffset);
+            tracer.traceInfo(
+                moduleName, "Creating RightShooterVision for camera %s.", robot.robotInfo.camInfos[1].camName);
+            rightShooterVision = new FrcPhotonVision(
+                robot.robotInfo.camInfos[1], this::getAprilTagGroundOffset, this::getRightShooterRobotToCamera);
             rightShooterCamFromRobot = new Transform3d(
-                new Translation3d(Units.inchesToMeters(camInfos[1].camPose.y),
-                                  -Units.inchesToMeters(camInfos[1].camPose.x),
-                                  Units.inchesToMeters(camInfos[1].camPose.z)),
-                new Rotation3d(Units.degreesToRadians(camInfos[1].camPose.roll),
-                               -Units.degreesToRadians(camInfos[1].camPose.pitch),
-                               -Units.degreesToRadians(camInfos[1].camPose.yaw)));
-            dashboard.refreshKey(DBKEY_PREFIX + camInfos[1].camName, "");
+                new Translation3d(Units.inchesToMeters(robot.robotInfo.camInfos[1].camPose.y),
+                                  -Units.inchesToMeters(robot.robotInfo.camInfos[1].camPose.x),
+                                  Units.inchesToMeters(robot.robotInfo.camInfos[1].camPose.z)),
+                new Rotation3d(Units.degreesToRadians(robot.robotInfo.camInfos[1].camPose.roll),
+                               -Units.degreesToRadians(robot.robotInfo.camInfos[1].camPose.pitch),
+                               -Units.degreesToRadians(robot.robotInfo.camInfos[1].camPose.yaw)));
+            dashboard.refreshKey(DBKEY_PREFIX + robot.robotInfo.camInfos[1].camName, "");
             rightShooterVision.setPipelineIndex(rightShooterPipeline.pipelineIndex);
         }
         else
@@ -147,18 +150,19 @@ public class Vision //implements TrcVision.ObjectInfo
             rightShooterCamFromRobot = null;
         }
 
-        if (camInfos.length > 2 && camInfos[2] != null)
+        if (robot.robotInfo.camInfos.length > 2 && robot.robotInfo.camInfos[2] != null)
         {
-            tracer.traceInfo(moduleName, "Creating IntakeVision for camera %s.", camInfos[2].camName);
-            intakeVision = new FrcPhotonVision(camInfos[2], (obj)-> 0.0);
+            tracer.traceInfo(moduleName, "Creating IntakeVision for camera %s.", robot.robotInfo.camInfos[2].camName);
+            // Intake camera is mounted fixed, no need to provide CameraLocation method.
+            intakeVision = new FrcPhotonVision(robot.robotInfo.camInfos[2], (obj)-> 0.0, null);
             // intakeCamFromRobot = new Transform3d(
-            //     new Translation3d(Units.inchesToMeters(camInfos[2].camPose.y),
-            //                       -Units.inchesToMeters(camInfos[2].camPose.x),
-            //                       Units.inchesToMeters(camInfos[2].camPose.z)),
-            //     new Rotation3d(Units.degreesToRadians(camInfos[2].camPose.roll),
-            //                    -Units.degreesToRadians(camInfos[2].camPose.pitch),
-            //                    -Units.degreesToRadians(camInfos[2].camPose.yaw)));
-            dashboard.refreshKey(DBKEY_PREFIX + camInfos[2].camName, "");
+            //     new Translation3d(Units.inchesToMeters(robot.robotInfo.camInfos[2].camPose.y),
+            //                       -Units.inchesToMeters(robot.robotInfo.camInfos[2].camPose.x),
+            //                       Units.inchesToMeters(robot.robotInfo.camInfos[2].camPose.z)),
+            //     new Rotation3d(Units.degreesToRadians(robot.robotInfo.camInfos[2].camPose.roll),
+            //                    -Units.degreesToRadians(robot.robotInfo.camInfos[2].camPose.pitch),
+            //                    -Units.degreesToRadians(robot.robotInfo.camInfos[2].camPose.yaw)));
+            dashboard.refreshKey(DBKEY_PREFIX + robot.robotInfo.camInfos[2].camName, "");
             rightShooterVision.setPipelineIndex(intakePipeline.pipelineIndex);
         }
         else
@@ -169,6 +173,40 @@ public class Vision //implements TrcVision.ObjectInfo
 
         FrcDashboard.getInstance().addStatusUpdate(moduleName, this::updateStatus);
     }   //Vision
+
+    /**
+     * This method returns the left shooter camera position relative to robot center.
+     *
+     * @return robot to camera transform.
+     */
+    private Transform3d getLeftShooterRobotToCamera()
+    {
+        Transform3d robotToCam = null;
+
+        if (robot.leftShooter != null)
+        {
+            double turretAngleRad = Math.toRadians(robot.turret.getPosition());
+        }
+
+        return robotToCam;
+    }   //getLeftShooterRobotToCamera
+
+    /**
+     * This method returns the right shooter camera position relative to robot center.
+     *
+     * @return robot to camera transform.
+     */
+    private Transform3d getRightShooterRobotToCamera()
+    {
+        Transform3d robotToCam = null;
+
+        if (robot.rightShooter != null)
+        {
+            double turretAngleRad = Math.toRadians(robot.turret.getPosition());
+        }
+
+        return robotToCam;
+    }   //getRightShooterRobotToCamera
 
     /**
      * This method returns the ground offset of the detected target.
@@ -240,10 +278,10 @@ public class Vision //implements TrcVision.ObjectInfo
             detectedAprilTag = null;
         }
 
-        if  (ledIndicator != null)
+        if  (robot.ledIndicator != null)
         {
             // Show result using LED.
-            ledIndicator.setPhotonDetectedObject(PipelineType.APRILTAG, detectedAprilTag);
+            robot.ledIndicator.setPhotonDetectedObject(PipelineType.APRILTAG, detectedAprilTag);
         }
 
         return detectedAprilTag;
@@ -260,9 +298,9 @@ public class Vision //implements TrcVision.ObjectInfo
         // TODO: Should we just provide a comparator and not from the caller?
         DetectedObject detectedObj = intakeVision != null? intakeVision.getBestDetectedObject(comparator): null;
 
-        if (detectedObj != null && ledIndicator != null)
+        if (detectedObj != null && robot.ledIndicator != null)
         {
-            ledIndicator.setPhotonDetectedObject(PipelineType.YELLOW_FUEL, detectedObj);
+            robot.ledIndicator.setPhotonDetectedObject(PipelineType.YELLOW_FUEL, detectedObj);
         }
 
         return detectedObj;

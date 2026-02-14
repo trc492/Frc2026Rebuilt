@@ -39,6 +39,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frclib.drivebase.FrcRobotBase;
 import frclib.drivebase.FrcSwerveBase;
+import frclib.drivebase.FrcSwerveDrive;
 import frclib.drivebase.FrcRobotBase.ImuType;
 import frclib.driverio.FrcDashboard;
 import frclib.driverio.FrcMatchInfo;
@@ -100,7 +101,8 @@ public class Robot extends FrcRobot
     public LEDIndicator ledIndicator;
     // Vision.
     public Vision vision;
-    public TrcVisionRelocalize visionRelocalize;
+    public boolean hasVisionPoseEstimator = false;
+    public TrcVisionRelocalize trcVisionRelocalize = null;
     // Hybrid mode objects.
     public Command m_autonomousCommand;
     // Other subsystems.
@@ -188,11 +190,21 @@ public class Robot extends FrcRobot
         // Create and initialize Vision subsystem.
         if (RobotParams.Preferences.useVision && robotInfo.camInfos != null)
         {
-            vision = new Vision(robotInfo.camInfos, ledIndicator);
+            vision = new Vision(this);
 
-            if (RobotParams.Preferences.useVisionRelocalize)
+            if (RobotParams.Preferences.visionRelocalizeEnabled && robotBase != null)
             {
-                visionRelocalize = new TrcVisionRelocalize(100);
+                if (RobotParams.Preferences.useWpiLibPoseEstimator &&
+                    robotBase.driveBase instanceof FrcSwerveDrive)
+                {
+                    ((FrcSwerveDrive) robotBase.driveBase).createPoseEstimator(
+                        new FrcPhotonVision[] {vision.leftShooterVision, vision.rightShooterVision});
+                    hasVisionPoseEstimator = true;
+                }
+                else
+                {
+                    trcVisionRelocalize = new TrcVisionRelocalize(100);
+                }
             }
 
             if (RobotParams.Preferences.useStreamCamera)
@@ -379,28 +391,38 @@ public class Robot extends FrcRobot
     @Override
     public void robotPeriodic(RunMode runMode, boolean slowPeriodicLoop)
     {
-        if (visionRelocalize != null && vision != null &&
+        if (vision != null &&
             dashboard.getBoolean(Vision.DBKEY_VISION_RELOCALIZE, RobotParams.Preferences.visionRelocalizeEnabled))
         {
-            double fpgaTime = Timer.getFPGATimestamp();
-            TrcPose2D robotPose = robotBase.driveBase.getFieldPosition();
-            visionRelocalize.addTimedPose(fpgaTime, robotPose);
-            DetectedObject aprilTagObj = vision.getBestDetectedAprilTag(null, null);
 
-            if (aprilTagObj != null)
+            if (hasVisionPoseEstimator)
             {
-                TrcPose2D robotVel = robotBase.driveBase.getFieldVelocity();
-                TrcPose2D relocalizedPose =
-                    Math.hypot(robotVel.x, robotVel.y) > 0.01 || Math.abs(robotVel.angle) > 1.0?
-                        visionRelocalize.getRelocalizedPose(aprilTagObj.timestamp, aprilTagObj.robotPose, robotPose):
-                        aprilTagObj.robotPose;
+                FrcSwerveDrive swerveDrive = (FrcSwerveDrive) robotBase.driveBase;
+                swerveDrive.visionUpdate();
+            }
+            else if (trcVisionRelocalize != null)
+            {
+                DetectedObject aprilTagObj = vision.getBestDetectedAprilTag(null, null);
+                double fpgaTime = Timer.getFPGATimestamp();
+                TrcPose2D robotPose = robotBase.driveBase.getFieldPosition();
 
-                robotBase.driveBase.setFieldPosition(relocalizedPose);
-                globalTracer.traceDebug(
-                    moduleName,
-                    "VisionRelocalize: Time=%.6f, Relocalize %s->%s, VisionPose[%d](time=%.6f, pose=%s)",
-                    fpgaTime, robotPose, relocalizedPose, aprilTagObj.target.getFiducialId(),
-                    aprilTagObj.timestamp, aprilTagObj.robotPose);
+                trcVisionRelocalize.addTimedPose(fpgaTime, robotPose);
+                if (aprilTagObj != null)
+                {
+                    TrcPose2D robotVel = robotBase.driveBase.getFieldVelocity();
+                    TrcPose2D relocalizedPose =
+                        Math.hypot(robotVel.x, robotVel.y) > 0.01 || Math.abs(robotVel.angle) > 1.0?
+                            trcVisionRelocalize.getRelocalizedPose(
+                                aprilTagObj.timestamp, aprilTagObj.robotPose, robotPose):
+                            aprilTagObj.robotPose;
+
+                    robotBase.driveBase.setFieldPosition(relocalizedPose);
+                    globalTracer.traceDebug(
+                        moduleName,
+                        "VisionRelocalize: Time=%.6f, Relocalize %s->%s, VisionPose[%d](time=%.6f, pose=%s)",
+                        fpgaTime, robotPose, relocalizedPose, aprilTagObj.target.getFiducialId(),
+                        aprilTagObj.timestamp, aprilTagObj.robotPose);
+                }
             }
         }
 
@@ -624,12 +646,12 @@ public class Robot extends FrcRobot
         if (aprilTagObj.robotPose != null)
         {
             TrcPose2D relocalizedPose;
-            if (visionRelocalize != null && inMotion)
+            if (trcVisionRelocalize != null && inMotion)
             {
                 double fpgaTime = Timer.getFPGATimestamp();
                 TrcPose2D robotPose = robotBase.driveBase.getFieldPosition();
                 relocalizedPose =
-                    visionRelocalize.getRelocalizedPose(aprilTagObj.timestamp, aprilTagObj.robotPose, robotPose);
+                    trcVisionRelocalize.getRelocalizedPose(aprilTagObj.timestamp, aprilTagObj.robotPose, robotPose);
                 globalTracer.traceInfo(
                     moduleName,
                     ">>>>> VisionRelocalize: Time=%.6f, Before=%s, After=%s, VisionPose[%d](time=%.6f, pose=%s)",
