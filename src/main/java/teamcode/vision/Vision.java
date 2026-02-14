@@ -38,9 +38,12 @@ import frclib.vision.FrcPhotonVision.DetectedObject;
 import teamcode.Dashboard;
 import teamcode.Robot;
 import teamcode.RobotParams;
+import teamcode.subsystems.Shooter;
 import trclib.pathdrive.TrcPose2D;
+import trclib.pathdrive.TrcPose3D;
 import trclib.robotcore.TrcDbgTrace;
 import trclib.vision.TrcVision;
+import trclib.vision.TrcVision.CameraInfo;
 
 public class Vision //implements TrcVision.ObjectInfo
 {
@@ -48,11 +51,11 @@ public class Vision //implements TrcVision.ObjectInfo
     // Rebuilt Left Shooter camera info
     public static final TrcVision.CameraInfo leftShooterCamInfo = new TrcVision.CameraInfo()
         .setCameraInfo("OV9782_LeftShooter", 640, 480)
-        .setCameraPose(-0.25, 5.75, 7.0, 0.0, 21.8346, 0.0);
+        .setCameraPose(Shooter.Params.LTURRET_X_OFFSET, Shooter.Params.LTURRET_Y_OFFSET, 19.26, 0.0, 25.0, 0.0);
     // Rebuilt Intake camera info
     public static final TrcVision.CameraInfo rightShooterCamInfo = new TrcVision.CameraInfo()
         .setCameraInfo("OV9782_RightShooter", 640, 480)
-        .setCameraPose(0.0, -1.563, 41.374, 180.0, 9.1241, 0.0);
+        .setCameraPose(Shooter.Params.RTURRET_X_OFFSET, Shooter.Params.RTURRET_Y_OFFSET, 19.26, 0.0, 25.0, 0.0);
 
     // Reefscape Front camera info
     public static final TrcVision.CameraInfo reefscapeFrontCamInfo = new TrcVision.CameraInfo()
@@ -175,37 +178,51 @@ public class Vision //implements TrcVision.ObjectInfo
     }   //Vision
 
     /**
-     * This method returns the left shooter camera position relative to robot center.
+     * This method returns the shooter camera position relative to robot center adjusted by turret angle.
+     *
+     * @return robot to camera transform.
+     */
+    private Transform3d getShooterRobotToCamera(CameraInfo camInfo)
+    {
+        Transform3d robotToCam = null;
+
+        if (camInfo != null)
+        {
+            TrcPose3D camPose = camInfo.camPose;
+            double turretAngleRad = Math.toRadians(robot.turret.getPosition());
+            double camXOffset = Shooter.Params.CAM_ROTATE_RADIUS * Math.sin(turretAngleRad);
+            double camYOffset = Shooter.Params.CAM_ROTATE_RADIUS * Math.cos(turretAngleRad);
+
+            robotToCam = new Transform3d(
+                new Translation3d(Units.inchesToMeters(camPose.y + camYOffset),
+                                  -Units.inchesToMeters(camPose.x + camXOffset),
+                                  Units.inchesToMeters(camPose.z)),
+                new Rotation3d(Units.degreesToRadians(camPose.roll),
+                               -Units.degreesToRadians(camPose.pitch),
+                               -turretAngleRad));
+        }
+
+        return robotToCam;
+    }   //getShooterRobotToCamera
+
+    /**
+     * This method returns the left shooter camera position relative to robot center adjusted by turret angle.
      *
      * @return robot to camera transform.
      */
     private Transform3d getLeftShooterRobotToCamera()
     {
-        Transform3d robotToCam = null;
-
-        if (robot.leftShooter != null)
-        {
-            double turretAngleRad = Math.toRadians(robot.turret.getPosition());
-        }
-
-        return robotToCam;
+        return getShooterRobotToCamera(leftShooterCamInfo);
     }   //getLeftShooterRobotToCamera
 
     /**
-     * This method returns the right shooter camera position relative to robot center.
+     * This method returns the right shooter camera position relative to robot center adjusted by turret angle.
      *
      * @return robot to camera transform.
      */
     private Transform3d getRightShooterRobotToCamera()
     {
-        Transform3d robotToCam = null;
-
-        if (robot.rightShooter != null)
-        {
-            double turretAngleRad = Math.toRadians(robot.turret.getPosition());
-        }
-
-        return robotToCam;
+        return getShooterRobotToCamera(rightShooterCamInfo);
     }   //getRightShooterRobotToCamera
 
     /**

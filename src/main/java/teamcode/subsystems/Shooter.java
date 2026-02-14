@@ -217,14 +217,12 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_STALL_TIMEOUT         = 0.1;
         public static final double TURRET_STALL_RESET_TIMEOUT   = 0.0;
 
-        public static final double LTURRET_X_OFFSET             = 0.0;      // inches from robot center
-        public static final double LTURRET_Y_OFFSET             = -3.246;   // inches from robot center
-        public static double LCAM_DISTANCE_FROM_TURRET          = 2.9837;   // inches from turret center
-        public static TrcPose2D LCAM_POSE_ON_TURRET             = new TrcPose2D(0.0, -LCAM_DISTANCE_FROM_TURRET, 0.0);
-        public static final double RTURRET_X_OFFSET             = 0.0;      // inches from robot center
-        public static final double RTURRET_Y_OFFSET             = -3.246;   // inches from robot center
-        public static double RCAM_DISTANCE_FROM_TURRET          = 2.9837;   // inches from turret center
-        public static TrcPose2D RCAM_POSE_ON_TURRET             = new TrcPose2D(0.0, -LCAM_DISTANCE_FROM_TURRET, 0.0);
+        // TODO: measure CAM_ROTATE_RADIUS in CAD.
+        public static final double CAM_ROTATE_RADIUS            = 5.0;      // inches from turret center
+        public static final double LTURRET_X_OFFSET             = -7.375;   // inches from robot center
+        public static final double LTURRET_Y_OFFSET             = -6.0;     // inches from robot center
+        public static final double RTURRET_X_OFFSET             = 7.376;    // inches from robot center
+        public static final double RTURRET_Y_OFFSET             = -6.0;     // inches from robot center
 
         // Common Outake Motor Characteristics
         public static final MotorType OUTAKE_MOTOR_TYPE         = MotorType.CanSparkMax;
