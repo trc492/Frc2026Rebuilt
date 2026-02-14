@@ -300,7 +300,7 @@ public class DriveBase extends TrcSubsystem
                 .setPidStallDetectionEnabled(true)
                 .setPidDriveParams(false)
                 .setPurePursuitDriveParams(10.0, true, false)
-                .setVisionInfo(Vision.reefscapeFrontCamInfo, Vision.reefscapeBackCamInfo)
+                .setVisionInfo(Vision.maestroFrontCamInfo, Vision.maestroBackCamInfo)
                 .setIndicators(
                     new LEDInfo("LED", HwConfig.PWM_CHANNEL_LED, HwConfig.NUM_LEDS));
             this.setSwerveParams(swerveParams)

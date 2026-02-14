@@ -66,6 +66,15 @@ public class Vision //implements TrcVision.ObjectInfo
         .setCameraInfo("BackOV9782", 1280, 800)
         .setCameraPose(0.0, -1.563, 41.374, 180.0, 9.1241, 0.0);
 
+    // Maestro Front camera info
+    public static final TrcVision.CameraInfo maestroFrontCamInfo = new TrcVision.CameraInfo()
+        .setCameraInfo("OV9281", 640, 480)
+        .setCameraPose(-3.5, -2.375, 23.125, 0.0, 33.0, 0.0);
+    // Maestro Back camera info
+    public static final TrcVision.CameraInfo maestroBackCamInfo = new TrcVision.CameraInfo()
+        .setCameraInfo("OV9782", 640, 480)
+        .setCameraPose(-0.5, -5.375, 20.0, 180.0, -17.5, 0.0);
+
     public static final String DBKEY_PREFIX                 = "Vision/";
     public static final String DBKEY_VISION_RELOCALIZE      = DBKEY_PREFIX + "Relocalizate";
     public static final double ONTARGET_THRESHOLD           = 0.5;      // in degrees

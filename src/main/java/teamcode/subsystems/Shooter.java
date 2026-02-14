@@ -218,7 +218,7 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_STALL_RESET_TIMEOUT   = 0.0;
 
         // TODO: measure CAM_ROTATE_RADIUS in CAD.
-        public static final double CAM_ROTATE_RADIUS            = 5.0;      // inches from turret center
+        public static final double CAM_ROTATE_RADIUS            = 5.800896; // inches from turret center
         public static final double LTURRET_X_OFFSET             = -7.375;   // inches from robot center
         public static final double LTURRET_Y_OFFSET             = -6.0;     // inches from robot center
         public static final double RTURRET_X_OFFSET             = 7.376;    // inches from robot center
