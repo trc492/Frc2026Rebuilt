@@ -39,6 +39,7 @@ import teamcode.Dashboard;
 import teamcode.Robot;
 import teamcode.RobotParams;
 import teamcode.subsystems.Shooter;
+import teamcode.subsystems.DriveBase.RobotType;
 import trclib.pathdrive.TrcPose2D;
 import trclib.pathdrive.TrcPose3D;
 import trclib.robotcore.TrcDbgTrace;
@@ -123,7 +124,8 @@ public class Vision //implements TrcVision.ObjectInfo
             tracer.traceInfo(
                 moduleName, "Creating LeftShooterVision for camera %s.", robot.robotInfo.camInfos[0].camName);
             leftShooterVision = new FrcPhotonVision(
-                robot.robotInfo.camInfos[0], this::getAprilTagGroundOffset, this::getLeftShooterRobotToCamera);
+                robot.robotInfo.camInfos[0], this::getAprilTagGroundOffset,
+                RobotParams.Preferences.robotType == RobotType.RebuiltRobot? this::getLeftShooterRobotToCamera: null);
             leftShooterCamFromRobot = new Transform3d(
                 new Translation3d(Units.inchesToMeters(robot.robotInfo.camInfos[0].camPose.y),
                                   -Units.inchesToMeters(robot.robotInfo.camInfos[0].camPose.x),
@@ -145,7 +147,8 @@ public class Vision //implements TrcVision.ObjectInfo
             tracer.traceInfo(
                 moduleName, "Creating RightShooterVision for camera %s.", robot.robotInfo.camInfos[1].camName);
             rightShooterVision = new FrcPhotonVision(
-                robot.robotInfo.camInfos[1], this::getAprilTagGroundOffset, this::getRightShooterRobotToCamera);
+                robot.robotInfo.camInfos[1], this::getAprilTagGroundOffset,
+                RobotParams.Preferences.robotType == RobotType.RebuiltRobot? this::getRightShooterRobotToCamera: null);
             rightShooterCamFromRobot = new Transform3d(
                 new Translation3d(Units.inchesToMeters(robot.robotInfo.camInfos[1].camPose.y),
                                   -Units.inchesToMeters(robot.robotInfo.camInfos[1].camPose.x),

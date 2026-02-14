@@ -43,7 +43,7 @@ public class RobotParams
     public static class Preferences
     {
         // Global config
-        public static final RobotType robotType                 = RobotType.MaestroRobot;
+        public static final RobotType robotType                 = RobotType.RebuiltRobot;
         public static final boolean inCompetition               = false;
         public static final boolean hybridMode                  = false;
         public static final boolean useTraceLog                 = true;
@@ -59,7 +59,7 @@ public class RobotParams
         public static final boolean hasDriverGameController     = robotType != RobotType.RebuiltRobot;
         public static final boolean hasOperatorGameController   = robotType == RobotType.RebuiltRobot;
         // Vision
-        public static final boolean useVision                   = robotType == RobotType.ReefscapeRobot;
+        public static final boolean useVision                   = true;
         public static final boolean showVisionStatus            = true;
         public static final boolean usePhotonVision             = true;
         public static final boolean useOpenCvVision             = false;
@@ -84,14 +84,14 @@ public class RobotParams
         public static final boolean useAntiTipping              = false;
         // Other Subsystems
         public static final boolean useLeftShooter              = true;
-        public static final boolean useRightShooter             = false;
+        public static final boolean useRightShooter             = true;
         public static final boolean showShooterStatus           = true;
-        public static final boolean useRegression               = true;
+        public static final boolean useRegression               = false;
         public static final boolean useMotionCompensation       = true;
-        public static final boolean useIntake                   = false;
-        public static final boolean showIntakeStatus            = false;
-        public static final boolean useClimber                  = false;
-        public static final boolean showClimberStatus           = false;
+        public static final boolean useIntake                   = true;
+        public static final boolean showIntakeStatus            = true;
+        public static final boolean useClimber                  = true;
+        public static final boolean showClimberStatus           = true;
         // Auto Tasks
         public static final boolean useAutoScoreTask            = false;
         public static final boolean useAutoPickupTask           = false;
