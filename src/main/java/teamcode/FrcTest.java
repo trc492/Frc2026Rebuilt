@@ -27,6 +27,7 @@ import java.util.Locale;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frclib.drivebase.FrcRobotBase;
+import frclib.drivebase.FrcSwerveBase;
 import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcUserChoices;
 import frclib.driverio.FrcXboxController;
@@ -112,6 +113,7 @@ public class FrcTest extends FrcTeleOp
         TUNE_DRIVE_PID,
         TUNE_SUBSYSTEM,
         VISION_TEST,
+        SWERVE_CALIBRATION,
         LIVE_WINDOW
     }   //enum Test
 
@@ -150,6 +152,7 @@ public class FrcTest extends FrcTeleOp
             testMenu.addChoice("Tune Drive PID", Test.TUNE_DRIVE_PID);
             testMenu.addChoice("Tune Subsystem", Test.TUNE_SUBSYSTEM);
             testMenu.addChoice("Vision Test", Test.VISION_TEST);
+            testMenu.addChoice("Swerve Calibration", Test.SWERVE_CALIBRATION);
             testMenu.addChoice("Live Window", Test.LIVE_WINDOW, false, true);
             //
             // Initialize dashboard with default choice values.
@@ -452,6 +455,14 @@ public class FrcTest extends FrcTeleOp
                 }
                 break;
 
+            case SWERVE_CALIBRATION:
+                if (robot.robotBase != null && robot.robotBase instanceof FrcSwerveBase)
+                {
+                    setControlsEnabled(false);
+                    ((FrcSwerveBase) robot.robotBase).startSteeringCalibration();
+                }
+                break;
+
             case LIVE_WINDOW:
                 liveWindowEnabled = true;
                 break;
@@ -475,6 +486,13 @@ public class FrcTest extends FrcTeleOp
             case X_TIMED_DRIVE:
             case Y_TIMED_DRIVE:
                 robot.robotBase.driveBase.setGyroAssistEnabled(null);
+                break;
+
+            case SWERVE_CALIBRATION:
+                if (robot.robotBase != null && robot.robotBase instanceof FrcSwerveBase)
+                {
+                    ((FrcSwerveBase) robot.robotBase).stopSteeringCalibration();
+                }
                 break;
 
             default:
@@ -669,6 +687,15 @@ public class FrcTest extends FrcTeleOp
 
                 case VISION_TEST:
                     lineNum = doVisionTest(lineNum);
+                    break;
+
+                case SWERVE_CALIBRATION:
+                    if (robot.robotBase != null && robot.robotBase instanceof FrcSwerveBase)
+                    {
+                        FrcSwerveBase swerveBase = (FrcSwerveBase) robot.robotBase;
+                        swerveBase.runSteeringCalibration();
+                        swerveBase.displaySteerZeroCalibration(lineNum);
+                    }
                     break;
 
                 default:

@@ -56,7 +56,7 @@ public class RobotParams
         public static final boolean updateDashboard             = !inCompetition;   // Start up default value.
         public static final boolean useLED                      = false;
         public static final boolean useRumble                   = false;
-        public static final boolean hasDriverGameController     = robotType == RobotType.RebuiltRobot;
+        public static final boolean hasDriverGameController     = true;
         public static final boolean hasOperatorGameController   = robotType == RobotType.RebuiltRobot;
         // Vision
         public static final boolean useVision                   = true;
