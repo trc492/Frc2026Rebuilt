@@ -54,7 +54,7 @@ public class Intake extends TrcSubsystem
         // Motor Characteristics
         public static final MotorType INTAKE_MOTOR_TYPE         = MotorType.CanTalonFx;
         public static final String INTAKE_MOTOR_NAME            = SUBSYSTEM_NAME + ".IntakeMotor";
-        public static final boolean INTAKE_MOTOR_INVERTED       = false;
+        public static final boolean INTAKE_MOTOR_INVERTED       = true;
         public static final int INTAKE_MOTOR_CANID              = RobotParams.HwConfig.CANID_INTAKE_MOTOR;
         // Intake Parameters
         public static final double INTAKE_POWER                 = 0.5;

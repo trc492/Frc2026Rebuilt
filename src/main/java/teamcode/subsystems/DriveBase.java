@@ -137,7 +137,8 @@ public class DriveBase extends TrcSubsystem
                         HwConfig.CANID_FLSTEER_ENCODER, HwConfig.CANID_FRSTEER_ENCODER,
                         HwConfig.CANID_BLSTEER_ENCODER, HwConfig.CANID_BRSTEER_ENCODER},
                     new boolean[] {false, false, false, false},
-                    new double[] {0.0, 0.0, 0.0, 0.0}, false,
+                    //new double[] {0.125244, 0.688232, 0.880127, 0.234619}, true,
+                    new double[] {0.0, 0.0, 0.0, 0.0}, true,
                     RobotParams.Robot.STEER_ZERO_CAL_FILE)
                 .setSteerMotorInfo(
                     MotorType.CanTalonFx, RobotParams.HwConfig.CANBUS_CANIVORE, null,

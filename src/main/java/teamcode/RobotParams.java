@@ -56,7 +56,7 @@ public class RobotParams
         public static final boolean updateDashboard             = !inCompetition;   // Start up default value.
         public static final boolean useLED                      = false;
         public static final boolean useRumble                   = false;
-        public static final boolean hasDriverGameController     = robotType != RobotType.RebuiltRobot;
+        public static final boolean hasDriverGameController     = robotType == RobotType.RebuiltRobot;
         public static final boolean hasOperatorGameController   = robotType == RobotType.RebuiltRobot;
         // Vision
         public static final boolean useVision                   = true;
@@ -79,7 +79,7 @@ public class RobotParams
         public static final boolean showDriveBaseStatus         = true;
         public static final boolean debugDriveBase              = false;
         public static final boolean debugPidDrive               = false;
-        public static final boolean showDrivePower              = false;
+        public static final boolean showDrivePower              = true;
         public static final boolean useGyroAssist               = false;
         public static final boolean useAntiTipping              = false;
         // Other Subsystems
@@ -88,7 +88,7 @@ public class RobotParams
         public static final boolean showShooterStatus           = true;
         public static final boolean useRegression               = false;
         public static final boolean useMotionCompensation       = true;
-        public static final boolean useIntake                   = false;
+        public static final boolean useIntake                   = true;
         public static final boolean showIntakeStatus            = true;
         public static final boolean useClimber                  = false;
         public static final boolean showClimberStatus           = true;

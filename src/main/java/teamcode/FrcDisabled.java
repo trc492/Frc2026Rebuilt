@@ -90,6 +90,10 @@ public class FrcDisabled implements TrcRobot.RobotMode
     @Override
     public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
+        if (slowPeriodicLoop)
+        {
+            Dashboard.checkDashboardUpdateEnabled();
+        }
     }   //periodic
 
 }   //class FrcDisabled
