@@ -131,7 +131,7 @@ public class DriveBase extends TrcSubsystem
                     new LEDInfo("LED", HwConfig.PWM_CHANNEL_LED, HwConfig.NUM_LEDS));
             this.setSwerveParams(swerveParams)
                 .setSteerEncoderInfo(
-                    EncoderType.CANCoder,
+                    EncoderType.CANCoder, RobotParams.HwConfig.CANBUS_CANIVORE,
                     new String[] {"flSteerEncoder", "frSteerEncoder", "blSteerEncoder", "brSteerEncoder"},
                     new int[] {
                         HwConfig.CANID_FLSTEER_ENCODER, HwConfig.CANID_FRSTEER_ENCODER,
@@ -140,7 +140,7 @@ public class DriveBase extends TrcSubsystem
                     new double[] {0.0, 0.0, 0.0, 0.0}, false,
                     RobotParams.Robot.STEER_ZERO_CAL_FILE)
                 .setSteerMotorInfo(
-                    MotorType.CanTalonFx, null,
+                    MotorType.CanTalonFx, null, RobotParams.HwConfig.CANBUS_CANIVORE,
                     new String[] {"flSteerMotor", "frSteerMotor", "blSteerMotor", "brSteerMotor"},
                     new int[] {
                         HwConfig.CANID_FLSTEER_MOTOR, HwConfig.CANID_FRSTEER_MOTOR,
@@ -219,6 +219,7 @@ public class DriveBase extends TrcSubsystem
             this.setSwerveParams(swerveParams)
                 .setSteerEncoderInfo(
                     EncoderType.Canandmag,
+                    null,
                     new String[] {"flSteerEncoder", "frSteerEncoder", "blSteerEncoder", "brSteerEncoder"},
                     new int[] {
                         HwConfig.CANID_FLSTEER_ENCODER, HwConfig.CANID_FRSTEER_ENCODER,
@@ -227,7 +228,7 @@ public class DriveBase extends TrcSubsystem
                     new double[] {0.0, 0.0, 0.0, 0.0}, true,
                     RobotParams.Robot.STEER_ZERO_CAL_FILE)
                 .setSteerMotorInfo(
-                    MotorType.CanTalonFx, null,
+                    MotorType.CanTalonFx, null, null,
                     new String[] {"flSteerMotor", "frSteerMotor", "blSteerMotor", "brSteerMotor"},
                     new int[] {
                         HwConfig.CANID_FLSTEER_MOTOR, HwConfig.CANID_FRSTEER_MOTOR,
@@ -306,6 +307,7 @@ public class DriveBase extends TrcSubsystem
             this.setSwerveParams(swerveParams)
                 .setSteerEncoderInfo(
                     EncoderType.Canandmag,
+                    null,
                     new String[] {"flSteerEncoder", "frSteerEncoder", "blSteerEncoder", "brSteerEncoder"},
                     new int[] {
                         HwConfig.CANID_FLSTEER_ENCODER, HwConfig.CANID_FRSTEER_ENCODER,
@@ -314,7 +316,7 @@ public class DriveBase extends TrcSubsystem
                     new double[] {0.0, 0.0, 0.0, 0.0}, true,
                     RobotParams.Robot.STEER_ZERO_CAL_FILE)
                 .setSteerMotorInfo(
-                    MotorType.CanTalonFx, null,
+                    MotorType.CanTalonFx, null, null,
                     new String[] {"flSteerMotor", "frSteerMotor", "blSteerMotor", "brSteerMotor"},
                     new int[] {
                         HwConfig.CANID_FLSTEER_MOTOR, HwConfig.CANID_FRSTEER_MOTOR,

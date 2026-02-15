@@ -507,8 +507,69 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         {
             case A:
             case B:
+                if(pressed)
+                {
+                    if(robot.leftShooter != null){
+                        if(robot.leftShooter.getShooterMotor1Power() != 0.0)
+                        {
+                            robot.leftShooter.shooterMotor1.setPower(0.0);
+                        } else
+                        {
+                            robot.leftShooter.shooterMotor1.setPower(0.3);
+                        }
+                    }
+                    if(robot.rightShooter != null){
+                        if(robot.rightShooter.getShooterMotor1Power() != 0.0)
+                        {
+                            robot.rightShooter.shooterMotor1.setPower(0.0);
+                        } else
+                        {
+                            robot.rightShooter.shooterMotor1.setPower(0.3);
+                        }
+                    }
+                }
+                break;
             case X:
+                if(pressed)
+                {
+                    if(robot.leftOutake != null && robot.rightOutake != null){
+                        if (robot.rightOutake.isActive())
+                        {
+                            robot.rightOutake.cancel();
+                        } else {
+                            robot.rightOutake.autoIntake(null);
+                        }
+
+                        if (robot.leftOutake.isActive())
+                        {
+                            robot.leftOutake.cancel();
+                        } else {
+                            robot.leftOutake.autoIntake(null);
+                        }
+                    }
+                    if(robot.feeder != null)
+                    {
+                        if (robot.feeder.getPower() != 0.0)
+                        {
+                            robot.feeder.setPower(0.0);
+                        }
+                        else
+                        {
+                            robot.feeder.setPower(1.0);
+                        }
+                    }
+                }
+                break;
             case Y:
+                if(pressed){
+                    if(robot.leftOutake != null && robot.rightOutake != null){
+                        robot.rightOutake.cancel();
+                        robot.leftOutake.cancel();
+                        robot.rightOutake.intake(0.25);
+                        robot.leftOutake.intake(0.25);
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Fired left and right outtake ");
+                    }
+                } 
                 break;
 
             case LeftBumper:

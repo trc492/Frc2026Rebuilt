@@ -48,7 +48,7 @@ public class Intake extends TrcSubsystem
     public static final class Params
     {
         public static final String CANBUS_NAME                  = RobotParams.HwConfig.CANBUS_CANIVORE;
-        public static final boolean HAS_DEPLOYER                = true;
+        public static final boolean HAS_DEPLOYER                = false;
 
         // Intake:
         // Motor Characteristics

@@ -54,7 +54,7 @@ import trclib.timer.TrcTimer;
 public class Shooter extends TrcSubsystem
 {
     public static final String SUBSYSTEM_NAME = "Shooter";
-    private static final boolean NEED_ZERO_CAL = true;
+    private static final boolean NEED_ZERO_CAL = false;
     private static final String DBKEY_PREFERENCE_SHOW_STATUS = SUBSYSTEM_NAME + "/ShowStatus";
     private static final String DBKEY_PREFERENCE_SHOW_GRAPHS = SUBSYSTEM_NAME + "/ShowGraphs";
     private static final String DBKEY_PREFERENCE_USE_REGRESSION = SUBSYSTEM_NAME + "/UseRegression";
@@ -108,10 +108,10 @@ public class Shooter extends TrcSubsystem
     public static final class Params
     {
         public static final String CANBUS_NAME                  = RobotParams.HwConfig.CANBUS_CANIVORE;
-        public static final boolean SHOOTER_HAS_TILT            = false;
-        public static final boolean SHOOTER_HAS_OUTAKE          = false;
-        public static final boolean HAS_TURRET                  = false;
-        public static final boolean HAS_FEEDER                  = false;
+        public static final boolean SHOOTER_HAS_TILT            = true;
+        public static final boolean SHOOTER_HAS_OUTAKE          = true;
+        public static final boolean HAS_TURRET                  = true;
+        public static final boolean HAS_FEEDER                  = true;
 
         // Common Shooter Motor Characteristics
         public static final MotorType SHOOTER_MOTOR_TYPE        = MotorType.CanTalonFx;
@@ -189,7 +189,8 @@ public class Shooter extends TrcSubsystem
         public static final double RTILT_ENCODER_ZERO_OFFSET    = 0.124848;
 
         // Common Turret Motor Characteristics
-        public static final MotorType TURRET_MOTOR_TYPE         = MotorType.CanTalonSrx;
+        public static final MotorType TURRET_MOTOR_TYPE         = MotorType.CanSparkMax;
+        public static final SparkMaxMotorParams TURRET_SPARKMAX_PARAMS = new SparkMaxMotorParams(true, false);
         public static final String TURRET_MOTOR_NAME            = SUBSYSTEM_NAME + ".TurretMotor";
         public static final boolean TURRET_MOTOR_INVERTED       = true;
         public static final int TURRET_MOTOR_CANID              = RobotParams.HwConfig.CANID_TURRET_MOTOR;
@@ -227,7 +228,7 @@ public class Shooter extends TrcSubsystem
         // Common Outake Motor Characteristics
         public static final MotorType OUTAKE_MOTOR_TYPE         = MotorType.CanSparkMax;
         public static final SparkMaxMotorParams OUTAKE_SPARKMAX_PARAMS = new SparkMaxMotorParams(true, false);
-        public static final double OUTAKE_INTAKE_POWER          = 1.0;
+        public static final double OUTAKE_INTAKE_POWER          = 0.25;
         public static final double OUTAKE_EJECT_POWER           = 0.5;
         public static final double OUTAKE_RETAIN_POWER          = 0.0;
         public static final double OUTAKE_INTAKE_FINISH_DELAY   = 0.0;
@@ -242,17 +243,17 @@ public class Shooter extends TrcSubsystem
         // Right Outake Motor Characteristics
         public static final String ROUTAKE_NAME                 = SUBSYSTEM_NAME + ".RightOutake";
         public static final String ROUTAKE_MOTOR_NAME           = SUBSYSTEM_NAME + ".RightOutakeMotor";
-        public static final boolean ROUTAKE_MOTOR_INVERTED      = true;
+        public static final boolean ROUTAKE_MOTOR_INVERTED      = false;
         public static final int ROUTAKE_UPPER_MOTOR_CANID       = RobotParams.HwConfig.CANID_ROUTAKE_MOTOR;
         public static final String ROUTAKE_BACK_SENSOR_NAME     = SUBSYSTEM_NAME + "RightOutakeBackSensor";
-        public static final boolean ROUTAKE_BACK_SENSOR_INVERTED= false;
+        public static final boolean ROUTAKE_BACK_SENSOR_INVERTED = false;
         // Feeder Motor Characteristics
         public static final MotorType FEEDER_MOTOR_TYPE         = MotorType.CanSparkMax;
         public static final SparkMaxMotorParams FEEDER_SPARKMAX_PARAMS = new SparkMaxMotorParams(true, false);
         public static final String FEEDER_MOTOR_NAME            = SUBSYSTEM_NAME + ".FeederMotor";
-        public static final boolean FEEDER_MOTOR_INVERTED       = true;
+        public static final boolean FEEDER_MOTOR_INVERTED       = false;
         public static final int FEEDER_MOTOR_CANID              = RobotParams.HwConfig.CANID_FEEDER_MOTOR;
-        public static final double FEEDER_POWER                 = 1.0;
+        public static final double FEEDER_POWER                 = 0.15;
     }   //class Params
 
     private static class GoalTrackingState
@@ -317,16 +318,16 @@ public class Shooter extends TrcSubsystem
             FrcShooter.Params lShooterParams = new FrcShooter.Params()
                 .setShooterMotor1(
                     Params.LSHOOTER_PRIMARY_MOTOR_NAME, Params.SHOOTER_MOTOR_TYPE, Params.LSHOOTER_PRIMARY_MOTOR_INVERTED,
-                    Params.LSHOOTER_PRIMARY_MOTOR_CANID, Params.CANBUS_NAME, null, true)
+                    Params.LSHOOTER_PRIMARY_MOTOR_CANID, null, null, true)
                 .setShooterMotor2(
                     Params.LSHOOTER_FOLLOWER_MOTOR_NAME, Params.SHOOTER_MOTOR_TYPE, Params.LSHOOTER_FOLLOWER_MOTOR_INVERTED,
-                    Params.LSHOOTER_FOLLOWER_MOTOR_CANID, Params.CANBUS_NAME, null, false, true);
+                    Params.LSHOOTER_FOLLOWER_MOTOR_CANID, null, null, false, true);
             if (Params.SHOOTER_HAS_TILT)
             {
                 lShooterParams
                     .setTiltMotor(
                         Params.LTILT_MOTOR_NAME, Params.TILT_MOTOR_TYPE, Params.LTILT_MOTOR_INVERTED,
-                        Params.LTILT_MOTOR_CANID, Params.CANBUS_NAME, Params.TILT_SPARKMAX_PARAMS,
+                        Params.LTILT_MOTOR_CANID, null, Params.TILT_SPARKMAX_PARAMS,
                         new TrcShooter.PanTiltParams(Params.TILT_POWER_LIMIT, Params.TILT_MIN_POS, Params.TILT_MAX_POS))
                     .setTiltMotorPosPresets(Params.TILT_POS_PRESET_TOLERANCE, Params.TILT_POS_PRESETS);
             }
@@ -363,7 +364,7 @@ public class Shooter extends TrcSubsystem
                 FrcRollerIntake.Params outakeParams = new FrcRollerIntake.Params()
                     .setPrimaryMotor(
                         Params.LOUTAKE_MOTOR_NAME, Params.OUTAKE_MOTOR_TYPE, Params.LOUTAKE_MOTOR_INVERTED,
-                        Params.LOUTAKE_MOTOR_CANID, Params.CANBUS_NAME, Params.OUTAKE_SPARKMAX_PARAMS)
+                        Params.LOUTAKE_MOTOR_CANID, null, Params.OUTAKE_SPARKMAX_PARAMS)
                     .setPowerLevels(
                         Params.OUTAKE_INTAKE_POWER, Params.OUTAKE_EJECT_POWER, Params.OUTAKE_RETAIN_POWER)
                     .setFinishDelays(Params.OUTAKE_INTAKE_FINISH_DELAY, Params.OUTAKE_EJECT_FINISH_DELAY)
@@ -392,18 +393,18 @@ public class Shooter extends TrcSubsystem
             FrcShooter.Params rShooterParams = new FrcShooter.Params()
                 .setShooterMotor1(
                     Params.RSHOOTER_PRIMARY_MOTOR_NAME, Params.SHOOTER_MOTOR_TYPE,
-                    Params.RSHOOTER_PRIMARY_MOTOR_INVERTED, Params.RSHOOTER_PRIMARY_MOTOR_CANID, Params.CANBUS_NAME,
+                    Params.RSHOOTER_PRIMARY_MOTOR_INVERTED, Params.RSHOOTER_PRIMARY_MOTOR_CANID, null,
                     null, true)
                 .setShooterMotor2(
                     Params.RSHOOTER_FOLLOWER_MOTOR_NAME, Params.SHOOTER_MOTOR_TYPE,
-                    Params.RSHOOTER_FOLLOWER_MOTOR_INVERTED, Params.RSHOOTER_FOLLOWER_MOTOR_CANID, Params.CANBUS_NAME,
+                    Params.RSHOOTER_FOLLOWER_MOTOR_INVERTED, Params.RSHOOTER_FOLLOWER_MOTOR_CANID, null,
                     null, false, true);
             if (Params.SHOOTER_HAS_TILT)
             {
                 rShooterParams
                     .setTiltMotor(
                         Params.RTILT_MOTOR_NAME, Params.TILT_MOTOR_TYPE, Params.RTILT_MOTOR_INVERTED,
-                        Params.RTILT_MOTOR_CANID, Params.CANBUS_NAME, Params.TILT_SPARKMAX_PARAMS,
+                        Params.RTILT_MOTOR_CANID, null, Params.TILT_SPARKMAX_PARAMS,
                         new TrcShooter.PanTiltParams(Params.TILT_POWER_LIMIT, Params.TILT_MIN_POS, Params.TILT_MAX_POS))
                     .setTiltMotorPosPresets(Params.TILT_POS_PRESET_TOLERANCE, Params.TILT_POS_PRESETS);
             }
@@ -469,7 +470,7 @@ public class Shooter extends TrcSubsystem
             FrcMotorActuator.Params turretMotorParams = new FrcMotorActuator.Params()
                 .setPrimaryMotor(
                     Params.TURRET_MOTOR_NAME, Params.TURRET_MOTOR_TYPE, Params.TURRET_MOTOR_INVERTED, true, true,
-                    Params.TURRET_MOTOR_CANID, Params.CANBUS_NAME, null)
+                    Params.TURRET_MOTOR_CANID, null, Params.TURRET_SPARKMAX_PARAMS)
                 .setPositionScaleAndOffset(Params.TURRET_MOTOR_DEG_PER_COUNT, Params.TURRET_POS_OFFSET)
                 .setPositionPresets(Params.TURRET_POS_PRESET_TOLERANCE, Params.TURRET_POS_PRESETS);
             turret = new FrcMotorActuator(turretMotorParams).getMotor();
@@ -496,7 +497,7 @@ public class Shooter extends TrcSubsystem
             FrcMotorActuator.Params feederMotorParams = new FrcMotorActuator.Params()
                 .setPrimaryMotor(
                     Params.FEEDER_MOTOR_NAME, Params.FEEDER_MOTOR_TYPE, Params.FEEDER_MOTOR_INVERTED, true, true,
-                    Params.FEEDER_MOTOR_CANID, Params.CANBUS_NAME, Params.FEEDER_SPARKMAX_PARAMS);
+                    Params.FEEDER_MOTOR_CANID, null, Params.FEEDER_SPARKMAX_PARAMS);
             feeder = new FrcMotorActuator(feederMotorParams).getMotor();
         }
         else
@@ -653,7 +654,7 @@ public class Shooter extends TrcSubsystem
      */
     public boolean getLeftOutakeSensorState()
     {
-        return leftOutake != null && leftOutake.getBackSensorState();
+        return leftOutake != null && leftOutake.motor.isLowerLimitSwitchActive();
     }   //getLeftOutakeSensorState
 
     /**
@@ -663,7 +664,7 @@ public class Shooter extends TrcSubsystem
      */
     public boolean getRightOutakeSensorState()
     {
-        return leftOutake != null && leftOutake.getBackSensorState();
+        return rightOutake != null && rightOutake.motor.isLowerLimitSwitchActive();
     }   //getRightOutakeSensorState
 
     /**
