@@ -854,28 +854,28 @@ public class FrcTest extends FrcTeleOp
                                 robot.rightShooter.setShooterMotorRPM(flywheelRPM, null);
                             }
                         }
-                        else if (robot.leftOutake != null &&
-                                 subsystemName.equalsIgnoreCase(Shooter.Params.LOUTAKE_MOTOR_NAME))
+                        else if (robot.leftTransfer != null &&
+                                 subsystemName.equalsIgnoreCase(Shooter.Params.LTRANSFER_MOTOR_NAME))
                         {
-                            if (robot.leftOutake.isActive())
+                            if (robot.leftTransfer.isActive())
                             {
-                                robot.leftOutake.cancel();
+                                robot.leftTransfer.cancel();
                             }
                             else
                             {
-                                robot.leftOutake.autoIntake(null);
+                                robot.leftTransfer.autoIntake(null);
                             }
                         }
-                        else if (robot.rightOutake != null &&
-                                 subsystemName.equalsIgnoreCase(Shooter.Params.ROUTAKE_MOTOR_NAME))
+                        else if (robot.rightTransfer != null &&
+                                 subsystemName.equalsIgnoreCase(Shooter.Params.RTRANSFER_MOTOR_NAME))
                         {
-                            if (robot.rightOutake.isActive())
+                            if (robot.rightTransfer.isActive())
                             {
-                                robot.rightOutake.cancel();
+                                robot.rightTransfer.cancel();
                             }
                             else
                             {
-                                robot.rightOutake.autoIntake(null);
+                                robot.rightTransfer.autoIntake(null);
                             }
                         }
                         else if (robot.feeder != null &&

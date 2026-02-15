@@ -125,10 +125,10 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
     protected boolean acquireSubsystemsOwnership(String owner)
     {
         // Shooters and turret are controlled by GoalTracking, so don't take ownership here.
-        // AutoShoot involves outakes and feeder, take their ownership here.
+        // AutoShoot involves transfers and feeder, take their ownership here.
         return owner == null ||
-               (robot.leftOutake == null || robot.leftOutake.acquireExclusiveAccess(owner)) &&
-               (robot.rightOutake == null || robot.rightOutake.acquireExclusiveAccess(owner)) &&
+               (robot.leftTransfer == null || robot.leftTransfer.acquireExclusiveAccess(owner)) &&
+               (robot.rightTransfer == null || robot.rightTransfer.acquireExclusiveAccess(owner)) &&
                (robot.feeder == null) || robot.feeder.acquireExclusiveAccess(owner);
     }   //acquireSubsystemsOwnership
 
@@ -147,11 +147,11 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
             tracer.traceInfo(
                 moduleName,
                 "Releasing subsystem ownership on behalf of " + owner +
-                "\n\tleftOutake=" + ownershipMgr.getOwner(robot.leftOutake) +
-                "\n\trightOutake=" + ownershipMgr.getOwner(robot.rightOutake) +
+                "\n\tleftTransfer=" + ownershipMgr.getOwner(robot.leftTransfer) +
+                "\n\trightTransfer=" + ownershipMgr.getOwner(robot.rightTransfer) +
                 "\n\tfeeder=" + ownershipMgr.getOwner(robot.feeder));
-            robot.leftOutake.releaseExclusiveAccess(owner);
-            robot.rightOutake.releaseExclusiveAccess(owner);
+            robot.leftTransfer.releaseExclusiveAccess(owner);
+            robot.rightTransfer.releaseExclusiveAccess(owner);
             robot.feeder.releaseExclusiveAccess(owner);
         }
     }   //releaseSubsystemsOwnership
@@ -166,8 +166,8 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
     protected void stopSubsystems(String owner)
     {
         tracer.traceInfo(moduleName, "Stopping subsystems.");
-        if (robot.leftOutake != null) robot.leftOutake.cancel();
-        if (robot.rightOutake != null) robot.rightOutake.cancel();
+        if (robot.leftTransfer != null) robot.leftTransfer.cancel();
+        if (robot.rightTransfer != null) robot.rightTransfer.cancel();
         if (robot.feeder != null) robot.feeder.cancel();
         robot.shooterSubsystem.setGoalTrackingEnabled(prevGoalTrackingMode);
         prevGoalTrackingMode = null;

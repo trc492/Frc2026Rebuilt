@@ -110,7 +110,7 @@ public class Shooter extends TrcSubsystem
     {
         public static final String CANBUS_NAME                  = RobotParams.HwConfig.CANBUS_CANIVORE;
         public static final boolean SHOOTER_HAS_TILT            = true;
-        public static final boolean SHOOTER_HAS_OUTAKE          = true;
+        public static final boolean SHOOTER_HAS_TRANSFER        = true;
         public static final boolean HAS_TURRET                  = true;
         public static final boolean HAS_FEEDER                  = true;
 
@@ -227,31 +227,33 @@ public class Shooter extends TrcSubsystem
         public static final double RTURRET_X_OFFSET             = 7.376;    // inches from robot center
         public static final double RTURRET_Y_OFFSET             = -6.0;     // inches from robot center
 
-        // Common Outake Motor Characteristics
-        public static final MotorType OUTAKE_MOTOR_TYPE         = MotorType.CanSparkMax;
-        public static final SparkMaxMotorParams OUTAKE_SPARKMAX_PARAMS = new SparkMaxMotorParams(true, false);
-        public static final double OUTAKE_INTAKE_POWER          = 0.25;
-        public static final double OUTAKE_EJECT_POWER           = 0.5;
-        public static final double OUTAKE_RETAIN_POWER          = 0.0;
-        public static final double OUTAKE_INTAKE_FINISH_DELAY   = 0.0;
-        public static final double OUTAKE_EJECT_FINISH_DELAY    = 0.0;
-        // Left Outake Motor Characteristics
-        public static final String LOUTAKE_NAME                 = SUBSYSTEM_NAME + ".LeftOutake";
-        public static final String LOUTAKE_MOTOR_NAME           = SUBSYSTEM_NAME + ".LeftOutakeMotor";
-        public static final boolean LOUTAKE_MOTOR_INVERTED      = true;
-        public static final int LOUTAKE_MOTOR_CANID             = RobotParams.HwConfig.CANID_LOUTAKE_MOTOR;
-        public static final String LOUTAKE_BACK_SENSOR_NAME     = SUBSYSTEM_NAME + "LeftOutakeBackSensor";
-        public static final boolean LOUTAKE_BACK_SENSOR_INVERTED= false;
-        // Right Outake Motor Characteristics
-        public static final String ROUTAKE_NAME                 = SUBSYSTEM_NAME + ".RightOutake";
-        public static final String ROUTAKE_MOTOR_NAME           = SUBSYSTEM_NAME + ".RightOutakeMotor";
-        public static final boolean ROUTAKE_MOTOR_INVERTED      = false;
-        public static final int ROUTAKE_UPPER_MOTOR_CANID       = RobotParams.HwConfig.CANID_ROUTAKE_MOTOR;
-        public static final String ROUTAKE_BACK_SENSOR_NAME     = SUBSYSTEM_NAME + "RightOutakeBackSensor";
-        public static final boolean ROUTAKE_BACK_SENSOR_INVERTED = false;
+        // Common Transfer Motor Characteristics
+        public static final MotorType TRANSFER_MOTOR_TYPE       = MotorType.CanSparkMax;
+        public static final SparkMaxMotorParams TRANSFER_SPARKMAX_PARAMS =
+            new SparkMaxMotorParams(true, false);
+        public static final double TRANSFER_INTAKE_POWER        = 0.25;
+        public static final double TRANSFER_EJECT_POWER         = 0.5;
+        public static final double TRANSFER_RETAIN_POWER        = 0.0;
+        public static final double TRANSFER_INTAKE_FINISH_DELAY = 0.0;
+        public static final double TRANSFER_EJECT_FINISH_DELAY  = 0.0;
+        // Left Transfer Motor Characteristics
+        public static final String LTRANSFER_NAME               = SUBSYSTEM_NAME + ".LeftTransfer";
+        public static final String LTRANSFER_MOTOR_NAME         = SUBSYSTEM_NAME + ".LeftTransferMotor";
+        public static final boolean LTRANSFER_MOTOR_INVERTED    = true;
+        public static final int LTRANSFER_MOTOR_CANID           = RobotParams.HwConfig.CANID_LTRANSFER_MOTOR;
+        public static final String LTRANSFER_BACK_SENSOR_NAME   = SUBSYSTEM_NAME + "LeftTransferBackSensor";
+        public static final boolean LTRANSFER_BACK_SENSOR_INVERTED = false;
+        // Right Transfer Motor Characteristics
+        public static final String RTRANSFER_NAME               = SUBSYSTEM_NAME + ".RightTransfer";
+        public static final String RTRANSFER_MOTOR_NAME         = SUBSYSTEM_NAME + ".RightTransferMotor";
+        public static final boolean RTRANSFER_MOTOR_INVERTED    = false;
+        public static final int RTRANSFER_UPPER_MOTOR_CANID     = RobotParams.HwConfig.CANID_RTRANSFER_MOTOR;
+        public static final String RTRANSFER_BACK_SENSOR_NAME   = SUBSYSTEM_NAME + "RightTransferBackSensor";
+        public static final boolean RTRANSFER_BACK_SENSOR_INVERTED = false;
         // Feeder Motor Characteristics
         public static final MotorType FEEDER_MOTOR_TYPE         = MotorType.CanSparkMax;
-        public static final SparkMaxMotorParams FEEDER_SPARKMAX_PARAMS = new SparkMaxMotorParams(true, false);
+        public static final SparkMaxMotorParams FEEDER_SPARKMAX_PARAMS =
+            new SparkMaxMotorParams(true, false);
         public static final String FEEDER_MOTOR_NAME            = SUBSYSTEM_NAME + ".FeederMotor";
         public static final boolean FEEDER_MOTOR_INVERTED       = false;
         public static final int FEEDER_MOTOR_CANID              = RobotParams.HwConfig.CANID_FEEDER_MOTOR;
@@ -269,13 +271,13 @@ public class Shooter extends TrcSubsystem
     private static class ShooterContext
     {
         TrcShooter shooter;
-        TrcRollerIntake outake;
+        TrcRollerIntake transfer;
         TrcTimer timer;
 
-        ShooterContext(TrcShooter shooter, TrcRollerIntake outake, TrcTimer timer)
+        ShooterContext(TrcShooter shooter, TrcRollerIntake transfer, TrcTimer timer)
         {
             this.shooter = shooter;
-            this.outake = outake;
+            this.transfer = transfer;
             this.timer = timer;
         }
     }   //class ShooterContext
@@ -292,8 +294,8 @@ public class Shooter extends TrcSubsystem
     private final Robot robot;
     private final TrcShooter leftShooter;
     private final TrcShooter rightShooter;
-    private final TrcRollerIntake leftOutake;
-    private final TrcRollerIntake rightOutake;
+    private final TrcRollerIntake leftTransfer;
+    private final TrcRollerIntake rightTransfer;
     private final TrcMotor turret; 
     private final TrcMotor feeder;
     private final ShooterContext leftShooterContext;
@@ -362,33 +364,33 @@ public class Shooter extends TrcSubsystem
                     Params.TILT_STALL_MIN_POWER, Params.TILT_STALL_TOLERANCE, Params.TILT_STALL_TIMEOUT,
                     Params.TILT_STALL_RESET_TIMEOUT);
             }
-            if (Params.SHOOTER_HAS_OUTAKE)
+            if (Params.SHOOTER_HAS_TRANSFER)
             {
-                FrcRollerIntake.Params outakeParams = new FrcRollerIntake.Params()
+                FrcRollerIntake.Params transferParams = new FrcRollerIntake.Params()
                     .setPrimaryMotor(
-                        Params.LOUTAKE_MOTOR_NAME, Params.OUTAKE_MOTOR_TYPE, Params.LOUTAKE_MOTOR_INVERTED,
-                        Params.LOUTAKE_MOTOR_CANID, null, Params.OUTAKE_SPARKMAX_PARAMS)
+                        Params.LTRANSFER_MOTOR_NAME, Params.TRANSFER_MOTOR_TYPE, Params.LTRANSFER_MOTOR_INVERTED,
+                        Params.LTRANSFER_MOTOR_CANID, null, Params.TRANSFER_SPARKMAX_PARAMS)
                     .setPowerLevels(
-                        Params.OUTAKE_INTAKE_POWER, Params.OUTAKE_EJECT_POWER, Params.OUTAKE_RETAIN_POWER)
-                    .setFinishDelays(Params.OUTAKE_INTAKE_FINISH_DELAY, Params.OUTAKE_EJECT_FINISH_DELAY)
+                        Params.TRANSFER_INTAKE_POWER, Params.TRANSFER_EJECT_POWER, Params.TRANSFER_RETAIN_POWER)
+                    .setFinishDelays(Params.TRANSFER_INTAKE_FINISH_DELAY, Params.TRANSFER_EJECT_FINISH_DELAY)
                     .setBackDigitalSourceTrigger(
-                        Params.LOUTAKE_BACK_SENSOR_NAME, this::getLeftOutakeSensorState,
+                        Params.LTRANSFER_BACK_SENSOR_NAME, this::getLeftTransferSensorState,
                         TriggerAction.FinishOnTrigger, TriggerMode.OnActive,
                         null, null);
-                leftOutake = new FrcRollerIntake(Params.LOUTAKE_NAME, outakeParams).getIntake();
-                leftOutake.motor.disableUpperLimitSwitch();     
+                leftTransfer = new FrcRollerIntake(Params.LTRANSFER_NAME, transferParams).getIntake();
+                leftTransfer.motor.disableUpperLimitSwitch();
             }
             else
             {
-                leftOutake = null;
+                leftTransfer = null;
             }
             leftShooterContext = new ShooterContext(
-                leftShooter, leftOutake, new TrcTimer(instanceName + ".leftTriggerTimer"));
+                leftShooter, leftTransfer, new TrcTimer(instanceName + ".leftTriggerTimer"));
         }
         else
         {
             leftShooter = null;
-            leftOutake = null;
+            leftTransfer = null;
             leftShooterContext = null;
         }
 
@@ -441,33 +443,33 @@ public class Shooter extends TrcSubsystem
                     Params.TILT_STALL_MIN_POWER, Params.TILT_STALL_TOLERANCE, Params.TILT_STALL_TIMEOUT,
                     Params.TILT_STALL_RESET_TIMEOUT);
             }
-            if (Params.SHOOTER_HAS_OUTAKE)
+            if (Params.SHOOTER_HAS_TRANSFER)
             {
-                FrcRollerIntake.Params outakeParams = new FrcRollerIntake.Params()
+                FrcRollerIntake.Params transferParams = new FrcRollerIntake.Params()
                     .setPrimaryMotor(
-                        Params.ROUTAKE_MOTOR_NAME, Params.OUTAKE_MOTOR_TYPE, Params.ROUTAKE_MOTOR_INVERTED,
-                        Params.ROUTAKE_UPPER_MOTOR_CANID, null, Params.OUTAKE_SPARKMAX_PARAMS)
+                        Params.RTRANSFER_MOTOR_NAME, Params.TRANSFER_MOTOR_TYPE, Params.RTRANSFER_MOTOR_INVERTED,
+                        Params.RTRANSFER_UPPER_MOTOR_CANID, null, Params.TRANSFER_SPARKMAX_PARAMS)
                     .setPowerLevels(
-                        Params.OUTAKE_INTAKE_POWER, Params.OUTAKE_EJECT_POWER, Params.OUTAKE_RETAIN_POWER)
-                    .setFinishDelays(Params.OUTAKE_INTAKE_FINISH_DELAY, Params.OUTAKE_EJECT_FINISH_DELAY)
+                        Params.TRANSFER_INTAKE_POWER, Params.TRANSFER_EJECT_POWER, Params.TRANSFER_RETAIN_POWER)
+                    .setFinishDelays(Params.TRANSFER_INTAKE_FINISH_DELAY, Params.TRANSFER_EJECT_FINISH_DELAY)
                     .setBackDigitalSourceTrigger(
-                        Params.ROUTAKE_BACK_SENSOR_NAME, this::getRightOutakeSensorState,
+                        Params.RTRANSFER_BACK_SENSOR_NAME, this::getRightTransferSensorState,
                         TriggerAction.FinishOnTrigger, TriggerMode.OnActive,
                         null, null);
-                rightOutake = new FrcRollerIntake(Params.ROUTAKE_NAME, outakeParams).getIntake();
-                rightOutake.motor.disableUpperLimitSwitch();  
+                rightTransfer = new FrcRollerIntake(Params.RTRANSFER_NAME, transferParams).getIntake();
+                rightTransfer.motor.disableUpperLimitSwitch();
             }
             else
             {
-                rightOutake = null;
+                rightTransfer = null;
             }
             rightShooterContext = new ShooterContext(
-                rightShooter, rightOutake, new TrcTimer(instanceName + ".rightTriggerTimer"));
+                rightShooter, rightTransfer, new TrcTimer(instanceName + ".rightTriggerTimer"));
         }
         else
         {
             rightShooter = null;
-            rightOutake = null;
+            rightTransfer = null;
             rightShooterContext = null;
         }
 
@@ -546,24 +548,24 @@ public class Shooter extends TrcSubsystem
     }   //getRightShooter
 
     /**
-     * This method returns the created left outake.
+     * This method returns the created left transfer.
      *
-     * @return created outake.
+     * @return created transfer.
      */
-    public TrcRollerIntake getLeftOutake()
+    public TrcRollerIntake getLeftTransfer()
     {
-        return leftOutake;
-    }   //getLeftOutake
+        return leftTransfer;
+    }   //getLeftTransfer
 
     /**
-     * This method returns the created right outake.
+     * This method returns the created right transfer.
      *
-     * @return created outake.
+     * @return created transfer.
      */
-    public TrcRollerIntake getRightOutake()
+    public TrcRollerIntake getRightTransfer()
     {
-        return rightOutake;
-    }   //getRightOutake
+        return rightTransfer;
+    }   //getRightTransfer
 
     /**
      * This method returns the created turret.
@@ -654,24 +656,24 @@ public class Shooter extends TrcSubsystem
     }   //setFlywheelRPM
 
     /**
-     * This method returns the left outake back sensor state.
+     * This method returns the left transfer back sensor state.
      *
-     * @return outake back sensor state, null if outtake does not exist.
+     * @return transfer back sensor state, null if transfer does not exist.
      */
-    public boolean getLeftOutakeSensorState()
+    public boolean getLeftTransferSensorState()
     {
-        return leftOutake != null && leftOutake.motor.isLowerLimitSwitchActive();
-    }   //getLeftOutakeSensorState
+        return leftTransfer != null && leftTransfer.motor.isUpperLimitSwitchActive();
+    }   //getLeftTransferSensorState
 
     /**
-     * This method returns the right outake back sensor state.
+     * This method returns the right transfer back sensor state.
      *
-     * @return outake back sensor state, null if outtake does not exist.
+     * @return transfer back sensor state, null if transfer does not exist.
      */
-    public boolean getRightOutakeSensorState()
+    public boolean getRightTransferSensorState()
     {
-        return rightOutake != null && rightOutake.motor.isLowerLimitSwitchActive();
-    }   //getRightOutakeSensorState
+        return rightTransfer != null && rightTransfer.motor.isUpperLimitSwitchActive();
+    }   //getRightTransferSensorState
 
     /**
      * This method checks if Goal Tracking is enabled.
@@ -959,7 +961,7 @@ public class Shooter extends TrcSubsystem
                 Params.SHOOTER_VEL_TRIGGER_SETTLING);
             velTrigger.enableTrigger(null, TriggerMode.OnBoth, this::velTriggerCallback);
             shooterContext.timer.set(Params.SHOOTER_VEL_TRIGGER_TIMEOUT, this::velTriggerTimeout, shooterContext);
-            shooterContext.outake.intake(owner, Params.OUTAKE_INTAKE_POWER, 0.0, null);
+            shooterContext.transfer.intake(owner, Params.TRANSFER_INTAKE_POWER, 0.0, null);
             if (feeder != null)
             {
                 feeder.setPower(owner, 0.0, Params.FEEDER_POWER, 0.0, null);
@@ -995,7 +997,7 @@ public class Shooter extends TrcSubsystem
         // Stop everything.
         shooterContext.shooter.shooterMotor1VelTrigger.disableTrigger();
         shooterContext.shooter.cancel();
-        shooterContext.outake.cancel();
+        shooterContext.transfer.cancel();
         if (feeder != null) feeder.cancel();
     }   //velTriggerTimeout
 
@@ -1011,8 +1013,8 @@ public class Shooter extends TrcSubsystem
     {
         if (leftShooter != null) leftShooter.cancel();
         if (rightShooter != null) rightShooter.cancel();
-        if (leftOutake != null) leftOutake.cancel();
-        if (rightOutake != null) rightOutake.cancel();
+        if (leftTransfer != null) leftTransfer.cancel();
+        if (rightTransfer != null) rightTransfer.cancel();
         if (feeder != null) feeder.cancel();
         if (leftShooterContext != null)
         {
@@ -1105,12 +1107,12 @@ public class Shooter extends TrcSubsystem
                             lineNum++, "LeftTilt: power=%.1f, current=%.1f, pos=%.1f/%.1f",
                             motor.getPower(), motor.getCurrent(), motor.getPosition(), motor.getPidTarget());
                     }
-                    if (leftOutake != null)
+                    if (leftTransfer != null)
                     {
                         dashboard.displayPrintf(
-                            lineNum++, "LeftOutake: power=%.1f, current=%.1f, sensor=%s, active=%s",
-                            leftOutake.motor.getPower(), leftOutake.motor.getCurrent(),
-                            leftOutake.getBackSensorState(), leftOutake.isActive());
+                            lineNum++, "LeftTransfer: power=%.1f, current=%.1f, sensor=%s, active=%s",
+                            leftTransfer.motor.getPower(), leftTransfer.motor.getCurrent(),
+                            leftTransfer.getBackSensorState(), leftTransfer.isActive());
                     }
                 }
 
@@ -1128,12 +1130,12 @@ public class Shooter extends TrcSubsystem
                             lineNum++, "RightTilt: power=%.1f, current=%.1f, pos=%.1f/%.1f",
                             motor.getPower(), motor.getCurrent(), motor.getPosition(), motor.getPidTarget());
                     }
-                    if (rightOutake != null)
+                    if (rightTransfer != null)
                     {
                         dashboard.displayPrintf(
-                            lineNum++, "RightOutake: power=%.1f, current=%.1f, sensor=%s, active=%s",
-                            rightOutake.motor.getPower(), rightOutake.motor.getCurrent(),
-                            rightOutake.getBackSensorState(), rightOutake.isActive());
+                            lineNum++, "RightTransfer: power=%.1f, current=%.1f, sensor=%s, active=%s",
+                            rightTransfer.motor.getPower(), rightTransfer.motor.getCurrent(),
+                            rightTransfer.getBackSensorState(), rightTransfer.isActive());
                     }
                 }
 

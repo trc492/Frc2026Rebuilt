@@ -130,12 +130,12 @@ public class RobotParams
         public static final int CANID_LSHOOTER_PRIMARY_MOTOR    = 7;    //Purple
         public static final int CANID_LSHOOTER_FOLLOWER_MOTOR   = 8;    //Gray
         public static final int CANID_LSHOOTER_TILT_MOTOR       = 9;    //White
-        public static final int CANID_LOUTAKE_MOTOR             = 37;   //Purple
+        public static final int CANID_LTRANSFER_MOTOR           = 37;   //Purple
         // Right Shooter CAN IDs.
         public static final int CANID_RSHOOTER_PRIMARY_MOTOR    = 27;   //Purple
         public static final int CANID_RSHOOTER_FOLLOWER_MOTOR   = 28;   //Gray
         public static final int CANID_RSHOOTER_TILT_MOTOR       = 29;   //White
-        public static final int CANID_ROUTAKE_MOTOR             = 38;   //Gray
+        public static final int CANID_RTRANSFER_MOTOR           = 38;   //Gray
         // Common Shooter CAN IDs.
         public static final int CANID_TURRET_MOTOR              = 39;   //White
         public static final int CANID_FEEDER_MOTOR              = 47;   //Purple

@@ -544,28 +544,28 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             case X:
                 if (pressed)
                 {
-                    if (robot.leftOutake != null && robot.rightOutake != null)
+                    if (robot.leftTransfer != null && robot.rightTransfer != null)
                     {
-                        if (robot.leftOutake.isActive())
+                        if (robot.leftTransfer.isActive())
                         {
-                            robot.globalTracer.traceInfo(moduleName, ">>>>> Cancel left AutoOutake.");
-                            robot.leftOutake.cancel();
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Cancel left AutoTransfer.");
+                            robot.leftTransfer.cancel();
                         }
                         else
                         {
-                            robot.globalTracer.traceInfo(moduleName, ">>>>> Turn on left AutoOutake.");
-                            robot.leftOutake.autoIntake(null);
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Turn on left AutoTransfer.");
+                            robot.leftTransfer.autoIntake(null);
                         }
 
-                        if (robot.rightOutake.isActive())
+                        if (robot.rightTransfer.isActive())
                         {
-                            robot.globalTracer.traceInfo(moduleName, ">>>>> Cancel right AutoOutake.");
-                            robot.rightOutake.cancel();
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Cancel right AutoTransfer.");
+                            robot.rightTransfer.cancel();
                         }
                         else
                         {
-                            robot.globalTracer.traceInfo(moduleName, ">>>>> Turn on right AutoOutake.");
-                            robot.rightOutake.autoIntake(null);
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Turn on right AutoTransfer.");
+                            robot.rightTransfer.autoIntake(null);
                         }
                     }
 
@@ -586,19 +586,19 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 break;
 
             case Y:
-                if (robot.leftOutake != null && robot.rightOutake != null)
+                if (robot.leftTransfer != null && robot.rightTransfer != null)
                 {
                     if (pressed)
                     {
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> Turn on Outake.");
-                        robot.rightOutake.intake(0.25);
-                        robot.leftOutake.intake(0.25);
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Turn on Transfer.");
+                        robot.rightTransfer.intake(0.25);
+                        robot.leftTransfer.intake(0.25);
                     }
                     else
                     {
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> Turn off Outake.");
-                        robot.rightOutake.cancel();
-                        robot.leftOutake.cancel();
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Turn off Transfer.");
+                        robot.rightTransfer.cancel();
+                        robot.leftTransfer.cancel();
                     }
                 } 
                 break;
