@@ -24,6 +24,7 @@ package teamcode.subsystems;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frclib.driverio.FrcDashboard;
+import frclib.motor.FrcCANTalonFX;
 import frclib.motor.FrcMotorActuator;
 import frclib.motor.FrcMotorActuator.MotorType;
 import frclib.motor.FrcMotorActuator.SparkMaxMotorParams;
@@ -115,6 +116,7 @@ public class Shooter extends TrcSubsystem
 
         // Common Shooter Motor Characteristics
         public static final MotorType SHOOTER_MOTOR_TYPE        = MotorType.CanTalonFx;
+        public static final boolean SHOOTER_FOC_ENABLED         = true;
         public static final double SHOOTER_MOTOR_GEAR_RATIO     = 26.0/42.0;    // Load/Motor
         public static final double SHOOTER_MOTOR_REV_PER_COUNT  = 1.0/SHOOTER_MOTOR_GEAR_RATIO;
         public static final double SHOOTER_MOTOR_MAX_VEL        = 6000.0;
@@ -333,6 +335,7 @@ public class Shooter extends TrcSubsystem
             }
             leftShooter = new FrcShooter(SUBSYSTEM_NAME + ".LeftShooter", lShooterParams).getShooter();
             motor = leftShooter.getShooterMotor1();
+            ((FrcCANTalonFX) motor).setFOCEnabled(Params.SHOOTER_FOC_ENABLED);
             motor.setPositionSensorScaleAndOffset(Params.SHOOTER_MOTOR_REV_PER_COUNT, 0.0);
             motor.setVelocityPidParameters(
                 new TrcMotor.PidParams()
@@ -411,6 +414,7 @@ public class Shooter extends TrcSubsystem
             }
             rightShooter = new FrcShooter(SUBSYSTEM_NAME + ".RightShooter", rShooterParams).getShooter();
             motor = rightShooter.getShooterMotor1();
+            ((FrcCANTalonFX) motor).setFOCEnabled(Params.SHOOTER_FOC_ENABLED);
             motor.setPositionSensorScaleAndOffset(Params.SHOOTER_MOTOR_REV_PER_COUNT, 0.0);
             motor.setVelocityPidParameters(
                 new TrcMotor.PidParams()
