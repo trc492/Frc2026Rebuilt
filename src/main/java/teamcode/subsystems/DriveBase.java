@@ -140,7 +140,7 @@ public class DriveBase extends TrcSubsystem
                     new double[] {0.0, 0.0, 0.0, 0.0}, false,
                     RobotParams.Robot.STEER_ZERO_CAL_FILE)
                 .setSteerMotorInfo(
-                    MotorType.CanTalonFx, null, RobotParams.HwConfig.CANBUS_CANIVORE,
+                    MotorType.CanTalonFx, RobotParams.HwConfig.CANBUS_CANIVORE, null,
                     new String[] {"flSteerMotor", "frSteerMotor", "blSteerMotor", "brSteerMotor"},
                     new int[] {
                         HwConfig.CANID_FLSTEER_MOTOR, HwConfig.CANID_FRSTEER_MOTOR,
