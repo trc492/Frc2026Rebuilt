@@ -376,7 +376,7 @@ public class Shooter extends TrcSubsystem
                         TriggerAction.FinishOnTrigger, TriggerMode.OnActive,
                         null, null);
                 leftOutake = new FrcRollerIntake(Params.LOUTAKE_NAME, outakeParams).getIntake();
-                leftOutake.motor.disableLowerLimitSwitch();     //TODO: Is it lower or upper?
+                leftOutake.motor.disableUpperLimitSwitch();     
             }
             else
             {
@@ -446,8 +446,7 @@ public class Shooter extends TrcSubsystem
                 FrcRollerIntake.Params outakeParams = new FrcRollerIntake.Params()
                     .setPrimaryMotor(
                         Params.ROUTAKE_MOTOR_NAME, Params.OUTAKE_MOTOR_TYPE, Params.ROUTAKE_MOTOR_INVERTED,
-                        // TODO: WHy is left Outake on RIO canbus and right Outake on Canivore???
-                        Params.ROUTAKE_UPPER_MOTOR_CANID, Params.CANBUS_NAME, Params.OUTAKE_SPARKMAX_PARAMS)
+                        Params.ROUTAKE_UPPER_MOTOR_CANID, null, Params.OUTAKE_SPARKMAX_PARAMS)
                     .setPowerLevels(
                         Params.OUTAKE_INTAKE_POWER, Params.OUTAKE_EJECT_POWER, Params.OUTAKE_RETAIN_POWER)
                     .setFinishDelays(Params.OUTAKE_INTAKE_FINISH_DELAY, Params.OUTAKE_EJECT_FINISH_DELAY)
@@ -456,7 +455,7 @@ public class Shooter extends TrcSubsystem
                         TriggerAction.FinishOnTrigger, TriggerMode.OnActive,
                         null, null);
                 rightOutake = new FrcRollerIntake(Params.ROUTAKE_NAME, outakeParams).getIntake();
-                rightOutake.motor.disableLowerLimitSwitch();    //TODO: Is it lower or upper?
+                rightOutake.motor.disableUpperLimitSwitch();  
             }
             else
             {
