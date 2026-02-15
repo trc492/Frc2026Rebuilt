@@ -506,68 +506,99 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         switch (button)
         {
             case A:
+                break;
+
             case B:
-                if(pressed)
+                if (pressed)
                 {
-                    if(robot.leftShooter != null){
-                        if(robot.leftShooter.getShooterMotor1Power() != 0.0)
+                    if (robot.leftShooter != null)
+                    {
+                        if (robot.leftShooter.getShooterMotor1Power() != 0.0)
                         {
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Turn off left flywheel.");
                             robot.leftShooter.shooterMotor1.setPower(0.0);
-                        } else
+                        }
+                        else
                         {
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Turn on left flywheel.");
                             robot.leftShooter.shooterMotor1.setPower(0.3);
                         }
                     }
-                    if(robot.rightShooter != null){
-                        if(robot.rightShooter.getShooterMotor1Power() != 0.0)
+
+                    if (robot.rightShooter != null)
+                    {
+                        if (robot.rightShooter.getShooterMotor1Power() != 0.0)
                         {
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Turn off right flywheel.");
                             robot.rightShooter.shooterMotor1.setPower(0.0);
-                        } else
+                        }
+                        else
                         {
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Turn on right flywheel.");
                             robot.rightShooter.shooterMotor1.setPower(0.3);
                         }
                     }
                 }
                 break;
-            case X:
-                if(pressed)
-                {
-                    if(robot.leftOutake != null && robot.rightOutake != null){
-                        if (robot.rightOutake.isActive())
-                        {
-                            robot.rightOutake.cancel();
-                        } else {
-                            robot.rightOutake.autoIntake(null);
-                        }
 
+            case X:
+                if (pressed)
+                {
+                    if (robot.leftOutake != null && robot.rightOutake != null)
+                    {
                         if (robot.leftOutake.isActive())
                         {
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Cancel left AutoOutake.");
                             robot.leftOutake.cancel();
-                        } else {
+                        }
+                        else
+                        {
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Turn on left AutoOutake.");
                             robot.leftOutake.autoIntake(null);
                         }
+
+                        if (robot.rightOutake.isActive())
+                        {
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Cancel right AutoOutake.");
+                            robot.rightOutake.cancel();
+                        }
+                        else
+                        {
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Turn on right AutoOutake.");
+                            robot.rightOutake.autoIntake(null);
+                        }
                     }
-                    if(robot.feeder != null)
+
+                    if (robot.feeder != null)
                     {
                         if (robot.feeder.getPower() != 0.0)
                         {
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Turn off feeder.");
                             robot.feeder.setPower(0.0);
                         }
                         else
                         {
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Turn on feeder.");
                             robot.feeder.setPower(1.0);
                         }
                     }
                 }
                 break;
+
             case Y:
-                if(pressed){
-                    if(robot.leftOutake != null && robot.rightOutake != null){
-                        robot.rightOutake.cancel();
-                        robot.leftOutake.cancel();
+                if (robot.leftOutake != null && robot.rightOutake != null)
+                {
+                    if (pressed)
+                    {
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Turn on Outake.");
                         robot.rightOutake.intake(0.25);
                         robot.leftOutake.intake(0.25);
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> Fired left and right outtake ");
+                    }
+                    else
+                    {
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Turn off Outake.");
+                        robot.rightOutake.cancel();
+                        robot.leftOutake.cancel();
                     }
                 } 
                 break;
