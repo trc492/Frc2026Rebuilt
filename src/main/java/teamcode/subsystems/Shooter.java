@@ -231,7 +231,7 @@ public class Shooter extends TrcSubsystem
         public static final MotorType TRANSFER_MOTOR_TYPE       = MotorType.CanSparkMax;
         public static final SparkMaxMotorParams TRANSFER_SPARKMAX_PARAMS =
             new SparkMaxMotorParams(true, false);
-        public static final double TRANSFER_INTAKE_POWER        = 0.25;
+        public static final double TRANSFER_INTAKE_POWER        = 0.75;
         public static final double TRANSFER_EJECT_POWER         = 0.5;
         public static final double TRANSFER_RETAIN_POWER        = 0.0;
         public static final double TRANSFER_INTAKE_FINISH_DELAY = 0.0;
@@ -257,7 +257,7 @@ public class Shooter extends TrcSubsystem
         public static final String FEEDER_MOTOR_NAME            = SUBSYSTEM_NAME + ".FeederMotor";
         public static final boolean FEEDER_MOTOR_INVERTED       = false;
         public static final int FEEDER_MOTOR_CANID              = RobotParams.HwConfig.CANID_FEEDER_MOTOR;
-        public static final double FEEDER_POWER                 = 0.15;
+        public static final double FEEDER_POWER                 = 0.5;
     }   //class Params
 
     private static class GoalTrackingState

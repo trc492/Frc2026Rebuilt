@@ -74,7 +74,7 @@ public class DriveBase extends TrcSubsystem
      */
     public static class RebuiltRobotInfo extends FrcSwerveBase.SwerveInfo
     {
-        public final static double DRIVE_WHEEL_DIAMETER         = 3.9326556997620689090425924610785;    // inches
+        public final static double DRIVE_WHEEL_DIAMETER         = 3.889513851;    // inches
         public final static double DRIVE_MOTOR_GEAR_RATIO       = 4.59;
         public final static double STEER_MOTOR_GEAR_RATIO       = 468.0/35.1;
         public final static double ROBOT_WIDTH                  = RobotParams.Robot.ROBOT_WIDTH;
@@ -121,7 +121,7 @@ public class DriveBase extends TrcSubsystem
                     new int[] {
                         HwConfig.CANID_FLDRIVE_MOTOR, HwConfig.CANID_FRDRIVE_MOTOR,
                         HwConfig.CANID_BLDRIVE_MOTOR, HwConfig.CANID_BRDRIVE_MOTOR},
-                    new boolean[] {false, false, false, false})
+                    new boolean[] {true, false, true, false})
                 .setDriveMotorPosScale(DRIVE_WHEEL_DIAMETER * Math.PI / DRIVE_MOTOR_GEAR_RATIO)
                 .setWpiOdometry()
                 .setDriveMotorCurrentLimits(40.0, 45.0, 0.2, 55.0)
@@ -142,7 +142,7 @@ public class DriveBase extends TrcSubsystem
                         HwConfig.CANID_BLSTEER_ENCODER, HwConfig.CANID_BRSTEER_ENCODER},
                     new boolean[] {false, false, false, false}, 1.0,
                     new double[] {0.127197 , 0.687500 , 0.880859 , 0.234863},
-                    SteerEncoderMode.CtreFusedCanCoder, RobotParams.Robot.STEER_ZERO_CAL_FILE)
+                    SteerEncoderMode.SyncToMotorEncoder, RobotParams.Robot.STEER_ZERO_CAL_FILE)
                 .setSteerMotorInfo(
                     MotorType.CanTalonFx, RobotParams.HwConfig.CANBUS_CANIVORE, null,
                     new String[] {"flSteerMotor", "frSteerMotor", "blSteerMotor", "brSteerMotor"},

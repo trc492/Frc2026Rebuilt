@@ -506,6 +506,19 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         switch (button)
         {
             case A:
+                if(pressed)
+                {
+                    if(robot.intake != null)
+                    {
+                        if(robot.intake.getPower() != 0.0)
+                        {
+                            robot.intake.setPower(0.0);
+                        } else 
+                        {
+                            robot.intake.intake(0.75);
+                        }
+                    }
+                }
                 break;
 
             case B:
@@ -554,7 +567,8 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                         else
                         {
                             robot.globalTracer.traceInfo(moduleName, ">>>>> Turn on left AutoTransfer.");
-                            robot.leftTransfer.autoIntake(null);
+                            //robot.leftTransfer.autoIntake(null);
+                            robot.leftTransfer.intake(0.75);
                         }
 
                         if (robot.rightTransfer.isActive())
@@ -565,7 +579,8 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                         else
                         {
                             robot.globalTracer.traceInfo(moduleName, ">>>>> Turn on right AutoTransfer.");
-                            robot.rightTransfer.autoIntake(null);
+                            //robot.rightTransfer.autoIntake(null);
+                            robot.rightTransfer.intake(0.75);
                         }
                     }
 
