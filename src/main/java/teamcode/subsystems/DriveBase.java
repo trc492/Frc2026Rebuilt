@@ -23,6 +23,7 @@
 package teamcode.subsystems;
 
 import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.studica.frc.AHRS.NavXComType;
 
 import frclib.drivebase.FrcRobotBase;
@@ -32,6 +33,7 @@ import frclib.drivebase.FrcSwerveBase;
 import frclib.driverio.FrcDashboard;
 import frclib.motor.FrcCANTalonFX;
 import frclib.motor.FrcMotorActuator.MotorType;
+import frclib.sensor.FrcCANCoder;
 import frclib.sensor.FrcEncoder.EncoderType;
 import teamcode.Dashboard;
 import teamcode.RobotParams;
@@ -140,7 +142,7 @@ public class DriveBase extends TrcSubsystem
                         HwConfig.CANID_BLSTEER_ENCODER, HwConfig.CANID_BRSTEER_ENCODER},
                     new boolean[] {false, false, false, false}, 1.0,
                     new double[] {0.127197 , 0.687500 , 0.880859 , 0.234863},
-                    SteerEncoderMode.SyncToMotorEncoder, RobotParams.Robot.STEER_ZERO_CAL_FILE)
+                    SteerEncoderMode.CtreFusedCanCoder, RobotParams.Robot.STEER_ZERO_CAL_FILE)
                 .setSteerMotorInfo(
                     MotorType.CanTalonFx, RobotParams.HwConfig.CANBUS_CANIVORE, null,
                     new String[] {"flSteerMotor", "frSteerMotor", "blSteerMotor", "brSteerMotor"},
@@ -439,12 +441,27 @@ public class DriveBase extends TrcSubsystem
                     swerveBase.driveMotors[i].setStatorCurrentLimit(robotInfo.driveMotorStatorCurrentLimit);
                 }
 
-                if (swerveInfo.steerEncoderMode == SteerEncoderMode.SyncToMotorEncoder)
+                for (int i = 0; i < swerveInfo.steerEncoderNames.length; i++)
                 {
-                    // Sync absolute encoders to steer motor internal encoders.
-                    for (int i = 0; i < swerveInfo.steerEncoderNames.length; i++)
+                    if (swerveInfo.steerEncoderMode == SteerEncoderMode.SyncToMotorEncoder)
                     {
+                        // Sync absolute encoders to steer motor internal encoders.
                         syncSteerEncoder((FrcSwerveBase.SwerveInfo) robotInfo, i);
+                    }
+                    else if ((swerveInfo.steerEncoderMode == SteerEncoderMode.CtreFusedCanCoder ||
+                              swerveInfo.steerEncoderMode == SteerEncoderMode.CtreSyncCanCoder) &&
+                             swerveBase.steerEncoders[i] instanceof FrcCANCoder &&
+                             swerveBase.steerMotors[i] instanceof FrcCANTalonFX)
+                    {
+                        FrcCANCoder cancoder = (FrcCANCoder) swerveBase.steerEncoders[i];
+                        FrcCANTalonFX steerMotor = (FrcCANTalonFX) swerveBase.steerMotors[i];
+
+                        cancoder.setAbsoluteRange(true);
+                        cancoder.setZeroOffset(swerveInfo.steerEncoderZeros[i]);
+                        steerMotor.setFeedbackDevice(
+                            swerveInfo.steerEncoderMode == SteerEncoderMode.CtreFusedCanCoder?
+                                FeedbackSensorSourceValue.FusedCANcoder: FeedbackSensorSourceValue.SyncCANcoder,
+                            cancoder.getDeviceID(), swerveInfo.steerGearRatio, 1.0);
                     }
                 }
             }
