@@ -27,6 +27,7 @@ import com.studica.frc.AHRS.NavXComType;
 
 import frclib.drivebase.FrcRobotBase;
 import frclib.drivebase.FrcRobotBase.LEDInfo;
+import frclib.drivebase.FrcSwerveBase.SteerEncoderMode;
 import frclib.drivebase.FrcSwerveBase;
 import frclib.driverio.FrcDashboard;
 import frclib.motor.FrcCANTalonFX;
@@ -119,8 +120,9 @@ public class DriveBase extends TrcSubsystem
                         HwConfig.CANID_FLDRIVE_MOTOR, HwConfig.CANID_FRDRIVE_MOTOR,
                         HwConfig.CANID_BLDRIVE_MOTOR, HwConfig.CANID_BRDRIVE_MOTOR},
                     new boolean[] {false, false, false, false})
+                .setDriveMotorPosScale(DRIVE_WHEEL_DIAMETER * Math.PI / DRIVE_MOTOR_GEAR_RATIO)
+                .setWpiOdometry()
                 .setDriveMotorCurrentLimits(40.0, 45.0, 0.2, 55.0)
-                .setWpiOdometry(DRIVE_WHEEL_DIAMETER * Math.PI / DRIVE_MOTOR_GEAR_RATIO)
                 .setPidRampRates(0.5, 0.5, 1.0)
                 .setDriveRampRate(0.25, 0.02)
                 .setPidStallDetectionEnabled(true)
@@ -136,10 +138,9 @@ public class DriveBase extends TrcSubsystem
                     new int[] {
                         HwConfig.CANID_FLSTEER_ENCODER, HwConfig.CANID_FRSTEER_ENCODER,
                         HwConfig.CANID_BLSTEER_ENCODER, HwConfig.CANID_BRSTEER_ENCODER},
-                    new boolean[] {false, false, false, false},
-                    //new double[] {0.125244, 0.688232, 0.880127, 0.234619}, true,
-                    new double[] {0.0, 0.0, 0.0, 0.0}, true,
-                    RobotParams.Robot.STEER_ZERO_CAL_FILE)
+                    new boolean[] {false, false, false, false}, 1.0,
+                    new double[] {0.127197 , 0.687500 , 0.880859 , 0.234863},
+                    SteerEncoderMode.SyncToMotorEncoder, RobotParams.Robot.STEER_ZERO_CAL_FILE)
                 .setSteerMotorInfo(
                     MotorType.CanTalonFx, RobotParams.HwConfig.CANBUS_CANIVORE, null,
                     new String[] {"flSteerMotor", "frSteerMotor", "blSteerMotor", "brSteerMotor"},
@@ -147,9 +148,7 @@ public class DriveBase extends TrcSubsystem
                         HwConfig.CANID_FLSTEER_MOTOR, HwConfig.CANID_FRSTEER_MOTOR,
                         HwConfig.CANID_BLSTEER_MOTOR, HwConfig.CANID_BRSTEER_MOTOR},
                     new boolean[] {false, false, false, false})
-                .setSwerveBaseCharacteristics(
-                    WHEEL_BASE_WIDTH, WHEEL_BASE_LENGTH, DRIVE_MOTOR_GEAR_RATIO, STEER_MOTOR_GEAR_RATIO,
-                    360.0 / STEER_MOTOR_GEAR_RATIO)
+                .setSteerPosScale(STEER_MOTOR_GEAR_RATIO, 360.0 / STEER_MOTOR_GEAR_RATIO)
                 .setSwerveModuleNames(new String[] {"flWheel", "frWheel", "blWheel", "brWheel"});
         }   //RebuiltRobotInfo
     }   //class RebuiltRobotInfo
@@ -207,8 +206,9 @@ public class DriveBase extends TrcSubsystem
                         HwConfig.CANID_FLDRIVE_MOTOR, HwConfig.CANID_FRDRIVE_MOTOR,
                         HwConfig.CANID_BLDRIVE_MOTOR, HwConfig.CANID_BRDRIVE_MOTOR},
                     new boolean[] {false, false, false, false})
+                .setDriveMotorPosScale(DRIVE_WHEEL_DIAMETER * Math.PI / DRIVE_MOTOR_GEAR_RATIO)
+                .setWpiOdometry()
                 .setDriveMotorCurrentLimits(40.0, 45.0, 0.2, 55.0)
-                .setWpiOdometry(DRIVE_WHEEL_DIAMETER * Math.PI / DRIVE_MOTOR_GEAR_RATIO)
                 .setPidRampRates(0.5, 0.5, 1.0)
                 .setDriveRampRate(0.25, 0.02)
                 .setPidStallDetectionEnabled(true)
@@ -225,8 +225,8 @@ public class DriveBase extends TrcSubsystem
                     new int[] {
                         HwConfig.CANID_FLSTEER_ENCODER, HwConfig.CANID_FRSTEER_ENCODER,
                         HwConfig.CANID_BLSTEER_ENCODER, HwConfig.CANID_BRSTEER_ENCODER},
-                    new boolean[] {false, false, false, false},
-                    new double[] {0.0, 0.0, 0.0, 0.0}, true,
+                    new boolean[] {false, false, false, false}, 1.0,
+                    new double[] {0.0, 0.0, 0.0, 0.0}, SteerEncoderMode.SyncToMotorEncoder,
                     RobotParams.Robot.STEER_ZERO_CAL_FILE)
                 .setSteerMotorInfo(
                     MotorType.CanTalonFx, null, null,
@@ -235,9 +235,7 @@ public class DriveBase extends TrcSubsystem
                         HwConfig.CANID_FLSTEER_MOTOR, HwConfig.CANID_FRSTEER_MOTOR,
                         HwConfig.CANID_BLSTEER_MOTOR, HwConfig.CANID_BRSTEER_MOTOR},
                     new boolean[] {false, false, false, false})
-                .setSwerveBaseCharacteristics(
-                    WHEEL_BASE_WIDTH, WHEEL_BASE_LENGTH, DRIVE_MOTOR_GEAR_RATIO, STEER_MOTOR_GEAR_RATIO,
-                    360.0 / STEER_MOTOR_GEAR_RATIO)
+                .setSteerPosScale(STEER_MOTOR_GEAR_RATIO, 360.0 / STEER_MOTOR_GEAR_RATIO)
                 .setSwerveModuleNames(new String[] {"flWheel", "frWheel", "blWheel", "brWheel"});
         }   //ReefscapeRobotInfo
     }   //class ReefscapeRobotInfo
@@ -295,8 +293,9 @@ public class DriveBase extends TrcSubsystem
                         HwConfig.CANID_FLDRIVE_MOTOR, HwConfig.CANID_FRDRIVE_MOTOR,
                         HwConfig.CANID_BLDRIVE_MOTOR, HwConfig.CANID_BRDRIVE_MOTOR},
                     new boolean[] {false, false, false, false})
+                .setDriveMotorPosScale(DRIVE_WHEEL_DIAMETER * Math.PI / DRIVE_MOTOR_GEAR_RATIO)
+                .setWpiOdometry()
                 .setDriveMotorCurrentLimits(40.0, 45.0, 0.2, 55.0)
-                .setWpiOdometry(DRIVE_WHEEL_DIAMETER * Math.PI / DRIVE_MOTOR_GEAR_RATIO)
                 .setPidRampRates(0.5, 0.5, 1.0)
                 .setDriveRampRate(0.25, 0.02)
                 .setPidStallDetectionEnabled(true)
@@ -313,8 +312,8 @@ public class DriveBase extends TrcSubsystem
                     new int[] {
                         HwConfig.CANID_FLSTEER_ENCODER, HwConfig.CANID_FRSTEER_ENCODER,
                         HwConfig.CANID_BLSTEER_ENCODER, HwConfig.CANID_BRSTEER_ENCODER},
-                    new boolean[] {false, false, false, false},
-                    new double[] {0.0, 0.0, 0.0, 0.0}, true,
+                    new boolean[] {false, false, false, false}, 1.0,
+                    new double[] {0.0, 0.0, 0.0, 0.0}, SteerEncoderMode.SyncToMotorEncoder,
                     RobotParams.Robot.STEER_ZERO_CAL_FILE)
                 .setSteerMotorInfo(
                     MotorType.CanTalonFx, null, null,
@@ -323,9 +322,7 @@ public class DriveBase extends TrcSubsystem
                         HwConfig.CANID_FLSTEER_MOTOR, HwConfig.CANID_FRSTEER_MOTOR,
                         HwConfig.CANID_BLSTEER_MOTOR, HwConfig.CANID_BRSTEER_MOTOR},
                     new boolean[] {false, false, false, false})
-                .setSwerveBaseCharacteristics(
-                    WHEEL_BASE_WIDTH, WHEEL_BASE_LENGTH, DRIVE_MOTOR_GEAR_RATIO, STEER_MOTOR_GEAR_RATIO,
-                    360.0 / STEER_MOTOR_GEAR_RATIO)
+                .setSteerPosScale(STEER_MOTOR_GEAR_RATIO, 360.0 / STEER_MOTOR_GEAR_RATIO)
                 .setSwerveModuleNames(new String[] {"flWheel", "frWheel", "blWheel", "brWheel"});
         }   //ReefscapeRobotInfo
     }   //class MaestroRobotInfo
@@ -430,19 +427,19 @@ public class DriveBase extends TrcSubsystem
         {
             if (robotBase instanceof FrcSwerveBase)
             {
-                FrcSwerveBase swerveDrive = (FrcSwerveBase) robotBase;
+                FrcSwerveBase swerveBase = (FrcSwerveBase) robotBase;
                 FrcSwerveBase.SwerveInfo swerveInfo = (FrcSwerveBase.SwerveInfo) robotInfo;
                 // Prevent Krakens from browning out.
                 for (int i = 0; i < swerveInfo.driveMotorNames.length; i++)
                 {
-                    swerveDrive.driveMotors[i].setCloseLoopRampRate(robotInfo.driveCloseLoopRampRate);
-                    swerveDrive.driveMotors[i].setCurrentLimit(
+                    swerveBase.driveMotors[i].setCloseLoopRampRate(robotInfo.driveCloseLoopRampRate);
+                    swerveBase.driveMotors[i].setCurrentLimit(
                         robotInfo.driveMotorCurrentLimit, robotInfo.driveMotorCurrentTriggerThreshold,
                         robotInfo.driveMotorCurrentTriggerPeriod);
-                    swerveDrive.driveMotors[i].setStatorCurrentLimit(robotInfo.driveMotorStatorCurrentLimit);
+                    swerveBase.driveMotors[i].setStatorCurrentLimit(robotInfo.driveMotorStatorCurrentLimit);
                 }
 
-                if (swerveInfo.syncToSteerMotorEncoder)
+                if (swerveInfo.steerEncoderMode == SteerEncoderMode.SyncToMotorEncoder)
                 {
                     // Sync absolute encoders to steer motor internal encoders.
                     for (int i = 0; i < swerveInfo.steerEncoderNames.length; i++)
@@ -464,9 +461,9 @@ public class DriveBase extends TrcSubsystem
     {
         // Note this method is implementation specific. If your implementation is not with an absolute encoder that
         // syncs with a TalonFX motor, you need to modify this method accordingly.
-        FrcSwerveBase swerveDrive = (FrcSwerveBase) robotBase;
-        TrcEncoder steerEncoder = swerveDrive.steerEncoders[index];
-        FrcCANTalonFX steerMotor = (FrcCANTalonFX)swerveDrive.steerMotors[index];
+        FrcSwerveBase swerveBase = (FrcSwerveBase) robotBase;
+        TrcEncoder steerEncoder = swerveBase.steerEncoders[index];
+        FrcCANTalonFX steerMotor = (FrcCANTalonFX)swerveBase.steerMotors[index];
         // getPosition returns a value in the range of 0 to 1.0 of one revolution.
         double motorEncoderPos = steerEncoder.getScaledPosition() * swerveInfo.steerGearRatio;
         StatusCode statusCode = steerMotor.motor.setPosition(motorEncoderPos);
@@ -566,27 +563,27 @@ public class DriveBase extends TrcSubsystem
                         (lfDriveEnc + rfDriveEnc + lbDriveEnc + rbDriveEnc) / robotBase.driveMotors.length));
                 if (robotBase instanceof FrcSwerveBase)
                 {
-                    FrcSwerveBase swerveDrive = (FrcSwerveBase) robotBase;
+                    FrcSwerveBase swerveBase = (FrcSwerveBase) robotBase;
                     dashboard.putString(
                         DBKEY_STEER_FRONT,
                         String.format(
                             "angle/motorEnc/absEnc: lf=%.1f/%.3f/%.3f, rf=%.1f/%.3f/%.3f",
-                            swerveDrive.swerveModules[FrcRobotBase.INDEX_FRONT_LEFT].getSteerAngle(),
-                            swerveDrive.steerMotors[FrcRobotBase.INDEX_FRONT_LEFT].getMotorPosition(),
-                            swerveDrive.steerEncoders[FrcRobotBase.INDEX_FRONT_LEFT].getRawPosition(),
-                            swerveDrive.swerveModules[FrcRobotBase.INDEX_FRONT_RIGHT].getSteerAngle(),
-                            swerveDrive.steerMotors[FrcRobotBase.INDEX_FRONT_RIGHT].getMotorPosition(),
-                            swerveDrive.steerEncoders[FrcRobotBase.INDEX_FRONT_RIGHT].getRawPosition()));
+                            swerveBase.swerveModules[FrcRobotBase.INDEX_FRONT_LEFT].getSteerAngle(),
+                            swerveBase.steerMotors[FrcRobotBase.INDEX_FRONT_LEFT].getMotorPosition(),
+                            swerveBase.steerEncoders[FrcRobotBase.INDEX_FRONT_LEFT].getRawPosition(),
+                            swerveBase.swerveModules[FrcRobotBase.INDEX_FRONT_RIGHT].getSteerAngle(),
+                            swerveBase.steerMotors[FrcRobotBase.INDEX_FRONT_RIGHT].getMotorPosition(),
+                            swerveBase.steerEncoders[FrcRobotBase.INDEX_FRONT_RIGHT].getRawPosition()));
                     dashboard.putString(
                         DBKEY_STEER_BACK,
                         String.format(
                             "angle/motorEnc/absEnc: lb=%.1f/%.3f/%.3f, rb=%.1f/%.3f/%.3f",
-                            swerveDrive.swerveModules[FrcRobotBase.INDEX_BACK_LEFT].getSteerAngle(),
-                            swerveDrive.steerMotors[FrcRobotBase.INDEX_BACK_LEFT].getMotorPosition(),
-                            swerveDrive.steerEncoders[FrcRobotBase.INDEX_BACK_LEFT].getRawPosition(),
-                            swerveDrive.swerveModules[FrcRobotBase.INDEX_BACK_RIGHT].getSteerAngle(),
-                            swerveDrive.steerMotors[FrcRobotBase.INDEX_BACK_RIGHT].getMotorPosition(),
-                            swerveDrive.steerEncoders[FrcRobotBase.INDEX_BACK_RIGHT].getRawPosition()));
+                            swerveBase.swerveModules[FrcRobotBase.INDEX_BACK_LEFT].getSteerAngle(),
+                            swerveBase.steerMotors[FrcRobotBase.INDEX_BACK_LEFT].getMotorPosition(),
+                            swerveBase.steerEncoders[FrcRobotBase.INDEX_BACK_LEFT].getRawPosition(),
+                            swerveBase.swerveModules[FrcRobotBase.INDEX_BACK_RIGHT].getSteerAngle(),
+                            swerveBase.steerMotors[FrcRobotBase.INDEX_BACK_RIGHT].getMotorPosition(),
+                            swerveBase.steerEncoders[FrcRobotBase.INDEX_BACK_RIGHT].getRawPosition()));
                 }
             }
 

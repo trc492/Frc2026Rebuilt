@@ -458,6 +458,7 @@ public class FrcTest extends FrcTeleOp
             case SWERVE_CALIBRATION:
                 if (robot.robotBase != null && robot.robotBase instanceof FrcSwerveBase)
                 {
+                    robot.globalTracer.traceInfo(moduleName, "Start Swerve Calibration.");
                     setControlsEnabled(false);
                     ((FrcSwerveBase) robot.robotBase).startSteeringCalibration();
                 }
@@ -491,6 +492,7 @@ public class FrcTest extends FrcTeleOp
             case SWERVE_CALIBRATION:
                 if (robot.robotBase != null && robot.robotBase instanceof FrcSwerveBase)
                 {
+                    robot.globalTracer.traceInfo(moduleName, "Stop Swerve Calibration.");
                     ((FrcSwerveBase) robot.robotBase).stopSteeringCalibration();
                 }
                 break;
