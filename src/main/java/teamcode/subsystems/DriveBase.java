@@ -456,12 +456,12 @@ public class DriveBase extends TrcSubsystem
                         FrcCANCoder cancoder = (FrcCANCoder) swerveBase.steerEncoders[i];
                         FrcCANTalonFX steerMotor = (FrcCANTalonFX) swerveBase.steerMotors[i];
 
-                        cancoder.setAbsoluteRange(true);
+                        cancoder.setAbsoluteRange(false);
                         cancoder.setZeroOffset(swerveInfo.steerEncoderZeros[i]);
                         steerMotor.setFeedbackDevice(
                             swerveInfo.steerEncoderMode == SteerEncoderMode.CtreFusedCanCoder?
                                 FeedbackSensorSourceValue.FusedCANcoder: FeedbackSensorSourceValue.SyncCANcoder,
-                            cancoder.getDeviceID(), swerveInfo.steerGearRatio, 1.0);
+                            cancoder.getDeviceID(), swerveInfo.steerGearRatio, 1.0, true);
                     }
                 }
             }
