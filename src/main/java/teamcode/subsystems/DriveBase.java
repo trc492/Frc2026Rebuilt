@@ -91,7 +91,7 @@ public class DriveBase extends TrcSubsystem
         private static final TrcPidController.PidCoefficients velPidCoeffs =
             new TrcPidController.PidCoefficients(0.0, 0.0, 0.0, 0.00909090909090909090909090909091, 0.0);
         private static final TrcPidController.PidCoefficients steerPidCoeffs =
-            new TrcPidController.PidCoefficients(3.0, 0.0, 0.0, 0.0, 0.0);
+            new TrcPidController.PidCoefficients(10.0, 0.0, 0.0, 0.0, 0.0);
 
         public static TrcDriveBase.BaseParams baseParams = new TrcDriveBase.BaseParams()
             .setDriveMotorVelocityControl(
@@ -141,16 +141,17 @@ public class DriveBase extends TrcSubsystem
                         HwConfig.CANID_FLSTEER_ENCODER, HwConfig.CANID_FRSTEER_ENCODER,
                         HwConfig.CANID_BLSTEER_ENCODER, HwConfig.CANID_BRSTEER_ENCODER},
                     new boolean[] {false, false, false, false}, 1.0,
-                    new double[] {0.127197 , 0.687500 , 0.880859 , 0.234863},
-                    SteerEncoderMode.SyncToMotorEncoder, RobotParams.Robot.STEER_ZERO_CAL_FILE)
+                    //new double[] {0.125977, 0.687500 , 0.880859 , 0.234863},
+                    new double[] {0.126221, 0.688721, 0.880371, 0.233398},
+                    SteerEncoderMode.CtreFusedCanCoder, RobotParams.Robot.STEER_ZERO_CAL_FILE)
                 .setSteerMotorInfo(
                     MotorType.CanTalonFx, RobotParams.HwConfig.CANBUS_CANIVORE, null,
                     new String[] {"flSteerMotor", "frSteerMotor", "blSteerMotor", "brSteerMotor"},
                     new int[] {
                         HwConfig.CANID_FLSTEER_MOTOR, HwConfig.CANID_FRSTEER_MOTOR,
                         HwConfig.CANID_BLSTEER_MOTOR, HwConfig.CANID_BRSTEER_MOTOR},
-                    new boolean[] {false, false, false, false})
-                .setSteerPosScale(STEER_MOTOR_GEAR_RATIO, 360.0 / STEER_MOTOR_GEAR_RATIO)
+                    new boolean[] {true, true, true, true})
+                .setSteerPosScale(STEER_MOTOR_GEAR_RATIO, 360.0)
                 .setSwerveModuleNames(new String[] {"flWheel", "frWheel", "blWheel", "brWheel"});
         }   //RebuiltRobotInfo
     }   //class RebuiltRobotInfo
