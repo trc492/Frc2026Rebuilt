@@ -55,7 +55,7 @@ import trclib.timer.TrcTimer;
 public class Shooter extends TrcSubsystem
 {
     public static final String SUBSYSTEM_NAME = "Shooter";
-    private static final boolean NEED_ZERO_CAL = false;
+    private static final boolean NEED_ZERO_CAL = true;
     private static final String DBKEY_PREFERENCE_SHOW_STATUS = SUBSYSTEM_NAME + "/ShowStatus";
     private static final String DBKEY_PREFERENCE_SHOW_GRAPHS = SUBSYSTEM_NAME + "/ShowGraphs";
     private static final String DBKEY_PREFERENCE_USE_REGRESSION = SUBSYSTEM_NAME + "/UseRegression";
@@ -133,11 +133,14 @@ public class Shooter extends TrcSubsystem
         public static final String LSHOOTER_FOLLOWER_MOTOR_NAME = SUBSYSTEM_NAME + ".LeftFollowerMotor";
         public static final boolean LSHOOTER_FOLLOWER_MOTOR_INVERTED = false;
         public static final int LSHOOTER_FOLLOWER_MOTOR_CANID   = RobotParams.HwConfig.CANID_LSHOOTER_FOLLOWER_MOTOR;
-        public static final double LSHOOTER_MOTOR_PID_KP        = 0.45;
+        public static final double LSHOOTER_MOTOR_PID_KP        = 0.28;
         public static final double LSHOOTER_MOTOR_PID_KI        = 0.0;
         public static final double LSHOOTER_MOTOR_PID_KD        = 0.0;
-        public static final double LSHOOTER_MOTOR_PID_KF        = 0.101;
+        public static final double LSHOOTER_MOTOR_PID_KF        = 0.0;
         public static final double LSHOOTER_MOTOR_PID_IZONE     = 0.0;      // in RPS
+        public static final double LSHOOTER_MOTOR_FF_KS         = 0.297;
+        public static final double LSHOOTER_MOTOR_FF_KV         = 0.097;
+        public static final double LSHOOTER_MOTOR_FF_KA         = 0.0;
         // Right Shooter Motor Characteristics
         public static final String RSHOOTER_PRIMARY_MOTOR_NAME  = SUBSYSTEM_NAME + ".RightPrimaryMotor";
         public static final boolean RSHOOTER_PRIMARY_MOTOR_INVERTED = false;
@@ -145,11 +148,14 @@ public class Shooter extends TrcSubsystem
         public static final String RSHOOTER_FOLLOWER_MOTOR_NAME = SUBSYSTEM_NAME + ".RightFollowerMotor";
         public static final boolean RSHOOTER_FOLLOWER_MOTOR_INVERTED = false;
         public static final int RSHOOTER_FOLLOWER_MOTOR_CANID   = RobotParams.HwConfig.CANID_RSHOOTER_FOLLOWER_MOTOR;
-        public static final double RSHOOTER_MOTOR_PID_KP        = 0.45;
+        public static final double RSHOOTER_MOTOR_PID_KP        = 0.28;
         public static final double RSHOOTER_MOTOR_PID_KI        = 0.0;
         public static final double RSHOOTER_MOTOR_PID_KD        = 0.0;
-        public static final double RSHOOTER_MOTOR_PID_KF        = 0.101;
+        public static final double RSHOOTER_MOTOR_PID_KF        = 0.0;
         public static final double RSHOOTER_MOTOR_PID_IZONE     = 0.0;      // in RPS
+        public static final double RSHOOTER_MOTOR_FF_KS         = 0.297;
+        public static final double RSHOOTER_MOTOR_FF_KV         = 0.097;
+        public static final double RSHOOTER_MOTOR_FF_KA         = 0.0;
 
         // Common Tilt Motor Characteristics
         public static final MotorType TILT_MOTOR_TYPE           = MotorType.CanSparkMax;
@@ -158,37 +164,35 @@ public class Shooter extends TrcSubsystem
         public static final double TILT_MOTOR_DEG_PER_COUNT     = 360.0/TILT_MOTOR_GEAR_RATIO;
         public static final double TILT_PID_TOLERANCE           = 1.0;
         public static final boolean TILT_SOFTWARE_PID_ENABLED   = false;
-        public static final double TILT_POWER_LIMIT             = 1.0;
-        public static final double TILT_POS_OFFSET              = 25.0;
+        public static final double TILT_POWER_LIMIT             = 0.2;
+        public static final double TILT_POS_OFFSET              = 17.0;
         public static final double TILT_MIN_POS                 = TILT_POS_OFFSET;
-        public static final double TILT_MAX_POS                 = 45.0;
+        public static final double TILT_MAX_POS                 = 47.0;
         public static final double TILT_POS_PRESET_TOLERANCE    = 2.0;
         public static final double[] TILT_POS_PRESETS           = {TILT_MIN_POS, 30.0, 35.0, 40.0, TILT_MAX_POS};
-        public static final double TILT_ZERO_CAL_POWER          = -0.2;
+        public static final double TILT_ZERO_CAL_POWER          = -0.05;
         public static final double TILT_STALL_MIN_POWER         = Math.abs(TILT_ZERO_CAL_POWER);
         public static final double TILT_STALL_TOLERANCE         = 0.1;
         public static final double TILT_STALL_TIMEOUT           = 0.1;
         public static final double TILT_STALL_RESET_TIMEOUT     = 0.0;
         // Left Tilt Motor Characteristics
         public static final String LTILT_MOTOR_NAME             = SUBSYSTEM_NAME + ".LeftTiltMotor";
-        public static final boolean LTILT_MOTOR_INVERTED        = false;
+        public static final boolean LTILT_MOTOR_INVERTED        = true;
         public static final int LTILT_MOTOR_CANID               = RobotParams.HwConfig.CANID_LSHOOTER_TILT_MOTOR;
-        public static final double LTILT_MOTOR_PID_KP           = 0.06;
-        public static final double LTILT_MOTOR_PID_KI           = 0.005;
-        public static final double LTILT_MOTOR_PID_KD           = 0.0025;
+        public static final double LTILT_MOTOR_PID_KP           = 0.0;
+        public static final double LTILT_MOTOR_PID_KI           = 0.0;
+        public static final double LTILT_MOTOR_PID_KD           = 0.0;
         public static final double LTILT_MOTOR_PID_KF           = 0.0;
-        public static final double LTILT_MOTOR_PID_IZONE        = 3.0;
-        public static final double LTILT_ENCODER_ZERO_OFFSET    = 0.124848;
+        public static final double LTILT_MOTOR_PID_IZONE        = 0.0;
         // Right Tilt Motor Characteristics
         public static final String RTILT_MOTOR_NAME             = SUBSYSTEM_NAME + ".RightTiltMotor";
-        public static final boolean RTILT_MOTOR_INVERTED        = false;
+        public static final boolean RTILT_MOTOR_INVERTED        = true;
         public static final int RTILT_MOTOR_CANID               = RobotParams.HwConfig.CANID_RSHOOTER_TILT_MOTOR;
-        public static final double RTILT_MOTOR_PID_KP           = 0.06;
-        public static final double RTILT_MOTOR_PID_KI           = 0.005;
-        public static final double RTILT_MOTOR_PID_KD           = 0.0025;
+        public static final double RTILT_MOTOR_PID_KP           = 0.0;
+        public static final double RTILT_MOTOR_PID_KI           = 0.0;
+        public static final double RTILT_MOTOR_PID_KD           = 0.0;
         public static final double RTILT_MOTOR_PID_KF           = 0.0;
-        public static final double RTILT_MOTOR_PID_IZONE        = 3.0;
-        public static final double RTILT_ENCODER_ZERO_OFFSET    = 0.124848;
+        public static final double RTILT_MOTOR_PID_IZONE        = 0.0;
 
         // Common Turret Motor Characteristics
         public static final MotorType TURRET_MOTOR_TYPE         = MotorType.CanSparkMax;
@@ -220,7 +224,6 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_STALL_TIMEOUT         = 0.1;
         public static final double TURRET_STALL_RESET_TIMEOUT   = 0.0;
 
-        // TODO: measure CAM_ROTATE_RADIUS in CAD.
         public static final double CAM_ROTATE_RADIUS            = 5.800896; // inches from turret center
         public static final double LTURRET_X_OFFSET             = -7.375;   // inches from robot center
         public static final double LTURRET_Y_OFFSET             = -6.0;     // inches from robot center
@@ -300,7 +303,9 @@ public class Shooter extends TrcSubsystem
     private final TrcMotor feeder;
     private final ShooterContext leftShooterContext;
     private final ShooterContext rightShooterContext;
-    private final TrcEvent zeroCalCallbackEvent;
+    private final TrcEvent leftTiltZeroCalCallbackEvent;
+    private final TrcEvent rightTiltZeroCalCallbackEvent;
+    private final TrcEvent turretZeroCalCallbackEvent;
     private final TrcDbgTrace tracer;
     private TrcEvent turretReadyEvent = null;
 
@@ -344,6 +349,8 @@ public class Shooter extends TrcSubsystem
                     .setPidCoefficients(
                         Params.LSHOOTER_MOTOR_PID_KP, Params.LSHOOTER_MOTOR_PID_KI, Params.LSHOOTER_MOTOR_PID_KD,
                         Params.LSHOOTER_MOTOR_PID_KF, Params.LSHOOTER_MOTOR_PID_IZONE)
+                    .setFFCoefficients(
+                        Params.LSHOOTER_MOTOR_FF_KS, Params.LSHOOTER_MOTOR_FF_KV, Params.LSHOOTER_MOTOR_FF_KA)
                     .setPidControlParams(Params.SHOOTER_PID_TOLERANCE_RPM/60.0, Params.SHOOTER_SOFTWARE_PID_ENABLED),
                 null);
             motor = leftShooter.getTiltMotor();
@@ -423,6 +430,8 @@ public class Shooter extends TrcSubsystem
                     .setPidCoefficients(
                         Params.RSHOOTER_MOTOR_PID_KP, Params.RSHOOTER_MOTOR_PID_KI, Params.RSHOOTER_MOTOR_PID_KD,
                         Params.RSHOOTER_MOTOR_PID_KF, Params.RSHOOTER_MOTOR_PID_IZONE)
+                    .setFFCoefficients(
+                        Params.RSHOOTER_MOTOR_FF_KS, Params.RSHOOTER_MOTOR_FF_KV, Params.RSHOOTER_MOTOR_FF_KA)
                     .setPidControlParams(Params.SHOOTER_PID_TOLERANCE_RPM/60.0, Params.SHOOTER_SOFTWARE_PID_ENABLED),
                 null);
             motor = rightShooter.getTiltMotor();
@@ -513,7 +522,9 @@ public class Shooter extends TrcSubsystem
             feeder = null;
         }
 
-        zeroCalCallbackEvent = new TrcEvent(instanceName + ".ZeroCalCallback");
+        leftTiltZeroCalCallbackEvent = new TrcEvent(instanceName + ".leftTiltZeroCalCallback");
+        rightTiltZeroCalCallbackEvent = new TrcEvent(instanceName + ".rightTiltZeroCalCallback");
+        turretZeroCalCallbackEvent = new TrcEvent(instanceName + ".turretZeroCalCallback");
         tracer = leftShooter != null? leftShooter.tracer: rightShooter.tracer;
 
         synchronized (goalTrackingState)
@@ -1037,9 +1048,34 @@ public class Shooter extends TrcSubsystem
     @Override
     public void zeroCalibrate(String owner, TrcEvent completionEvent)
     {
+        if (leftShooter != null && leftShooter.tiltMotor != null)
+        {
+            leftTiltZeroCalCallbackEvent.clear();
+            leftTiltZeroCalCallbackEvent.setCallback(this::zeroCalCallback, completionEvent);
+            leftShooter.tiltMotor.zeroCalibrate(owner, Params.TILT_ZERO_CAL_POWER, leftTiltZeroCalCallbackEvent);
+        }
+        else
+        {
+            // There is no left tilter, pretend its zero cal is done.
+            leftTiltZeroCalCallbackEvent.signal();
+        }
+
+        if (rightShooter != null && rightShooter.tiltMotor != null)
+        {
+            rightTiltZeroCalCallbackEvent.clear();
+            rightTiltZeroCalCallbackEvent.setCallback(this::zeroCalCallback, completionEvent);
+            rightShooter.tiltMotor.zeroCalibrate(owner, Params.TILT_ZERO_CAL_POWER, rightTiltZeroCalCallbackEvent);
+        }
+        else
+        {
+            // There is no right tilter, pretend its zero cal is done.
+            rightTiltZeroCalCallbackEvent.signal();
+        }
+
         if (turret != null)
         {
-            zeroCalCallbackEvent.setCallback(
+            turretZeroCalCallbackEvent.clear();
+            turretZeroCalCallbackEvent.setCallback(
                 (ctxt, canceled) ->
                 {
                     TrcEvent event = (TrcEvent) ctxt;
@@ -1055,17 +1091,42 @@ public class Shooter extends TrcSubsystem
                         turret.setPosition(owner, 0.0, turretTargetPos, true, Params.TURRET_POWER_LIMIT, null, 0.0);
                         if (event != null)
                         {
-                            event.signal();
+                            zeroCalCallback(event, false);
                         }
                     }
                     else if (event != null)
                     {
                         event.cancel();
                     }
-                }, zeroCalCallbackEvent);
-            turret.zeroCalibrate(owner, Params.TURRET_ZERO_CAL_POWER, zeroCalCallbackEvent);
+                }, completionEvent);
+            turret.zeroCalibrate(owner, Params.TURRET_ZERO_CAL_POWER, turretZeroCalCallbackEvent);
         }
     }   //zeroCalibrate
+
+    /**
+     * This method is called when the tilter of either shooter and the turret have completed zero calibration.
+     *
+     * @param context specifies the zero calibration completion event.
+     * @param canceled specifies true if zero cal is canceled, false otherwise.
+     */
+    private void zeroCalCallback(Object context, boolean canceled)
+    {
+        TrcEvent completionEvent = (TrcEvent) context;
+
+        if (!canceled)
+        {
+            if (completionEvent != null && leftTiltZeroCalCallbackEvent.isSignaled() &&
+                rightTiltZeroCalCallbackEvent.isSignaled() && turretZeroCalCallbackEvent.isSignaled())
+            {
+                // Signal completion only if all have completed their zero cal.
+                completionEvent.signal();
+            }
+        }
+        else if (completionEvent != null)
+        {
+            completionEvent.cancel();
+        }
+    }   //zeroCalCallback
 
     /**
      * This method resets the subsystem state. Typically, this is used to retract the subsystem for turtle mode.
