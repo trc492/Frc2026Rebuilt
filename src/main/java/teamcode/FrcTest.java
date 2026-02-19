@@ -83,6 +83,9 @@ public class FrcTest extends FrcTeleOp
     public static final String DBKEY_TEST_SUBSYSTEM_TOLERANCE = "Test/SubsystemTolerance";
     public static final String DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID = "Test/SubsystemSoftwarePid";
     public static final String DBKEY_TEST_SUBSYSTEM_TARGET_PARAM = "Test/SubsystemTargetParam";
+    public static final String DBKEY_TEST_SUBSYSTEM_KS = "Test/SubsystemKs";
+    public static final String DBKEY_TEST_SUBSYSTEM_KV = "Test/SubsystemKv";
+    public static final String DBKEY_TEST_SUBSYSTEM_KA = "Test/SubsystemKa";
 
     public static final String DBKEY_TEST_SUBSYSTEM_INPUT = "Test/SubsystemInput";
     public static final String DBKEY_TEST_SUBSYSTEM_TARGET = "Test/SubsystemTarget";
@@ -196,6 +199,9 @@ public class FrcTest extends FrcTeleOp
             userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_TOLERANCE, 0.0);
             userChoices.addBoolean(DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, false);
             userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
+            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_KS, 0.0);
+            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_KV, 0.0);
+            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_KA, 0.0);
         }   //TestChoices
 
         //
@@ -297,10 +303,19 @@ public class FrcTest extends FrcTeleOp
                 userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_IZONE));
         }   //getSubsystemPidCoefficients
 
+        public TrcPidController.FFCoefficients getSubsystemFFCoefficients()
+        {
+            return new TrcPidController.FFCoefficients(
+                userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_KS),
+                userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_KV),
+                userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_KA));
+        }   //getSubsystemFFCoefficients
+
         public TrcMotor.PidParams getSubsystemPidParameters()
         {
             return new TrcMotor.PidParams()
                         .setPidCoefficients(getSubsystemPidCoefficients())
+                        .setFFCoefficients(getSubsystemFFCoefficients())
                         .setPidControlParams(
                             userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_TOLERANCE),
                             userChoices.getUserBoolean(DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID));

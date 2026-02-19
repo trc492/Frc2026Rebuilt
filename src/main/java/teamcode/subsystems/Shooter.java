@@ -60,7 +60,40 @@ public class Shooter extends TrcSubsystem
     private static final String DBKEY_PREFERENCE_SHOW_GRAPHS = SUBSYSTEM_NAME + "/ShowGraphs";
     private static final String DBKEY_PREFERENCE_USE_REGRESSION = SUBSYSTEM_NAME + "/UseRegression";
     private static final String DBKEY_PREFERENCE_USE_MOTION_COMPENSATION = SUBSYSTEM_NAME + "/UseMotionCompensation";
-    private static final String DBKEY_SHOOTER_CURRENT = "Shooter/ShooterCurrent";
+
+    private static final String DBKEY_LSHOOTER_POWER = "Shooter/LShooterPower";
+    private static final String DBKEY_LSHOOTER_CURRENT = "Shooter/LShooterCurrent";
+    private static final String DBKEY_LSHOOTER_RPM = "Shooter/LShooterRPM";
+    private static final String DBKEY_LSHOOTER_TARGET_RPM = "Shooter/LShooterTargetRPM";
+    private static final String DBKEY_LTILT_POWER = "Shooter/LTiltPower";
+    private static final String DBKEY_LTILT_CURRENT = "Shooter/LTiltCurrent";
+    private static final String DBKEY_LTILT_POS = "Shooter/LTiltPos";
+    private static final String DBKEY_LTILT_TARGET = "Shooter/LTiltTarget";
+    private static final String DBKEY_LXFER_POWER = "Shooter/LXferPower";
+    private static final String DBKEY_LXFER_CURRENT = "Shooter/LXferCurrent";
+    private static final String DBKEY_LXFER_SENSOR = "Shooter/LXferSensor";
+    private static final String DBKEY_LXFER_ACTIVE = "Shooter/LXferActive";
+
+    private static final String DBKEY_RSHOOTER_POWER = "Shooter/RShooterPower";
+    private static final String DBKEY_RSHOOTER_CURRENT = "Shooter/RShooterCurrent";
+    private static final String DBKEY_RSHOOTER_RPM = "Shooter/RShooterRPM";
+    private static final String DBKEY_RSHOOTER_TARGET_RPM = "Shooter/RShooterTargetRPM";
+    private static final String DBKEY_RTILT_POWER = "Shooter/RTiltPower";
+    private static final String DBKEY_RTILT_CURRENT = "Shooter/RTiltCurrent";
+    private static final String DBKEY_RTILT_POS = "Shooter/RTiltPos";
+    private static final String DBKEY_RTILT_TARGET = "Shooter/RTiltTarget";
+    private static final String DBKEY_RXFER_POWER = "Shooter/RXferPower";
+    private static final String DBKEY_RXFER_CURRENT = "Shooter/RXferCurrent";
+    private static final String DBKEY_RXFER_SENSOR = "Shooter/RXferSensor";
+    private static final String DBKEY_RXFER_ACTIVE = "Shooter/RXferActive";
+
+    private static final String DBKEY_TURRET_POWER = "Shooter/TurretPower";
+    private static final String DBKEY_TURRET_CURRENT = "Shooter/TurretCurrent";
+    private static final String DBKEY_TURRET_POS = "Shooter/TurretPos";
+    private static final String DBKEY_TURRET_TARGET = "Shooter/TurretTarget";
+
+    private static final String DBKEY_FEEDER_POWER = "Shooter/FeederPower";
+    private static final String DBKEY_FEEDER_CURRENT = "Shooter/FeederCurrent";
 
     public static final String HUB_SHOOT_POINT = "HubShootPoint";
     public static final String TOWER_SHOOT_POINT = "TowerShootPoint";
@@ -1155,12 +1188,20 @@ public class Shooter extends TrcSubsystem
                         lineNum++, "LeftShooter: power=%.1f, current=%.1f, vel=%.1f, target=%.1f",
                         motor.getPower(), motor.getCurrent(), leftShooter.getShooterMotor1RPM(),
                         leftShooter.getShooterMotor1TargetRPM());
+                    dashboard.putNumber(DBKEY_LSHOOTER_POWER, leftShooter.getShooterMotor1Power());
+                    dashboard.putNumber(DBKEY_LSHOOTER_CURRENT, leftShooter.getShooterMotor1Current());
+                    dashboard.putNumber(DBKEY_LSHOOTER_RPM, leftShooter.getShooterMotor1RPM());
+                    dashboard.putNumber(DBKEY_LSHOOTER_TARGET_RPM, leftShooter.getShooterMotor1TargetRPM());
                     motor = leftShooter.getTiltMotor();
                     if (motor != null)
                     {
                         dashboard.displayPrintf(
                             lineNum++, "LeftTilt: power=%.1f, current=%.1f, pos=%.1f/%.1f",
                             motor.getPower(), motor.getCurrent(), motor.getPosition(), motor.getPidTarget());
+                        dashboard.putNumber(DBKEY_LTILT_POWER, motor.getPower());
+                        dashboard.putNumber(DBKEY_LTILT_CURRENT, motor.getCurrent());
+                        dashboard.putNumber(DBKEY_LTILT_POS, motor.getPosition());
+                        dashboard.putNumber(DBKEY_LTILT_TARGET, motor.getPidTarget());
                     }
                     if (leftTransfer != null)
                     {
@@ -1168,6 +1209,10 @@ public class Shooter extends TrcSubsystem
                             lineNum++, "LeftTransfer: power=%.1f, current=%.1f, sensor=%s, active=%s",
                             leftTransfer.motor.getPower(), leftTransfer.motor.getCurrent(),
                             leftTransfer.getBackSensorState(), leftTransfer.isActive());
+                        dashboard.putNumber(DBKEY_LXFER_POWER, leftTransfer.motor.getPower());
+                        dashboard.putNumber(DBKEY_LXFER_CURRENT, leftTransfer.motor.getCurrent());
+                        dashboard.putBoolean(DBKEY_LXFER_SENSOR, leftTransfer.getBackSensorState());
+                        dashboard.putBoolean(DBKEY_LXFER_ACTIVE, leftTransfer.isActive());
                     }
                 }
 
@@ -1178,12 +1223,20 @@ public class Shooter extends TrcSubsystem
                         lineNum++, "RightShooter: power=%.1f, current=%.1f, vel=%.1f, target=%.1f",
                         motor.getPower(), motor.getCurrent(), rightShooter.getShooterMotor1RPM(),
                         rightShooter.getShooterMotor1TargetRPM());
+                    dashboard.putNumber(DBKEY_RSHOOTER_POWER, rightShooter.getShooterMotor1Power());
+                    dashboard.putNumber(DBKEY_RSHOOTER_CURRENT, rightShooter.getShooterMotor1Current());
+                    dashboard.putNumber(DBKEY_RSHOOTER_RPM, rightShooter.getShooterMotor1RPM());
+                    dashboard.putNumber(DBKEY_RSHOOTER_TARGET_RPM, rightShooter.getShooterMotor1TargetRPM());
                     motor = rightShooter.getTiltMotor();
                     if (motor != null)
                     {
                         dashboard.displayPrintf(
                             lineNum++, "RightTilt: power=%.1f, current=%.1f, pos=%.1f/%.1f",
                             motor.getPower(), motor.getCurrent(), motor.getPosition(), motor.getPidTarget());
+                        dashboard.putNumber(DBKEY_RTILT_POWER, motor.getPower());
+                        dashboard.putNumber(DBKEY_RTILT_CURRENT, motor.getCurrent());
+                        dashboard.putNumber(DBKEY_RTILT_POS, motor.getPosition());
+                        dashboard.putNumber(DBKEY_RTILT_TARGET, motor.getPidTarget());
                     }
                     if (rightTransfer != null)
                     {
@@ -1191,6 +1244,10 @@ public class Shooter extends TrcSubsystem
                             lineNum++, "RightTransfer: power=%.1f, current=%.1f, sensor=%s, active=%s",
                             rightTransfer.motor.getPower(), rightTransfer.motor.getCurrent(),
                             rightTransfer.getBackSensorState(), rightTransfer.isActive());
+                        dashboard.putNumber(DBKEY_RXFER_POWER, rightTransfer.motor.getPower());
+                        dashboard.putNumber(DBKEY_RXFER_CURRENT, rightTransfer.motor.getCurrent());
+                        dashboard.putBoolean(DBKEY_RXFER_SENSOR, rightTransfer.getBackSensorState());
+                        dashboard.putBoolean(DBKEY_RXFER_ACTIVE, rightTransfer.isActive());
                     }
                 }
 
@@ -1199,12 +1256,18 @@ public class Shooter extends TrcSubsystem
                     dashboard.displayPrintf(
                         lineNum++, "Turret: power=%.1f, current=%.1f, pos=%f/%f",
                         turret.getPower(), turret.getCurrent(), turret.getPosition(), turret.getPidTarget());
+                    dashboard.putNumber(DBKEY_TURRET_POWER, turret.getPower());
+                    dashboard.putNumber(DBKEY_TURRET_CURRENT, turret.getCurrent());
+                    dashboard.putNumber(DBKEY_TURRET_POS, turret.getPosition());
+                    dashboard.putNumber(DBKEY_TURRET_TARGET, turret.getPidTarget());
                 }
 
                 if (feeder != null)
                 {
                     dashboard.displayPrintf(
                         lineNum++, "Feeder: power=%.1f, current=%.1f", feeder.getPower(), feeder.getCurrent());
+                    dashboard.putNumber(DBKEY_FEEDER_POWER, feeder.getPower());
+                    dashboard.putNumber(DBKEY_FEEDER_CURRENT, feeder.getCurrent());
                 }
             }
         }
@@ -1219,13 +1282,13 @@ public class Shooter extends TrcSubsystem
                 {
                     dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_INPUT, leftShooter.getShooterMotor1RPM());
                     dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET, leftShooter.getShooterMotor1TargetRPM());
-                    dashboard.putNumber(DBKEY_SHOOTER_CURRENT, leftShooter.getShooterMotor1Current());
+                    dashboard.putNumber(DBKEY_LSHOOTER_CURRENT, leftShooter.getShooterMotor1Current());
                 }
                 else if (subsystemName.equalsIgnoreCase(Params.RSHOOTER_PRIMARY_MOTOR_NAME))
                 {
                     dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_INPUT, rightShooter.getShooterMotor1RPM());
                     dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET, rightShooter.getShooterMotor1TargetRPM());
-                    dashboard.putNumber(DBKEY_SHOOTER_CURRENT, rightShooter.getShooterMotor1Current());
+                    dashboard.putNumber(DBKEY_RSHOOTER_CURRENT, rightShooter.getShooterMotor1Current());
                 }
                 else if (subsystemName.equalsIgnoreCase(Params.LTILT_MOTOR_NAME))
                 {
@@ -1269,6 +1332,9 @@ public class Shooter extends TrcSubsystem
                 dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.SHOOTER_PID_TOLERANCE_RPM);
                 dashboard.putBoolean(FrcTest.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.SHOOTER_SOFTWARE_PID_ENABLED);
                 dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KS, Params.LSHOOTER_MOTOR_FF_KS);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KV, Params.LSHOOTER_MOTOR_FF_KV);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KA, Params.LSHOOTER_MOTOR_FF_KA);
             }
             else if (subsystemName.equalsIgnoreCase(Params.RSHOOTER_PRIMARY_MOTOR_NAME))
             {
@@ -1280,6 +1346,9 @@ public class Shooter extends TrcSubsystem
                 dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.SHOOTER_PID_TOLERANCE_RPM);
                 dashboard.putBoolean(FrcTest.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.SHOOTER_SOFTWARE_PID_ENABLED);
                 dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KS, Params.RSHOOTER_MOTOR_FF_KS);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KV, Params.RSHOOTER_MOTOR_FF_KV);
+                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KA, Params.RSHOOTER_MOTOR_FF_KA);
             }
             else if (subsystemName.equalsIgnoreCase(Params.LTILT_MOTOR_NAME))
             {
