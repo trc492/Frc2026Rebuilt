@@ -364,9 +364,7 @@ public class Shooter extends TrcSubsystem
                             Params.LTILT_MOTOR_PID_KF, Params.LTILT_MOTOR_PID_IZONE)
                         .setPidControlParams(Params.TILT_PID_TOLERANCE, Params.TILT_SOFTWARE_PID_ENABLED),
                     null);
-                // There is no lower limit switch, enable stall detection for zero calibration and soft limits for
-                // protection.
-                // motor.setSoftPositionLimits(Params.TILT_MIN_POS, Params.TILT_MAX_POS, false);
+                // There is no lower limit switch, enable stall detection for zero calibration.
                 motor.setStallProtection(
                     Params.TILT_STALL_MIN_POWER, Params.TILT_STALL_TOLERANCE, Params.TILT_STALL_TIMEOUT,
                     Params.TILT_STALL_RESET_TIMEOUT);
@@ -445,9 +443,7 @@ public class Shooter extends TrcSubsystem
                             Params.RTILT_MOTOR_PID_KF, Params.RTILT_MOTOR_PID_IZONE)
                         .setPidControlParams(Params.TILT_PID_TOLERANCE, Params.TILT_SOFTWARE_PID_ENABLED),
                     null);
-                // There is no lower limit switch, enable stall detection for zero calibration and soft limits for
-                // protection.
-                // motor.setSoftPositionLimits(Params.TILT_MIN_POS, Params.TILT_MAX_POS, false);
+                // There is no lower limit switch, enable stall detection for zero calibration.
                 motor.setStallProtection(
                     Params.TILT_STALL_MIN_POWER, Params.TILT_STALL_TOLERANCE, Params.TILT_STALL_TIMEOUT,
                     Params.TILT_STALL_RESET_TIMEOUT);
@@ -497,9 +493,7 @@ public class Shooter extends TrcSubsystem
                         Params.TURRET_MOTOR_PID_KP, Params.TURRET_MOTOR_PID_KI, Params.TURRET_MOTOR_PID_KD,
                         Params.TURRET_MOTOR_PID_KF, Params.TURRET_MOTOR_PID_IZONE)
                     .setPidControlParams(Params.TURRET_PID_TOLERANCE, Params.TURRET_SOFTWARE_PID_ENABLED), null);
-            // There is no lower limit switch, enable stall detection for zero calibration and soft limits for
-            // protection.
-            // turret.setSoftPositionLimits(Params.TURRET_MIN_POS, Params.TURRET_MAX_POS, false);
+            // There is no lower limit switch, enable stall detection for zero calibration.
             turret.setStallProtection(
                 Params.TURRET_STALL_MIN_POWER, Params.TURRET_STALL_TOLERANCE, Params.TURRET_STALL_TIMEOUT,
                 Params.TURRET_STALL_RESET_TIMEOUT);
