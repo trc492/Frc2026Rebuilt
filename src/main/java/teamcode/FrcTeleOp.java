@@ -29,6 +29,7 @@ import frclib.vision.FrcPhotonVision.DetectedObject;
 import teamcode.subsystems.Shooter;
 import teamcode.subsystems.Shooter.TrackingMode;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
+import trclib.dataprocessor.TrcUtil;
 import trclib.drivebase.TrcSwerveDrive;
 import trclib.driverio.TrcGameController.DriveMode;
 import trclib.pathdrive.TrcPose2D;
@@ -242,7 +243,8 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                     // Analog control of subsystems.
                     if (robot.turret != null)
                     {
-                        double panPower = robot.operatorController.getRightStickX(true);
+                        double panPower =
+                            robot.operatorController.getRightStickX(true) * Shooter.Params.TURRET_POWER_LIMIT;
 
                         if (panPower != prevPanPower)
                         {
@@ -261,7 +263,8 @@ public class FrcTeleOp implements TrcRobot.RobotMode
 
                     if (robot.leftShooter != null || robot.rightShooter != null)
                     {
-                        double tiltPower = robot.operatorController.getLeftStickY(true);
+                        double tiltPower =
+                            robot.operatorController.getLeftStickY(true) * Shooter.Params.TILT_POWER_LIMIT;
 
                         if (tiltPower != prevTiltPower)
                         {
