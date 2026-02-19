@@ -41,6 +41,11 @@ public class Climber extends TrcSubsystem
     private static final String DBKEY_PREFERENCE_SHOW_STATUS = SUBSYSTEM_NAME + "/ShowStatus";
     private static final String DBKEY_PREFERENCE_SHOW_GRAPHS = SUBSYSTEM_NAME + "/ShowGraphs";
 
+    private static final String DBKEY_CLIMBER_POWER = "Climber/ClimberPower";
+    private static final String DBKEY_CLIMBER_CURRENT = "Climber/ClimberCurrent";
+    private static final String DBKEY_CLIMBER_POS = "Climber/ClimberPos";
+    private static final String DBKEY_CLIMBER_TARGET = "Climber/ClimberTarget";
+
     public static final class Params
     {
         public static final String CANBUS_NAME                  = RobotParams.HwConfig.CANBUS_CANIVORE;
@@ -168,10 +173,10 @@ public class Climber extends TrcSubsystem
         {
             if (slowLoop)
             {
-                dashboard.displayPrintf(
-                    lineNum++, "%s: power=%.1f, current=%.1f, pos=%f/%f",
-                    Params.CLIMBER_MOTOR_NAME, climber.getPower(), climber.getCurrent(), climber.getPosition(),
-                    climber.getPidTarget());
+                dashboard.putNumber(DBKEY_CLIMBER_POWER, climber.getPower());
+                dashboard.putNumber(DBKEY_CLIMBER_CURRENT, climber.getCurrent());
+                dashboard.putNumber(DBKEY_CLIMBER_POS, climber.getPosition());
+                dashboard.putNumber(DBKEY_CLIMBER_TARGET, climber.getPidTarget());
             }
         }
 

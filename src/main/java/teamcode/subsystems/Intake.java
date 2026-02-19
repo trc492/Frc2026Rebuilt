@@ -45,6 +45,15 @@ public class Intake extends TrcSubsystem
     private static final String DBKEY_PREFERENCE_SHOW_STATUS = SUBSYSTEM_NAME + "/ShowStatus";
     private static final String DBKEY_PREFERENCE_SHOW_GRAPHS = SUBSYSTEM_NAME + "/ShowGraphs";
 
+    private static final String DBKEY_INTAKE_POWER = "Intake/IntakePower";
+    private static final String DBKEY_INTAKE_CURRENT = "Intake/IntakeCurrent";
+    private static final String DBKEY_INTAKE_AUTO = "Intake/IntakeAuto";
+
+    private static final String DBKEY_DEPLOYER_POWER = "Intake/DeployerPower";
+    private static final String DBKEY_DEPLOYER_CURRENT = "Intake/DeployerCurrent";
+    private static final String DBKEY_DEPLOYER_POS = "Intake/DeployerPos";
+    private static final String DBKEY_DEPLOYER_TARGET = "Intake/DeployerTarget";
+
     public static final class Params
     {
         public static final String CANBUS_NAME                  = RobotParams.HwConfig.CANBUS_CANIVORE;
@@ -269,14 +278,15 @@ public class Intake extends TrcSubsystem
         {
             if (slowLoop)
             {
-                dashboard.displayPrintf(
-                    lineNum++, "Intake: power=%.1f, current=%.1f, auto=%s",
-                    intake.getPower(), intake.getCurrent(), intake.isAutoActive());
+                dashboard.putNumber(DBKEY_INTAKE_POWER, intake.getPower());
+                dashboard.putNumber(DBKEY_INTAKE_CURRENT, intake.getCurrent());
+                dashboard.putBoolean(DBKEY_INTAKE_AUTO, intake.isAutoActive());
                 if (deployer != null)
                 {
-                    dashboard.displayPrintf(
-                        lineNum++, "Deployer: power=%.1f, current=%.1f, pos=%f/%f",
-                        deployer.getPower(), deployer.getCurrent(), deployer.getPosition(), deployer.getPidTarget());
+                    dashboard.putNumber(DBKEY_DEPLOYER_POWER, deployer.getPower());
+                    dashboard.putNumber(DBKEY_DEPLOYER_CURRENT, deployer.getCurrent());
+                    dashboard.putNumber(DBKEY_DEPLOYER_POS, deployer.getPosition());
+                    dashboard.putNumber(DBKEY_DEPLOYER_TARGET, deployer.getPidTarget());
                 }
             }
         }

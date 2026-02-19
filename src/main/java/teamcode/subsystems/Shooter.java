@@ -1184,10 +1184,6 @@ public class Shooter extends TrcSubsystem
                 if (leftShooter != null)
                 {
                     motor = leftShooter.getShooterMotor1();
-                    dashboard.displayPrintf(
-                        lineNum++, "LeftShooter: power=%.1f, current=%.1f, vel=%.1f, target=%.1f",
-                        motor.getPower(), motor.getCurrent(), leftShooter.getShooterMotor1RPM(),
-                        leftShooter.getShooterMotor1TargetRPM());
                     dashboard.putNumber(DBKEY_LSHOOTER_POWER, leftShooter.getShooterMotor1Power());
                     dashboard.putNumber(DBKEY_LSHOOTER_CURRENT, leftShooter.getShooterMotor1Current());
                     dashboard.putNumber(DBKEY_LSHOOTER_RPM, leftShooter.getShooterMotor1RPM());
@@ -1195,9 +1191,6 @@ public class Shooter extends TrcSubsystem
                     motor = leftShooter.getTiltMotor();
                     if (motor != null)
                     {
-                        dashboard.displayPrintf(
-                            lineNum++, "LeftTilt: power=%.1f, current=%.1f, pos=%.1f/%.1f",
-                            motor.getPower(), motor.getCurrent(), motor.getPosition(), motor.getPidTarget());
                         dashboard.putNumber(DBKEY_LTILT_POWER, motor.getPower());
                         dashboard.putNumber(DBKEY_LTILT_CURRENT, motor.getCurrent());
                         dashboard.putNumber(DBKEY_LTILT_POS, motor.getPosition());
@@ -1205,10 +1198,6 @@ public class Shooter extends TrcSubsystem
                     }
                     if (leftTransfer != null)
                     {
-                        dashboard.displayPrintf(
-                            lineNum++, "LeftTransfer: power=%.1f, current=%.1f, sensor=%s, active=%s",
-                            leftTransfer.motor.getPower(), leftTransfer.motor.getCurrent(),
-                            leftTransfer.getBackSensorState(), leftTransfer.isActive());
                         dashboard.putNumber(DBKEY_LXFER_POWER, leftTransfer.motor.getPower());
                         dashboard.putNumber(DBKEY_LXFER_CURRENT, leftTransfer.motor.getCurrent());
                         dashboard.putBoolean(DBKEY_LXFER_SENSOR, leftTransfer.getBackSensorState());
@@ -1219,10 +1208,6 @@ public class Shooter extends TrcSubsystem
                 if (rightShooter != null)
                 {
                     motor = rightShooter.getShooterMotor1();
-                    dashboard.displayPrintf(
-                        lineNum++, "RightShooter: power=%.1f, current=%.1f, vel=%.1f, target=%.1f",
-                        motor.getPower(), motor.getCurrent(), rightShooter.getShooterMotor1RPM(),
-                        rightShooter.getShooterMotor1TargetRPM());
                     dashboard.putNumber(DBKEY_RSHOOTER_POWER, rightShooter.getShooterMotor1Power());
                     dashboard.putNumber(DBKEY_RSHOOTER_CURRENT, rightShooter.getShooterMotor1Current());
                     dashboard.putNumber(DBKEY_RSHOOTER_RPM, rightShooter.getShooterMotor1RPM());
@@ -1230,9 +1215,6 @@ public class Shooter extends TrcSubsystem
                     motor = rightShooter.getTiltMotor();
                     if (motor != null)
                     {
-                        dashboard.displayPrintf(
-                            lineNum++, "RightTilt: power=%.1f, current=%.1f, pos=%.1f/%.1f",
-                            motor.getPower(), motor.getCurrent(), motor.getPosition(), motor.getPidTarget());
                         dashboard.putNumber(DBKEY_RTILT_POWER, motor.getPower());
                         dashboard.putNumber(DBKEY_RTILT_CURRENT, motor.getCurrent());
                         dashboard.putNumber(DBKEY_RTILT_POS, motor.getPosition());
@@ -1240,10 +1222,6 @@ public class Shooter extends TrcSubsystem
                     }
                     if (rightTransfer != null)
                     {
-                        dashboard.displayPrintf(
-                            lineNum++, "RightTransfer: power=%.1f, current=%.1f, sensor=%s, active=%s",
-                            rightTransfer.motor.getPower(), rightTransfer.motor.getCurrent(),
-                            rightTransfer.getBackSensorState(), rightTransfer.isActive());
                         dashboard.putNumber(DBKEY_RXFER_POWER, rightTransfer.motor.getPower());
                         dashboard.putNumber(DBKEY_RXFER_CURRENT, rightTransfer.motor.getCurrent());
                         dashboard.putBoolean(DBKEY_RXFER_SENSOR, rightTransfer.getBackSensorState());
@@ -1253,9 +1231,6 @@ public class Shooter extends TrcSubsystem
 
                 if (turret != null)
                 {
-                    dashboard.displayPrintf(
-                        lineNum++, "Turret: power=%.1f, current=%.1f, pos=%f/%f",
-                        turret.getPower(), turret.getCurrent(), turret.getPosition(), turret.getPidTarget());
                     dashboard.putNumber(DBKEY_TURRET_POWER, turret.getPower());
                     dashboard.putNumber(DBKEY_TURRET_CURRENT, turret.getCurrent());
                     dashboard.putNumber(DBKEY_TURRET_POS, turret.getPosition());
@@ -1264,8 +1239,6 @@ public class Shooter extends TrcSubsystem
 
                 if (feeder != null)
                 {
-                    dashboard.displayPrintf(
-                        lineNum++, "Feeder: power=%.1f, current=%.1f", feeder.getPower(), feeder.getCurrent());
                     dashboard.putNumber(DBKEY_FEEDER_POWER, feeder.getPower());
                     dashboard.putNumber(DBKEY_FEEDER_CURRENT, feeder.getCurrent());
                 }
