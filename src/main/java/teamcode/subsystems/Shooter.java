@@ -111,7 +111,7 @@ public class Shooter extends TrcSubsystem
         public static final String CANBUS_NAME                  = RobotParams.HwConfig.CANBUS_CANIVORE;
         public static final boolean SHOOTER_HAS_TILT            = true;
         public static final boolean SHOOTER_HAS_TRANSFER        = true;
-        public static final boolean HAS_TURRET                  = true;
+        public static final boolean HAS_TURRET                  = false;
         public static final boolean HAS_FEEDER                  = true;
 
         // Common Shooter Motor Characteristics
@@ -139,7 +139,7 @@ public class Shooter extends TrcSubsystem
         public static final double LSHOOTER_MOTOR_PID_KF        = 0.0;
         public static final double LSHOOTER_MOTOR_PID_IZONE     = 0.0;      // in RPS
         public static final double LSHOOTER_MOTOR_FF_KS         = 0.297;
-        public static final double LSHOOTER_MOTOR_FF_KV         = 0.097;
+        public static final double LSHOOTER_MOTOR_FF_KV         = 0.1;
         public static final double LSHOOTER_MOTOR_FF_KA         = 0.0;
         // Right Shooter Motor Characteristics
         public static final String RSHOOTER_PRIMARY_MOTOR_NAME  = SUBSYSTEM_NAME + ".RightPrimaryMotor";
@@ -154,7 +154,7 @@ public class Shooter extends TrcSubsystem
         public static final double RSHOOTER_MOTOR_PID_KF        = 0.0;
         public static final double RSHOOTER_MOTOR_PID_IZONE     = 0.0;      // in RPS
         public static final double RSHOOTER_MOTOR_FF_KS         = 0.297;
-        public static final double RSHOOTER_MOTOR_FF_KV         = 0.097;
+        public static final double RSHOOTER_MOTOR_FF_KV         = 0.1;
         public static final double RSHOOTER_MOTOR_FF_KA         = 0.0;
 
         // Common Tilt Motor Characteristics
@@ -170,7 +170,7 @@ public class Shooter extends TrcSubsystem
         public static final double TILT_MAX_POS                 = 47.0;
         public static final double TILT_POS_PRESET_TOLERANCE    = 2.0;
         public static final double[] TILT_POS_PRESETS           = {TILT_MIN_POS, 30.0, 35.0, 40.0, TILT_MAX_POS};
-        public static final double TILT_ZERO_CAL_POWER          = -0.05;
+        public static final double TILT_ZERO_CAL_POWER          = -0.1;
         public static final double TILT_STALL_MIN_POWER         = Math.abs(TILT_ZERO_CAL_POWER);
         public static final double TILT_STALL_TOLERANCE         = 0.1;
         public static final double TILT_STALL_TIMEOUT           = 0.1;
@@ -179,7 +179,7 @@ public class Shooter extends TrcSubsystem
         public static final String LTILT_MOTOR_NAME             = SUBSYSTEM_NAME + ".LeftTiltMotor";
         public static final boolean LTILT_MOTOR_INVERTED        = true;
         public static final int LTILT_MOTOR_CANID               = RobotParams.HwConfig.CANID_LSHOOTER_TILT_MOTOR;
-        public static final double LTILT_MOTOR_PID_KP           = 0.0;
+        public static final double LTILT_MOTOR_PID_KP           = 0.3;
         public static final double LTILT_MOTOR_PID_KI           = 0.0;
         public static final double LTILT_MOTOR_PID_KD           = 0.0;
         public static final double LTILT_MOTOR_PID_KF           = 0.0;
@@ -188,7 +188,7 @@ public class Shooter extends TrcSubsystem
         public static final String RTILT_MOTOR_NAME             = SUBSYSTEM_NAME + ".RightTiltMotor";
         public static final boolean RTILT_MOTOR_INVERTED        = true;
         public static final int RTILT_MOTOR_CANID               = RobotParams.HwConfig.CANID_RSHOOTER_TILT_MOTOR;
-        public static final double RTILT_MOTOR_PID_KP           = 0.0;
+        public static final double RTILT_MOTOR_PID_KP           = 0.3;
         public static final double RTILT_MOTOR_PID_KI           = 0.0;
         public static final double RTILT_MOTOR_PID_KD           = 0.0;
         public static final double RTILT_MOTOR_PID_KF           = 0.0;
@@ -200,11 +200,11 @@ public class Shooter extends TrcSubsystem
         public static final String TURRET_MOTOR_NAME            = SUBSYSTEM_NAME + ".TurretMotor";
         public static final boolean TURRET_MOTOR_INVERTED       = true;
         public static final int TURRET_MOTOR_CANID              = RobotParams.HwConfig.CANID_TURRET_MOTOR;
-        public static final double TURRET_MOTOR_PID_KP          = 0.03;
-        public static final double TURRET_MOTOR_PID_KI          = 0.02;
+        public static final double TURRET_MOTOR_PID_KP          = 0.0;
+        public static final double TURRET_MOTOR_PID_KI          = 0.0;
         public static final double TURRET_MOTOR_PID_KD          = 0.0;
         public static final double TURRET_MOTOR_PID_KF          = 0.0;
-        public static final double TURRET_MOTOR_PID_IZONE       = 5.0;
+        public static final double TURRET_MOTOR_PID_IZONE       = 0.0;
         public static final double TURRET_MOTOR_GEAR_RATIO      = 130.0/40.0;   // Load/Motor
         public static final double TURRET_MOTOR_DEG_PER_COUNT   = 360.0/TURRET_MOTOR_GEAR_RATIO;
         public static final double TURRET_PID_TOLERANCE         = 1.0;
@@ -366,7 +366,7 @@ public class Shooter extends TrcSubsystem
                     null);
                 // There is no lower limit switch, enable stall detection for zero calibration and soft limits for
                 // protection.
-                motor.setSoftPositionLimits(Params.TILT_MIN_POS, Params.TILT_MAX_POS, false);
+                // motor.setSoftPositionLimits(Params.TILT_MIN_POS, Params.TILT_MAX_POS, false);
                 motor.setStallProtection(
                     Params.TILT_STALL_MIN_POWER, Params.TILT_STALL_TOLERANCE, Params.TILT_STALL_TIMEOUT,
                     Params.TILT_STALL_RESET_TIMEOUT);
@@ -447,7 +447,7 @@ public class Shooter extends TrcSubsystem
                     null);
                 // There is no lower limit switch, enable stall detection for zero calibration and soft limits for
                 // protection.
-                motor.setSoftPositionLimits(Params.TILT_MIN_POS, Params.TILT_MAX_POS, false);
+                // motor.setSoftPositionLimits(Params.TILT_MIN_POS, Params.TILT_MAX_POS, false);
                 motor.setStallProtection(
                     Params.TILT_STALL_MIN_POWER, Params.TILT_STALL_TOLERANCE, Params.TILT_STALL_TIMEOUT,
                     Params.TILT_STALL_RESET_TIMEOUT);
@@ -499,7 +499,7 @@ public class Shooter extends TrcSubsystem
                     .setPidControlParams(Params.TURRET_PID_TOLERANCE, Params.TURRET_SOFTWARE_PID_ENABLED), null);
             // There is no lower limit switch, enable stall detection for zero calibration and soft limits for
             // protection.
-            turret.setSoftPositionLimits(Params.TURRET_MIN_POS, Params.TURRET_MAX_POS, false);
+            // turret.setSoftPositionLimits(Params.TURRET_MIN_POS, Params.TURRET_MAX_POS, false);
             turret.setStallProtection(
                 Params.TURRET_STALL_MIN_POWER, Params.TURRET_STALL_TOLERANCE, Params.TURRET_STALL_TIMEOUT,
                 Params.TURRET_STALL_RESET_TIMEOUT);
