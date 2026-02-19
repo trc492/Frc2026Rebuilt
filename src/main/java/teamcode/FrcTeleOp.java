@@ -29,7 +29,6 @@ import frclib.vision.FrcPhotonVision.DetectedObject;
 import teamcode.subsystems.Shooter;
 import teamcode.subsystems.Shooter.TrackingMode;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
-import trclib.dataprocessor.TrcUtil;
 import trclib.drivebase.TrcSwerveDrive;
 import trclib.driverio.TrcGameController.DriveMode;
 import trclib.pathdrive.TrcPose2D;
@@ -255,7 +254,8 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                             else
                             {
                                 robot.turret.setPidPower(
-                                    panPower, Shooter.Params.TURRET_MIN_POS, Shooter.Params.TURRET_MAX_POS, true);
+                                    panPower, Shooter.Params.TURRET_POWER_LIMIT, Shooter.Params.TURRET_MIN_POS,
+                                    Shooter.Params.TURRET_MAX_POS, true);
                             }
                             prevPanPower = panPower;
                         }
@@ -285,13 +285,15 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                                 if (robot.leftShooter != null)
                                 {
                                     robot.leftShooter.tiltMotor.setPidPower(
-                                        tiltPower, Shooter.Params.TILT_MIN_POS, Shooter.Params.TILT_MAX_POS, true);
+                                        tiltPower, Shooter.Params.TILT_POWER_LIMIT, Shooter.Params.TILT_MIN_POS,
+                                        Shooter.Params.TILT_MAX_POS, true);
                                 }
 
                                 if (robot.rightShooter != null)
                                 {
                                     robot.rightShooter.tiltMotor.setPidPower(
-                                        tiltPower, Shooter.Params.TILT_MIN_POS, Shooter.Params.TILT_MAX_POS, true);
+                                        tiltPower, Shooter.Params.TILT_POWER_LIMIT, Shooter.Params.TILT_MIN_POS,
+                                        Shooter.Params.TILT_MAX_POS, true);
                                 }
                             }
                             prevTiltPower = tiltPower;
