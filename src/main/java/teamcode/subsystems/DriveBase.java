@@ -95,7 +95,7 @@ public class DriveBase extends TrcSubsystem
 
         public static TrcDriveBase.BaseParams baseParams = new TrcDriveBase.BaseParams()
             .setDriveMotorVelocityControl(
-                driveMotorVelPidCoeffs, DRIVE_WHEEL_DIAMETER * Math.PI / DRIVE_MOTOR_GEAR_RATIO, false)
+                driveMotorVelPidCoeffs, null, DRIVE_WHEEL_DIAMETER * Math.PI / DRIVE_MOTOR_GEAR_RATIO, false)
             .setPidTolerances(1.0, 1.0)
             .setXPidParams(drivePidCoeffs, 0.5)
             .setYPidParams(drivePidCoeffs, 0.5)
@@ -182,7 +182,7 @@ public class DriveBase extends TrcSubsystem
 
         public static TrcDriveBase.BaseParams baseParams = new TrcDriveBase.BaseParams()
             .setDriveMotorVelocityControl(
-                driveMotorVelPidCoeffs, DRIVE_WHEEL_DIAMETER * Math.PI / DRIVE_MOTOR_GEAR_RATIO, false)
+                driveMotorVelPidCoeffs, null, DRIVE_WHEEL_DIAMETER * Math.PI / DRIVE_MOTOR_GEAR_RATIO, false)
             .setPidTolerances(1.0, 1.0)
             .setXPidParams(drivePidCoeffs, 0.5)
             .setYPidParams(drivePidCoeffs, 0.5)
@@ -269,7 +269,7 @@ public class DriveBase extends TrcSubsystem
 
         public static TrcDriveBase.BaseParams baseParams = new TrcDriveBase.BaseParams()
             .setDriveMotorVelocityControl(
-                driveMotorVelPidCoeffs, DRIVE_WHEEL_DIAMETER * Math.PI / DRIVE_MOTOR_GEAR_RATIO, false)
+                driveMotorVelPidCoeffs, null, DRIVE_WHEEL_DIAMETER * Math.PI / DRIVE_MOTOR_GEAR_RATIO, false)
             .setPidTolerances(1.0, 2.0)
             .setXPidParams(drivePidCoeffs, 0.5)
             .setYPidParams(drivePidCoeffs, 0.5)
