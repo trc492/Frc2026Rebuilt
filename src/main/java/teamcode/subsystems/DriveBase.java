@@ -84,7 +84,7 @@ public class DriveBase extends TrcSubsystem
 
         private static final TrcPidController.PidCoefficients driveMotorVelPidCoeffs =
             new TrcPidController.PidCoefficients(0.368615, 0.0, 0.0, 0.0, 0.0);
-        private static final TrcPidController.FFCoefficients driveMotorsVelFFCoeffs = 
+        private static final TrcPidController.FFCoefficients driveMotorVelFFCoeffs =
             new TrcPidController.FFCoefficients(0.0, 0.141525, 0.0);
         private static final TrcPidController.PidCoefficients drivePidCoeffs =
             new TrcPidController.PidCoefficients(0.02, 0.0, 0.002, 0.0, 0.0);
@@ -97,7 +97,8 @@ public class DriveBase extends TrcSubsystem
 
         public static TrcDriveBase.BaseParams baseParams = new TrcDriveBase.BaseParams()
             .setDriveMotorVelocityControl(
-                driveMotorVelPidCoeffs, driveMotorsVelFFCoeffs, DRIVE_WHEEL_DIAMETER * Math.PI / DRIVE_MOTOR_GEAR_RATIO, false)
+                driveMotorVelPidCoeffs, driveMotorVelFFCoeffs, DRIVE_WHEEL_DIAMETER*Math.PI/DRIVE_MOTOR_GEAR_RATIO,
+                false)
             .setPidTolerances(1.0, 1.0)
             .setXPidParams(drivePidCoeffs, 0.5)
             .setYPidParams(drivePidCoeffs, 0.5)
@@ -466,7 +467,7 @@ public class DriveBase extends TrcSubsystem
                                 FeedbackSensorSourceValue.FusedCANcoder: FeedbackSensorSourceValue.SyncCANcoder,
                             cancoder.getDeviceID(), swerveInfo.steerGearRatio, 1.0, true);
                         // CTRE expects CCW+ but we are CW+, invert steering to correct it.
-                        //swerveBase.swerveModules[i].setSteerInverted(false);
+                        //swerveBase.swerveModules[i].setSteerInverted(true);
                     }
                 }
             }
