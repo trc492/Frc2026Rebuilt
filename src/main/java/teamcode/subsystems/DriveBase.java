@@ -74,7 +74,7 @@ public class DriveBase extends TrcSubsystem
      */
     public static class RebuiltRobotInfo extends FrcSwerveBase.SwerveInfo
     {
-        public final static double DRIVE_WHEEL_DIAMETER         = 3.889513851;    // inches
+        public final static double DRIVE_WHEEL_DIAMETER         = 3.93253173; // inches
         public final static double DRIVE_MOTOR_GEAR_RATIO       = 4.59;
         public final static double STEER_MOTOR_GEAR_RATIO       = 468.0/35.1;
         public final static double ROBOT_WIDTH                  = RobotParams.Robot.ROBOT_WIDTH;
@@ -83,7 +83,9 @@ public class DriveBase extends TrcSubsystem
         public final static double WHEEL_BASE_LENGTH            = 22.249;
 
         private static final TrcPidController.PidCoefficients driveMotorVelPidCoeffs =
-            new TrcPidController.PidCoefficients(0.35, 0.0, 0.0, 0.12, 0.0);
+            new TrcPidController.PidCoefficients(0.368615, 0.0, 0.0, 0.0, 0.0);
+        private static final TrcPidController.FFCoefficients driveMotorsVelFFCoeffs = 
+            new TrcPidController.FFCoefficients(0.0, 0.141525, 0.0);
         private static final TrcPidController.PidCoefficients drivePidCoeffs =
             new TrcPidController.PidCoefficients(0.02, 0.0, 0.002, 0.0, 0.0);
         private static final TrcPidController.PidCoefficients turnPidCoeffs =
@@ -91,11 +93,11 @@ public class DriveBase extends TrcSubsystem
         private static final TrcPidController.PidCoefficients velPidCoeffs =
             new TrcPidController.PidCoefficients(0.0, 0.0, 0.0, 0.00909090909090909090909090909091, 0.0);
         private static final TrcPidController.PidCoefficients steerPidCoeffs =
-            new TrcPidController.PidCoefficients(10.0, 0.0, 0.0, 0.0, 0.0);
+            new TrcPidController.PidCoefficients(52.87825, 0.0, 0.0, 0.82872, 0.0);
 
         public static TrcDriveBase.BaseParams baseParams = new TrcDriveBase.BaseParams()
             .setDriveMotorVelocityControl(
-                driveMotorVelPidCoeffs, null, DRIVE_WHEEL_DIAMETER * Math.PI / DRIVE_MOTOR_GEAR_RATIO, false)
+                driveMotorVelPidCoeffs, driveMotorsVelFFCoeffs, DRIVE_WHEEL_DIAMETER * Math.PI / DRIVE_MOTOR_GEAR_RATIO, false)
             .setPidTolerances(1.0, 1.0)
             .setXPidParams(drivePidCoeffs, 0.5)
             .setYPidParams(drivePidCoeffs, 0.5)
@@ -464,7 +466,7 @@ public class DriveBase extends TrcSubsystem
                                 FeedbackSensorSourceValue.FusedCANcoder: FeedbackSensorSourceValue.SyncCANcoder,
                             cancoder.getDeviceID(), swerveInfo.steerGearRatio, 1.0, true);
                         // CTRE expects CCW+ but we are CW+, invert steering to correct it.
-                        swerveBase.swerveModules[i].setSteerInverted(true);
+                        //swerveBase.swerveModules[i].setSteerInverted(false);
                     }
                 }
             }

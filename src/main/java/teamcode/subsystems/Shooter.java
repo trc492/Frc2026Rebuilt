@@ -144,7 +144,7 @@ public class Shooter extends TrcSubsystem
         public static final String CANBUS_NAME                  = RobotParams.HwConfig.CANBUS_CANIVORE;
         public static final boolean SHOOTER_HAS_TILT            = true;
         public static final boolean SHOOTER_HAS_TRANSFER        = true;
-        public static final boolean HAS_TURRET                  = false;
+        public static final boolean HAS_TURRET                  = true;
         public static final boolean HAS_FEEDER                  = true;
 
         // Common Shooter Motor Characteristics

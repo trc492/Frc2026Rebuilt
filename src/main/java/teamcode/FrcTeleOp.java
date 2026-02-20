@@ -23,6 +23,9 @@
 package teamcode;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frclib.drivebase.FrcRobotBase;
+import frclib.drivebase.FrcSwerveBase;
 import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcXboxController;
 import frclib.vision.FrcPhotonVision.DetectedObject;
@@ -531,29 +534,31 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 {
                     if (robot.leftShooter != null)
                     {
-                        if (robot.leftShooter.getShooterMotor1Power() != 0.0)
+                        if (robot.leftShooter.getShooterMotor1RPM() != 0.0)
                         {
                             robot.globalTracer.traceInfo(moduleName, ">>>>> Turn off left flywheel.");
-                            robot.leftShooter.shooterMotor1.setPower(0.0);
+                            robot.leftShooter.shooterMotor1.cancel();
                         }
                         else
                         {
                             robot.globalTracer.traceInfo(moduleName, ">>>>> Turn on left flywheel.");
-                            robot.leftShooter.shooterMotor1.setPower(0.3);
+                            //robot.leftShooter.shooterMotor1.setPower(0.3);
+                            robot.leftShooter.setShooterMotorRPM(3000.0, null);
                         }
                     }
 
                     if (robot.rightShooter != null)
                     {
-                        if (robot.rightShooter.getShooterMotor1Power() != 0.0)
+                        if (robot.rightShooter.getShooterMotor1RPM() != 0.0)
                         {
                             robot.globalTracer.traceInfo(moduleName, ">>>>> Turn off right flywheel.");
-                            robot.rightShooter.shooterMotor1.setPower(0.0);
+                            robot.rightShooter.shooterMotor1.cancel();
                         }
                         else
                         {
                             robot.globalTracer.traceInfo(moduleName, ">>>>> Turn on right flywheel.");
-                            robot.rightShooter.shooterMotor1.setPower(0.3);
+                            //robot.rightShooter.shooterMotor1.setPower(0.3);
+                            robot.rightShooter.setShooterMotorRPM(1500.0, null);
                         }
                     }
                 }
@@ -573,7 +578,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                         {
                             robot.globalTracer.traceInfo(moduleName, ">>>>> Turn on left AutoTransfer.");
                             //robot.leftTransfer.autoIntake(null);
-                            robot.leftTransfer.intake(0.75);
+                            robot.leftTransfer.intake(1.0);
                         }
 
                         if (robot.rightTransfer.isActive())
@@ -585,7 +590,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                         {
                             robot.globalTracer.traceInfo(moduleName, ">>>>> Turn on right AutoTransfer.");
                             //robot.rightTransfer.autoIntake(null);
-                            robot.rightTransfer.intake(0.75);
+                            robot.rightTransfer.intake(1.0);
                         }
                     }
 
@@ -631,6 +636,19 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             case RightBumper:
             case DpadUp:
             case DpadDown:
+                if(pressed)
+                {
+                    if (robot.leftShooter != null)
+                    {
+                        robot.leftShooter.tiltMotor.setPosition(Shooter.Params.TILT_POS_PRESETS[3], true);
+                    }
+
+                    if (robot.rightShooter != null)
+                    {
+                        robot.rightShooter.tiltMotor.setPosition(Shooter.Params.TILT_POS_PRESETS[3], true);
+                    }
+                }
+                break;
             case DpadLeft:
             case DpadRight:
                 break;
