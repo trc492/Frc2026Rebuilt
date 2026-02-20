@@ -238,7 +238,7 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_MOTOR_PID_KD          = 0.0;
         public static final double TURRET_MOTOR_PID_KF          = 0.0;
         public static final double TURRET_MOTOR_PID_IZONE       = 0.0;
-        public static final double TURRET_MOTOR_GEAR_RATIO      = 18.6 * 130.0/40.0;   // Load/Motor //TODO: tune
+        public static final double TURRET_MOTOR_GEAR_RATIO      = 20.0*130.0/40.0;  // Load/Motor
         public static final double TURRET_MOTOR_DEG_PER_COUNT   = 360.0/TURRET_MOTOR_GEAR_RATIO;
         public static final double TURRET_PID_TOLERANCE         = 1.0;
         public static final boolean TURRET_SOFTWARE_PID_ENABLED = false;
