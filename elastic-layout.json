@@ -46,8 +46,8 @@
               "topic": "/FMSInfo/IsRedAlliance",
               "period": 0.06,
               "data_type": "boolean",
-              "true_color": 4294901760,
-              "false_color": 4278190335,
+              "true_color": 4283215696,
+              "false_color": 4294198070,
               "true_icon": "None",
               "false_icon": "None"
             }
@@ -138,6 +138,19 @@
             "type": "Toggle Switch",
             "properties": {
               "topic": "/SmartDashboard/Preferences/UpdateDashboard",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Relocalize",
+            "x": 256.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Vision/Relocalizate",
               "period": 0.06,
               "data_type": "boolean"
             }
@@ -404,148 +417,189 @@
       }
     },
     {
-      "name": "DriveBase",
+      "name": "Tune Shoot Table",
       "grid_layout": {
-        "layouts": [],
-        "containers": [
+        "layouts": [
           {
-            "title": "DebugDriveBase/DriveEnc",
-            "x": 896.0,
-            "y": 0.0,
-            "width": 768.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/DriveBase/DriveEnc",
-              "period": 0.06,
-              "data_type": "string",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "RobotPose",
-            "x": 128.0,
-            "y": 0.0,
-            "width": 768.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/DriveBase/RobotPose",
-              "period": 0.06,
-              "data_type": "string",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "DebugDriveBase/SteerBack",
-            "x": 896.0,
-            "y": 128.0,
-            "width": 768.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/DriveBase/SteerBack",
-              "period": 0.06,
-              "data_type": "string",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "DebugDriveBase/SteerFront",
-            "x": 128.0,
-            "y": 128.0,
-            "width": 768.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/DriveBase/SteerFront",
-              "period": 0.06,
-              "data_type": "string",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "DebugPidDrive/XPidInfo",
-            "x": 128.0,
-            "y": 256.0,
-            "width": 768.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/DriveBase/XPidInfo",
-              "period": 0.06,
-              "data_type": "string",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "DebugPidDrive/YPidInfo",
-            "x": 896.0,
-            "y": 256.0,
-            "width": 768.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/DriveBase/YPidInfo",
-              "period": 0.06,
-              "data_type": "string",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "DebugPidDrive/TurnPidInfo",
-            "x": 128.0,
-            "y": 384.0,
-            "width": 768.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/DriveBase/TurnPidInfo",
-              "period": 0.06,
-              "data_type": "string",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "DebugPidDrive",
-            "x": 0.0,
-            "y": 256.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Toggle Switch",
-            "properties": {
-              "topic": "/SmartDashboard/Preferences/DebugPidDrive",
-              "period": 0.06,
-              "data_type": "boolean"
-            }
-          },
-          {
-            "title": "DebugDriveBase",
-            "x": 0.0,
-            "y": 128.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Toggle Switch",
-            "properties": {
-              "topic": "/SmartDashboard/Preferences/DebugDriveBase",
-              "period": 0.06,
-              "data_type": "boolean"
-            }
-          },
-          {
-            "title": "DriveBaseStatus",
+            "title": "Shooter Flywheel",
             "x": 0.0,
             "y": 0.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Toggle Switch",
+            "width": 256.0,
+            "height": 384.0,
+            "type": "List Layout",
             "properties": {
-              "topic": "/SmartDashboard/Preferences/DriveBaseStatus",
-              "period": 0.06,
-              "data_type": "boolean"
-            }
+              "label_position": "TOP"
+            },
+            "children": [
+              {
+                "title": "LShooterRPM",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Shooter/LShooterRPM",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "LShooterTargetRPM",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Shooter/LShooterTargetRPM",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": true
+                }
+              },
+              {
+                "title": "RShooterRPM",
+                "x": 0.0,
+                "y": 256.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Shooter/RShooterRPM",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "RShooterTargetRPM",
+                "x": 0.0,
+                "y": 256.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Shooter/RShooterTargetRPM",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": true
+                }
+              }
+            ]
+          },
+          {
+            "title": "Shooter Hood",
+            "x": 256.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 384.0,
+            "type": "List Layout",
+            "properties": {
+              "label_position": "TOP"
+            },
+            "children": [
+              {
+                "title": "LTiltPos",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Shooter/LTiltPos",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "LTiltTarget",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Shooter/LTiltTarget",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": true
+                }
+              },
+              {
+                "title": "RTiltPos",
+                "x": 256.0,
+                "y": 128.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Shooter/RTiltPos",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "RTiltTarget",
+                "x": 256.0,
+                "y": 256.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Shooter/RTiltTarget",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": true
+                }
+              }
+            ]
+          },
+          {
+            "title": "Target Info",
+            "x": 512.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "List Layout",
+            "properties": {
+              "label_position": "TOP"
+            },
+            "children": [
+              {
+                "title": "Alliance",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "ComboBox Chooser",
+                "properties": {
+                  "topic": "/SmartDashboard/Auto/Alliance",
+                  "period": 0.06,
+                  "sort_options": false
+                }
+              },
+              {
+                "title": "DistanceToTarget",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Vision/DistanceToTarget",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              }
+            ]
           }
-        ]
+        ],
+        "containers": []
       }
     },
     {
@@ -608,7 +662,7 @@
               {
                 "title": "SubsystemKd",
                 "x": 0.0,
-                "y": 0.0,
+                "y": 640.0,
                 "width": 128.0,
                 "height": 128.0,
                 "type": "Text Display",
@@ -1370,6 +1424,151 @@
       }
     },
     {
+      "name": "DriveBase",
+      "grid_layout": {
+        "layouts": [],
+        "containers": [
+          {
+            "title": "DebugDriveBase/DriveEnc",
+            "x": 896.0,
+            "y": 0.0,
+            "width": 768.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/DriveBase/DriveEnc",
+              "period": 0.06,
+              "data_type": "string",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "RobotPose",
+            "x": 128.0,
+            "y": 0.0,
+            "width": 768.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/DriveBase/RobotPose",
+              "period": 0.06,
+              "data_type": "string",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "DebugDriveBase/SteerBack",
+            "x": 896.0,
+            "y": 128.0,
+            "width": 768.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/DriveBase/SteerBack",
+              "period": 0.06,
+              "data_type": "string",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "DebugDriveBase/SteerFront",
+            "x": 128.0,
+            "y": 128.0,
+            "width": 768.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/DriveBase/SteerFront",
+              "period": 0.06,
+              "data_type": "string",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "DebugPidDrive/XPidInfo",
+            "x": 128.0,
+            "y": 256.0,
+            "width": 768.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/DriveBase/XPidInfo",
+              "period": 0.06,
+              "data_type": "string",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "DebugPidDrive/YPidInfo",
+            "x": 896.0,
+            "y": 256.0,
+            "width": 768.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/DriveBase/YPidInfo",
+              "period": 0.06,
+              "data_type": "string",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "DebugPidDrive/TurnPidInfo",
+            "x": 128.0,
+            "y": 384.0,
+            "width": 768.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/DriveBase/TurnPidInfo",
+              "period": 0.06,
+              "data_type": "string",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "DebugPidDrive",
+            "x": 0.0,
+            "y": 256.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Preferences/DebugPidDrive",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "DebugDriveBase",
+            "x": 0.0,
+            "y": 128.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Preferences/DebugDriveBase",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "DriveBaseStatus",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Preferences/DriveBaseStatus",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "Vision",
       "grid_layout": {
         "layouts": [
@@ -1678,9 +1877,9 @@
           },
           {
             "title": "ShowDrivePower",
-            "x": 512.0,
-            "y": 0.0,
-            "width": 128.0,
+            "x": 0.0,
+            "y": 256.0,
+            "width": 256.0,
             "height": 128.0,
             "type": "Toggle Switch",
             "properties": {
@@ -1692,7 +1891,7 @@
           {
             "title": "DrivePower",
             "x": 0.0,
-            "y": 256.0,
+            "y": 384.0,
             "width": 512.0,
             "height": 128.0,
             "type": "Text Display",
@@ -2069,117 +2268,6 @@
                 }
               }
             ]
-          },
-          {
-            "title": "List Layout",
-            "x": 1408.0,
-            "y": 0.0,
-            "width": 256.0,
-            "height": 640.0,
-            "type": "List Layout",
-            "properties": {
-              "label_position": "TOP"
-            },
-            "children": [
-              {
-                "title": "SubsystemParam0",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/Test/SubsystemParam0",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              },
-              {
-                "title": "SubsystemParam1",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/Test/SubsystemParam1",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              },
-              {
-                "title": "SubsystemParam2",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/Test/SubsystemParam2",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              },
-              {
-                "title": "SubsystemParam3",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/Test/SubsystemParam3",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              },
-              {
-                "title": "SubsystemParam4",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/Test/SubsystemParam4",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              },
-              {
-                "title": "SubsystemParam5",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/Test/SubsystemParam5",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              },
-              {
-                "title": "SubsystemParam6",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/Test/SubsystemParam6",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              }
-            ]
           }
         ],
         "containers": [
@@ -2236,42 +2324,6 @@
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": true
-            }
-          },
-          {
-            "title": "Shooter1TargetRPM",
-            "x": 512.0,
-            "y": 0.0,
-            "width": 896.0,
-            "height": 384.0,
-            "type": "Graph",
-            "properties": {
-              "topic": "/SmartDashboard/Shooter/Shooter1TargetRPM",
-              "period": 0.033,
-              "data_type": "double",
-              "time_displayed": 5.0,
-              "min_value": 0.0,
-              "max_value": 6000.0,
-              "color": 4278238420,
-              "line_width": 2.0
-            }
-          },
-          {
-            "title": "Shooter1RPM",
-            "x": 512.0,
-            "y": 384.0,
-            "width": 896.0,
-            "height": 384.0,
-            "type": "Graph",
-            "properties": {
-              "topic": "/SmartDashboard/Shooter/Shooter1RPM",
-              "period": 0.033,
-              "data_type": "double",
-              "time_displayed": 5.0,
-              "min_value": 0.0,
-              "max_value": 6000.0,
-              "color": 4278238420,
-              "line_width": 2.0
             }
           }
         ]
