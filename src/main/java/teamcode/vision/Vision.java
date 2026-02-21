@@ -31,11 +31,13 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frclib.driverio.FrcDashboard;
 import frclib.robotcore.FrcField;
 import frclib.vision.FrcPhotonVision;
 import frclib.vision.FrcPhotonVision.DetectedObject;
 import teamcode.Dashboard;
+import teamcode.FrcAuto;
 import teamcode.Robot;
 import teamcode.RobotParams;
 import teamcode.subsystems.Shooter;
@@ -49,6 +51,9 @@ import trclib.vision.TrcVision.CameraInfo;
 public class Vision //implements TrcVision.ObjectInfo
 {
     private final String moduleName = getClass().getSimpleName();
+
+    public static final String DBKEY_DISTANCE_TO_TARGET = "Vision/DistanceToTarget";
+
     // Rebuilt Left Shooter camera info
     public static final TrcVision.CameraInfo leftShooterCamInfo = new TrcVision.CameraInfo()
         .setCameraInfo("OV9782_LeftShooter", 640, 480)
@@ -119,6 +124,7 @@ public class Vision //implements TrcVision.ObjectInfo
         this.robot = robot;
 
         dashboard.refreshKey(DBKEY_VISION_RELOCALIZE, RobotParams.Preferences.visionRelocalizeEnabled);
+        dashboard.refreshKey(DBKEY_DISTANCE_TO_TARGET, 0.0);
         if (robot.robotInfo.camInfos.length > 0 && robot.robotInfo.camInfos[0] != null)
         {
             tracer.traceInfo(
@@ -256,6 +262,17 @@ public class Vision //implements TrcVision.ObjectInfo
 
         return aprilTagGroundOffset;
     }   //getAprilTagGroundOffset
+
+    public double getDistanceToTarget()
+    {
+        Alliance alliance = FrcAuto.autoChoices.getAlliance();
+        TrcPose2D robotFieldPose = robot.robotBase.driveBase.getFieldPosition();
+        TrcPose2D targetFieldPose = robot.adjustPoseByAlliance(RobotParams.Game.BLUE_HUB_POSE, alliance);
+        TrcPose2D targetPose = targetFieldPose.relativeTo(robotFieldPose);
+        double distance = Math.hypot(targetPose.x, targetPose.y);
+        robot.dashboard.putNumber(DBKEY_DISTANCE_TO_TARGET, distance);
+        return distance;
+    }   //getDistanceToTarget
 
     /**
      * This method returns the best detected object.

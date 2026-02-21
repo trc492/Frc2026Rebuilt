@@ -73,7 +73,7 @@ public class RobotParams
         public static final boolean useSubsystems               = robotType == RobotType.RebuiltRobot;
         public static final boolean showSubsystems              = true;
         public static final boolean showSubsystemGraphs         = true;
-        public static final String testSubsystemName            = Shooter.Params.LSHOOTER_PRIMARY_MOTOR_NAME;
+        public static final String testSubsystemName            = Shooter.Params.TURRET_MOTOR_NAME;
         // Drive Base Subsystem
         public static final boolean useDriveBase                = true;
         public static final boolean showDriveBaseStatus         = true;
@@ -83,7 +83,7 @@ public class RobotParams
         public static final boolean useGyroAssist               = false;
         public static final boolean useAntiTipping              = false;
         // Other Subsystems
-        public static final boolean useLeftShooter              = true;
+        public static final boolean useLeftShooter              = false;
         public static final boolean useRightShooter             = true;
         public static final boolean showShooterStatus           = true;
         public static final boolean useRegression               = false;
@@ -153,7 +153,7 @@ public class RobotParams
         public static final int DIO_INTAKE_BACK_SENSOR          = 0;
 
         // PWM channels.
-        public static final int NUM_LEDS                        = 30;
+        public static final int NUM_LEDS                        = 150;
         public static final int PWM_CHANNEL_LED                 = 0;
 
         // Relay channels.

@@ -55,7 +55,7 @@ import trclib.timer.TrcTimer;
 public class Shooter extends TrcSubsystem
 {
     public static final String SUBSYSTEM_NAME = "Shooter";
-    private static final boolean NEED_ZERO_CAL = true;
+    private static final boolean NEED_ZERO_CAL = false;
     private static final String DBKEY_PREFERENCE_SHOW_STATUS = SUBSYSTEM_NAME + "/ShowStatus";
     private static final String DBKEY_PREFERENCE_SHOW_GRAPHS = SUBSYSTEM_NAME + "/ShowGraphs";
     private static final String DBKEY_PREFERENCE_USE_REGRESSION = SUBSYSTEM_NAME + "/UseRegression";
@@ -63,12 +63,12 @@ public class Shooter extends TrcSubsystem
 
     private static final String DBKEY_LSHOOTER_POWER = "Shooter/LShooterPower";
     private static final String DBKEY_LSHOOTER_CURRENT = "Shooter/LShooterCurrent";
-    private static final String DBKEY_LSHOOTER_RPM = "Shooter/LShooterRPM";
-    private static final String DBKEY_LSHOOTER_TARGET_RPM = "Shooter/LShooterTargetRPM";
+    public static final String DBKEY_LSHOOTER_RPM = "Shooter/LShooterRPM";
+    public static final String DBKEY_LSHOOTER_TARGET_RPM = "Shooter/LShooterTargetRPM";
     private static final String DBKEY_LTILT_POWER = "Shooter/LTiltPower";
     private static final String DBKEY_LTILT_CURRENT = "Shooter/LTiltCurrent";
-    private static final String DBKEY_LTILT_POS = "Shooter/LTiltPos";
-    private static final String DBKEY_LTILT_TARGET = "Shooter/LTiltTarget";
+    public static final String DBKEY_LTILT_POS = "Shooter/LTiltPos";
+    public static final String DBKEY_LTILT_TARGET = "Shooter/LTiltTarget";
     private static final String DBKEY_LXFER_POWER = "Shooter/LXferPower";
     private static final String DBKEY_LXFER_CURRENT = "Shooter/LXferCurrent";
     private static final String DBKEY_LXFER_SENSOR = "Shooter/LXferSensor";
@@ -76,12 +76,12 @@ public class Shooter extends TrcSubsystem
 
     private static final String DBKEY_RSHOOTER_POWER = "Shooter/RShooterPower";
     private static final String DBKEY_RSHOOTER_CURRENT = "Shooter/RShooterCurrent";
-    private static final String DBKEY_RSHOOTER_RPM = "Shooter/RShooterRPM";
-    private static final String DBKEY_RSHOOTER_TARGET_RPM = "Shooter/RShooterTargetRPM";
+    public static final String DBKEY_RSHOOTER_RPM = "Shooter/RShooterRPM";
+    public static final String DBKEY_RSHOOTER_TARGET_RPM = "Shooter/RShooterTargetRPM";
     private static final String DBKEY_RTILT_POWER = "Shooter/RTiltPower";
     private static final String DBKEY_RTILT_CURRENT = "Shooter/RTiltCurrent";
-    private static final String DBKEY_RTILT_POS = "Shooter/RTiltPos";
-    private static final String DBKEY_RTILT_TARGET = "Shooter/RTiltTarget";
+    public static final String DBKEY_RTILT_POS = "Shooter/RTiltPos";
+    public static final String DBKEY_RTILT_TARGET = "Shooter/RTiltTarget";
     private static final String DBKEY_RXFER_POWER = "Shooter/RXferPower";
     private static final String DBKEY_RXFER_CURRENT = "Shooter/RXferCurrent";
     private static final String DBKEY_RXFER_SENSOR = "Shooter/RXferSensor";
@@ -233,21 +233,21 @@ public class Shooter extends TrcSubsystem
         public static final String TURRET_MOTOR_NAME            = SUBSYSTEM_NAME + ".TurretMotor";
         public static final boolean TURRET_MOTOR_INVERTED       = false;
         public static final int TURRET_MOTOR_CANID              = RobotParams.HwConfig.CANID_TURRET_MOTOR;
-        public static final double TURRET_MOTOR_PID_KP          = 0.0;  //TODO: tune
-        public static final double TURRET_MOTOR_PID_KI          = 0.0;
-        public static final double TURRET_MOTOR_PID_KD          = 0.0;
-        public static final double TURRET_MOTOR_PID_KF          = 0.0;
+        public static final double TURRET_MOTOR_PID_KP          = 0.5;  
+        public static final double TURRET_MOTOR_PID_KI          = 0.0;  
+        public static final double TURRET_MOTOR_PID_KD          = 0.0;  
+        public static final double TURRET_MOTOR_PID_KF          = 0.0;  
         public static final double TURRET_MOTOR_PID_IZONE       = 0.0;
-        public static final double TURRET_MOTOR_GEAR_RATIO      = 20.0*130.0/40.0;  // Load/Motor
+        public static final double TURRET_MOTOR_GEAR_RATIO      = 0.9571438827*(20.0*130.0/40.0);  // Load/Motor   //TODO: verify
         public static final double TURRET_MOTOR_DEG_PER_COUNT   = 360.0/TURRET_MOTOR_GEAR_RATIO;
         public static final double TURRET_PID_TOLERANCE         = 1.0;
         public static final boolean TURRET_SOFTWARE_PID_ENABLED = false;
-        public static final double TURRET_POWER_LIMIT           = 0.5;      //TODO:Tune
-        public static final double TURRET_POS_OFFSET            = 180.0;
-        public static final double TURRET_MIN_POS               = -170.0;
-        public static final double TURRET_MAX_POS               = 175.0;
-        public static final double TURRET_CONFLICT_ZONE_LOW     = 60.0;
-        public static final double TURRET_CONFLICT_ZONE_HIGH    = 120.0;
+        public static final double TURRET_POWER_LIMIT           = 0.5; 
+        public static final double TURRET_POS_OFFSET            = 182.25;//177.758282;
+        public static final double TURRET_MIN_POS               = -158.0;   
+        public static final double TURRET_MAX_POS               = 176.0;
+        public static final double TURRET_CONFLICT_ZONE_LOW     = 60.0;     //TODO: tune
+        public static final double TURRET_CONFLICT_ZONE_HIGH    = 120.0;    //TODO: tune
         public static final double TURRET_POS_PRESET_TOLERANCE  = 2.0;
         public static final double[] TURRET_POS_PRESETS         =
             {TURRET_MIN_POS, -135.0, -90.0, -45.0, 0.0, 45.0, 90.0, 135.0, TURRET_MAX_POS};
@@ -353,6 +353,14 @@ public class Shooter extends TrcSubsystem
         dashboard = FrcDashboard.getInstance();
         dashboard.refreshKey(DBKEY_PREFERENCE_SHOW_STATUS, RobotParams.Preferences.showShooterStatus);
         dashboard.refreshKey(DBKEY_PREFERENCE_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs);
+        dashboard.refreshKey(DBKEY_LSHOOTER_RPM, 0.0);
+        dashboard.refreshKey(DBKEY_LSHOOTER_TARGET_RPM, 0.0);
+        dashboard.refreshKey(DBKEY_RSHOOTER_RPM, 0.0);
+        dashboard.refreshKey(DBKEY_RSHOOTER_TARGET_RPM, 0.0);
+        dashboard.refreshKey(DBKEY_LTILT_POS, 0.0);
+        dashboard.refreshKey(DBKEY_LTILT_TARGET, 0.0);
+        dashboard.refreshKey(DBKEY_RTILT_POS, 0.0);
+        dashboard.refreshKey(DBKEY_RTILT_TARGET, 0.0);
         this.robot = robot;
 
         if (RobotParams.Preferences.useLeftShooter)
@@ -1373,7 +1381,7 @@ public class Shooter extends TrcSubsystem
             TrcMotor.PidParams pidParams = FrcTest.testChoices.getSubsystemPidParameters();
             boolean foundMatch = false;
 
-            if (subsystemName.equalsIgnoreCase(Params.LSHOOTER_PRIMARY_MOTOR_NAME))
+            if (subsystemName.equalsIgnoreCase(Params.LSHOOTER_PRIMARY_MOTOR_NAME) && leftShooter != null)
             {
                 // Adjust shooter tolerance to RPS.
                 pidParams.pidTolerance /= 60.0;
@@ -1387,7 +1395,8 @@ public class Shooter extends TrcSubsystem
                 rightShooter.shooterMotor1.setVelocityPidParameters(pidParams, null);
                 foundMatch = true;
             }
-            else if (subsystemName.equalsIgnoreCase(Params.LTILT_MOTOR_NAME) && leftShooter.tiltMotor != null)
+            else if (subsystemName.equalsIgnoreCase(Params.LTILT_MOTOR_NAME) && leftShooter != null &&
+                     leftShooter.tiltMotor != null)
             {
                 leftShooter.tiltMotor.setPositionPidParameters(pidParams, null);
                 foundMatch = true;
@@ -1398,7 +1407,7 @@ public class Shooter extends TrcSubsystem
                 rightShooter.tiltMotor.setPositionPidParameters(pidParams, null);
                 foundMatch = true;
             }
-            else if (subsystemName.equalsIgnoreCase(Params.TURRET_MOTOR_NAME) && leftShooter.panMotor != null)
+            else if (subsystemName.equalsIgnoreCase(Params.TURRET_MOTOR_NAME) && turret != null)
             {
                 turret.setPositionPidParameters(pidParams, null);
                 foundMatch = true;

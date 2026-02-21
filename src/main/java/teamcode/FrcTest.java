@@ -32,6 +32,7 @@ import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcUserChoices;
 import frclib.driverio.FrcXboxController;
 import teamcode.subsystems.Shooter;
+import teamcode.vision.Vision;
 import trclib.command.CmdDriveMotorsTest;
 import trclib.command.CmdPidDrive;
 import trclib.command.CmdTimedDrive;
@@ -97,6 +98,7 @@ public class FrcTest extends FrcTeleOp
     private static final String DBKEY_TEST_TARGET_VEL = "Test/TargetVelocity";
     private static final String DBKEY_TEST_ROBOT_POS = "Test/RobotPosition";
     private static final String DBKEY_TEST_TARGET_POS = "Test/TargetPosition";
+
     //
     // Global constants.
     //
@@ -115,6 +117,7 @@ public class FrcTest extends FrcTeleOp
         PID_DRIVE,
         TUNE_DRIVE_PID,
         TUNE_SUBSYSTEM,
+        TUNE_SHOOT_TABLE,
         VISION_TEST,
         SWERVE_CALIBRATION,
         LIVE_WINDOW
@@ -154,6 +157,7 @@ public class FrcTest extends FrcTeleOp
             testMenu.addChoice("PID Drive", Test.PID_DRIVE);
             testMenu.addChoice("Tune Drive PID", Test.TUNE_DRIVE_PID);
             testMenu.addChoice("Tune Subsystem", Test.TUNE_SUBSYSTEM);
+            testMenu.addChoice("Tune Shoot Table", Test.TUNE_SHOOT_TABLE);
             testMenu.addChoice("Vision Test", Test.VISION_TEST);
             testMenu.addChoice("Swerve Calibration", Test.SWERVE_CALIBRATION);
             testMenu.addChoice("Live Window", Test.LIVE_WINDOW, false, true);
@@ -702,6 +706,14 @@ public class FrcTest extends FrcTeleOp
                     }
                     break;
 
+                case TUNE_SHOOT_TABLE:
+                    if (robot.vision != null)
+                    {
+                        robot.dashboard.putNumber(
+                            Vision.DBKEY_DISTANCE_TO_TARGET, robot.vision.getDistanceToTarget());
+                    }
+                    break;
+
                 case VISION_TEST:
                     lineNum = doVisionTest(lineNum);
                     break;
@@ -729,8 +741,8 @@ public class FrcTest extends FrcTeleOp
      */
     private boolean allowTeleOp(Test test)
     {
-        return test == Test.SUBSYSTEMS_TEST || test == Test.TUNE_SUBSYSTEM || test == Test.VISION_TEST ||
-               test == Test.DRIVE_SPEED_TEST;
+        return test == Test.SUBSYSTEMS_TEST || test == Test.TUNE_SUBSYSTEM || test == Test.TUNE_SHOOT_TABLE ||
+               test == Test.VISION_TEST || test == Test.DRIVE_SPEED_TEST;
     }   //allowTeleOp
 
     //
@@ -937,9 +949,66 @@ public class FrcTest extends FrcTeleOp
                     }
                     passToTeleOp = false;
                 }
+                else if (test == Test.TUNE_SHOOT_TABLE && robot.shooterSubsystem != null)
+                {
+                    if (pressed)
+                    {
+                        if (robot.leftShooter != null)
+                        {
+                            robot.leftShooter.setShooterMotorRPM(
+                                robot.dashboard.getNumber(Shooter.DBKEY_LSHOOTER_TARGET_RPM, 0.0),
+                                null);
+                            robot.leftShooter.setTiltAngle(robot.dashboard.getNumber(Shooter.DBKEY_LTILT_TARGET, 0.0));
+                        }
+
+                        if (robot.rightShooter != null)
+                        {
+                            robot.rightShooter.setShooterMotorRPM(
+                                robot.dashboard.getNumber(Shooter.DBKEY_RSHOOTER_TARGET_RPM, 0.0),
+                                null);
+                            robot.rightShooter.setTiltAngle(robot.dashboard.getNumber(Shooter.DBKEY_RTILT_TARGET, 0.0));
+                        }
+                    }
+
+                    passToTeleOp = false;
+                }
                 break;
 
             case B:
+                if (test == Test.TUNE_SHOOT_TABLE && robot.feeder != null)
+                {
+                    if (robot.leftTransfer != null)
+                    {
+                        if (pressed)
+                        {
+                            robot.feeder.setPower(Shooter.Params.FEEDER_POWER);
+                            robot.leftTransfer.intake();
+                        }
+                        else
+                        {
+                            robot.feeder.setPower(0.0);
+                            robot.leftTransfer.cancel();
+                        }
+                    }
+
+                    if (robot.rightTransfer != null)
+                    {
+                        if (pressed)
+                        {
+                            robot.feeder.setPower(Shooter.Params.FEEDER_POWER);
+                            robot.rightTransfer.intake();
+                        }
+                        else
+                        {
+                            robot.feeder.setPower(0.0);
+                            robot.rightTransfer.cancel();
+                        }
+                    }
+
+                    passToTeleOp = false;
+                }
+                break;
+
             case X:
             case Y:
             case LeftBumper:
