@@ -214,9 +214,9 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_POS_PRESET_TOLERANCE  = 2.0;
         public static final double[] TURRET_POS_PRESETS         =
             {TURRET_MIN_POS, -135.0, -90.0, -45.0, 0.0, 45.0, 90.0, 135.0, TURRET_MAX_POS};
-        public static final double TURRET_ZERO_CAL_POWER        = 0.2;
+        public static final double TURRET_ZERO_CAL_POWER        = 0.1;
         public static final double TURRET_STALL_MIN_POWER       = Math.abs(TURRET_ZERO_CAL_POWER);
-        public static final double TURRET_STALL_TOLERANCE       = 0.1;
+        public static final double TURRET_STALL_TOLERANCE       = 2.0;      // in degrees
         public static final double TURRET_STALL_TIMEOUT         = 0.1;
         public static final double TURRET_STALL_RESET_TIMEOUT   = 0.0;
 
