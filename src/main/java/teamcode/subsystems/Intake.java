@@ -26,6 +26,7 @@ import frclib.driverio.FrcDashboard;
 import frclib.motor.FrcMotorActuator;
 import frclib.motor.FrcMotorActuator.MotorType;
 import frclib.subsystem.FrcRollerIntake;
+import teamcode.Dashboard;
 import teamcode.FrcTest;
 import teamcode.Robot;
 import teamcode.RobotParams;
@@ -42,17 +43,6 @@ public class Intake extends TrcSubsystem
 {
     public static final String SUBSYSTEM_NAME = "Intake";
     private static final boolean NEED_ZERO_CAL = true;
-    private static final String DBKEY_PREFERENCE_SHOW_STATUS = SUBSYSTEM_NAME + "/ShowStatus";
-    private static final String DBKEY_PREFERENCE_SHOW_GRAPHS = SUBSYSTEM_NAME + "/ShowGraphs";
-
-    private static final String DBKEY_INTAKE_POWER = "Intake/IntakePower";
-    private static final String DBKEY_INTAKE_CURRENT = "Intake/IntakeCurrent";
-    private static final String DBKEY_INTAKE_AUTO = "Intake/IntakeAuto";
-
-    private static final String DBKEY_DEPLOYER_POWER = "Intake/DeployerPower";
-    private static final String DBKEY_DEPLOYER_CURRENT = "Intake/DeployerCurrent";
-    private static final String DBKEY_DEPLOYER_POS = "Intake/DeployerPos";
-    private static final String DBKEY_DEPLOYER_TARGET = "Intake/DeployerTarget";
 
     public static final class Params
     {
@@ -122,8 +112,6 @@ public class Intake extends TrcSubsystem
 
         this.dashboard = FrcDashboard.getInstance();
         this.robot = robot;
-        dashboard.refreshKey(DBKEY_PREFERENCE_SHOW_STATUS, RobotParams.Preferences.showIntakeStatus);
-        dashboard.refreshKey(DBKEY_PREFERENCE_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs);
 
         FrcRollerIntake.Params intakeParams = new FrcRollerIntake.Params()
             .setPrimaryMotor(
@@ -274,29 +262,29 @@ public class Intake extends TrcSubsystem
     @Override
     public int updateStatus(int lineNum, boolean slowLoop)
     {
-        if (dashboard.getBoolean(DBKEY_PREFERENCE_SHOW_STATUS, RobotParams.Preferences.showIntakeStatus))
+        if (dashboard.getBoolean(Dashboard.DBKEY_INTAKE_SHOW_STATUS, RobotParams.Preferences.showIntakeStatus))
         {
             if (slowLoop)
             {
-                dashboard.putNumber(DBKEY_INTAKE_POWER, intake.getPower());
-                dashboard.putNumber(DBKEY_INTAKE_CURRENT, intake.getCurrent());
-                dashboard.putBoolean(DBKEY_INTAKE_AUTO, intake.isAutoActive());
+                dashboard.putNumber(Dashboard.DBKEY_INTAKE_POWER, intake.getPower());
+                dashboard.putNumber(Dashboard.DBKEY_INTAKE_CURRENT, intake.getCurrent());
+                dashboard.putBoolean(Dashboard.DBKEY_INTAKE_AUTO, intake.isAutoActive());
                 if (deployer != null)
                 {
-                    dashboard.putNumber(DBKEY_DEPLOYER_POWER, deployer.getPower());
-                    dashboard.putNumber(DBKEY_DEPLOYER_CURRENT, deployer.getCurrent());
-                    dashboard.putNumber(DBKEY_DEPLOYER_POS, deployer.getPosition());
-                    dashboard.putNumber(DBKEY_DEPLOYER_TARGET, deployer.getPidTarget());
+                    dashboard.putNumber(Dashboard.DBKEY_DEPLOYER_POWER, deployer.getPower());
+                    dashboard.putNumber(Dashboard.DBKEY_DEPLOYER_CURRENT, deployer.getCurrent());
+                    dashboard.putNumber(Dashboard.DBKEY_DEPLOYER_POS, deployer.getPosition());
+                    dashboard.putNumber(Dashboard.DBKEY_DEPLOYER_TARGET, deployer.getPidTarget());
                 }
             }
         }
 
-        if (dashboard.getBoolean(DBKEY_PREFERENCE_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs))
+        if (dashboard.getBoolean(Dashboard.DBKEY_INTAKE_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs))
         {
             if (deployer != null)
             {
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_INPUT, deployer.getPosition());
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET, deployer.getPidTarget());
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, deployer.getPosition());
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET, deployer.getPidTarget());
             }
         }
 
@@ -312,14 +300,14 @@ public class Intake extends TrcSubsystem
     {
         if (deployer != null)
         {
-            dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KP, Params.DEPLOYER_MOTOR_PID_KP);
-            dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KI, Params.DEPLOYER_MOTOR_PID_KI);
-            dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KD, Params.DEPLOYER_MOTOR_PID_KD);
-            dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KF, Params.DEPLOYER_MOTOR_PID_KF);
-            dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_IZONE, Params.DEPLOYER_MOTOR_PID_IZONE);
-            dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.DEPLOYER_PID_TOLERANCE);
-            dashboard.putBoolean(FrcTest.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.DEPLOYER_SOFTWARE_PID_ENABLED);
-            dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
+            dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KP, Params.DEPLOYER_MOTOR_PID_KP);
+            dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KI, Params.DEPLOYER_MOTOR_PID_KI);
+            dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KD, Params.DEPLOYER_MOTOR_PID_KD);
+            dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KF, Params.DEPLOYER_MOTOR_PID_KF);
+            dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_IZONE, Params.DEPLOYER_MOTOR_PID_IZONE);
+            dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.DEPLOYER_PID_TOLERANCE);
+            dashboard.putBoolean(Dashboard.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.DEPLOYER_SOFTWARE_PID_ENABLED);
+            dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
         }
     }   //updateParamsToDashboard
 

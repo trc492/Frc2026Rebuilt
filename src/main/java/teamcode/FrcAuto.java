@@ -100,27 +100,6 @@ public class FrcAuto implements TrcRobot.RobotMode
      */
     public static class AutoChoices
     {
-        // Smart dashboard keys for Autonomous choices.
-        private static final String DBKEY_AUTO_ALLIANCE = "Auto/Alliance";                  //Choices
-        private static final String DBKEY_AUTO_STRATEGY = "Auto/Strategy";                  //Choices
-        private static final String DBKEY_AUTO_START_POS = "Auto/StartPos";                 //Choices
-        private static final String DBKEY_AUTO_START_DELAY = "Auto/StartDelay";             //Number
-
-        private static final String DBKEY_AUTO_DEPOT_PICKUP = "Auto/DepotPickup";           //Boolean
-        private static final String DBKEY_AUTO_OUTPOST_PICKUP = "Auto/OutpostPickup";       //Boolean
-        private static final String DBKEY_AUTO_NEUTRAL_ZONE_PICKUP = "Auto/NeutralZonePickup"; //Boolean
-        private static final String DBKEY_AUTO_MOVE_TO = "Auto/MoveTo";                     //Choices
-        private static final String DBKEY_AUTO_PASS_BACK = "Auto/PassBack";                 //Choices
-        private static final String DBKEY_AUTO_CLIMB = "Auto/Climb";                        //Boolean
-        private static final String DBKEY_AUTO_CLIMB_SIDE= "Auto/ClimbSide";     //Choices
-        
-        private static final String DBKEY_AUTO_PATHFILE = "Auto/PathFile";                  //String
-        private static final String DBKEY_AUTO_X_DRIVE_DISTANCE = "Auto/XDriveDistance";    //Number
-        private static final String DBKEY_AUTO_Y_DRIVE_DISTANCE = "Auto/YDriveDistance";    //Number
-        private static final String DBKEY_AUTO_TURN_ANGLE = "Auto/TurnAngle";               //Number
-        private static final String DBKEY_AUTO_DRIVE_TIME = "Auto/DriveTime";               //Number
-        private static final String DBKEY_AUTO_DRIVE_POWER = "Auto/DrivePower";             //Number
-
         private final FrcUserChoices userChoices = new FrcUserChoices();
         // Choice menus
         private final FrcChoiceMenu<DriverStation.Alliance> allianceMenu;
@@ -136,13 +115,13 @@ public class FrcAuto implements TrcRobot.RobotMode
             //
             // Create autonomous mode specific choice menus.
             //
-            allianceMenu = new FrcChoiceMenu<>(DBKEY_AUTO_ALLIANCE);
-            autoStrategyMenu = new FrcChoiceMenu<>(DBKEY_AUTO_STRATEGY);
-            autoStartPosMenu = new FrcChoiceMenu<>(DBKEY_AUTO_START_POS);
+            allianceMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_ALLIANCE);
+            autoStrategyMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_STRATEGY);
+            autoStartPosMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_START_POS);
 
-            moveToChoiceMenu = new FrcChoiceMenu<>(DBKEY_AUTO_MOVE_TO);
-            passBackChoiceMenu = new FrcChoiceMenu<>(DBKEY_AUTO_PASS_BACK);
-            climbSideChoiceMenu = new FrcChoiceMenu<>(DBKEY_AUTO_CLIMB_SIDE);
+            moveToChoiceMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_MOVE_TO);
+            passBackChoiceMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_PASS_BACK);
+            climbSideChoiceMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_CLIMB_SIDE);
             //
             // Populate autonomous mode choice menus.
             //
@@ -179,24 +158,24 @@ public class FrcAuto implements TrcRobot.RobotMode
             //
             // Initialize dashboard with default choice values.
             //
-            userChoices.addChoiceMenu(DBKEY_AUTO_ALLIANCE, allianceMenu);
-            userChoices.addChoiceMenu(DBKEY_AUTO_STRATEGY, autoStrategyMenu);
-            userChoices.addChoiceMenu(DBKEY_AUTO_START_POS, autoStartPosMenu);
-            userChoices.addNumber(DBKEY_AUTO_START_DELAY, 0.0);
+            userChoices.addChoiceMenu(Dashboard.DBKEY_AUTO_ALLIANCE, allianceMenu);
+            userChoices.addChoiceMenu(Dashboard.DBKEY_AUTO_STRATEGY, autoStrategyMenu);
+            userChoices.addChoiceMenu(Dashboard.DBKEY_AUTO_START_POS, autoStartPosMenu);
+            userChoices.addNumber(Dashboard.DBKEY_AUTO_START_DELAY, 0.0);
 
-            userChoices.addBoolean(DBKEY_AUTO_DEPOT_PICKUP, false);
-            userChoices.addBoolean(DBKEY_AUTO_OUTPOST_PICKUP, false);
-            userChoices.addBoolean(DBKEY_AUTO_NEUTRAL_ZONE_PICKUP, false);
-            userChoices.addChoiceMenu(DBKEY_AUTO_MOVE_TO, moveToChoiceMenu);
-            userChoices.addChoiceMenu(DBKEY_AUTO_PASS_BACK, passBackChoiceMenu);
-            userChoices.addBoolean(DBKEY_AUTO_CLIMB, false);
+            userChoices.addBoolean(Dashboard.DBKEY_AUTO_DEPOT_PICKUP, false);
+            userChoices.addBoolean(Dashboard.DBKEY_AUTO_OUTPOST_PICKUP, false);
+            userChoices.addBoolean(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_PICKUP, false);
+            userChoices.addChoiceMenu(Dashboard.DBKEY_AUTO_MOVE_TO, moveToChoiceMenu);
+            userChoices.addChoiceMenu(Dashboard.DBKEY_AUTO_PASS_BACK, passBackChoiceMenu);
+            userChoices.addBoolean(Dashboard.DBKEY_AUTO_CLIMB, false);
 
-            userChoices.addString(DBKEY_AUTO_PATHFILE, "DrivePath.csv");
-            userChoices.addNumber(DBKEY_AUTO_X_DRIVE_DISTANCE, 0.0);    // in feet
-            userChoices.addNumber(DBKEY_AUTO_Y_DRIVE_DISTANCE, 0.0);    // in feet
-            userChoices.addNumber(DBKEY_AUTO_TURN_ANGLE, 0.0);          // in degrees
-            userChoices.addNumber(DBKEY_AUTO_DRIVE_TIME, 0.0);          // in seconds
-            userChoices.addNumber(DBKEY_AUTO_DRIVE_POWER, 0.0);
+            userChoices.addString(Dashboard.DBKEY_AUTO_PATHFILE, "DrivePath.csv");
+            userChoices.addNumber(Dashboard.DBKEY_AUTO_X_DRIVE_DISTANCE, 0.0);      // in feet
+            userChoices.addNumber(Dashboard.DBKEY_AUTO_Y_DRIVE_DISTANCE, 0.0);      // in feet
+            userChoices.addNumber(Dashboard.DBKEY_AUTO_TURN_ANGLE, 0.0);            // in degrees
+            userChoices.addNumber(Dashboard.DBKEY_AUTO_DRIVE_TIME, 0.0);            // in seconds
+            userChoices.addNumber(Dashboard.DBKEY_AUTO_DRIVE_POWER, 0.0);
         }   //AutoChoices
 
         //
@@ -222,22 +201,22 @@ public class FrcAuto implements TrcRobot.RobotMode
 
         public double getStartDelay()
         {
-            return userChoices.getUserNumber(DBKEY_AUTO_START_DELAY);
+            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_START_DELAY);
         }   //getStartDelay
 
         public boolean depotPickup()
         {
-            return userChoices.getUserBoolean(DBKEY_AUTO_DEPOT_PICKUP);
+            return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_DEPOT_PICKUP);
         }   //depotPickup
 
         public boolean outpostPickup()
         {
-            return userChoices.getUserBoolean(DBKEY_AUTO_OUTPOST_PICKUP);
+            return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_OUTPOST_PICKUP);
         }   //outpostPickup
 
         public boolean neutralZonePickup()
         {
-            return userChoices.getUserBoolean(DBKEY_AUTO_NEUTRAL_ZONE_PICKUP);
+            return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_PICKUP);
         }   //neutralZonePickup
 
         public MoveTo getMoveTo()
@@ -252,7 +231,7 @@ public class FrcAuto implements TrcRobot.RobotMode
 
         public boolean getClimb()
         {
-            return userChoices.getUserBoolean(DBKEY_AUTO_CLIMB);
+            return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_CLIMB);
         }   //getClimb
 
         public TaskAutoClimb.ClimbSide getClimbSide()
@@ -262,32 +241,32 @@ public class FrcAuto implements TrcRobot.RobotMode
 
         public String getPathFile()
         {
-            return userChoices.getUserString(DBKEY_AUTO_PATHFILE);
+            return userChoices.getUserString(Dashboard.DBKEY_AUTO_PATHFILE);
         }   //getPathFile
 
         public double getXDriveDistance()
         {
-            return userChoices.getUserNumber(DBKEY_AUTO_X_DRIVE_DISTANCE);
+            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_X_DRIVE_DISTANCE);
         }   //getXDriveDistance
 
         public double getYDriveDistance()
         {
-            return userChoices.getUserNumber(DBKEY_AUTO_Y_DRIVE_DISTANCE);
+            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_Y_DRIVE_DISTANCE);
         }   //getYDriveDistance
 
         public double getTurnAngle()
         {
-            return userChoices.getUserNumber(DBKEY_AUTO_TURN_ANGLE);
+            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_TURN_ANGLE);
         }   //getTurnAngle
 
         public double getDriveTime()
         {
-            return userChoices.getUserNumber(DBKEY_AUTO_DRIVE_TIME);
+            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_DRIVE_TIME);
         }   //getDriveTime
 
         public double getDrivePower()
         {
-            return userChoices.getUserNumber(DBKEY_AUTO_DRIVE_TIME);
+            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_DRIVE_TIME);
         }   //getDrivePower
 
         @Override

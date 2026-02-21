@@ -30,6 +30,7 @@ import frclib.motor.FrcMotorActuator.MotorType;
 import frclib.motor.FrcMotorActuator.SparkMaxMotorParams;
 import frclib.subsystem.FrcRollerIntake;
 import frclib.subsystem.FrcShooter;
+import teamcode.Dashboard;
 import teamcode.FrcAuto;
 import teamcode.FrcTest;
 import teamcode.Robot;
@@ -56,44 +57,6 @@ public class Shooter extends TrcSubsystem
 {
     public static final String SUBSYSTEM_NAME = "Shooter";
     private static final boolean NEED_ZERO_CAL = false;
-    private static final String DBKEY_PREFERENCE_SHOW_STATUS = SUBSYSTEM_NAME + "/ShowStatus";
-    private static final String DBKEY_PREFERENCE_SHOW_GRAPHS = SUBSYSTEM_NAME + "/ShowGraphs";
-    private static final String DBKEY_PREFERENCE_USE_REGRESSION = SUBSYSTEM_NAME + "/UseRegression";
-    private static final String DBKEY_PREFERENCE_USE_MOTION_COMPENSATION = SUBSYSTEM_NAME + "/UseMotionCompensation";
-
-    private static final String DBKEY_LSHOOTER_POWER = "Shooter/LShooterPower";
-    private static final String DBKEY_LSHOOTER_CURRENT = "Shooter/LShooterCurrent";
-    public static final String DBKEY_LSHOOTER_RPM = "Shooter/LShooterRPM";
-    public static final String DBKEY_LSHOOTER_TARGET_RPM = "Shooter/LShooterTargetRPM";
-    private static final String DBKEY_LTILT_POWER = "Shooter/LTiltPower";
-    private static final String DBKEY_LTILT_CURRENT = "Shooter/LTiltCurrent";
-    public static final String DBKEY_LTILT_POS = "Shooter/LTiltPos";
-    public static final String DBKEY_LTILT_TARGET = "Shooter/LTiltTarget";
-    private static final String DBKEY_LXFER_POWER = "Shooter/LXferPower";
-    private static final String DBKEY_LXFER_CURRENT = "Shooter/LXferCurrent";
-    private static final String DBKEY_LXFER_SENSOR = "Shooter/LXferSensor";
-    private static final String DBKEY_LXFER_ACTIVE = "Shooter/LXferActive";
-
-    private static final String DBKEY_RSHOOTER_POWER = "Shooter/RShooterPower";
-    private static final String DBKEY_RSHOOTER_CURRENT = "Shooter/RShooterCurrent";
-    public static final String DBKEY_RSHOOTER_RPM = "Shooter/RShooterRPM";
-    public static final String DBKEY_RSHOOTER_TARGET_RPM = "Shooter/RShooterTargetRPM";
-    private static final String DBKEY_RTILT_POWER = "Shooter/RTiltPower";
-    private static final String DBKEY_RTILT_CURRENT = "Shooter/RTiltCurrent";
-    public static final String DBKEY_RTILT_POS = "Shooter/RTiltPos";
-    public static final String DBKEY_RTILT_TARGET = "Shooter/RTiltTarget";
-    private static final String DBKEY_RXFER_POWER = "Shooter/RXferPower";
-    private static final String DBKEY_RXFER_CURRENT = "Shooter/RXferCurrent";
-    private static final String DBKEY_RXFER_SENSOR = "Shooter/RXferSensor";
-    private static final String DBKEY_RXFER_ACTIVE = "Shooter/RXferActive";
-
-    private static final String DBKEY_TURRET_POWER = "Shooter/TurretPower";
-    private static final String DBKEY_TURRET_CURRENT = "Shooter/TurretCurrent";
-    private static final String DBKEY_TURRET_POS = "Shooter/TurretPos";
-    private static final String DBKEY_TURRET_TARGET = "Shooter/TurretTarget";
-
-    private static final String DBKEY_FEEDER_POWER = "Shooter/FeederPower";
-    private static final String DBKEY_FEEDER_CURRENT = "Shooter/FeederCurrent";
 
     public static final String HUB_SHOOT_POINT = "HubShootPoint";
     public static final String TOWER_SHOOT_POINT = "TowerShootPoint";
@@ -351,16 +314,6 @@ public class Shooter extends TrcSubsystem
         TrcMotor motor;
 
         dashboard = FrcDashboard.getInstance();
-        dashboard.refreshKey(DBKEY_PREFERENCE_SHOW_STATUS, RobotParams.Preferences.showShooterStatus);
-        dashboard.refreshKey(DBKEY_PREFERENCE_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs);
-        dashboard.refreshKey(DBKEY_LSHOOTER_RPM, 0.0);
-        dashboard.refreshKey(DBKEY_LSHOOTER_TARGET_RPM, 0.0);
-        dashboard.refreshKey(DBKEY_RSHOOTER_RPM, 0.0);
-        dashboard.refreshKey(DBKEY_RSHOOTER_TARGET_RPM, 0.0);
-        dashboard.refreshKey(DBKEY_LTILT_POS, 0.0);
-        dashboard.refreshKey(DBKEY_LTILT_TARGET, 0.0);
-        dashboard.refreshKey(DBKEY_RTILT_POS, 0.0);
-        dashboard.refreshKey(DBKEY_RTILT_TARGET, 0.0);
         this.robot = robot;
 
         if (RobotParams.Preferences.useLeftShooter)
@@ -887,7 +840,7 @@ public class Shooter extends TrcSubsystem
         {
             AimInfo aimInfo;
             boolean useRegression = dashboard.getBoolean(
-                DBKEY_PREFERENCE_USE_REGRESSION, RobotParams.Preferences.useRegression);
+                Dashboard.DBKEY_SHOOTER_USE_REGRESSION, RobotParams.Preferences.useRegression);
             TrcLookupTable.Entry shootParams;
 
             if (targetPose == null)
@@ -923,7 +876,8 @@ public class Shooter extends TrcSubsystem
                     targetPose, leftFlywheelRPM, null, targetPanAngle, shootParams.region.value,
                     shootParams.outputs[2]);
                 if (dashboard.getBoolean(
-                        DBKEY_PREFERENCE_USE_MOTION_COMPENSATION, RobotParams.Preferences.useMotionCompensation))
+                        Dashboard.DBKEY_SHOOTER_USE_MOTION_COMPENSATION,
+                        RobotParams.Preferences.useMotionCompensation))
                 {
                     // Compensate for robot motion.
                     aimInfo = leftShooter.compensateRobotMotion(
@@ -1183,7 +1137,7 @@ public class Shooter extends TrcSubsystem
     @Override
     public int updateStatus(int lineNum, boolean slowLoop)
     {
-        if (dashboard.getBoolean(DBKEY_PREFERENCE_SHOW_STATUS, RobotParams.Preferences.showShooterStatus))
+        if (dashboard.getBoolean(Dashboard.DBKEY_SHOOTER_SHOW_STATUS, RobotParams.Preferences.showShooterStatus))
         {
             if (slowLoop)
             {
@@ -1192,68 +1146,68 @@ public class Shooter extends TrcSubsystem
                 if (leftShooter != null)
                 {
                     motor = leftShooter.getShooterMotor1();
-                    dashboard.putNumber(DBKEY_LSHOOTER_POWER, leftShooter.getShooterMotor1Power());
-                    dashboard.putNumber(DBKEY_LSHOOTER_CURRENT, leftShooter.getShooterMotor1Current());
-                    dashboard.putNumber(DBKEY_LSHOOTER_RPM, leftShooter.getShooterMotor1RPM());
-                    dashboard.putNumber(DBKEY_LSHOOTER_TARGET_RPM, leftShooter.getShooterMotor1TargetRPM());
+                    dashboard.putNumber(Dashboard.DBKEY_LSHOOTER_POWER, leftShooter.getShooterMotor1Power());
+                    dashboard.putNumber(Dashboard.DBKEY_LSHOOTER_CURRENT, leftShooter.getShooterMotor1Current());
+                    dashboard.putNumber(Dashboard.DBKEY_LSHOOTER_RPM, leftShooter.getShooterMotor1RPM());
+                    dashboard.putNumber(Dashboard.DBKEY_LSHOOTER_TARGET_RPM, leftShooter.getShooterMotor1TargetRPM());
                     motor = leftShooter.getTiltMotor();
                     if (motor != null)
                     {
-                        dashboard.putNumber(DBKEY_LTILT_POWER, motor.getPower());
-                        dashboard.putNumber(DBKEY_LTILT_CURRENT, motor.getCurrent());
-                        dashboard.putNumber(DBKEY_LTILT_POS, motor.getPosition());
-                        dashboard.putNumber(DBKEY_LTILT_TARGET, motor.getPidTarget());
+                        dashboard.putNumber(Dashboard.DBKEY_LTILT_POWER, motor.getPower());
+                        dashboard.putNumber(Dashboard.DBKEY_LTILT_CURRENT, motor.getCurrent());
+                        dashboard.putNumber(Dashboard.DBKEY_LTILT_POS, motor.getPosition());
+                        dashboard.putNumber(Dashboard.DBKEY_LTILT_TARGET, motor.getPidTarget());
                     }
                     if (leftTransfer != null)
                     {
-                        dashboard.putNumber(DBKEY_LXFER_POWER, leftTransfer.motor.getPower());
-                        dashboard.putNumber(DBKEY_LXFER_CURRENT, leftTransfer.motor.getCurrent());
-                        dashboard.putBoolean(DBKEY_LXFER_SENSOR, leftTransfer.getBackSensorState());
-                        dashboard.putBoolean(DBKEY_LXFER_ACTIVE, leftTransfer.isActive());
+                        dashboard.putNumber(Dashboard.DBKEY_LXFER_POWER, leftTransfer.motor.getPower());
+                        dashboard.putNumber(Dashboard.DBKEY_LXFER_CURRENT, leftTransfer.motor.getCurrent());
+                        dashboard.putBoolean(Dashboard.DBKEY_LXFER_SENSOR, leftTransfer.getBackSensorState());
+                        dashboard.putBoolean(Dashboard.DBKEY_LXFER_ACTIVE, leftTransfer.isActive());
                     }
                 }
 
                 if (rightShooter != null)
                 {
                     motor = rightShooter.getShooterMotor1();
-                    dashboard.putNumber(DBKEY_RSHOOTER_POWER, rightShooter.getShooterMotor1Power());
-                    dashboard.putNumber(DBKEY_RSHOOTER_CURRENT, rightShooter.getShooterMotor1Current());
-                    dashboard.putNumber(DBKEY_RSHOOTER_RPM, rightShooter.getShooterMotor1RPM());
-                    dashboard.putNumber(DBKEY_RSHOOTER_TARGET_RPM, rightShooter.getShooterMotor1TargetRPM());
+                    dashboard.putNumber(Dashboard.DBKEY_RSHOOTER_POWER, rightShooter.getShooterMotor1Power());
+                    dashboard.putNumber(Dashboard.DBKEY_RSHOOTER_CURRENT, rightShooter.getShooterMotor1Current());
+                    dashboard.putNumber(Dashboard.DBKEY_RSHOOTER_RPM, rightShooter.getShooterMotor1RPM());
+                    dashboard.putNumber(Dashboard.DBKEY_RSHOOTER_TARGET_RPM, rightShooter.getShooterMotor1TargetRPM());
                     motor = rightShooter.getTiltMotor();
                     if (motor != null)
                     {
-                        dashboard.putNumber(DBKEY_RTILT_POWER, motor.getPower());
-                        dashboard.putNumber(DBKEY_RTILT_CURRENT, motor.getCurrent());
-                        dashboard.putNumber(DBKEY_RTILT_POS, motor.getPosition());
-                        dashboard.putNumber(DBKEY_RTILT_TARGET, motor.getPidTarget());
+                        dashboard.putNumber(Dashboard.DBKEY_RTILT_POWER, motor.getPower());
+                        dashboard.putNumber(Dashboard.DBKEY_RTILT_CURRENT, motor.getCurrent());
+                        dashboard.putNumber(Dashboard.DBKEY_RTILT_POS, motor.getPosition());
+                        dashboard.putNumber(Dashboard.DBKEY_RTILT_TARGET, motor.getPidTarget());
                     }
                     if (rightTransfer != null)
                     {
-                        dashboard.putNumber(DBKEY_RXFER_POWER, rightTransfer.motor.getPower());
-                        dashboard.putNumber(DBKEY_RXFER_CURRENT, rightTransfer.motor.getCurrent());
-                        dashboard.putBoolean(DBKEY_RXFER_SENSOR, rightTransfer.getBackSensorState());
-                        dashboard.putBoolean(DBKEY_RXFER_ACTIVE, rightTransfer.isActive());
+                        dashboard.putNumber(Dashboard.DBKEY_RXFER_POWER, rightTransfer.motor.getPower());
+                        dashboard.putNumber(Dashboard.DBKEY_RXFER_CURRENT, rightTransfer.motor.getCurrent());
+                        dashboard.putBoolean(Dashboard.DBKEY_RXFER_SENSOR, rightTransfer.getBackSensorState());
+                        dashboard.putBoolean(Dashboard.DBKEY_RXFER_ACTIVE, rightTransfer.isActive());
                     }
                 }
 
                 if (turret != null)
                 {
-                    dashboard.putNumber(DBKEY_TURRET_POWER, turret.getPower());
-                    dashboard.putNumber(DBKEY_TURRET_CURRENT, turret.getCurrent());
-                    dashboard.putNumber(DBKEY_TURRET_POS, turret.getPosition());
-                    dashboard.putNumber(DBKEY_TURRET_TARGET, turret.getPidTarget());
+                    dashboard.putNumber(Dashboard.DBKEY_TURRET_POWER, turret.getPower());
+                    dashboard.putNumber(Dashboard.DBKEY_TURRET_CURRENT, turret.getCurrent());
+                    dashboard.putNumber(Dashboard.DBKEY_TURRET_POS, turret.getPosition());
+                    dashboard.putNumber(Dashboard.DBKEY_TURRET_TARGET, turret.getPidTarget());
                 }
 
                 if (feeder != null)
                 {
-                    dashboard.putNumber(DBKEY_FEEDER_POWER, feeder.getPower());
-                    dashboard.putNumber(DBKEY_FEEDER_CURRENT, feeder.getCurrent());
+                    dashboard.putNumber(Dashboard.DBKEY_FEEDER_POWER, feeder.getPower());
+                    dashboard.putNumber(Dashboard.DBKEY_FEEDER_CURRENT, feeder.getCurrent());
                 }
             }
         }
 
-        if (dashboard.getBoolean(DBKEY_PREFERENCE_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs))
+        if (dashboard.getBoolean(Dashboard.DBKEY_SHOOTER_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs))
         {
             String subsystemName = FrcTest.testChoices.getSubsystemName();
 
@@ -1261,30 +1215,30 @@ public class Shooter extends TrcSubsystem
             {
                 if (subsystemName.equalsIgnoreCase(Params.LSHOOTER_PRIMARY_MOTOR_NAME))
                 {
-                    dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_INPUT, leftShooter.getShooterMotor1RPM());
-                    dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET, leftShooter.getShooterMotor1TargetRPM());
-                    dashboard.putNumber(DBKEY_LSHOOTER_CURRENT, leftShooter.getShooterMotor1Current());
+                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, leftShooter.getShooterMotor1RPM());
+                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET, leftShooter.getShooterMotor1TargetRPM());
+                    dashboard.putNumber(Dashboard.DBKEY_LSHOOTER_CURRENT, leftShooter.getShooterMotor1Current());
                 }
                 else if (subsystemName.equalsIgnoreCase(Params.RSHOOTER_PRIMARY_MOTOR_NAME))
                 {
-                    dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_INPUT, rightShooter.getShooterMotor1RPM());
-                    dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET, rightShooter.getShooterMotor1TargetRPM());
-                    dashboard.putNumber(DBKEY_RSHOOTER_CURRENT, rightShooter.getShooterMotor1Current());
+                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, rightShooter.getShooterMotor1RPM());
+                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET, rightShooter.getShooterMotor1TargetRPM());
+                    dashboard.putNumber(Dashboard.DBKEY_RSHOOTER_CURRENT, rightShooter.getShooterMotor1Current());
                 }
                 else if (subsystemName.equalsIgnoreCase(Params.LTILT_MOTOR_NAME))
                 {
-                    dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_INPUT, leftShooter.getTiltAngle());
-                    dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET, leftShooter.getTiltAngleTarget());
+                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, leftShooter.getTiltAngle());
+                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET, leftShooter.getTiltAngleTarget());
                 }
                 else if (subsystemName.equalsIgnoreCase(Params.RTILT_MOTOR_NAME))
                 {
-                    dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_INPUT, rightShooter.getTiltAngle());
-                    dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET, rightShooter.getTiltAngleTarget());
+                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, rightShooter.getTiltAngle());
+                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET, rightShooter.getTiltAngleTarget());
                 }
                 else if (subsystemName.equalsIgnoreCase(Params.TURRET_MOTOR_NAME))
                 {
-                    dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_INPUT, turret.getPosition());
-                    dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET, turret.getPidTarget());
+                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, turret.getPosition());
+                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET, turret.getPidTarget());
                 }
             }
         }
@@ -1305,64 +1259,64 @@ public class Shooter extends TrcSubsystem
         {
             if (subsystemName.equalsIgnoreCase(Params.LSHOOTER_PRIMARY_MOTOR_NAME))
             {
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KP, Params.LSHOOTER_MOTOR_PID_KP);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KI, Params.LSHOOTER_MOTOR_PID_KI);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KD, Params.LSHOOTER_MOTOR_PID_KD);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KF, Params.LSHOOTER_MOTOR_PID_KF);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_IZONE, Params.LSHOOTER_MOTOR_PID_IZONE);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.SHOOTER_PID_TOLERANCE_RPM);
-                dashboard.putBoolean(FrcTest.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.SHOOTER_SOFTWARE_PID_ENABLED);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KS, Params.LSHOOTER_MOTOR_FF_KS);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KV, Params.LSHOOTER_MOTOR_FF_KV);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KA, Params.LSHOOTER_MOTOR_FF_KA);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KP, Params.LSHOOTER_MOTOR_PID_KP);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KI, Params.LSHOOTER_MOTOR_PID_KI);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KD, Params.LSHOOTER_MOTOR_PID_KD);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KF, Params.LSHOOTER_MOTOR_PID_KF);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_IZONE, Params.LSHOOTER_MOTOR_PID_IZONE);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.SHOOTER_PID_TOLERANCE_RPM);
+                dashboard.putBoolean(Dashboard.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.SHOOTER_SOFTWARE_PID_ENABLED);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KS, Params.LSHOOTER_MOTOR_FF_KS);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KV, Params.LSHOOTER_MOTOR_FF_KV);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KA, Params.LSHOOTER_MOTOR_FF_KA);
             }
             else if (subsystemName.equalsIgnoreCase(Params.RSHOOTER_PRIMARY_MOTOR_NAME))
             {
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KP, Params.RSHOOTER_MOTOR_PID_KP);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KI, Params.RSHOOTER_MOTOR_PID_KI);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KD, Params.RSHOOTER_MOTOR_PID_KD);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KF, Params.RSHOOTER_MOTOR_PID_KF);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_IZONE, Params.RSHOOTER_MOTOR_PID_IZONE);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.SHOOTER_PID_TOLERANCE_RPM);
-                dashboard.putBoolean(FrcTest.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.SHOOTER_SOFTWARE_PID_ENABLED);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KS, Params.RSHOOTER_MOTOR_FF_KS);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KV, Params.RSHOOTER_MOTOR_FF_KV);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KA, Params.RSHOOTER_MOTOR_FF_KA);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KP, Params.RSHOOTER_MOTOR_PID_KP);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KI, Params.RSHOOTER_MOTOR_PID_KI);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KD, Params.RSHOOTER_MOTOR_PID_KD);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KF, Params.RSHOOTER_MOTOR_PID_KF);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_IZONE, Params.RSHOOTER_MOTOR_PID_IZONE);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.SHOOTER_PID_TOLERANCE_RPM);
+                dashboard.putBoolean(Dashboard.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.SHOOTER_SOFTWARE_PID_ENABLED);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KS, Params.RSHOOTER_MOTOR_FF_KS);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KV, Params.RSHOOTER_MOTOR_FF_KV);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KA, Params.RSHOOTER_MOTOR_FF_KA);
             }
             else if (subsystemName.equalsIgnoreCase(Params.LTILT_MOTOR_NAME))
             {
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KP, Params.LTILT_MOTOR_PID_KP);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KI, Params.LTILT_MOTOR_PID_KI);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KD, Params.LTILT_MOTOR_PID_KD);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KF, Params.LTILT_MOTOR_PID_KF);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_IZONE, Params.LTILT_MOTOR_PID_IZONE);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.TILT_PID_TOLERANCE);
-                dashboard.putBoolean(FrcTest.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.TILT_SOFTWARE_PID_ENABLED);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KP, Params.LTILT_MOTOR_PID_KP);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KI, Params.LTILT_MOTOR_PID_KI);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KD, Params.LTILT_MOTOR_PID_KD);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KF, Params.LTILT_MOTOR_PID_KF);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_IZONE, Params.LTILT_MOTOR_PID_IZONE);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.TILT_PID_TOLERANCE);
+                dashboard.putBoolean(Dashboard.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.TILT_SOFTWARE_PID_ENABLED);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
             }
             else if (subsystemName.equalsIgnoreCase(Params.RTILT_MOTOR_NAME))
             {
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KP, Params.RTILT_MOTOR_PID_KP);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KI, Params.RTILT_MOTOR_PID_KI);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KD, Params.RTILT_MOTOR_PID_KD);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KF, Params.RTILT_MOTOR_PID_KF);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_IZONE, Params.RTILT_MOTOR_PID_IZONE);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.TILT_PID_TOLERANCE);
-                dashboard.putBoolean(FrcTest.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.TILT_SOFTWARE_PID_ENABLED);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KP, Params.RTILT_MOTOR_PID_KP);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KI, Params.RTILT_MOTOR_PID_KI);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KD, Params.RTILT_MOTOR_PID_KD);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KF, Params.RTILT_MOTOR_PID_KF);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_IZONE, Params.RTILT_MOTOR_PID_IZONE);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.TILT_PID_TOLERANCE);
+                dashboard.putBoolean(Dashboard.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.TILT_SOFTWARE_PID_ENABLED);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
             }
             else if (subsystemName.equalsIgnoreCase(Params.TURRET_MOTOR_NAME))
             {
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KP, Params.TURRET_MOTOR_PID_KP);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KI, Params.TURRET_MOTOR_PID_KI);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KD, Params.TURRET_MOTOR_PID_KD);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KF, Params.TURRET_MOTOR_PID_KF);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_IZONE, Params.TURRET_MOTOR_PID_IZONE);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.TURRET_PID_TOLERANCE);
-                dashboard.putBoolean(FrcTest.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.TURRET_SOFTWARE_PID_ENABLED);
-                dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KP, Params.TURRET_MOTOR_PID_KP);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KI, Params.TURRET_MOTOR_PID_KI);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KD, Params.TURRET_MOTOR_PID_KD);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KF, Params.TURRET_MOTOR_PID_KF);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_IZONE, Params.TURRET_MOTOR_PID_IZONE);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.TURRET_PID_TOLERANCE);
+                dashboard.putBoolean(Dashboard.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.TURRET_SOFTWARE_PID_ENABLED);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
             }
         }
     }   //updateParamsToDashboard

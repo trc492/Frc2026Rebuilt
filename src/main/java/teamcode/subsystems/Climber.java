@@ -26,6 +26,7 @@ import frclib.driverio.FrcDashboard;
 import frclib.motor.FrcMotorActuator;
 import frclib.motor.FrcMotorActuator.MotorType;
 import frclib.motor.FrcMotorActuator.SparkMaxMotorParams;
+import teamcode.Dashboard;
 import teamcode.FrcTest;
 import teamcode.RobotParams;
 import trclib.motor.TrcMotor;
@@ -38,13 +39,6 @@ public class Climber extends TrcSubsystem
 {
     public static final String SUBSYSTEM_NAME = "Climber";
     private static final boolean NEED_ZERO_CAL = true;
-    private static final String DBKEY_PREFERENCE_SHOW_STATUS = SUBSYSTEM_NAME + "/ShowStatus";
-    private static final String DBKEY_PREFERENCE_SHOW_GRAPHS = SUBSYSTEM_NAME + "/ShowGraphs";
-
-    private static final String DBKEY_CLIMBER_POWER = "Climber/ClimberPower";
-    private static final String DBKEY_CLIMBER_CURRENT = "Climber/ClimberCurrent";
-    private static final String DBKEY_CLIMBER_POS = "Climber/ClimberPos";
-    private static final String DBKEY_CLIMBER_TARGET = "Climber/ClimberTarget";
 
     public static final class Params
     {
@@ -95,8 +89,6 @@ public class Climber extends TrcSubsystem
         super(SUBSYSTEM_NAME, NEED_ZERO_CAL);
 
         this.dashboard = FrcDashboard.getInstance();
-        dashboard.refreshKey(DBKEY_PREFERENCE_SHOW_STATUS, RobotParams.Preferences.showClimberStatus);
-        dashboard.refreshKey(DBKEY_PREFERENCE_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs);
 
         FrcMotorActuator.Params climberMotorParams = new FrcMotorActuator.Params()
             .setPrimaryMotor(
@@ -169,21 +161,21 @@ public class Climber extends TrcSubsystem
     @Override
     public int updateStatus(int lineNum, boolean slowLoop)
     {
-        if (dashboard.getBoolean(DBKEY_PREFERENCE_SHOW_STATUS, RobotParams.Preferences.showClimberStatus))
+        if (dashboard.getBoolean(Dashboard.DBKEY_CLIMBER_SHOW_STATUS, RobotParams.Preferences.showClimberStatus))
         {
             if (slowLoop)
             {
-                dashboard.putNumber(DBKEY_CLIMBER_POWER, climber.getPower());
-                dashboard.putNumber(DBKEY_CLIMBER_CURRENT, climber.getCurrent());
-                dashboard.putNumber(DBKEY_CLIMBER_POS, climber.getPosition());
-                dashboard.putNumber(DBKEY_CLIMBER_TARGET, climber.getPidTarget());
+                dashboard.putNumber(Dashboard.DBKEY_CLIMBER_POWER, climber.getPower());
+                dashboard.putNumber(Dashboard.DBKEY_CLIMBER_CURRENT, climber.getCurrent());
+                dashboard.putNumber(Dashboard.DBKEY_CLIMBER_POS, climber.getPosition());
+                dashboard.putNumber(Dashboard.DBKEY_CLIMBER_TARGET, climber.getPidTarget());
             }
         }
 
-        if (dashboard.getBoolean(DBKEY_PREFERENCE_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs))
+        if (dashboard.getBoolean(Dashboard.DBKEY_CLIMBER_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs))
         {
-            dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_INPUT, climber.getPosition());
-            dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET, climber.getPidTarget());
+            dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, climber.getPosition());
+            dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET, climber.getPidTarget());
         }
 
         return lineNum;
@@ -196,14 +188,14 @@ public class Climber extends TrcSubsystem
     @Override
     public void updateParamsToDashboard()
     {
-        dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KP, Params.CLIMBER_MOTOR_PID_KP);
-        dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KI, Params.CLIMBER_MOTOR_PID_KI);
-        dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KD, Params.CLIMBER_MOTOR_PID_KD);
-        dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_KF, Params.CLIMBER_MOTOR_PID_KF);
-        dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_IZONE, Params.CLIMBER_MOTOR_PID_IZONE);
-        dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.CLIMBER_PID_TOLERANCE);
-        dashboard.putBoolean(FrcTest.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.CLIMBER_SOFTWARE_PID_ENABLED);
-        dashboard.putNumber(FrcTest.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
+        dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KP, Params.CLIMBER_MOTOR_PID_KP);
+        dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KI, Params.CLIMBER_MOTOR_PID_KI);
+        dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KD, Params.CLIMBER_MOTOR_PID_KD);
+        dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KF, Params.CLIMBER_MOTOR_PID_KF);
+        dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_IZONE, Params.CLIMBER_MOTOR_PID_IZONE);
+        dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.CLIMBER_PID_TOLERANCE);
+        dashboard.putBoolean(Dashboard.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.CLIMBER_SOFTWARE_PID_ENABLED);
+        dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
     }   //updateParamsToDashboard
 
     /**

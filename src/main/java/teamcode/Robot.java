@@ -392,7 +392,7 @@ public class Robot extends FrcRobot
     public void robotPeriodic(RunMode runMode, boolean slowPeriodicLoop)
     {
         if (vision != null &&
-            dashboard.getBoolean(Vision.DBKEY_VISION_RELOCALIZE, RobotParams.Preferences.visionRelocalizeEnabled))
+            dashboard.getBoolean(Dashboard.DBKEY_VISION_RELOCALIZE, RobotParams.Preferences.visionRelocalizeEnabled))
         {
 
             if (hasVisionPoseEstimator)
@@ -676,6 +676,17 @@ public class Robot extends FrcRobot
 
         return success;
     }   //relocalizeRobotByAprilTag
+
+    public double getRobotDistanceToTarget()
+    {
+        Alliance alliance = FrcAuto.autoChoices.getAlliance();
+        TrcPose2D robotFieldPose = robotBase.driveBase.getFieldPosition();
+        TrcPose2D targetFieldPose = adjustPoseByAlliance(RobotParams.Game.BLUE_HUB_POSE, alliance);
+        TrcPose2D targetPose = targetFieldPose.relativeTo(robotFieldPose);
+        double distance = Math.hypot(targetPose.x, targetPose.y);
+        dashboard.putNumber(Dashboard.DBKEY_ROBOT_DISTANCE_TO_TARGET, distance);
+        return distance;
+    }   //getRobotDistanceToTarget
 
     // /**
     //  * This method re-localizes the robot with AprilTag vision reported info.

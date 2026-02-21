@@ -31,13 +31,11 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frclib.driverio.FrcDashboard;
 import frclib.robotcore.FrcField;
 import frclib.vision.FrcPhotonVision;
 import frclib.vision.FrcPhotonVision.DetectedObject;
 import teamcode.Dashboard;
-import teamcode.FrcAuto;
 import teamcode.Robot;
 import teamcode.RobotParams;
 import teamcode.subsystems.Shooter;
@@ -51,8 +49,6 @@ import trclib.vision.TrcVision.CameraInfo;
 public class Vision //implements TrcVision.ObjectInfo
 {
     private final String moduleName = getClass().getSimpleName();
-
-    public static final String DBKEY_DISTANCE_TO_TARGET = "Vision/DistanceToTarget";
 
     // Rebuilt Left Shooter camera info
     public static final TrcVision.CameraInfo leftShooterCamInfo = new TrcVision.CameraInfo()
@@ -81,9 +77,7 @@ public class Vision //implements TrcVision.ObjectInfo
         .setCameraInfo("OV9782", 640, 480)
         .setCameraPose(-0.5, -5.375, 20.0, 180.0, -17.5, 0.0);
 
-    public static final String DBKEY_PREFIX                 = "Vision/";
-    public static final String DBKEY_VISION_RELOCALIZE      = DBKEY_PREFIX + "Relocalizate";
-    public static final double ONTARGET_THRESHOLD           = 0.5;      // in degrees
+    public static final double ONTARGET_THRESHOLD = 0.5;    // in degrees
 
     public enum PipelineType
     {
@@ -123,8 +117,6 @@ public class Vision //implements TrcVision.ObjectInfo
         this.dashboard = FrcDashboard.getInstance();
         this.robot = robot;
 
-        dashboard.refreshKey(DBKEY_VISION_RELOCALIZE, RobotParams.Preferences.visionRelocalizeEnabled);
-        dashboard.refreshKey(DBKEY_DISTANCE_TO_TARGET, 0.0);
         if (robot.robotInfo.camInfos.length > 0 && robot.robotInfo.camInfos[0] != null)
         {
             tracer.traceInfo(
@@ -139,7 +131,7 @@ public class Vision //implements TrcVision.ObjectInfo
                 new Rotation3d(Units.degreesToRadians(robot.robotInfo.camInfos[0].camPose.roll),
                                -Units.degreesToRadians(robot.robotInfo.camInfos[0].camPose.pitch),
                                -Units.degreesToRadians(robot.robotInfo.camInfos[0].camPose.yaw)));
-            dashboard.refreshKey(DBKEY_PREFIX + robot.robotInfo.camInfos[0].camName, "");
+            dashboard.refreshKey("Vision/" + robot.robotInfo.camInfos[0].camName, "");
             leftShooterVision.setPipelineIndex(leftShooterPipeline.pipelineIndex);
         }
         else
@@ -162,7 +154,7 @@ public class Vision //implements TrcVision.ObjectInfo
                 new Rotation3d(Units.degreesToRadians(robot.robotInfo.camInfos[1].camPose.roll),
                                -Units.degreesToRadians(robot.robotInfo.camInfos[1].camPose.pitch),
                                -Units.degreesToRadians(robot.robotInfo.camInfos[1].camPose.yaw)));
-            dashboard.refreshKey(DBKEY_PREFIX + robot.robotInfo.camInfos[1].camName, "");
+            dashboard.refreshKey("Vision/" + robot.robotInfo.camInfos[1].camName, "");
             rightShooterVision.setPipelineIndex(rightShooterPipeline.pipelineIndex);
         }
         else
@@ -183,7 +175,7 @@ public class Vision //implements TrcVision.ObjectInfo
             //     new Rotation3d(Units.degreesToRadians(robot.robotInfo.camInfos[2].camPose.roll),
             //                    -Units.degreesToRadians(robot.robotInfo.camInfos[2].camPose.pitch),
             //                    -Units.degreesToRadians(robot.robotInfo.camInfos[2].camPose.yaw)));
-            dashboard.refreshKey(DBKEY_PREFIX + robot.robotInfo.camInfos[2].camName, "");
+            dashboard.refreshKey("Vision/" + robot.robotInfo.camInfos[2].camName, "");
             rightShooterVision.setPipelineIndex(intakePipeline.pipelineIndex);
         }
         else
@@ -262,17 +254,6 @@ public class Vision //implements TrcVision.ObjectInfo
 
         return aprilTagGroundOffset;
     }   //getAprilTagGroundOffset
-
-    public double getDistanceToTarget()
-    {
-        Alliance alliance = FrcAuto.autoChoices.getAlliance();
-        TrcPose2D robotFieldPose = robot.robotBase.driveBase.getFieldPosition();
-        TrcPose2D targetFieldPose = robot.adjustPoseByAlliance(RobotParams.Game.BLUE_HUB_POSE, alliance);
-        TrcPose2D targetPose = targetFieldPose.relativeTo(robotFieldPose);
-        double distance = Math.hypot(targetPose.x, targetPose.y);
-        robot.dashboard.putNumber(DBKEY_DISTANCE_TO_TARGET, distance);
-        return distance;
-    }   //getDistanceToTarget
 
     /**
      * This method returns the best detected object.
@@ -451,7 +432,7 @@ public class Vision //implements TrcVision.ObjectInfo
                         String msg = String.format(
                             "LShooterVision[%d]:targetPose=%s,robotPose=%s",
                             detectedObj.target.getFiducialId(), detectedObj.targetPose, detectedObj.robotPose);
-                        dashboard.putString(DBKEY_PREFIX + "LeftShooter", msg);
+                        dashboard.putString("Vision/LeftShooter", msg);
                         dashboard.displayPrintf(lineNum++, msg);
                     }
                     else
@@ -468,7 +449,7 @@ public class Vision //implements TrcVision.ObjectInfo
                         String msg = String.format(
                             "RShooterVision[%d]:targetPose=%s,robotPose=%s",
                             detectedObj.target.getFiducialId(), detectedObj.targetPose, detectedObj.robotPose);
-                        dashboard.putString(DBKEY_PREFIX + "RightShooter", msg);
+                        dashboard.putString("Vision/RightShooter", msg);
                         dashboard.displayPrintf(lineNum++, msg);
                     }
                     else
@@ -483,7 +464,7 @@ public class Vision //implements TrcVision.ObjectInfo
                     if (detectedObj != null)
                     {
                         String msg = String.format("IntakeVision: targetPose=%s", detectedObj.targetPose);
-                        dashboard.putString(DBKEY_PREFIX + "Intake", msg);
+                        dashboard.putString("Vision/Intake", msg);
                         dashboard.displayPrintf(lineNum++, msg);
                     }
                 }

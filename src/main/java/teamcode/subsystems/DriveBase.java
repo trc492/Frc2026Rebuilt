@@ -104,7 +104,7 @@ public class DriveBase extends TrcSubsystem
             .setYPidParams(drivePidCoeffs, 0.5)
             .setTurnPidParams(turnPidCoeffs, 0.5)
             .setVelocityPidParams(velPidCoeffs)
-            .setDriveCharacteristics(110.0, 200.0, 90.0, 200.0);
+            .setDriveCharacteristics(175.0, 200.0, 90.0, 400.0);
         public static TrcSwerveDrive.SwerveParams swerveParams = new TrcSwerveDrive.SwerveParams()
             .setSteerMotorPidParams(
                 new TrcMotor.PidParams()
@@ -346,14 +346,6 @@ public class DriveBase extends TrcSubsystem
         }   //VisionOnlyInfo
     }   //class VisionOnlyInfo
 
-    public static final String DBKEY_ROBOT_POSE                 = "DriveBase/RobotPose";
-    public static final String DBKEY_DRIVE_ENC                  = "DriveBase/DriveEnc";
-    public static final String DBKEY_STEER_FRONT                = "DriveBase/SteerFront";
-    public static final String DBKEY_STEER_BACK                 = "DriveBase/SteerBack";
-    public static final String DBKEY_XPID_INFO                  = "DriveBase/XPidInfo";
-    public static final String DBKEY_YPID_INFO                  = "DriveBase/YPidInfo";
-    public static final String DBKEY_TURNPID_INFO               = "DriveBase/TurnPidInfo";
-
     private final FrcDashboard dashboard;
     private final FrcRobotBase.RobotInfo robotInfo;
     private final FrcRobotBase robotBase;
@@ -366,13 +358,6 @@ public class DriveBase extends TrcSubsystem
         super(RobotParams.Preferences.robotType.toString(), false);
 
         dashboard = FrcDashboard.getInstance();
-        dashboard.refreshKey(DBKEY_ROBOT_POSE, "");
-        dashboard.refreshKey(DBKEY_DRIVE_ENC, "");
-        dashboard.refreshKey(DBKEY_STEER_FRONT, "");
-        dashboard.refreshKey(DBKEY_STEER_BACK, "");
-        dashboard.refreshKey(DBKEY_XPID_INFO, "");
-        dashboard.refreshKey(DBKEY_YPID_INFO, "");
-        dashboard.refreshKey(DBKEY_TURNPID_INFO, "");
 
         switch (RobotParams.Preferences.robotType)
         {
@@ -563,7 +548,7 @@ public class DriveBase extends TrcSubsystem
 
         if (slowLoop)
         {
-            dashboard.putString(DBKEY_ROBOT_POSE, robotBase.driveBase.getFieldPosition().toString());
+            dashboard.putString(Dashboard.DBKEY_ROBOT_POSE, robotBase.driveBase.getFieldPosition().toString());
             if (dashboard.getBoolean(
                     Dashboard.DBKEY_PREFERENCE_DEBUG_DRIVEBASE, RobotParams.Preferences.debugDriveBase))
             {
@@ -579,7 +564,7 @@ public class DriveBase extends TrcSubsystem
                     robotBase.driveMotors.length > 2?
                     robotBase.driveMotors[FrcRobotBase.INDEX_BACK_RIGHT].getPosition(): 0.0;
                 dashboard.putString(
-                    DBKEY_DRIVE_ENC,
+                    Dashboard.DBKEY_DRIVE_ENC,
                     String.format(
                         "lf=%.0f, rf=%.0f, lb=%.0f, rb=%.0f, avg=%.0f",
                         lfDriveEnc, rfDriveEnc, lbDriveEnc, rbDriveEnc,
@@ -588,7 +573,7 @@ public class DriveBase extends TrcSubsystem
                 {
                     FrcSwerveBase swerveBase = (FrcSwerveBase) robotBase;
                     dashboard.putString(
-                        DBKEY_STEER_FRONT,
+                        Dashboard.DBKEY_STEER_FRONT,
                         String.format(
                             "angle/motorEnc/absEnc: lf=%.1f/%.3f/%.3f, rf=%.1f/%.3f/%.3f",
                             swerveBase.swerveModules[FrcRobotBase.INDEX_FRONT_LEFT].getSteerAngle(),
@@ -598,7 +583,7 @@ public class DriveBase extends TrcSubsystem
                             swerveBase.steerMotors[FrcRobotBase.INDEX_FRONT_RIGHT].getMotorPosition(),
                             swerveBase.steerEncoders[FrcRobotBase.INDEX_FRONT_RIGHT].getRawPosition()));
                     dashboard.putString(
-                        DBKEY_STEER_BACK,
+                        Dashboard.DBKEY_STEER_BACK,
                         String.format(
                             "angle/motorEnc/absEnc: lb=%.1f/%.3f/%.3f, rb=%.1f/%.3f/%.3f",
                             swerveBase.swerveModules[FrcRobotBase.INDEX_BACK_LEFT].getSteerAngle(),
@@ -619,7 +604,7 @@ public class DriveBase extends TrcSubsystem
                 {
                     pidInfo = pidCtrl.getPidStateInfo();
                     dashboard.putString(
-                        DBKEY_XPID_INFO,
+                        Dashboard.DBKEY_XPID_INFO,
                         String.format(
                             "%s: Input=%.3f, Target=%.3f, Error=%.3f, Output=%.3f(%.3f/%.3f)",
                             pidCtrl, pidInfo[0], pidInfo[1], pidInfo[2], pidInfo[3], pidInfo[4], pidInfo[5],
@@ -628,7 +613,7 @@ public class DriveBase extends TrcSubsystem
                 pidCtrl = robotBase.pidDrive.getYPidCtrl();
                 pidInfo = pidCtrl.getPidStateInfo();
                 dashboard.putString(
-                    DBKEY_YPID_INFO,
+                    Dashboard.DBKEY_YPID_INFO,
                     String.format(
                         "%s: Input=%.3f, Target=%.3f, Error=%.3f, Output=%.3f(%.3f/%.3f)",
                         pidCtrl, pidInfo[0], pidInfo[1], pidInfo[2], pidInfo[3], pidInfo[4], pidInfo[5],
@@ -636,7 +621,7 @@ public class DriveBase extends TrcSubsystem
                 pidCtrl = robotBase.pidDrive.getTurnPidCtrl();
                 pidInfo = pidCtrl.getPidStateInfo();
                 dashboard.putString(
-                    DBKEY_YPID_INFO,
+                    Dashboard.DBKEY_YPID_INFO,
                     String.format(
                         "%s: Input=%.3f, Target=%.3f, Error=%.3f, Output=%.3f(%.3f/%.3f)",
                         pidCtrl, pidInfo[0], pidInfo[1], pidInfo[2], pidInfo[3], pidInfo[4], pidInfo[5],

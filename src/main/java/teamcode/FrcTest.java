@@ -32,7 +32,6 @@ import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcUserChoices;
 import frclib.driverio.FrcXboxController;
 import teamcode.subsystems.Shooter;
-import teamcode.vision.Vision;
 import trclib.command.CmdDriveMotorsTest;
 import trclib.command.CmdPidDrive;
 import trclib.command.CmdTimedDrive;
@@ -51,54 +50,6 @@ import trclib.timer.TrcTimer;
 public class FrcTest extends FrcTeleOp
 {
     private static final String moduleName = FrcTest.class.getSimpleName();
-    // Smart dashboard keys for Autonomous choices.
-    private static final String DBKEY_TEST_TESTS = "Test/Tests";
-    private static final String DBKEY_TEST_X_TARGET = "Test/XTarget";
-    private static final String DBKEY_TEST_Y_TARGET = "Test/YTarget";
-    private static final String DBKEY_TEST_TURN_TARGET = "Test/TurnTarget";
-    private static final String DBKEY_TEST_DRIVE_POWER = "Test/DrivePower";
-    private static final String DBKEY_TEST_TURN_POWER = "Test/TurnPower";
-    private static final String DBKEY_TEST_DRIVE_TIME = "Test/DriveTime";
-    private static final String DBKEY_TEST_X_KP = "Test/XKp";
-    private static final String DBKEY_TEST_X_KI = "Test/XKi";
-    private static final String DBKEY_TEST_X_KD = "Test/XKd";
-    private static final String DBKEY_TEST_X_KF = "Test/XKf";
-    private static final String DBKEY_TEST_X_IZONE = "Test/XIZone";
-    private static final String DBKEY_TEST_Y_KP = "Test/YKp";
-    private static final String DBKEY_TEST_Y_KI = "Test/YKi";
-    private static final String DBKEY_TEST_Y_KD = "Test/YKd";
-    private static final String DBKEY_TEST_Y_KF = "Test/YKf";
-    private static final String DBKEY_TEST_Y_IZONE = "Test/YIZone";
-    private static final String DBKEY_TEST_TURN_KP = "Test/TurnKp";
-    private static final String DBKEY_TEST_TURN_KI = "Test/TurnKi";
-    private static final String DBKEY_TEST_TURN_KD = "Test/TurnKd";
-    private static final String DBKEY_TEST_TURN_KF = "Test/TurnKf";
-    private static final String DBKEY_TEST_TURN_IZONE = "Test/TurnIZone";
-
-    private static final String DBKEY_TEST_SUBSYSTEM_NAME = "Test/SubsystemName";
-    public static final String DBKEY_TEST_SUBSYSTEM_KP = "Test/SubsystemKp";
-    public static final String DBKEY_TEST_SUBSYSTEM_KI = "Test/SubsystemKi";
-    public static final String DBKEY_TEST_SUBSYSTEM_KD = "Test/SubsystemKd";
-    public static final String DBKEY_TEST_SUBSYSTEM_KF = "Test/SubsystemKf";
-    public static final String DBKEY_TEST_SUBSYSTEM_IZONE = "Test/SubsystemIZone";
-    public static final String DBKEY_TEST_SUBSYSTEM_TOLERANCE = "Test/SubsystemTolerance";
-    public static final String DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID = "Test/SubsystemSoftwarePid";
-    public static final String DBKEY_TEST_SUBSYSTEM_TARGET_PARAM = "Test/SubsystemTargetParam";
-    public static final String DBKEY_TEST_SUBSYSTEM_KS = "Test/SubsystemKs";
-    public static final String DBKEY_TEST_SUBSYSTEM_KV = "Test/SubsystemKv";
-    public static final String DBKEY_TEST_SUBSYSTEM_KA = "Test/SubsystemKa";
-
-    public static final String DBKEY_TEST_SUBSYSTEM_INPUT = "Test/SubsystemInput";
-    public static final String DBKEY_TEST_SUBSYSTEM_TARGET = "Test/SubsystemTarget";
-
-    private static final String DBKEY_TEST_MAX_VELOCITY = "Test/MaxVelocity";
-    private static final String DBKEY_TEST_MAX_ACCELERATION = "Test/MaxAcceleration";
-    private static final String DBKEY_TEST_MAX_DECELERATION = "Test/MaxDeceleration";
-    private static final String DBKEY_TEST_ROBOT_VEL = "Test/RobotVelocity";
-    private static final String DBKEY_TEST_TARGET_VEL = "Test/TargetVelocity";
-    private static final String DBKEY_TEST_ROBOT_POS = "Test/RobotPosition";
-    private static final String DBKEY_TEST_TARGET_POS = "Test/TargetPosition";
-
     //
     // Global constants.
     //
@@ -144,7 +95,7 @@ public class FrcTest extends FrcTeleOp
             //
             // Create test mode specific choice menus.
             //
-            testMenu = new FrcChoiceMenu<>(DBKEY_TEST_TESTS);
+            testMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_TEST_TESTS);
             //
             // Populate test mode menus.
             //
@@ -164,48 +115,48 @@ public class FrcTest extends FrcTeleOp
             //
             // Initialize dashboard with default choice values.
             //
-            userChoices.addChoiceMenu(DBKEY_TEST_TESTS, testMenu);
-            userChoices.addNumber(DBKEY_TEST_X_TARGET, 0.0);    // in ft
-            userChoices.addNumber(DBKEY_TEST_Y_TARGET, 0.0);    // in ft
-            userChoices.addNumber(DBKEY_TEST_TURN_TARGET, 0.0); // in degrees
-            userChoices.addNumber(DBKEY_TEST_DRIVE_POWER, 0.5);
-            userChoices.addNumber(DBKEY_TEST_TURN_POWER, 0.5);
-            userChoices.addNumber(DBKEY_TEST_DRIVE_TIME, 0.0);  // in seconds
-            userChoices.addNumber(DBKEY_TEST_X_KP, 0.0);
-            userChoices.addNumber(DBKEY_TEST_X_KI, 0.0);
-            userChoices.addNumber(DBKEY_TEST_X_KD, 0.0);
-            userChoices.addNumber(DBKEY_TEST_X_KF, 0.0);
-            userChoices.addNumber(DBKEY_TEST_X_IZONE, 0.0);
-            userChoices.addNumber(DBKEY_TEST_Y_KP, 0.0);
-            userChoices.addNumber(DBKEY_TEST_Y_KI, 0.0);
-            userChoices.addNumber(DBKEY_TEST_Y_KD, 0.0);
-            userChoices.addNumber(DBKEY_TEST_Y_KF, 0.0);
-            userChoices.addNumber(DBKEY_TEST_Y_IZONE, 0.0);
-            userChoices.addNumber(DBKEY_TEST_TURN_KP, 0.0);
-            userChoices.addNumber(DBKEY_TEST_TURN_KI, 0.0);
-            userChoices.addNumber(DBKEY_TEST_TURN_KD, 0.0);
-            userChoices.addNumber(DBKEY_TEST_TURN_KF, 0.0);
-            userChoices.addNumber(DBKEY_TEST_TURN_IZONE, 0.0);
-            userChoices.addNumber(DBKEY_TEST_MAX_VELOCITY, 0.0);
-            userChoices.addNumber(DBKEY_TEST_MAX_ACCELERATION, 0.0);
-            userChoices.addNumber(DBKEY_TEST_MAX_DECELERATION, 0.0);
-            userChoices.addNumber(DBKEY_TEST_ROBOT_VEL, 0.0);
-            userChoices.addNumber(DBKEY_TEST_TARGET_VEL, 0.0);
-            userChoices.addNumber(DBKEY_TEST_ROBOT_POS, 0.0);
-            userChoices.addNumber(DBKEY_TEST_TARGET_POS, 0.0);
+            userChoices.addChoiceMenu(Dashboard.DBKEY_TEST_TESTS, testMenu);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_X_TARGET, 0.0);    // in ft
+            userChoices.addNumber(Dashboard.DBKEY_TEST_Y_TARGET, 0.0);    // in ft
+            userChoices.addNumber(Dashboard.DBKEY_TEST_TURN_TARGET, 0.0); // in degrees
+            userChoices.addNumber(Dashboard.DBKEY_TEST_DRIVE_POWER, 0.5);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_TURN_POWER, 0.5);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_DRIVE_TIME, 0.0);  // in seconds
+            userChoices.addNumber(Dashboard.DBKEY_TEST_X_KP, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_X_KI, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_X_KD, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_X_KF, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_X_IZONE, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_Y_KP, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_Y_KI, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_Y_KD, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_Y_KF, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_Y_IZONE, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_TURN_KP, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_TURN_KI, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_TURN_KD, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_TURN_KF, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_TURN_IZONE, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_MAX_VELOCITY, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_MAX_ACCELERATION, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_MAX_DECELERATION, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_ROBOT_VEL, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_TARGET_VEL, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_ROBOT_POS, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_TARGET_POS, 0.0);
 
-            userChoices.addString(DBKEY_TEST_SUBSYSTEM_NAME, RobotParams.Preferences.testSubsystemName);
-            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_KP, 0.0);
-            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_KI, 0.0);
-            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_KD, 0.0);
-            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_KF, 0.0);
-            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_IZONE, 0.0);
-            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_TOLERANCE, 0.0);
-            userChoices.addBoolean(DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, false);
-            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
-            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_KS, 0.0);
-            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_KV, 0.0);
-            userChoices.addNumber(DBKEY_TEST_SUBSYSTEM_KA, 0.0);
+            userChoices.addString(Dashboard.DBKEY_TEST_SUBSYSTEM_NAME, RobotParams.Preferences.testSubsystemName);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KP, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KI, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KD, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KF, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_IZONE, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TOLERANCE, 0.0);
+            userChoices.addBoolean(Dashboard.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, false);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KS, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KV, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KA, 0.0);
         }   //TestChoices
 
         //
@@ -219,100 +170,100 @@ public class FrcTest extends FrcTeleOp
 
         public double getXTarget()
         {
-            return userChoices.getUserNumber(DBKEY_TEST_X_TARGET);
+            return userChoices.getUserNumber(Dashboard.DBKEY_TEST_X_TARGET);
         }   //getXTarget
 
         public double getYTarget()
         {
-            return userChoices.getUserNumber(DBKEY_TEST_Y_TARGET);
+            return userChoices.getUserNumber(Dashboard.DBKEY_TEST_Y_TARGET);
         }   //getYTarget
 
         public double getTurnTarget()
         {
-            return userChoices.getUserNumber(DBKEY_TEST_TURN_TARGET);
+            return userChoices.getUserNumber(Dashboard.DBKEY_TEST_TURN_TARGET);
         }   //getTurnTarget
 
         public double getDrivePower()
         {
-            return userChoices.getUserNumber(DBKEY_TEST_DRIVE_POWER);
+            return userChoices.getUserNumber(Dashboard.DBKEY_TEST_DRIVE_POWER);
         }   //getDrivePower
 
         public double getTurnPower()
         {
-            return userChoices.getUserNumber(DBKEY_TEST_TURN_POWER);
+            return userChoices.getUserNumber(Dashboard.DBKEY_TEST_TURN_POWER);
         }   //getTurnPower
 
         public double getDriveTime()
         {
-            return userChoices.getUserNumber(DBKEY_TEST_DRIVE_TIME);
+            return userChoices.getUserNumber(Dashboard.DBKEY_TEST_DRIVE_TIME);
         }   //getDriveTime
 
         public TrcPidController.PidCoefficients getXPidCoefficients()
         {
             return new TrcPidController.PidCoefficients(
-                userChoices.getUserNumber(DBKEY_TEST_X_KP),
-                userChoices.getUserNumber(DBKEY_TEST_X_KI),
-                userChoices.getUserNumber(DBKEY_TEST_X_KD),
-                userChoices.getUserNumber(DBKEY_TEST_X_KF),
-                userChoices.getUserNumber(DBKEY_TEST_X_IZONE));
+                userChoices.getUserNumber(Dashboard.DBKEY_TEST_X_KP),
+                userChoices.getUserNumber(Dashboard.DBKEY_TEST_X_KI),
+                userChoices.getUserNumber(Dashboard.DBKEY_TEST_X_KD),
+                userChoices.getUserNumber(Dashboard.DBKEY_TEST_X_KF),
+                userChoices.getUserNumber(Dashboard.DBKEY_TEST_X_IZONE));
         }   //getXPidCoefficients
 
         public TrcPidController.PidCoefficients getYPidCoefficients()
         {
             return new TrcPidController.PidCoefficients(
-                userChoices.getUserNumber(DBKEY_TEST_Y_KP),
-                userChoices.getUserNumber(DBKEY_TEST_Y_KI),
-                userChoices.getUserNumber(DBKEY_TEST_Y_KD),
-                userChoices.getUserNumber(DBKEY_TEST_Y_KF),
-                userChoices.getUserNumber(DBKEY_TEST_Y_IZONE));
+                userChoices.getUserNumber(Dashboard.DBKEY_TEST_Y_KP),
+                userChoices.getUserNumber(Dashboard.DBKEY_TEST_Y_KI),
+                userChoices.getUserNumber(Dashboard.DBKEY_TEST_Y_KD),
+                userChoices.getUserNumber(Dashboard.DBKEY_TEST_Y_KF),
+                userChoices.getUserNumber(Dashboard.DBKEY_TEST_Y_IZONE));
         }   //getYPidCoefficients
 
         public TrcPidController.PidCoefficients getTurnPidCoefficients()
         {
             return new TrcPidController.PidCoefficients(
-                userChoices.getUserNumber(DBKEY_TEST_TURN_KP),
-                userChoices.getUserNumber(DBKEY_TEST_TURN_KI),
-                userChoices.getUserNumber(DBKEY_TEST_TURN_KD),
-                userChoices.getUserNumber(DBKEY_TEST_TURN_KF),
-                userChoices.getUserNumber(DBKEY_TEST_TURN_IZONE));
+                userChoices.getUserNumber(Dashboard.DBKEY_TEST_TURN_KP),
+                userChoices.getUserNumber(Dashboard.DBKEY_TEST_TURN_KI),
+                userChoices.getUserNumber(Dashboard.DBKEY_TEST_TURN_KD),
+                userChoices.getUserNumber(Dashboard.DBKEY_TEST_TURN_KF),
+                userChoices.getUserNumber(Dashboard.DBKEY_TEST_TURN_IZONE));
         }   //getYPidCoefficients
 
         public double getMaxVelocity()
         {
-            return userChoices.getUserNumber(DBKEY_TEST_MAX_VELOCITY);
+            return userChoices.getUserNumber(Dashboard.DBKEY_TEST_MAX_VELOCITY);
         }   //getMaxVelocity
 
         public double getMaxAcceleration()
         {
-            return userChoices.getUserNumber(DBKEY_TEST_MAX_ACCELERATION);
+            return userChoices.getUserNumber(Dashboard.DBKEY_TEST_MAX_ACCELERATION);
         }   //getMaxAcceleration
 
         public double getMaxDeceleration()
         {
-            return userChoices.getUserNumber(DBKEY_TEST_MAX_ACCELERATION);
+            return userChoices.getUserNumber(Dashboard.DBKEY_TEST_MAX_ACCELERATION);
         }   //getMaxDeceleration
 
         public String getSubsystemName()
         {
-            return userChoices.getUserString(DBKEY_TEST_SUBSYSTEM_NAME);
+            return userChoices.getUserString(Dashboard.DBKEY_TEST_SUBSYSTEM_NAME);
         }   //getSubsystemName
 
         public TrcPidController.PidCoefficients getSubsystemPidCoefficients()
         {
             return new TrcPidController.PidCoefficients(
-                userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_KP),
-                userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_KI),
-                userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_KD),
-                userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_KF),
-                userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_IZONE));
+                userChoices.getUserNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KP),
+                userChoices.getUserNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KI),
+                userChoices.getUserNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KD),
+                userChoices.getUserNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KF),
+                userChoices.getUserNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_IZONE));
         }   //getSubsystemPidCoefficients
 
         public TrcPidController.FFCoefficients getSubsystemFFCoefficients()
         {
             return new TrcPidController.FFCoefficients(
-                userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_KS),
-                userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_KV),
-                userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_KA));
+                userChoices.getUserNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KS),
+                userChoices.getUserNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KV),
+                userChoices.getUserNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KA));
         }   //getSubsystemFFCoefficients
 
         public TrcMotor.PidParams getSubsystemPidParameters()
@@ -321,13 +272,13 @@ public class FrcTest extends FrcTeleOp
                         .setPidCoefficients(getSubsystemPidCoefficients())
                         .setFFCoefficients(getSubsystemFFCoefficients())
                         .setPidControlParams(
-                            userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_TOLERANCE),
-                            userChoices.getUserBoolean(DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID));
+                            userChoices.getUserNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TOLERANCE),
+                            userChoices.getUserBoolean(Dashboard.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID));
         }   //getSubsystemPidParameters
 
         public double getSubsystemTargetParam()
         {
-            return userChoices.getUserNumber(DBKEY_TEST_SUBSYSTEM_TARGET_PARAM);
+            return userChoices.getUserNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM);
         }   //getSubsystemTargetParam
 
         @Override
@@ -615,13 +566,13 @@ public class FrcTest extends FrcTeleOp
                 if (robot.robotBase != null && robot.robotBase.purePursuitDrive != null)
                 {
                     robot.dashboard.putNumber(
-                        DBKEY_TEST_ROBOT_VEL, robot.robotBase.purePursuitDrive.getPathRobotVelocity());
+                        Dashboard.DBKEY_TEST_ROBOT_VEL, robot.robotBase.purePursuitDrive.getPathRobotVelocity());
                     robot.dashboard.putNumber(
-                        DBKEY_TEST_TARGET_VEL, robot.robotBase.purePursuitDrive.getPathTargetVelocity());
+                        Dashboard.DBKEY_TEST_TARGET_VEL, robot.robotBase.purePursuitDrive.getPathTargetVelocity());
                     robot.dashboard.putNumber(
-                        DBKEY_TEST_ROBOT_POS, robot.robotBase.purePursuitDrive.getPathRelativePosition());
+                        Dashboard.DBKEY_TEST_ROBOT_POS, robot.robotBase.purePursuitDrive.getPathRelativePosition());
                     robot.dashboard.putNumber(
-                        DBKEY_TEST_TARGET_POS, robot.robotBase.purePursuitDrive.getPathPositionTarget());
+                        Dashboard.DBKEY_TEST_TARGET_POS, robot.robotBase.purePursuitDrive.getPathPositionTarget());
                 }
                 break;
     
@@ -710,7 +661,7 @@ public class FrcTest extends FrcTeleOp
                     if (robot.vision != null)
                     {
                         robot.dashboard.putNumber(
-                            Vision.DBKEY_DISTANCE_TO_TARGET, robot.vision.getDistanceToTarget());
+                            Dashboard.DBKEY_ROBOT_DISTANCE_TO_TARGET, robot.getRobotDistanceToTarget());
                     }
                     break;
 
@@ -956,17 +907,19 @@ public class FrcTest extends FrcTeleOp
                         if (robot.leftShooter != null)
                         {
                             robot.leftShooter.setShooterMotorRPM(
-                                robot.dashboard.getNumber(Shooter.DBKEY_LSHOOTER_TARGET_RPM, 0.0),
+                                robot.dashboard.getNumber(Dashboard.DBKEY_LSHOOTER_TARGET_RPM, 0.0),
                                 null);
-                            robot.leftShooter.setTiltAngle(robot.dashboard.getNumber(Shooter.DBKEY_LTILT_TARGET, 0.0));
+                            robot.leftShooter.setTiltAngle(
+                                robot.dashboard.getNumber(Dashboard.DBKEY_LTILT_TARGET, 0.0));
                         }
 
                         if (robot.rightShooter != null)
                         {
                             robot.rightShooter.setShooterMotorRPM(
-                                robot.dashboard.getNumber(Shooter.DBKEY_RSHOOTER_TARGET_RPM, 0.0),
+                                robot.dashboard.getNumber(Dashboard.DBKEY_RSHOOTER_TARGET_RPM, 0.0),
                                 null);
-                            robot.rightShooter.setTiltAngle(robot.dashboard.getNumber(Shooter.DBKEY_RTILT_TARGET, 0.0));
+                            robot.rightShooter.setTiltAngle(
+                                robot.dashboard.getNumber(Dashboard.DBKEY_RTILT_TARGET, 0.0));
                         }
                     }
 
