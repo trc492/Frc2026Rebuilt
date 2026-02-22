@@ -256,9 +256,6 @@ public class Robot extends FrcRobot
                 autoScoreTask = RobotParams.Preferences.useAutoScoreTask? new TaskAutoScore(this): null;
                 autoPickupTask = RobotParams.Preferences.useAutoPickupTask? new TaskAutoPickup(this): null;
                 autoClimbTask = RobotParams.Preferences.useAutoClimbTask? new TaskAutoClimb(this): null;
-
-                // Zero calibrate all subsystems only once in robot initialization.
-                zeroCalibrate(null, null);
             }
         }
 

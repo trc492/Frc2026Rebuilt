@@ -218,7 +218,7 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_STALL_MIN_POWER       = Math.abs(TURRET_ZERO_CAL_POWER)* 0.9;
         public static final double TURRET_STALL_TOLERANCE       = 2.0;      // in degrees
         public static final double TURRET_STALL_TIMEOUT         = 0.1;
-        public static final double TURRET_STALL_RESET_TIMEOUT   = 0.0;
+        public static final double TURRET_STALL_RESET_TIMEOUT   = 0.5;
 
         public static final double CAM_ROTATE_RADIUS            = 5.800896; // inches from turret center
         public static final double LTURRET_X_OFFSET             = -7.375;   // inches from robot center
