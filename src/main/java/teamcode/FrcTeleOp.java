@@ -389,7 +389,8 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                                 trackingMode = TrackingMode.Disabled;
                                 break;
                         }
-                        robot.shooterSubsystem.setGoalTrackingEnabled(TrackingMode.AllianceHub);
+                        robot.shooterSubsystem.setGoalTrackingEnabled(trackingMode);
+                        robot.globalTracer.traceInfo(moduleName, "Set tracking mode to " + trackingMode.toString());
                     }
                 }
                 break;
