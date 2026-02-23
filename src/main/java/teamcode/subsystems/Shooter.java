@@ -63,21 +63,18 @@ public class Shooter extends TrcSubsystem
 
     public static final TrcLookupTable.Region[] shootRegions =
     {
-        // Region 1: RPM 26°, y = 15.42211x + 3116.30051
-        new TrcLookupTable.Region(1500.0, new double[][] {null, null, null}),
+        new TrcLookupTable.Region(0.0, new double[][] {null, null, null})
     };
 
     public static final TrcLookupTable shootParamsTable = new TrcLookupTable()
-        //        name,                     distance,       region,                             ShooterVel, Hood Angle, TOF 
-        // Region 1: tilt 26°
-        .addEntry(null,                     74.95,       shootRegions[0],    4500.0, 23.0, (3.0-2.16))
-
-        .addEntry(null,                     165.0,      shootRegions[0],    6400.0, 34.0, (9.94-8.87)) // TODO: TOF TBD
-        .addEntry(null,                     171.0,      shootRegions[0],    6300.0, 35.0, (9.94-8.87))
-        .addEntry(null,                     178.0,      shootRegions[0],    6300.0, 35.0, (5.69-4.62))
-        .addEntry(null,                     184.0,      shootRegions[0],    6500.0, 38.0, (5.93-4.92))
-        .addEntry(null,                     190.0,      shootRegions[0],    6400.0, 35.0, (13.70-12.57))
-        .addEntry(null,                     196.0,      shootRegions[0],    6400.0, 35.0, (8.14-7.04));
+        //        name,                 distance,   region,             ShooterVel, HoodAngle,  Tof
+        .addEntry(null,                 74.95,      shootRegions[0],    4500.0,     23.0,       0.84)
+        .addEntry(null,                 165.0,      shootRegions[0],    6400.0,     34.0,       1.07) // TODO: TOF TBD
+        .addEntry(null,                 171.0,      shootRegions[0],    6300.0,     35.0,       1.07)
+        .addEntry(null,                 178.0,      shootRegions[0],    6300.0,     35.0,       1.07)
+        .addEntry(null,                 184.0,      shootRegions[0],    6500.0,     38.0,       1.01)
+        .addEntry(null,                 190.0,      shootRegions[0],    6400.0,     35.0,       1.13)
+        .addEntry(null,                 196.0,      shootRegions[0],    6400.0,     35.0,       1.1);
 
     public static final class Params
     {
@@ -110,7 +107,7 @@ public class Shooter extends TrcSubsystem
         public static final double LSHOOTER_MOTOR_PID_KI        = 0.0;
         public static final double LSHOOTER_MOTOR_PID_KD        = 0.0;
         public static final double LSHOOTER_MOTOR_PID_KF        = 0.0;
-        public static final double LSHOOTER_MOTOR_PID_IZONE     = 0.0;      // in RPS
+        public static final double LSHOOTER_MOTOR_PID_IZONE     = 0.0;          // in RPS
         public static final double LSHOOTER_MOTOR_FF_KS         = 0.297;
         public static final double LSHOOTER_MOTOR_FF_KV         = 0.1;
         public static final double LSHOOTER_MOTOR_FF_KA         = 0.0;
@@ -125,7 +122,7 @@ public class Shooter extends TrcSubsystem
         public static final double RSHOOTER_MOTOR_PID_KI        = 0.0;
         public static final double RSHOOTER_MOTOR_PID_KD        = 0.0;
         public static final double RSHOOTER_MOTOR_PID_KF        = 0.0;
-        public static final double RSHOOTER_MOTOR_PID_IZONE     = 0.0;      // in RPS
+        public static final double RSHOOTER_MOTOR_PID_IZONE     = 0.0;          // in RPS
         public static final double RSHOOTER_MOTOR_FF_KS         = 0.297;
         public static final double RSHOOTER_MOTOR_FF_KV         = 0.1;
         public static final double RSHOOTER_MOTOR_FF_KA         = 0.0;
@@ -186,22 +183,22 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_POS_OFFSET            = 182.25;//177.758282;
         public static final double TURRET_MIN_POS               = -171.0;   
         public static final double TURRET_MAX_POS               = 180.0;
-        public static final double TURRET_CONFLICT_ZONE_LOW     = 60.0;     //TODO: tune
-        public static final double TURRET_CONFLICT_ZONE_HIGH    = 120.0;    //TODO: tune
+        public static final double TURRET_CONFLICT_ZONE_LOW     = 60.0;         //TODO: tune
+        public static final double TURRET_CONFLICT_ZONE_HIGH    = 120.0;        //TODO: tune
         public static final double TURRET_POS_PRESET_TOLERANCE  = 2.0;
         public static final double[] TURRET_POS_PRESETS         =
             {TURRET_MIN_POS, -135.0, -90.0, -45.0, 0.0, 45.0, 90.0, 135.0, TURRET_MAX_POS};
         public static final double TURRET_ZERO_CAL_POWER        = 0.1;
         public static final double TURRET_STALL_MIN_POWER       = Math.abs(TURRET_ZERO_CAL_POWER)* 0.9;
-        public static final double TURRET_STALL_TOLERANCE       = 2.0;      // in degrees
+        public static final double TURRET_STALL_TOLERANCE       = 2.0;          // in degrees
         public static final double TURRET_STALL_TIMEOUT         = 0.1;
         public static final double TURRET_STALL_RESET_TIMEOUT   = 0.5;
 
-        public static final double CAM_ROTATE_RADIUS            = 5.800896; // inches from turret center
-        public static final double LTURRET_X_OFFSET             = -7.375;   // inches from robot center
-        public static final double LTURRET_Y_OFFSET             = -6.0;     // inches from robot center
-        public static final double RTURRET_X_OFFSET             = 7.376;    // inches from robot center
-        public static final double RTURRET_Y_OFFSET             = -6.0;     // inches from robot center
+        public static final double CAM_ROTATE_RADIUS            = 5.800896;     // inches from turret center
+        public static final double LTURRET_X_OFFSET             = -7.375;       // inches from robot center
+        public static final double LTURRET_Y_OFFSET             = -6.0;         // inches from robot center
+        public static final double RTURRET_X_OFFSET             = 7.376;        // inches from robot center
+        public static final double RTURRET_Y_OFFSET             = -6.0;         // inches from robot center
 
         // Common Transfer Motor Characteristics
         public static final MotorType TRANSFER_MOTOR_TYPE       = MotorType.CanSparkMax;
