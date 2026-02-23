@@ -707,7 +707,14 @@ public class Shooter extends TrcSubsystem
     {
         synchronized (goalTrackingState)
         {
-            return goalTrackingState.goalFieldPose;
+            TrcPose2D goalFieldPose = goalTrackingState.goalFieldPose;
+            if (goalFieldPose == null)
+            {
+                // Goal Tracking is not ON, just use the alliance's Hub pose.
+                Alliance alliance = FrcAuto.autoChoices.getAlliance();
+                goalFieldPose = robot.adjustPoseByAlliance(RobotParams.Game.BLUE_HUB_POSE, alliance);
+            }
+            return goalFieldPose;
         }
     }   //getGoalFieldPose
 
