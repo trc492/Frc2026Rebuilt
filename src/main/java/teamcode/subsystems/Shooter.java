@@ -70,14 +70,14 @@ public class Shooter extends TrcSubsystem
     public static final TrcLookupTable shootParamsTable = new TrcLookupTable()
         //        name,                     distance,       region,                             ShooterVel, Hood Angle, TOF 
         // Region 1: tilt 26°
-        .addEntry(null,                     74.95,       shootRegions[0],    4500.0, 23.0, (7.6-4.29))
+        .addEntry(null,                     74.95,       shootRegions[0],    4500.0, 23.0, (3.0-2.16))
 
         .addEntry(null,                     165.0,      shootRegions[0],    6400.0, 34.0, (9.94-8.87)) // TODO: TOF TBD
         .addEntry(null,                     171.0,      shootRegions[0],    6300.0, 35.0, (9.94-8.87))
         .addEntry(null,                     178.0,      shootRegions[0],    6300.0, 35.0, (5.69-4.62))
         .addEntry(null,                     184.0,      shootRegions[0],    6500.0, 38.0, (5.93-4.92))
         .addEntry(null,                     190.0,      shootRegions[0],    6400.0, 35.0, (13.70-12.57))
-        .addEntry(null,                     196.0,      shootRegions[0],    6400.0, 35.0, (14.7-10.18));
+        .addEntry(null,                     196.0,      shootRegions[0],    6400.0, 35.0, (8.14-7.04));
 
     public static final class Params
     {
