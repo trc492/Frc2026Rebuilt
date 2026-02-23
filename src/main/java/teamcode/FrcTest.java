@@ -157,6 +157,11 @@ public class FrcTest extends FrcTeleOp
             userChoices.addNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KS, 0.0);
             userChoices.addNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KV, 0.0);
             userChoices.addNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KA, 0.0);
+
+            userChoices.addNumber(Dashboard.DBKEY_TEST_RSHOOTER_TARGET_RPM, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_LSHOOTER_TARGET_RPM, 0.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_RTILT_TARGET, 17.0);
+            userChoices.addNumber(Dashboard.DBKEY_TEST_LTILT_TARGET, 17.0);
         }   //TestChoices
 
         //
@@ -280,6 +285,27 @@ public class FrcTest extends FrcTeleOp
         {
             return userChoices.getUserNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM);
         }   //getSubsystemTargetParam
+
+        public double getRShooterTargetRPM()
+        {
+            return userChoices.getUserNumber(Dashboard.DBKEY_TEST_RSHOOTER_TARGET_RPM);
+        }
+
+        public double getLShooterTargetRPM()
+        {
+            return userChoices.getUserNumber(Dashboard.DBKEY_TEST_LSHOOTER_TARGET_RPM);
+        }
+
+        public double getRTiltTarget()
+        {
+            return userChoices.getUserNumber(Dashboard.DBKEY_TEST_RTILT_TARGET);
+        }
+
+
+        public double getLTiltTarget()
+        {
+            return userChoices.getUserNumber(Dashboard.DBKEY_TEST_LTILT_TARGET);
+        }
 
         @Override
         public String toString()
@@ -906,20 +932,25 @@ public class FrcTest extends FrcTeleOp
                     {
                         if (robot.leftShooter != null)
                         {
+                            // robot.leftShooter.setShooterMotorRPM(
+                            //     robot.dashboard.getNumber(Dashboard.DBKEY_LSHOOTER_TARGET_RPM, 10.0),
+                            //     null);
+                            // robot.leftShooter.setTiltAngle(
+                            //     robot.dashboard.getNumber(Dashboard.DBKEY_LTILT_TARGET, 0.0));
                             robot.leftShooter.setShooterMotorRPM(
-                                robot.dashboard.getNumber(Dashboard.DBKEY_LSHOOTER_TARGET_RPM, 0.0),
+                                testChoices.getLShooterTargetRPM(),
                                 null);
                             robot.leftShooter.setTiltAngle(
-                                robot.dashboard.getNumber(Dashboard.DBKEY_LTILT_TARGET, 0.0));
+                               testChoices.getLTiltTarget());
                         }
 
                         if (robot.rightShooter != null)
                         {
                             robot.rightShooter.setShooterMotorRPM(
-                                robot.dashboard.getNumber(Dashboard.DBKEY_RSHOOTER_TARGET_RPM, 0.0),
+                                testChoices.getRShooterTargetRPM(),
                                 null);
                             robot.rightShooter.setTiltAngle(
-                                robot.dashboard.getNumber(Dashboard.DBKEY_RTILT_TARGET, 0.0));
+                                testChoices.getRTiltTarget());
                         }
                     }
 

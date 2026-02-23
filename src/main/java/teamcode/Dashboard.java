@@ -192,6 +192,12 @@ public class Dashboard
     public static final String DBKEY_TEST_ROBOT_POS                 = "Test/RobotPosition";
     public static final String DBKEY_TEST_TARGET_POS                = "Test/TargetPosition";
 
+    public static final String DBKEY_TEST_RSHOOTER_TARGET_RPM       = "Test/RShooterTargetRPM";
+    public static final String DBKEY_TEST_LSHOOTER_TARGET_RPM       = "Test/LShooterTargetRPM";
+
+    public static final String DBKEY_TEST_RTILT_TARGET              = "Test/RTiltTarget";
+    public static final String DBKEY_TEST_LTILT_TARGET              = "Test/LTiltTarget";
+
     private static FrcDashboard dashboard;
 
     /**

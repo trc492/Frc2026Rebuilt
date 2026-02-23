@@ -64,48 +64,25 @@ public class Shooter extends TrcSubsystem
     public static final TrcLookupTable.Region[] shootRegions =
     {
         // Region 1: RPM 26°, y = 15.42211x + 3116.30051
-        new TrcLookupTable.Region(1500.0, new double[][] {null, null}),
-        // Region 2: tilt 30°, y = 5.71429x + 3398.57143
-        new TrcLookupTable.Region(2000.0, new double[][] {null, null}),
-        // Region 3: tilt 33°, y = 19.71941x + 2858.83725
-        new TrcLookupTable.Region(2500.0, new double[][] {null, null}),
-        // Region 4: tilt 38°, y = 16.3593x + 2943.18711
-        new TrcLookupTable.Region(3000, new double[][] {null, null}),
-        // Region 5: tilt 45°, y = 14.80364x + 3288.15202
-        new TrcLookupTable.Region(3500, new double[][] {null, null})
+        new TrcLookupTable.Region(1500.0, new double[][] {null, null, null}),
     };
 
     public static final TrcLookupTable shootParamsTable = new TrcLookupTable()
-        //        name,                     distance,   region,             shooterVel
+        //        name,                     distance,       region,                             ShooterVel, Hood Angle, TOF 
         // Region 1: tilt 26°
-        .addEntry(null,                     25.7,       shootRegions[0],    3500.0, 3500.0)
-        .addEntry(null,                     29.9,       shootRegions[0],    3600.0, 3600.0)
-        .addEntry(null,                     35.25,      shootRegions[0],    3650.0, 3650.0)
-        // Region 2: tilt 30°
-        .addEntry(HUB_SHOOT_POINT,    35.2500001, shootRegions[1],    3600.0, 3600.0)
-        .addEntry(null,                     44.0,       shootRegions[1],    3650.0, 3650.0)
-        // Region 3: tilt 33°
-        .addEntry(null,                     44.0000001, shootRegions[2],    3700.0, 3700.0)
-        .addEntry(null,                     53.0,       shootRegions[2],    3950.0, 3950.0)
-        .addEntry(null,                     65.2,       shootRegions[2],    4125.0, 4125.0)
-        // Region 4: tilt 38°
-        .addEntry(null,                     65.2000001, shootRegions[3],    4025.0, 4025.0)
-        .addEntry(null,                     85.4,       shootRegions[3],    4300.0, 4300.0)
-        .addEntry(null,                     91.1,       shootRegions[3],    4433.51934, 4433.51934)
-        // Region 5: tilt 45°
-        .addEntry(null,                     91.1000001, shootRegions[4],    4636.76363, 4636.76363)
-        .addEntry(null,                     100.8,      shootRegions[4],    4780.35893, 4780.35893)
-        .addEntry(TOWER_SHOOT_POINT,     110.7,      shootRegions[4],    4926.91497, 4926.91497)
-        .addEntry(null,                     123.8,      shootRegions[4],    5120.84265, 5120.84265)
-        .addEntry(null,                     133.5,      shootRegions[4],    5264.43796, 5264.43796)
-        .addEntry(null,                     144.3,      shootRegions[4],    5424.31727, 5424.31727)
-        .addEntry(null,                     153.2,      shootRegions[4],    5556.06967, 5556.06967)
-        .addEntry(null,                     172.4,      shootRegions[4],    5840.29956, 5840.29956);
+        .addEntry(null,                     74.95,       shootRegions[0],    4500.0, 23.0, (7.6-4.29))
+
+        .addEntry(null,                     165.0,      shootRegions[0],    6400.0, 34.0, (9.94-8.87)) // TODO: TOF TBD
+        .addEntry(null,                     171.0,      shootRegions[0],    6300.0, 35.0, (9.94-8.87))
+        .addEntry(null,                     178.0,      shootRegions[0],    6300.0, 35.0, (5.69-4.62))
+        .addEntry(null,                     184.0,      shootRegions[0],    6500.0, 38.0, (5.93-4.92))
+        .addEntry(null,                     190.0,      shootRegions[0],    6400.0, 35.0, (13.70-12.57))
+        .addEntry(null,                     196.0,      shootRegions[0],    6400.0, 35.0, (14.7-10.18));
 
     public static final class Params
     {
         public static final String CANBUS_NAME                  = RobotParams.HwConfig.CANBUS_CANIVORE;
-        public static final boolean SHOOTER_HAS_TILT            = false;
+        public static final boolean SHOOTER_HAS_TILT            = true;
         public static final boolean SHOOTER_HAS_TRANSFER        = true;
         public static final boolean HAS_TURRET                  = true;
         public static final boolean HAS_FEEDER                  = true;
@@ -201,14 +178,14 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_MOTOR_PID_KD          = 0.0;  
         public static final double TURRET_MOTOR_PID_KF          = 0.0;  
         public static final double TURRET_MOTOR_PID_IZONE       = 0.0;
-        public static final double TURRET_MOTOR_GEAR_RATIO      = 0.9571438827*(20.0*130.0/40.0);  // Load/Motor   //TODO: verify
+        public static final double TURRET_MOTOR_GEAR_RATIO      = 0.9571438827*(20.0*130.0/40.0); //1.000362802*(20.0*130.0/40.0); // // Load/Motor   //TODO: verify
         public static final double TURRET_MOTOR_DEG_PER_COUNT   = 360.0/TURRET_MOTOR_GEAR_RATIO;
         public static final double TURRET_PID_TOLERANCE         = 1.0;
         public static final boolean TURRET_SOFTWARE_PID_ENABLED = false;
         public static final double TURRET_POWER_LIMIT           = 0.2; 
         public static final double TURRET_POS_OFFSET            = 182.25;//177.758282;
-        public static final double TURRET_MIN_POS               = -165.0;   
-        public static final double TURRET_MAX_POS               = 176.0;
+        public static final double TURRET_MIN_POS               = -171.0;   
+        public static final double TURRET_MAX_POS               = 180.0;
         public static final double TURRET_CONFLICT_ZONE_LOW     = 60.0;     //TODO: tune
         public static final double TURRET_CONFLICT_ZONE_HIGH    = 120.0;    //TODO: tune
         public static final double TURRET_POS_PRESET_TOLERANCE  = 2.0;
