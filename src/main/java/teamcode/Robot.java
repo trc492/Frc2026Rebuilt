@@ -674,16 +674,18 @@ public class Robot extends FrcRobot
         return success;
     }   //relocalizeRobotByAprilTag
 
-    public double getRobotDistanceToTarget()
+    /**
+     * This method returns the relative pose from the center point of the two shooters to the target.
+     *
+     * @return relative pose from center point of the two shooters to the target.
+     */
+    public TrcPose2D getShooterToTargetPose()
     {
-        Alliance alliance = FrcAuto.autoChoices.getAlliance();
         TrcPose2D robotFieldPose = robotBase.driveBase.getFieldPosition();
-        TrcPose2D targetFieldPose = adjustPoseByAlliance(RobotParams.Game.BLUE_HUB_POSE, alliance);
-        TrcPose2D targetPose = targetFieldPose.relativeTo(robotFieldPose);
-        double distance = Math.hypot(targetPose.x, targetPose.y);
-        dashboard.putNumber(Dashboard.DBKEY_ROBOT_DISTANCE_TO_TARGET, distance);
-        return distance;
-    }   //getRobotDistanceToTarget
+        TrcPose2D shooterFieldPose = robotFieldPose.addRelativePose(new TrcPose2D(0.0, -6.0, 0.0));
+        TrcPose2D targetPose = shooterSubsystem.getGoalFieldPose().relativeTo(shooterFieldPose);
+        return targetPose;
+    }   //getShooterDistanceToTarget
 
     // /**
     //  * This method re-localizes the robot with AprilTag vision reported info.

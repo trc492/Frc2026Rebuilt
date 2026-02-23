@@ -68,13 +68,13 @@ public class Shooter extends TrcSubsystem
 
     public static final TrcLookupTable shootParamsTable = new TrcLookupTable()
         //        name,                 distance,   region,             ShooterVel, HoodAngle,  Tof
-        .addEntry(null,                 74.95,      shootRegions[0],    4500.0,     23.0,       0.84)
-        .addEntry(null,                 165.0,      shootRegions[0],    6400.0,     34.0,       1.07) // TODO: TOF TBD
-        .addEntry(null,                 171.0,      shootRegions[0],    6300.0,     35.0,       1.07)
-        .addEntry(null,                 178.0,      shootRegions[0],    6300.0,     35.0,       1.07)
-        .addEntry(null,                 184.0,      shootRegions[0],    6500.0,     38.0,       1.01)
-        .addEntry(null,                 190.0,      shootRegions[0],    6400.0,     35.0,       1.13)
-        .addEntry(null,                 196.0,      shootRegions[0],    6400.0,     35.0,       1.1);
+        .addEntry(null,                 80.95,      shootRegions[0],    4500.0,     23.0,       0.84)
+        .addEntry(null,                 171.0,      shootRegions[0],    6400.0,     34.0,       1.07) // TODO: TOF TBD
+        .addEntry(null,                 177.0,      shootRegions[0],    6300.0,     35.0,       1.07)
+        .addEntry(null,                 184.0,      shootRegions[0],    6300.0,     35.0,       1.07)
+        .addEntry(null,                 190.0,      shootRegions[0],    6500.0,     38.0,       1.01)
+        .addEntry(null,                 196.0,      shootRegions[0],    6400.0,     35.0,       1.13)
+        .addEntry(null,                 202.0,      shootRegions[0],    6400.0,     35.0,       1.1);
 
     public static final class Params
     {
@@ -699,6 +699,19 @@ public class Shooter extends TrcSubsystem
     }   //getGoalTrackingMode
 
     /**
+     * This method returns the tracked goal field pose.
+     *
+     * @return goal field pose.
+     */
+    public TrcPose2D getGoalFieldPose()
+    {
+        synchronized (goalTrackingState)
+        {
+            return goalTrackingState.goalFieldPose;
+        }
+    }   //getGoalFieldPose
+
+    /**
      * This method enables/disables Goal Tracking.
      *
      * @param trackingMode specifies tracking mode, null to disable.
@@ -828,9 +841,7 @@ public class Shooter extends TrcSubsystem
             if (targetPose == null)
             {
                 // Get AimInfo by Oodometry.
-                TrcPose2D robotPose = robot.robotBase.driveBase.getFieldPosition();
-                // getLeftShooterAimInfo is called by GoalTracking, therefore goalFieldPose should not be null.
-                targetPose = goalTrackingState.goalFieldPose.relativeTo(robotPose);
+                targetPose = robot.getShooterToTargetPose();
                 shootParams = shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), useRegression);
                 double targetPanAngle = targetPose.angle % 360.0;
                 double absPanAngle = Math.abs(targetPanAngle);

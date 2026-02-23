@@ -686,8 +686,9 @@ public class FrcTest extends FrcTeleOp
                 case TUNE_SHOOT_TABLE:
                     if (robot.vision != null)
                     {
+                        TrcPose2D targetPose = robot.getShooterToTargetPose();
                         robot.dashboard.putNumber(
-                            Dashboard.DBKEY_ROBOT_DISTANCE_TO_TARGET, robot.getRobotDistanceToTarget());
+                            Dashboard.DBKEY_SHOOTER_DISTANCE_TO_TARGET, Math.hypot(targetPose.x, targetPose.y));
                     }
                     break;
 

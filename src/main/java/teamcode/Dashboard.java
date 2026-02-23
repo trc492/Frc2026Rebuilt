@@ -49,7 +49,7 @@ public class Dashboard
 
     // Vision.
     public static final String DBKEY_VISION_RELOCALIZE              = "Vision/Relocalize";
-    public static final String DBKEY_ROBOT_DISTANCE_TO_TARGET       = "Vision/DistanceToTarget";
+    public static final String DBKEY_SHOOTER_DISTANCE_TO_TARGET     = "Vision/DistanceToTarget";
 
     // Shooter.
     public static final String DBKEY_SHOOTER_SHOW_STATUS            = "Shooter/ShowStatus";
@@ -224,7 +224,7 @@ public class Dashboard
         dashboard.refreshKey(DBKEY_TURNPID_INFO, "");
         // Vision.
         dashboard.refreshKey(DBKEY_VISION_RELOCALIZE, RobotParams.Preferences.visionRelocalizeEnabled);
-        dashboard.refreshKey(DBKEY_ROBOT_DISTANCE_TO_TARGET, 0.0);
+        dashboard.refreshKey(DBKEY_SHOOTER_DISTANCE_TO_TARGET, 0.0);
         // Shooter.
         dashboard.refreshKey(DBKEY_SHOOTER_SHOW_STATUS, RobotParams.Preferences.showShooterStatus);
         dashboard.refreshKey(DBKEY_SHOOTER_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs);
