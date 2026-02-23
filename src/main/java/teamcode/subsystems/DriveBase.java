@@ -452,7 +452,7 @@ public class DriveBase extends TrcSubsystem
                                 FeedbackSensorSourceValue.FusedCANcoder: FeedbackSensorSourceValue.SyncCANcoder,
                             cancoder.getDeviceID(), swerveInfo.steerGearRatio, 1.0, true);
                         // CTRE expects CCW+ but we are CW+, invert steering to correct it.
-                        //swerveBase.swerveModules[i].setSteerInverted(true);
+                        swerveBase.swerveModules[i].setSteerInverted(true);
                     }
                 }
             }
