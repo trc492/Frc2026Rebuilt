@@ -241,7 +241,8 @@ public class Shooter extends TrcSubsystem
         TrackingMode trackingMode = TrackingMode.Disabled;
         TrcPose2D goalFieldPose = null;
         AimInfo rightShooterAimInfo = null;
-        TrcTriggerThresholdZones halfFieldTrigger = null;
+        TrcTriggerThresholdZones fieldLengthTrigger = null;
+        TrcTriggerThresholdZones fieldWidthTrigger = null;
     }   //class GoalTrackingState
 
     private static class ShooterContext
@@ -496,9 +497,14 @@ public class Shooter extends TrcSubsystem
         {
             if (robot.robotBase != null)
             {
-                goalTrackingState.halfFieldTrigger = new TrcTriggerThresholdZones(
-                    instanceName + "HalfFieldTrigger", () -> robot.robotBase.driveBase.getXPosition(),
-                    RobotParams.Game.fieldWidth / 2.0);
+                goalTrackingState.fieldLengthTrigger = new TrcTriggerThresholdZones(
+                    instanceName + "fieldLengthTrigger", () -> robot.robotBase.driveBase.getYPosition(),
+                    RobotParams.Game.fieldLengthTriggerPoints);
+                goalTrackingState.fieldLengthTrigger.enableTrigger(TriggerMode.OnBoth, this::fieldTriggerCallback);
+                goalTrackingState.fieldWidthTrigger = new TrcTriggerThresholdZones(
+                    instanceName + "fieldWidthTrigger", () -> robot.robotBase.driveBase.getXPosition(),
+                    RobotParams.Game.fieldWidthTriggerPoints);
+                goalTrackingState.fieldWidthTrigger.enableTrigger(TriggerMode.OnBoth, this::fieldTriggerCallback);
             }
         }
     }   //Shooter
@@ -652,6 +658,24 @@ public class Shooter extends TrcSubsystem
     }   //getRightTransferSensorState
 
     /**
+     * This method is called when the robot crosses the field length/width zones.
+     *
+     * @param context specifies the trigger zone info.
+     * @param canceled specifies true if the trigger is canceled.
+     */
+    private void fieldTriggerCallback(Object context, boolean canceled)
+    {
+        if (!canceled)
+        {
+            synchronized (goalTrackingState)
+            {
+                // We crossed field zones, let's re-evaluate tracking modes.
+                setGoalTrackingEnabled(isGoalTrackingEnabled());
+            }
+        }
+    }   //fieldTriggerCallback
+
+    /**
      * This method checks if Goal Tracking is enabled.
      *
      * @return true if Goal Tracking is enabled, false if disabled.
@@ -682,83 +706,67 @@ public class Shooter extends TrcSubsystem
      *
      * @param trackingMode specifies tracking mode, null to disable.
      */
-    public void setGoalTrackingEnabled(TrackingMode trackingMode)
+    public void setGoalTrackingEnabled(boolean enabled)
     {
         synchronized (goalTrackingState)
         {
-            if (trackingMode != goalTrackingState.trackingMode)
+            if (enabled)
             {
-                // Changing TrackingMode.
-                if (trackingMode != null)
-                {
-                    // Enabling GoalTracking or changing tracking mode.
-                    Alliance alliance = FrcAuto.autoChoices.getAlliance();
+                // We will run this code even if GoalTracking was already enabled because this can be called by the
+                // fieldTriggers (i.e. crossing some field zones). In that case, we need to run this code again to
+                // re-evaluate the GoalTracking mode.
+                Alliance alliance = FrcAuto.autoChoices.getAlliance();
+                int fieldLengthZone = goalTrackingState.fieldLengthTrigger.getCurrentZone();
+                int fieldWidthZone = goalTrackingState.fieldWidthTrigger.getCurrentZone();
 
-                    tracer.traceInfo(instanceName, "Enabling GoalTracking (trackingMode=%s).", trackingMode);
-                    if (trackingMode == TrackingMode.AllianceHub)
-                    {
-                        goalTrackingState.goalFieldPose =
-                            robot.adjustPoseByAlliance(RobotParams.Game.BLUE_HUB_POSE, alliance);
-                    }
-                    else
-                    {
-                        // Passback tracking mode.
-                        TrcPose2D robotPose = robot.robotBase.driveBase.getFieldPosition();
-                        goalTrackingState.goalFieldPose =
-                            robot.adjustPoseByAlliance(
-                                robotPose.x < RobotParams.Game.fieldWidth / 2.0?
-                                    RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
-                                    RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE,
-                                alliance);
-                        if (goalTrackingState.halfFieldTrigger != null)
-                        {
-                            goalTrackingState.halfFieldTrigger.enableTrigger(
-                                TriggerMode.OnBoth,
-                                (ctxt, canceled) ->
-                                {
-                                    if (!canceled)
-                                    {
-                                        TrcTriggerThresholdZones.CallbackContext context =
-                                            (TrcTriggerThresholdZones.CallbackContext) ctxt;
-                                        goalTrackingState.goalFieldPose =
-                                            robot.adjustPoseByAlliance(
-                                                context.currZone == 0?
-                                                    RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
-                                                    RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE,
-                                                FrcAuto.autoChoices.getAlliance());
-                                    }
-                                });
-                        }
-                    }
-                    goalTrackingState.rightShooterAimInfo = null;
-                    if (leftShooter != null)
-                    {
-                        leftShooter.setGoalTrackingEnabled(this::getLeftShooterAimInfo);
-                    }
-                    if (rightShooter != null)
-                    {
-                        rightShooter.setGoalTrackingEnabled(this::getRightShooterAimInfo);
-                    }
+                goalTrackingState.trackingMode =
+                    fieldLengthZone == 0 && alliance == Alliance.Blue ||
+                    fieldLengthZone == 5 && alliance == Alliance.Red?
+                        TrackingMode.AllianceHub: TrackingMode.Passback;
+
+                if (goalTrackingState.trackingMode == TrackingMode.AllianceHub)
+                {
+                    // Alliance Hub tracking mode.
+                    goalTrackingState.goalFieldPose =
+                        robot.adjustPoseByAlliance(RobotParams.Game.BLUE_HUB_POSE, alliance);
                 }
                 else
                 {
-                    tracer.traceInfo(instanceName, "Disabling GoalTracking.");
-                    goalTrackingState.goalFieldPose = null;
-                    goalTrackingState.rightShooterAimInfo = null;
-                    if (leftShooter != null)
-                    {
-                        leftShooter.setGoalTrackingEnabled(null);
-                    }
-                    if (rightShooter != null)
-                    {
-                        rightShooter.setGoalTrackingEnabled(null);
-                    }
+                    // Passback tracking mode.
+                    goalTrackingState.goalFieldPose =
+                        robot.adjustPoseByAlliance(
+                            fieldWidthZone <= 1? RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
+                                                 RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE,
+                            alliance);
                 }
-                if (trackingMode != TrackingMode.Passback && goalTrackingState.halfFieldTrigger != null)
+                tracer.traceInfo(
+                    instanceName, "Enabling GoalTracking (trackingMode=%s, gaolPose=%s).",
+                    goalTrackingState.trackingMode, goalTrackingState.goalFieldPose);
+
+                goalTrackingState.rightShooterAimInfo = null;
+                if (leftShooter != null)
                 {
-                    goalTrackingState.halfFieldTrigger.disableTrigger();
+                    leftShooter.setGoalTrackingEnabled(this::getLeftShooterAimInfo);
                 }
-                goalTrackingState.trackingMode = trackingMode;
+                if (rightShooter != null)
+                {
+                    rightShooter.setGoalTrackingEnabled(this::getRightShooterAimInfo);
+                }
+            }
+            else if (isGoalTrackingEnabled())
+            {
+                // Disable only if GoalTracking was enabled.
+                goalTrackingState.trackingMode = TrackingMode.Disabled;
+                goalTrackingState.goalFieldPose = null;
+                goalTrackingState.rightShooterAimInfo = null;
+                if (leftShooter != null)
+                {
+                    leftShooter.setGoalTrackingEnabled(null);
+                }
+                if (rightShooter != null)
+                {
+                    rightShooter.setGoalTrackingEnabled(null);
+                }
             }
         }
     }   //setGoalTrackingEnabled

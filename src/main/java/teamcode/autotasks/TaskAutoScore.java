@@ -22,10 +22,7 @@
 
 package teamcode.autotasks;
 
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import teamcode.Robot;
-import teamcode.subsystems.Shooter;
-import teamcode.subsystems.Shooter.TrackingMode;
 import trclib.robotcore.TrcAutoTask;
 import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcOwnershipMgr;
@@ -48,17 +45,9 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
 
     private static class TaskParams
     {
-        public boolean passback = false;
-
-        public TaskParams setPassback(boolean passback)
-        {
-            this.passback = passback;
-            return this;
-        }   //setPassback
-
         public String toString()
         {
-            return "(passback=" + passback + ")";
+            return "()";
         }   //toString
     }   //class TaskParams
 
@@ -70,7 +59,7 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
     private final TrcEvent leftShooterDone;
     private final TrcEvent rightShooterDone;
 
-    private TrackingMode prevGoalTrackingMode = null;
+    private boolean enabledGoalTracking = false;
     private boolean leftShooterShooting = false;
     private boolean rightShooterShooting = false;
 
@@ -95,17 +84,18 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
      *
      * @param owner specifies the owner to acquire subsystem ownerships, can be null if not requiring ownership.
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
-     * @param passback specifies true to set GoalTracking to Passback mode, false otherwise.
      */
-    public void autoScore(
-        String owner, TrcEvent completionEvent, Alliance alliance, boolean passback)
+    public void autoScore(String owner, TrcEvent completionEvent)
     {
-        autoScoreParams.setPassback(passback);
         tracer.traceInfo(
             moduleName,
             "autoScore(owner=" + owner + ", event=" + completionEvent + ", taskParams=" + autoScoreParams + ")");
-        prevGoalTrackingMode = robot.shooterSubsystem.getGoalTrackingMode();
-        tracer.traceInfo(moduleName, "prevGoalTrackingMode=%s", prevGoalTrackingMode);
+        if (!robot.shooterSubsystem.isGoalTrackingEnabled())
+        {
+            robot.shooterSubsystem.setGoalTrackingEnabled(true);
+            enabledGoalTracking = true;
+            tracer.traceInfo(moduleName, "Enabling Goal Tracking.");
+        }
         startAutoTask(owner, State.START, autoScoreParams, completionEvent);
     }   //autoScore
 
@@ -169,8 +159,11 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
         if (robot.leftTransfer != null) robot.leftTransfer.cancel();
         if (robot.rightTransfer != null) robot.rightTransfer.cancel();
         if (robot.feeder != null) robot.feeder.cancel();
-        robot.shooterSubsystem.setGoalTrackingEnabled(prevGoalTrackingMode);
-        prevGoalTrackingMode = null;
+        if (enabledGoalTracking)
+        {
+            robot.shooterSubsystem.setGoalTrackingEnabled(false);
+            enabledGoalTracking = false;
+        }
     }   //stopSubsystems
 
     /**
@@ -189,16 +182,9 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
         String owner, Object params, State state, TrcTaskMgr.TaskType taskType, TrcRobot.RunMode runMode,
         boolean slowPeriodicLoop)
     {
-        TaskParams taskParams = (TaskParams) params;
-
         switch (state)
         {
             case START:
-                tracer.traceInfo(
-                    moduleName, "***** Setting GoalTrackingMode (passback=%s).", taskParams.passback);
-                robot.shooterSubsystem.setGoalTrackingEnabled(
-                    taskParams.passback? Shooter.TrackingMode.Passback: Shooter.TrackingMode.AllianceHub);
-
                 if (robot.leftShooter != null)
                 {
                     tracer.traceInfo(moduleName, "***** Wait for left Shooter ready.");

@@ -197,6 +197,16 @@ public class RobotParams
         public static final boolean mirroredField               = false;
         public static final double fieldWidth                   = FrcField.getFieldWidth();
         public static final double fieldLength                  = FrcField.getFieldLength();
+        public static final double halfFieldWidth               = fieldWidth / 2.0;
+        public static final double halfFieldLength              = fieldLength / 2.0;
+        public static final double[] fieldLengthTriggerPoints   = new double[]
+        {
+            182.11-30.0, 182.11+30.0, halfFieldLength, fieldLength - (182.11+30.0), fieldLength - (182.11-30.0)
+        };
+        public static final double[] fieldWidthTriggerPoints    = new double[]
+        {
+            halfFieldWidth-91.0, halfFieldWidth, halfFieldWidth+91.0
+        };
         //
         // AprilTag Poses
         //
