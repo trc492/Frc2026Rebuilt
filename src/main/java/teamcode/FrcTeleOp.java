@@ -28,7 +28,6 @@ import frclib.driverio.FrcXboxController;
 import frclib.vision.FrcPhotonVision.DetectedObject;
 import teamcode.subsystems.Shooter;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
-import trclib.drivebase.TrcSwerveDrive;
 import trclib.driverio.TrcGameController.DriveMode;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcRobot;
@@ -342,6 +341,31 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         switch (button)
         {
             case A:
+                if (robot.intake != null)
+                {
+                    if (pressed)
+                    {
+                        if (robot.intake.getPower() != 0.0)
+                        {
+                            robot.intake.setPower(0.0);
+                        }
+                        else
+                        {
+                            robot.intake.intake(0.75);
+                        }
+                    }
+                }
+                break;
+
+            case B:
+                // Turtle mode.
+                if (pressed)
+                {
+                    robot.turtle();
+                }
+                break;
+
+            case X:
                 // Toggle between field or robot oriented driving.
                 if (robot.robotBase != null && pressed)
                 {
@@ -367,9 +391,14 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                             ")");
                     }
                 }
+                // if (robot.robotBase != null && pressed)
+                // {
+                //     ((TrcSwerveDrive) (robot.robotBase.driveBase)).setXMode(null);
+                //     robot.globalTracer.traceInfo(moduleName, ">>>>> X Mode");
+                // }
                 break;
 
-            case B:
+            case Y:
                 if (robot.shooterSubsystem != null)
                 {
                     if (pressed)
@@ -379,22 +408,6 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                         robot.globalTracer.traceInfo(
                             moduleName, "GoalTracking is %s.", goalTrackingEnabled? "enabled": "disabled");
                     }
-                }
-                break;
-
-            case X:
-                if (robot.robotBase != null && pressed)
-                {
-                    ((TrcSwerveDrive) (robot.robotBase.driveBase)).setXMode(null);
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> X Mode");
-                }
-                break;
-
-            case Y:
-                // Turtle mode.
-                if (pressed)
-                {
-                    robot.turtle();
                 }
                 break;
 
