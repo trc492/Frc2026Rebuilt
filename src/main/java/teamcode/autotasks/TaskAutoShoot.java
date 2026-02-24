@@ -32,9 +32,9 @@ import trclib.robotcore.TrcTaskMgr;
 /**
  * This class implements auto-assist task.
  */
-public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
+public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
 {
-    private static final String moduleName = TaskAutoScore.class.getSimpleName();
+    private static final String moduleName = TaskAutoShoot.class.getSimpleName();
 
     public enum State
     {
@@ -51,7 +51,7 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
         }   //toString
     }   //class TaskParams
 
-    private final TaskParams autoScoreParams = new TaskParams();
+    private final TaskParams autoShootParams = new TaskParams();
     private final Robot robot;
     private final TrcEvent leftShooterReadyEvent;
     private final TrcEvent rightShooterReadyEvent;
@@ -68,7 +68,7 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
      *
      * @param robot specifies the robot object that contains all the necessary subsystems.
      */
-    public TaskAutoScore(Robot robot)
+    public TaskAutoShoot(Robot robot)
     {
         super(moduleName, TrcTaskMgr.TaskType.POST_PERIODIC_TASK);
         this.robot = robot;
@@ -77,7 +77,7 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
         this.turretReadyEvent = new TrcEvent(moduleName + ".turretReady");
         this.leftShooterDone = new TrcEvent(moduleName + ".leftShooterDone");
         this.rightShooterDone = new TrcEvent(moduleName + ".rightShooterDone");
-    }   //TaskAutoScore
+    }   //TaskAutoShoot
 
     /**
      * This method starts the auto-assist operation.
@@ -85,19 +85,19 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
      * @param owner specifies the owner to acquire subsystem ownerships, can be null if not requiring ownership.
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
-    public void autoScore(String owner, TrcEvent completionEvent)
+    public void autoShoot(String owner, TrcEvent completionEvent)
     {
         tracer.traceInfo(
             moduleName,
-            "autoScore(owner=" + owner + ", event=" + completionEvent + ", taskParams=" + autoScoreParams + ")");
+            "autoShoot(owner=" + owner + ", event=" + completionEvent + ", taskParams=" + autoShootParams + ")");
         if (!robot.shooterSubsystem.isGoalTrackingEnabled())
         {
             robot.shooterSubsystem.setGoalTrackingEnabled(true);
             enabledGoalTracking = true;
             tracer.traceInfo(moduleName, "Enabling Goal Tracking.");
         }
-        startAutoTask(owner, State.START, autoScoreParams, completionEvent);
-    }   //autoScore
+        startAutoTask(owner, State.START, autoShootParams, completionEvent);
+    }   //autoShoot
 
     //
     // Implement TrcAutoTask abstract methods.
@@ -249,4 +249,4 @@ public class TaskAutoScore extends TrcAutoTask<TaskAutoScore.State>
         }
     }   //runTaskState
  
-}   //class TaskAutoScore
+}   //class TaskAutoShoot

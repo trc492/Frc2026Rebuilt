@@ -196,7 +196,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     }
                     if (robot.shooterSubsystem != null)
                     {
-                        robot.autoScoreTask.autoScore(null, event);
+                        robot.autoShootTask.autoShoot(null, event);
                         sm.waitForSingleEvent(event, nextState);
                     }
                     else
@@ -298,7 +298,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                 case SHOOT_FUEL:
                     if (robot.shooterSubsystem != null)
                     {
-                        robot.autoScoreTask.autoScore(null, event);
+                        robot.autoShootTask.autoShoot(null, event);
                     }
                     if (climb)
                     {
@@ -388,7 +388,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     {
                         if (robot.shooterSubsystem != null)
                         {
-                            robot.autoScoreTask.autoScore(null, null);
+                            robot.autoShootTask.autoShoot(null, null);
                         }
                     }
                     robot.robotBase.purePursuitDrive.start(
@@ -407,13 +407,13 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     }
                     if (robot.shooterSubsystem != null)
                     {
-                        robot.autoScoreTask.cancel();
+                        robot.autoShootTask.cancel();
                     }
 
                     boolean isDepotReturn = (startPos == AutoStartPos.START_POS_DEPOT) || 
                                             (startPos == AutoStartPos.START_POS_CENTER && moveTo == MoveTo.DEPOT);
 
-                    TrcPose2D returnScorePose = isDepotReturn ? 
+                    TrcPose2D returnScorePose = isDepotReturn ?
                         RobotParams.Game.STARTPOS_BLUE_DEPOT.clone() : RobotParams.Game.STARTPOS_BLUE_OUTPOST.clone();
                     
                     TrcPose2D returnIntermediatePose = returnScorePose.clone();
@@ -436,7 +436,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                 case SHOOT_NEUTRAL_FUEL:
                     if (robot.shooterSubsystem != null)
                     {
-                        robot.autoScoreTask.autoScore(null, event);
+                        robot.autoShootTask.autoShoot(null, event);
                     }
                     if (climb)
                     {

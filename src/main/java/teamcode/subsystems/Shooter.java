@@ -68,13 +68,13 @@ public class Shooter extends TrcSubsystem
 
     public static final TrcLookupTable shootParamsTable = new TrcLookupTable()
         //        name,                 distance,   region,             ShooterVel, HoodAngle,  Tof
-        .addEntry(HUB_SHOOT_POINT,                 80.95,      shootRegions[0],    4500.0,     23.0,       0.84) // TODO: Needs to be tuned
-        .addEntry(null,                 171.0,      shootRegions[0],    6400.0,     34.0,       1.07) // TODO: Needs to be tuned
-        .addEntry(null,                 177.0,      shootRegions[0],    6300.0,     35.0,       1.07) // TODO: Needs to be tuned
-        .addEntry(null,                 159.0,      shootRegions[0],    5100.0,     38.0,       (6.83-5.85))
-        .addEntry(null,                 171.0,      shootRegions[0],    5300.0,     39.0,       (6.84-5.85))
-        .addEntry(null,                 183.0,      shootRegions[0],    5300.0,     40.0,       (6.38-5.41))
-        .addEntry(null,                 195.0,      shootRegions[0],    5500.0,     40.0,       (2.92-1.87));
+        .addEntry(HUB_SHOOT_POINT,      80.95,      shootRegions[0],    4500.0,     23.0,       0.84) // TODO: Needs to be tuned
+        // .addEntry(null,                 171.0,      shootRegions[0],    6400.0,     34.0,       1.07) // TODO: Needs to be tuned
+        // .addEntry(null,                 177.0,      shootRegions[0],    6300.0,     35.0,       1.07) // TODO: Needs to be tuned
+        .addEntry(null,                 159.0,      shootRegions[0],    5100.0,     38.0,       0.98)
+        .addEntry(null,                 171.0,      shootRegions[0],    5300.0,     39.0,       0.99)
+        .addEntry(null,                 183.0,      shootRegions[0],    5300.0,     40.0,       0.97)
+        .addEntry(null,                 195.0,      shootRegions[0],    5500.0,     40.0,       1.05);
 
     public static final class Params
     {
@@ -230,8 +230,8 @@ public class Shooter extends TrcSubsystem
         public static final String FEEDER_MOTOR_NAME            = SUBSYSTEM_NAME + ".FeederMotor";
         public static final boolean FEEDER_MOTOR_INVERTED       = false;
         public static final int FEEDER_MOTOR_CANID              = RobotParams.HwConfig.CANID_FEEDER_MOTOR;
-        public static final double FEEDER_POWER                 = 1.0;
-        public static final double FEEDER_REVERSE_POWER         = 0.5;
+        public static final double FEEDER_FORWARD_POWER         = 1.0;
+        public static final double FEEDER_REVERSE_POWER         = -0.5;
     }   //class Params
 
     private static class GoalTrackingState
@@ -969,7 +969,7 @@ public class Shooter extends TrcSubsystem
             shooterContext.transfer.intake(owner, Params.TRANSFER_INTAKE_POWER, 0.0, null);
             if (feeder != null)
             {
-                feeder.setPower(owner, 0.0, Params.FEEDER_POWER, 0.0, null);
+                feeder.setPower(owner, 0.0, Params.FEEDER_FORWARD_POWER, 0.0, null);
             }
         }
     }

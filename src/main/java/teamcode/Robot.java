@@ -52,7 +52,7 @@ import frclib.vision.FrcPhotonVision;
 import frclib.vision.FrcPhotonVision.DetectedObject;
 import teamcode.autotasks.TaskAutoClimb;
 import teamcode.autotasks.TaskAutoPickup;
-import teamcode.autotasks.TaskAutoScore;
+import teamcode.autotasks.TaskAutoShoot;
 import teamcode.indicators.LEDIndicator;
 import teamcode.subsystems.Climber;
 import teamcode.subsystems.DriveBase;
@@ -119,7 +119,7 @@ public class Robot extends FrcRobot
     public Climber climberSubsystem;
     public TrcMotor climber;
     // Auto Tasks.
-    public TaskAutoScore autoScoreTask;
+    public TaskAutoShoot autoShootTask;
     public TaskAutoPickup autoPickupTask;
     public TaskAutoClimb autoClimbTask;
 
@@ -253,7 +253,7 @@ public class Robot extends FrcRobot
                 TrcSubsystem.updateSubsystemParamsToDashboard();
 
                 // Create autotasks.
-                autoScoreTask = RobotParams.Preferences.useAutoScoreTask? new TaskAutoScore(this): null;
+                autoShootTask = RobotParams.Preferences.useAutoShootTask? new TaskAutoShoot(this): null;
                 autoPickupTask = RobotParams.Preferences.useAutoPickupTask? new TaskAutoPickup(this): null;
                 autoClimbTask = RobotParams.Preferences.useAutoClimbTask? new TaskAutoClimb(this): null;
             }
@@ -682,7 +682,7 @@ public class Robot extends FrcRobot
     public TrcPose2D getShooterToTargetPose()
     {
         TrcPose2D robotFieldPose = robotBase.driveBase.getFieldPosition();
-        // TrcPose2D shooterFieldPose = robotFieldPose.addRelativePose(new TrcPose2D(0.0, 6.0, 0.0));
+        // TrcPose2D shooterFieldPose = robotFieldPose.addRelativePose(new TrcPose2D(0.0, -6.0, 0.0));
         TrcPose2D goalFieldPose = shooterSubsystem.getGoalFieldPose();
         TrcPose2D targetPose = goalFieldPose.relativeTo(robotFieldPose);//shooterFieldPose);
         // globalTracer.traceErr(

@@ -93,7 +93,7 @@ public class RobotParams
         public static final boolean useClimber                  = false;
         public static final boolean showClimberStatus           = true;
         // Auto Tasks
-        public static final boolean useAutoScoreTask            = false;
+        public static final boolean useAutoShootTask            = false;
         public static final boolean useAutoPickupTask           = false;
         public static final boolean useAutoClimbTask            = false;
     }   //class Preferences

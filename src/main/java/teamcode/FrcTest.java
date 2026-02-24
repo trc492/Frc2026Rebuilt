@@ -966,7 +966,7 @@ public class FrcTest extends FrcTeleOp
                     {
                         if (pressed)
                         {
-                            robot.feeder.setPower(Shooter.Params.FEEDER_POWER);
+                            robot.feeder.setPower(Shooter.Params.FEEDER_FORWARD_POWER);
                             robot.leftTransfer.intake();
                         }
                         else
@@ -980,7 +980,7 @@ public class FrcTest extends FrcTeleOp
                     {
                         if (pressed)
                         {
-                            robot.feeder.setPower(Shooter.Params.FEEDER_POWER);
+                            robot.feeder.setPower(Shooter.Params.FEEDER_FORWARD_POWER);
                             robot.rightTransfer.intake();
                         }
                         else
