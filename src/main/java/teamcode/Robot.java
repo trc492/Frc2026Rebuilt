@@ -682,8 +682,12 @@ public class Robot extends FrcRobot
     public TrcPose2D getShooterToTargetPose()
     {
         TrcPose2D robotFieldPose = robotBase.driveBase.getFieldPosition();
-        TrcPose2D shooterFieldPose = robotFieldPose.addRelativePose(new TrcPose2D(0.0, -6.0, 0.0));
-        TrcPose2D targetPose = shooterSubsystem.getGoalFieldPose().relativeTo(shooterFieldPose);
+        TrcPose2D shooterFieldPose = robotFieldPose.addRelativePose(new TrcPose2D(0.0, 6.0, 0.0));
+        TrcPose2D goalFieldPose = shooterSubsystem.getGoalFieldPose();
+        TrcPose2D targetPose = goalFieldPose.relativeTo(shooterFieldPose);
+        // globalTracer.traceErr(
+        //     moduleName, "robotPose=%s, shooterPose=%s, goalPose=%s, targetPose=%s",
+        //     robotFieldPose, shooterFieldPose, goalFieldPose, targetPose);
         return targetPose;
     }   //getShooterDistanceToTarget
 
