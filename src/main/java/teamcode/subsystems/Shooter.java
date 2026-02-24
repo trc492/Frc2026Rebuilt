@@ -635,10 +635,16 @@ public class Shooter extends TrcSubsystem
         }
     }   //setFlywheelRPM
 
+    /**
+     * This method checks if the left or the right shooter is active.
+     *
+     * @return true if either the left or the right shooter is active, false if both inactive.
+     */
     public boolean isActive() 
     {
         return leftShooter.isActive() || rightShooter.isActive();
-    }
+    }   //isActive
+
     /**
      * This method returns the left transfer back sensor state.
      *
