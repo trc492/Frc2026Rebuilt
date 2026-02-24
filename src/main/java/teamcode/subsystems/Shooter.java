@@ -68,7 +68,7 @@ public class Shooter extends TrcSubsystem
 
     public static final TrcLookupTable shootParamsTable = new TrcLookupTable()
         //        name,                 distance,   region,             ShooterVel, HoodAngle,  Tof
-        .addEntry(null,                 80.95,      shootRegions[0],    4500.0,     23.0,       0.84) // TODO: Needs to be tuned
+        .addEntry(HUB_SHOOT_POINT,                 80.95,      shootRegions[0],    4500.0,     23.0,       0.84) // TODO: Needs to be tuned
         .addEntry(null,                 171.0,      shootRegions[0],    6400.0,     34.0,       1.07) // TODO: Needs to be tuned
         .addEntry(null,                 177.0,      shootRegions[0],    6300.0,     35.0,       1.07) // TODO: Needs to be tuned
         .addEntry(null,                 159.0,      shootRegions[0],    5100.0,     38.0,       (6.83-5.85))
@@ -204,7 +204,7 @@ public class Shooter extends TrcSubsystem
         public static final MotorType TRANSFER_MOTOR_TYPE       = MotorType.CanSparkMax;
         public static final SparkMaxMotorParams TRANSFER_SPARKMAX_PARAMS =
             new SparkMaxMotorParams(true, false);
-        public static final double TRANSFER_INTAKE_POWER        = 0.75;
+        public static final double TRANSFER_INTAKE_POWER        = 1.0;
         public static final double TRANSFER_EJECT_POWER         = 0.5;
         public static final double TRANSFER_RETAIN_POWER        = 0.0;
         public static final double TRANSFER_INTAKE_FINISH_DELAY = 0.0;
@@ -230,7 +230,8 @@ public class Shooter extends TrcSubsystem
         public static final String FEEDER_MOTOR_NAME            = SUBSYSTEM_NAME + ".FeederMotor";
         public static final boolean FEEDER_MOTOR_INVERTED       = false;
         public static final int FEEDER_MOTOR_CANID              = RobotParams.HwConfig.CANID_FEEDER_MOTOR;
-        public static final double FEEDER_POWER                 = 0.5;
+        public static final double FEEDER_POWER                 = 1.0;
+        public static final double FEEDER_REVERSE_POWER         = 0.5;
     }   //class Params
 
     private static class GoalTrackingState
@@ -634,6 +635,10 @@ public class Shooter extends TrcSubsystem
         }
     }   //setFlywheelRPM
 
+    public boolean isActive() 
+    {
+        return leftShooter.isActive() || rightShooter.isActive();
+    }
     /**
      * This method returns the left transfer back sensor state.
      *
@@ -1124,7 +1129,8 @@ public class Shooter extends TrcSubsystem
     public void resetState()
     {
         // Shooter does not support resetState.
-        // If you need to tuck away pan and tilt for turtle mode, add code here.
+        if (leftShooter != null && leftShooter.tiltMotor != null) leftShooter.setTiltAngle(Params.TILT_MIN_POS); 
+        if (rightShooter != null && rightShooter.tiltMotor != null) rightShooter.setTiltAngle(Params.TILT_MIN_POS); 
     }   //resetState
 
     /**
