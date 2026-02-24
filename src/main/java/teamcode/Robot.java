@@ -198,7 +198,7 @@ public class Robot extends FrcRobot
                     robotBase.driveBase instanceof FrcSwerveDrive)
                 {
                     ((FrcSwerveDrive) robotBase.driveBase).createPoseEstimator(
-                        new FrcPhotonVision[] {vision.leftShooterVision, vision.rightShooterVision});
+                        vision.leftShooterVision, vision.rightShooterVision);
                     hasVisionPoseEstimator = true;
                 }
                 else
