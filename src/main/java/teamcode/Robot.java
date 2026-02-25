@@ -388,10 +388,9 @@ public class Robot extends FrcRobot
     @Override
     public void robotPeriodic(RunMode runMode, boolean slowPeriodicLoop)
     {
-        if (vision != null &&
+        if (vision != null && shooterSubsystem != null && shooterSubsystem.isTurretZeroCalibrated() &&
             dashboard.getBoolean(Dashboard.DBKEY_VISION_RELOCALIZE, RobotParams.Preferences.visionRelocalizeEnabled))
         {
-
             if (hasVisionPoseEstimator)
             {
                 FrcSwerveDrive swerveDrive = (FrcSwerveDrive) robotBase.driveBase;

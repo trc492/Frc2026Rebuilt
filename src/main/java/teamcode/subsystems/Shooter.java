@@ -283,6 +283,7 @@ public class Shooter extends TrcSubsystem
     private final TrcEvent turretZeroCalCallbackEvent;
     private final TrcDbgTrace tracer;
     private TrcEvent turretReadyEvent = null;
+    private boolean turretZeroCalibrated = false;
 
     /**
      * Constructor: Creates an instance of the object.
@@ -986,6 +987,16 @@ public class Shooter extends TrcSubsystem
     }   //getRightShooterAimInfo
 
     /**
+     * This method checks if the turret is zero calibrated.
+     *
+     * @return true if turret is zero calibrated, false otherwise.
+     */
+    public boolean isTurretZeroCalibrated()
+    {
+        return turretZeroCalibrated;
+    }   //isTurretZeroCalibrated
+
+    /**
      * This method waits for the turret finished aiming the target and will signal the given event.
      *
      * @param event specifies the event to signal when aiming is on-target.
@@ -1024,7 +1035,7 @@ public class Shooter extends TrcSubsystem
                 feeder.setPower(owner, 0.0, Params.FEEDER_FORWARD_POWER, 0.0, null);
             }
         }
-    }
+    }   //shoot
 
     /**
      * This method is called when the shooter velocity is triggered usually means a ball has been shot out.
@@ -1127,6 +1138,7 @@ public class Shooter extends TrcSubsystem
                     TrcEvent event = (TrcEvent) ctxt;
                     if (!canceled)
                     {
+                        turretZeroCalibrated = true;
                         TrcRobot.RunMode runMode = TrcRobot.getRunMode();
                         FrcAuto.AutoStartPos startPos =
                             runMode == TrcRobot.RunMode.AUTO_MODE ? FrcAuto.autoChoices.getStartPos() : null;
