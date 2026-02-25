@@ -192,11 +192,10 @@ public class Dashboard
     public static final String DBKEY_TEST_ROBOT_POS                 = "Test/RobotPosition";
     public static final String DBKEY_TEST_TARGET_POS                = "Test/TargetPosition";
 
-    public static final String DBKEY_TEST_RSHOOTER_TARGET_RPM       = "Test/RShooterTargetRPM";
     public static final String DBKEY_TEST_LSHOOTER_TARGET_RPM       = "Test/LShooterTargetRPM";
-
-    public static final String DBKEY_TEST_RTILT_TARGET              = "Test/RTiltTarget";
-    public static final String DBKEY_TEST_LTILT_TARGET              = "Test/LTiltTarget";
+    public static final String DBKEY_TEST_LTILT_TARGET_POS          = "Test/LTiltTarget";
+    public static final String DBKEY_TEST_RSHOOTER_TARGET_RPM       = "Test/RShooterTargetRPM";
+    public static final String DBKEY_TEST_RTILT_TARGET_POS          = "Test/RTiltTarget";
 
     private static FrcDashboard dashboard;
 
@@ -249,7 +248,13 @@ public class Dashboard
         dashboard.refreshKey(DBKEY_TELEOP_TURN_SLOW_SCALE, FrcTeleOp.DEF_TURN_SLOW_SCALE);
         dashboard.refreshKey(DBKEY_TELEOP_SHOW_DRIVE_POWER, RobotParams.Preferences.showDrivePower);
         dashboard.refreshKey(DBKEY_TELEOP_DRIVE_POWER, "");
+        // Test.
+        dashboard.refreshKey(DBKEY_TEST_LSHOOTER_TARGET_RPM, 0.0);
+        dashboard.refreshKey(DBKEY_TEST_LTILT_TARGET_POS, 0.0);
+        dashboard.refreshKey(DBKEY_TEST_RSHOOTER_TARGET_RPM, 0.0);
+        dashboard.refreshKey(DBKEY_TEST_RTILT_TARGET_POS, 0.0);
     }   //Dashboard
+
     /**
      * This method returns the FrcDashboard object.
      *
