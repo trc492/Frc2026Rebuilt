@@ -797,6 +797,7 @@ public class Shooter extends TrcSubsystem
     {
         synchronized (goalTrackingState)
         {
+            goalTrackingState.goalTrackingParams = goalTrackingParams;
             setupGoalTrackingMode();
 
             if (leftShooter != null)

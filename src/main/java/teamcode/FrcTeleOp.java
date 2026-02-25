@@ -384,16 +384,6 @@ public class FrcTeleOp implements TrcRobot.RobotMode
 
             case Y:
                 shoot(pressed, false);
-                // if (robot.shooterSubsystem != null)
-                // {
-                //     if (pressed)
-                //     {
-                //         boolean goalTrackingEnabled = !robot.shooterSubsystem.isGoalTrackingEnabled();
-                //         robot.shooterSubsystem.setGoalTrackingEnabled(goalTrackingEnabled);
-                //         robot.globalTracer.traceInfo(
-                //             moduleName, "GoalTracking is %s.", goalTrackingEnabled? "enabled": "disabled");
-                //     }
-                // }
                 break;
 
             case LeftBumper:
