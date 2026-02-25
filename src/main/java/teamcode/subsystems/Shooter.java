@@ -245,9 +245,7 @@ public class Shooter extends TrcSubsystem
         AimInfo rightShooterAimInfo = null;
         TrcTriggerThresholdZones fieldLengthTrigger = null;
         TrcTriggerThresholdZones fieldWidthTrigger = null;
-        boolean trackFlywheel = false;
-        boolean trackHoodPos = false;
-        boolean trackTurretPos = false;
+        TrcShooter.GoalTrackingParams goalTrackingParams = null;
     }   //class GoalTrackingState
 
     private static class ShooterContext
@@ -686,7 +684,7 @@ public class Shooter extends TrcSubsystem
             synchronized (goalTrackingState)
             {
                 // We crossed field zones, let's re-evaluate tracking modes.
-                setGoalTrackingEnabled(isGoalTrackingEnabled());
+                setupGoalTrackingMode();
             }
         }
     }   //fieldTriggerCallback
@@ -718,6 +716,19 @@ public class Shooter extends TrcSubsystem
     }   //getGoalTrackingMode
 
     /**
+     * This method returns the current goal tracking parameters.
+     *
+     * @return goal tracking parameters, null if Goal Tracking is not enabled.
+     */
+    public TrcShooter.GoalTrackingParams getGoalTrackingParams()
+    {
+        synchronized (goalTrackingState)
+        {
+            return isGoalTrackingEnabled()? goalTrackingState.goalTrackingParams: null;
+        }
+    }   //getGoalTrackingParams
+
+    /**
      * This method returns the tracked goal field pose.
      *
      * @return goal field pose.
@@ -738,108 +749,81 @@ public class Shooter extends TrcSubsystem
     }   //getGoalFieldPose
 
     /**
-     * This method enables/disables Goal Tracking.
-     *
-     * @param enabled specifies true to enable GoalTracking.
+     * This method re-evaluates the goal tracking mode by examining the robot's location on the field and the
+     * current alliance color. This method assumes the caller has synchronization lock on goalTrackingState.
      */
-    private void setGoalTrackingEnabled(boolean enabled)
+    private void setupGoalTrackingMode()
     {
-        synchronized (goalTrackingState)
+        if (goalTrackingState.trackingMode != TrackingMode.Disabled)
         {
-            if (enabled)
+            Alliance alliance = FrcAuto.autoChoices.getAlliance();
+            int fieldLengthZone = goalTrackingState.fieldLengthTrigger.getCurrentZone();
+            int fieldWidthZone = goalTrackingState.fieldWidthTrigger.getCurrentZone();
+
+            goalTrackingState.trackingMode =
+                fieldLengthZone == 0 && alliance == Alliance.Blue ||
+                fieldLengthZone == 5 && alliance == Alliance.Red?
+                    TrackingMode.AllianceHub: TrackingMode.Passback;
+
+            if (goalTrackingState.trackingMode == TrackingMode.AllianceHub)
             {
-                // We will run this code even if GoalTracking was already enabled because this can be called by the
-                // fieldTriggers (i.e. crossing some field zones). In that case, we need to run this code again to
-                // re-evaluate the GoalTracking mode.
-                Alliance alliance = FrcAuto.autoChoices.getAlliance();
-                int fieldLengthZone = goalTrackingState.fieldLengthTrigger.getCurrentZone();
-                int fieldWidthZone = goalTrackingState.fieldWidthTrigger.getCurrentZone();
-
-                goalTrackingState.trackingMode =
-                    fieldLengthZone == 0 && alliance == Alliance.Blue ||
-                    fieldLengthZone == 5 && alliance == Alliance.Red?
-                        TrackingMode.AllianceHub: TrackingMode.Passback;
-
-                if (goalTrackingState.trackingMode == TrackingMode.AllianceHub)
-                {
-                    // Alliance Hub tracking mode.
-                    goalTrackingState.goalFieldPose =
-                        robot.adjustPoseByAlliance(RobotParams.Game.BLUE_HUB_POSE, alliance);
-                }
-                else
-                {
-                    // Passback tracking mode.
-                    goalTrackingState.goalFieldPose =
-                        robot.adjustPoseByAlliance(
-                            fieldWidthZone <= 1? RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
-                                                 RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE,
-                            alliance);
-                }
-                tracer.traceInfo(
-                    instanceName,
-                    "Enabling GoalTracking (trackingMode=%s, track(Flywheel/hood/turret)=%s/%s/%s, gaolPose=%s).",
-                    goalTrackingState.trackingMode, goalTrackingState.trackFlywheel, goalTrackingState.trackHoodPos,
-                    goalTrackingState.trackTurretPos, goalTrackingState.goalFieldPose);
-
-                goalTrackingState.rightShooterAimInfo = null;
-                if (leftShooter != null)
-                {
-                    leftShooter.enableGoalTracking(
-                        this::getLeftShooterAimInfo, goalTrackingState.trackFlywheel, goalTrackingState.trackHoodPos,
-                        goalTrackingState.trackTurretPos);
-                }
-                if (rightShooter != null)
-                {
-                    rightShooter.enableGoalTracking(
-                        this::getRightShooterAimInfo, goalTrackingState.trackFlywheel, goalTrackingState.trackHoodPos,
-                        goalTrackingState.trackTurretPos);
-                }
+                // Alliance Hub tracking mode.
+                goalTrackingState.goalFieldPose =
+                    robot.adjustPoseByAlliance(RobotParams.Game.BLUE_HUB_POSE, alliance);
             }
-            else if (isGoalTrackingEnabled())
+            else
             {
-                // Disable only if GoalTracking was enabled.
-                goalTrackingState.trackingMode = TrackingMode.Disabled;
-                goalTrackingState.goalFieldPose = null;
-                goalTrackingState.rightShooterAimInfo = null;
-                if (leftShooter != null)
-                {
-                    leftShooter.disableGoalTracking();
-                }
-                if (rightShooter != null)
-                {
-                    rightShooter.disableGoalTracking();
-                }
+                // Passback tracking mode.
+                goalTrackingState.goalFieldPose =
+                    robot.adjustPoseByAlliance(
+                        fieldWidthZone <= 1? RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
+                                            RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE,
+                        alliance);
             }
+            goalTrackingState.rightShooterAimInfo = null;
+
+            tracer.traceInfo(
+                instanceName, "GoalTracking(trackingMode=%s, goalPose=%s).",
+                goalTrackingState.trackingMode, goalTrackingState.goalFieldPose);
         }
-    }   //setGoalTrackingEnabled
+    }   //setupGoalTrackingMode
 
     /**
      * This method enables GoalTracking.
      *
-     * @param trackFlywheel specifies true to change flywheel speed according to distance to goal, false to not
-     *        change flywheel speed.
-     * @param trackHoodPos specifies true to change hood position according to distance to goal, false to not
-     *        change hood position.
-     * @param trackTurretPos specifies true to change turret position according to goal bearing, false to not
-     *        change turret position.
+     * @param goalTrackingParams specifies the Goal Tracking parameters.
      */
-    public void enableGoalTracking(boolean trackFlywheel, boolean trackHoodPos, boolean trackTurretPos)
+    public void enableGoalTracking(TrcShooter.GoalTrackingParams goalTrackingParams)
     {
         synchronized (goalTrackingState)
         {
-            goalTrackingState.trackFlywheel = trackFlywheel;
-            goalTrackingState.trackHoodPos = trackHoodPos;
-            goalTrackingState.trackTurretPos = trackTurretPos;
-            setGoalTrackingEnabled(true);
+            setupGoalTrackingMode();
+
+            if (leftShooter != null)
+            {
+                leftShooter.enableGoalTracking(goalTrackingState.goalTrackingParams, this::getLeftShooterAimInfo);
+            }
+
+            if (rightShooter != null)
+            {
+                rightShooter.enableGoalTracking(goalTrackingState.goalTrackingParams, this::getRightShooterAimInfo);
+            }
         }
     }   //enableGoalTracking
 
     /**
-     * This method enables GoalTracking but do not change the tracking options.
+     * This method enables GoalTracking with the speicified tracking mode.
+     *
+     * @param trackFlywheel specifies true to change flywheel speed according to distance to goal, false to not
+     *        change flywheel speed.
+     * @param trackTiltPos specifies true to change tilt position according to distance to goal, false to not
+     *        change tilt position.
+     * @param trackPanPos specifies true to change pan position according to goal bearing, false to not
+     *        change pan position.
      */
-    public void enableGoalTracking()
+    public void enableGoalTracking(boolean trackFlywheel, boolean trackTiltPos, boolean trackPanPos)
     {
-        setGoalTrackingEnabled(true);
+        enableGoalTracking(new TrcShooter.GoalTrackingParams(trackFlywheel, trackTiltPos, trackPanPos));
     }   //enableGoalTracking
 
     /**
@@ -847,7 +831,23 @@ public class Shooter extends TrcSubsystem
      */
     public void disableGoalTracking()
     {
-        setGoalTrackingEnabled(false);
+        synchronized (goalTrackingState)
+        {
+            // Disable only if GoalTracking was enabled.
+            goalTrackingState.trackingMode = TrackingMode.Disabled;
+            goalTrackingState.goalFieldPose = null;
+            goalTrackingState.rightShooterAimInfo = null;
+
+            if (leftShooter != null)
+            {
+                leftShooter.disableGoalTracking();
+            }
+
+            if (rightShooter != null)
+            {
+                rightShooter.disableGoalTracking();
+            }
+        }
     }   //disableGoalTracking
 
     /**
