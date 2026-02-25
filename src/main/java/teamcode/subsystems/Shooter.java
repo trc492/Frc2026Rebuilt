@@ -241,6 +241,9 @@ public class Shooter extends TrcSubsystem
         AimInfo rightShooterAimInfo = null;
         TrcTriggerThresholdZones fieldLengthTrigger = null;
         TrcTriggerThresholdZones fieldWidthTrigger = null;
+        boolean trackFlywheel = false;
+        boolean trackHoodPos = false;
+        boolean trackTurretPos = false;
     }   //class GoalTrackingState
 
     private static class ShooterContext
@@ -732,9 +735,9 @@ public class Shooter extends TrcSubsystem
     /**
      * This method enables/disables Goal Tracking.
      *
-     * @param trackingMode specifies tracking mode, null to disable.
+     * @param enabled specifies true to enable GoalTracking.
      */
-    public void setGoalTrackingEnabled(boolean enabled)
+    private void setGoalTrackingEnabled(boolean enabled)
     {
         synchronized (goalTrackingState)
         {
@@ -768,17 +771,23 @@ public class Shooter extends TrcSubsystem
                             alliance);
                 }
                 tracer.traceInfo(
-                    instanceName, "Enabling GoalTracking (trackingMode=%s, gaolPose=%s).",
-                    goalTrackingState.trackingMode, goalTrackingState.goalFieldPose);
+                    instanceName,
+                    "Enabling GoalTracking (trackingMode=%s, track(Flywheel/hood/turret)=%s/%s/%s, gaolPose=%s).",
+                    goalTrackingState.trackingMode, goalTrackingState.trackFlywheel, goalTrackingState.trackHoodPos,
+                    goalTrackingState.trackTurretPos, goalTrackingState.goalFieldPose);
 
                 goalTrackingState.rightShooterAimInfo = null;
                 if (leftShooter != null)
                 {
-                    leftShooter.setGoalTrackingEnabled(this::getLeftShooterAimInfo);
+                    leftShooter.enableGoalTracking(
+                        this::getLeftShooterAimInfo, goalTrackingState.trackFlywheel, goalTrackingState.trackHoodPos,
+                        goalTrackingState.trackTurretPos);
                 }
                 if (rightShooter != null)
                 {
-                    rightShooter.setGoalTrackingEnabled(this::getRightShooterAimInfo);
+                    rightShooter.enableGoalTracking(
+                        this::getRightShooterAimInfo, goalTrackingState.trackFlywheel, goalTrackingState.trackHoodPos,
+                        goalTrackingState.trackTurretPos);
                 }
             }
             else if (isGoalTrackingEnabled())
@@ -789,15 +798,52 @@ public class Shooter extends TrcSubsystem
                 goalTrackingState.rightShooterAimInfo = null;
                 if (leftShooter != null)
                 {
-                    leftShooter.setGoalTrackingEnabled(null);
+                    leftShooter.disableGoalTracking();
                 }
                 if (rightShooter != null)
                 {
-                    rightShooter.setGoalTrackingEnabled(null);
+                    rightShooter.disableGoalTracking();
                 }
             }
         }
     }   //setGoalTrackingEnabled
+
+    /**
+     * This method enables GoalTracking.
+     *
+     * @param trackFlywheel specifies true to change flywheel speed according to distance to goal, false to not
+     *        change flywheel speed.
+     * @param trackHoodPos specifies true to change hood position according to distance to goal, false to not
+     *        change hood position.
+     * @param trackTurretPos specifies true to change turret position according to goal bearing, false to not
+     *        change turret position.
+     */
+    public void enableGoalTracking(boolean trackFlywheel, boolean trackHoodPos, boolean trackTurretPos)
+    {
+        synchronized (goalTrackingState)
+        {
+            goalTrackingState.trackFlywheel = trackFlywheel;
+            goalTrackingState.trackHoodPos = trackHoodPos;
+            goalTrackingState.trackTurretPos = trackTurretPos;
+            setGoalTrackingEnabled(true);
+        }
+    }   //enableGoalTracking
+
+    /**
+     * This method enables GoalTracking but do not change the tracking options.
+     */
+    public void enableGoalTracking()
+    {
+        setGoalTrackingEnabled(true);
+    }   //enableGoalTracking
+
+    /**
+     * This method disables GoalTracking.
+     */
+    public void disableGoalTracking()
+    {
+        setGoalTrackingEnabled(false);
+    }   //disableGoalTracking
 
     /**
      * This method checks if the target pan angle crosses the hardstop. If so, it will adjust the pan angle so the

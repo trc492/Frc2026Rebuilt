@@ -92,7 +92,7 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
             "autoShoot(owner=" + owner + ", event=" + completionEvent + ", taskParams=" + autoShootParams + ")");
         if (!robot.shooterSubsystem.isGoalTrackingEnabled())
         {
-            robot.shooterSubsystem.setGoalTrackingEnabled(true);
+            robot.shooterSubsystem.enableGoalTracking();
             enabledGoalTracking = true;
             tracer.traceInfo(moduleName, "Enabling Goal Tracking.");
         }
@@ -161,7 +161,7 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
         if (robot.feeder != null) robot.feeder.cancel();
         if (enabledGoalTracking)
         {
-            robot.shooterSubsystem.setGoalTrackingEnabled(false);
+            robot.shooterSubsystem.disableGoalTracking();
             enabledGoalTracking = false;
         }
     }   //stopSubsystems
