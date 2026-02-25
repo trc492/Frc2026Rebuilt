@@ -253,9 +253,12 @@ public class Robot extends FrcRobot
                 TrcSubsystem.updateSubsystemParamsToDashboard();
 
                 // Create autotasks.
-                autoShootTask = RobotParams.Preferences.useAutoShootTask? new TaskAutoShoot(this): null;
-                autoPickupTask = RobotParams.Preferences.useAutoPickupTask? new TaskAutoPickup(this): null;
-                autoClimbTask = RobotParams.Preferences.useAutoClimbTask? new TaskAutoClimb(this): null;
+                autoShootTask = RobotParams.Preferences.useAutoShootTask && shooterSubsystem != null?
+                    new TaskAutoShoot(this): null;
+                autoPickupTask = RobotParams.Preferences.useAutoPickupTask && intakeSubsystem != null?
+                    new TaskAutoPickup(this): null;
+                autoClimbTask = RobotParams.Preferences.useAutoClimbTask && climberSubsystem != null?
+                    new TaskAutoClimb(this): null;
             }
         }
 

@@ -1042,6 +1042,36 @@ public class Shooter extends TrcSubsystem
     }   //shoot
 
     /**
+     * This method starts manual shooting at the specified location.
+     *
+     * @param entryName specifies the shoot table entry by name.
+     */
+    public void shootAt(String entryName)
+    {
+        TrcLookupTable.Entry shootParams = shootParamsTable.get(entryName);
+
+        if (shootParams != null)
+        {
+            if (robot.autoShootTask != null)
+            {
+                robot.autoShootTask.cancel();
+            }
+
+            if (leftShooter != null)
+            {
+                leftShooter.aimShooter(
+                    null, shootParams.outputs[0], null, 0.0, shootParams.outputs[1], null, 0.0, this::shoot, null);
+            }
+
+            if (rightShooter != null)
+            {
+                rightShooter.aimShooter(
+                    null, shootParams.outputs[0], null, 0.0, shootParams.outputs[1], null, 0.0, this::shoot, null);
+            }
+        }
+    }   //shootAt
+
+    /**
      * This method is called when the shooter velocity is triggered usually means a ball has been shot out.
      *
      * @param context specifies the ShooterContext object.

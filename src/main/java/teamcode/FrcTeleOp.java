@@ -25,14 +25,11 @@ package teamcode;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcXboxController;
-import frclib.vision.FrcPhotonVision.DetectedObject;
 import teamcode.subsystems.Climber;
 import teamcode.subsystems.Shooter;
-import trclib.dataprocessor.TrcLookupTable;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
 import trclib.drivebase.TrcSwerveDrive;
 import trclib.driverio.TrcGameController.DriveMode;
-import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcRobot;
 import trclib.robotcore.TrcRobot.RunMode;
 
@@ -59,8 +56,6 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     private boolean controlsEnabled = false;
     protected boolean driverAltFunc = false;
     protected boolean operatorAltFunc = false;
-    private boolean relocalizing = false;
-    private TrcPose2D robotFieldPose = null;
     private boolean rumbling = false;
     private double prevPanPower = 0.0;
     private Double prevTiltPower = 0.0;
@@ -174,19 +169,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 //
                 if (robot.robotBase != null)
                 {
-                    if (relocalizing)
-                    {
-                        if (robotFieldPose == null)
-                        {
-                            DetectedObject aprilTagObj = robot.vision.getBestDetectedAprilTag(null, null);
-
-                            if (aprilTagObj != null)
-                            {
-                                robotFieldPose = robot.vision.getRobotFieldPose();
-                            }
-                        }
-                    }
-                    else if (robot.driverController != null)
+                    if (robot.driverController != null)
                     {
                         boolean showDriveBaseStatus = robot.dashboard.getBoolean(
                             Dashboard.DBKEY_TELEOP_SHOW_DRIVE_POWER, RobotParams.Preferences.showDrivePower);
@@ -453,30 +436,15 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 break;
 
             case Start:
-                if (robot.vision != null)
+                if (robot.shooterSubsystem != null && pressed)
                 {
-                    // On press of the button, we will start looking for AprilTag for re-localization.
-                    // On release of the button, we will set the robot's field location if we found the
-                    // AprilTag.
-                    relocalizing = pressed;
-                    if (!pressed)
+                    if (robot.shooterSubsystem.isGoalTrackingEnabled())
                     {
-                        if (robotFieldPose != null)
-                        {
-                            robot.globalTracer.traceInfo(
-                                moduleName, ">>>>> Finish re-localizing: pose=" + robotFieldPose);
-                            robot.robotBase.driveBase.setFieldPosition(robotFieldPose, false);
-                            robotFieldPose = null;
-                        }
-                        else
-                        {
-                            robot.globalTracer.traceInfo(
-                                moduleName, ">>>>> Finish re-localizing: AprilTag not found");
-                        }
+                        robot.shooterSubsystem.disableGoalTracking();
                     }
                     else
                     {
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> Start re-localizing ...");
+                        robot.shooterSubsystem.enableGoalTracking(false, false, true);
                     }
                 }
                 break;
@@ -663,21 +631,24 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 }
                 else
                 {
-                    // TODO: CodeReview - What exactly do you want to do here? If you are still tracking goal,
-                    // the code will start flywheel again for you and controls the hood too.
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Stop Auto Shoot.");
                     robot.autoShootTask.cancel();
-                    robot.shooterSubsystem.stopFlywheel();
                     robot.shooterSubsystem.resetState();
                 }
             }
         }
-        else
+        else if (robot.shooterSubsystem != null)
         {
-            if (robot.autoShootTask != null) robot.autoShootTask.cancel();
-            robot.globalTracer.traceInfo(moduleName, ">>>>> Start Manual Shoot.");
-            TrcLookupTable.Entry manualShootEntry = Shooter.shootParamsTable.get(Shooter.HUB_SHOOT_POINT);
-            // Manual Shoot code goes here
+            if (pressed)
+            {
+                robot.globalTracer.traceInfo(moduleName, ">>>>> Start Manual Shoot.");
+                robot.shooterSubsystem.shootAt(Shooter.HUB_SHOOT_POINT);
+            }
+            else
+            {
+                robot.globalTracer.traceInfo(moduleName, ">>>>> Stop Manual Shoot.");
+                robot.shooterSubsystem.cancel();
+            }
         }
     }   //shoot
 
