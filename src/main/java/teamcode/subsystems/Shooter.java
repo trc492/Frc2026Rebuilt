@@ -37,6 +37,7 @@ import teamcode.Robot;
 import teamcode.RobotParams;
 import teamcode.FrcAuto.AutoStartPos;
 import trclib.dataprocessor.TrcLookupTable;
+import trclib.dataprocessor.TrcLookupTable.Interpolation;
 import trclib.motor.TrcMotor;
 import trclib.motor.TrcMotor.PidParams;
 import trclib.pathdrive.TrcPose2D;
@@ -912,15 +913,14 @@ public class Shooter extends TrcSubsystem
         synchronized (goalTrackingState)
         {
             AimInfo aimInfo;
-            boolean useRegression = dashboard.getBoolean(
-                Dashboard.DBKEY_SHOOTER_USE_REGRESSION, RobotParams.Preferences.useRegression);
+            Interpolation interpolation = Dashboard.getShooterInterpolation();
             TrcLookupTable.Entry shootParams;
 
             if (targetPose == null)
             {
                 // Get AimInfo by Oodometry.
                 targetPose = robot.getShooterToTargetPose();
-                shootParams = shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), useRegression);
+                shootParams = shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), interpolation);
                 double targetPanAngle = targetPose.angle % 360.0;
                 double absPanAngle = Math.abs(targetPanAngle);
                 boolean inConflictZone =
@@ -968,7 +968,7 @@ public class Shooter extends TrcSubsystem
             else
             {
                 // Called by compensateRobotMotion.
-                shootParams = shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), useRegression);
+                shootParams = shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), interpolation);
                 aimInfo = new AimInfo(
                     targetPose, shootParams.outputs[0], null, targetPose.angle % 360.0, shootParams.region.value,
                     shootParams.outputs[1]);

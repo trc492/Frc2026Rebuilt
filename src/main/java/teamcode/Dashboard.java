@@ -22,7 +22,9 @@
 
 package teamcode;
 
+import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcDashboard;
+import trclib.dataprocessor.TrcLookupTable.Interpolation;
 
 /**
  * This class contains Dashboard constants and parameters.
@@ -54,7 +56,7 @@ public class Dashboard
     // Shooter.
     public static final String DBKEY_SHOOTER_SHOW_STATUS            = "Shooter/ShowStatus";
     public static final String DBKEY_SHOOTER_SHOW_GRAPHS            = "Shooter/ShowGraphs";
-    public static final String DBKEY_SHOOTER_USE_REGRESSION         = "Shooter/UseRegression";
+    public static final String DBKEY_SHOOTER_INTERPOLATION          = "Shooter/Interpolation";
     public static final String DBKEY_SHOOTER_USE_MOTION_COMPENSATION= "Shooter/UseMotionCompensation";
 
     public static final String DBKEY_LSHOOTER_POWER                 = "Shooter/LShooterPower";
@@ -198,6 +200,8 @@ public class Dashboard
     public static final String DBKEY_TEST_RTILT_TARGET_POS          = "Test/RTiltTarget";
 
     private static FrcDashboard dashboard;
+    private static final FrcChoiceMenu<Interpolation> shooterInterpolationMenu =
+        new FrcChoiceMenu<>(Dashboard.DBKEY_SHOOTER_INTERPOLATION);
 
     /**
      * Constructor: Creates an instance of the object and publishes the keys in the Network Table.
@@ -225,6 +229,16 @@ public class Dashboard
         dashboard.refreshKey(DBKEY_VISION_RELOCALIZE, RobotParams.Preferences.visionRelocalizeEnabled);
         dashboard.refreshKey(DBKEY_SHOOTER_DISTANCE_TO_TARGET, 0.0);
         // Shooter.
+        shooterInterpolationMenu.addChoice(
+            "Linear", Interpolation.LinearInterpolation,
+            RobotParams.Preferences.shooterInterpolation == Interpolation.LinearInterpolation, false);
+        shooterInterpolationMenu.addChoice(
+            "Polynomial", Interpolation.PolynomialRegression,
+            RobotParams.Preferences.shooterInterpolation == Interpolation.PolynomialRegression, false);
+        shooterInterpolationMenu.addChoice(
+            "Custom", Interpolation.CustomInterpolation,
+            RobotParams.Preferences.shooterInterpolation == Interpolation.CustomInterpolation, true);
+
         dashboard.refreshKey(DBKEY_SHOOTER_SHOW_STATUS, RobotParams.Preferences.showShooterStatus);
         dashboard.refreshKey(DBKEY_SHOOTER_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs);
         dashboard.refreshKey(DBKEY_LSHOOTER_RPM, 0.0);
@@ -283,5 +297,15 @@ public class Dashboard
             dashboard.disableDashboardUpdate();
         }
     }   //checkDashboardUpdateEnabled
+
+    /**
+     * This method returns the shooter interpolation type from the choice menu.
+     *
+     * @return shooter interpolation type.
+     */
+    public static Interpolation getShooterInterpolation()
+    {
+        return shooterInterpolationMenu.getCurrentChoiceObject();
+    }   //getShooterInterpolation
 
 }   //class Dashboard

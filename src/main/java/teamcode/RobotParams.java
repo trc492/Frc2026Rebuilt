@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import frclib.robotcore.FrcField;
 import teamcode.subsystems.DriveBase.RobotType;
 import teamcode.subsystems.Shooter;
+import trclib.dataprocessor.TrcLookupTable.Interpolation;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
 
@@ -86,7 +87,7 @@ public class RobotParams
         public static final boolean useLeftShooter              = true;
         public static final boolean useRightShooter             = false;
         public static final boolean showShooterStatus           = true;
-        public static final boolean useRegression               = false;
+        public static final Interpolation shooterInterpolation  = Interpolation.PolynomialRegression;
         public static final boolean useMotionCompensation       = true;
         public static final boolean useIntake                   = true;
         public static final boolean showIntakeStatus            = true;
