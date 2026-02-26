@@ -754,38 +754,35 @@ public class Shooter extends TrcSubsystem
      */
     private void setupGoalTrackingMode()
     {
-        if (goalTrackingState.trackingMode != TrackingMode.Disabled)
+        Alliance alliance = FrcAuto.autoChoices.getAlliance();
+        int fieldLengthZone = goalTrackingState.fieldLengthTrigger.getCurrentZone();
+        int fieldWidthZone = goalTrackingState.fieldWidthTrigger.getCurrentZone();
+
+        goalTrackingState.trackingMode =
+            fieldLengthZone == 0 && alliance == Alliance.Blue ||
+            fieldLengthZone == 5 && alliance == Alliance.Red?
+                TrackingMode.AllianceHub: TrackingMode.Passback;
+
+        if (goalTrackingState.trackingMode == TrackingMode.AllianceHub)
         {
-            Alliance alliance = FrcAuto.autoChoices.getAlliance();
-            int fieldLengthZone = goalTrackingState.fieldLengthTrigger.getCurrentZone();
-            int fieldWidthZone = goalTrackingState.fieldWidthTrigger.getCurrentZone();
-
-            goalTrackingState.trackingMode =
-                fieldLengthZone == 0 && alliance == Alliance.Blue ||
-                fieldLengthZone == 5 && alliance == Alliance.Red?
-                    TrackingMode.AllianceHub: TrackingMode.Passback;
-
-            if (goalTrackingState.trackingMode == TrackingMode.AllianceHub)
-            {
-                // Alliance Hub tracking mode.
-                goalTrackingState.goalFieldPose =
-                    robot.adjustPoseByAlliance(RobotParams.Game.BLUE_HUB_POSE, alliance);
-            }
-            else
-            {
-                // Passback tracking mode.
-                goalTrackingState.goalFieldPose =
-                    robot.adjustPoseByAlliance(
-                        fieldWidthZone <= 1? RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
-                                            RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE,
-                        alliance);
-            }
-            goalTrackingState.rightShooterAimInfo = null;
-
-            tracer.traceInfo(
-                instanceName, "GoalTracking(trackingMode=%s, goalPose=%s).",
-                goalTrackingState.trackingMode, goalTrackingState.goalFieldPose);
+            // Alliance Hub tracking mode.
+            goalTrackingState.goalFieldPose =
+                robot.adjustPoseByAlliance(RobotParams.Game.BLUE_HUB_POSE, alliance);
         }
+        else
+        {
+            // Passback tracking mode.
+            goalTrackingState.goalFieldPose =
+                robot.adjustPoseByAlliance(
+                    fieldWidthZone <= 1? RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
+                                        RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE,
+                    alliance);
+        }
+        goalTrackingState.rightShooterAimInfo = null;
+
+        tracer.traceInfo(
+            instanceName, "GoalTracking(trackingMode=%s, goalPose=%s).",
+            goalTrackingState.trackingMode, goalTrackingState.goalFieldPose);
     }   //setupGoalTrackingMode
 
     /**

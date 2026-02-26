@@ -430,10 +430,12 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 {
                     if (robot.shooterSubsystem.isGoalTrackingEnabled())
                     {
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Disable GoalTracking.");
                         robot.shooterSubsystem.disableGoalTracking();
                     }
                     else
                     {
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Enable GoalTracking.");
                         robot.shooterSubsystem.enableGoalTracking(false, false, true);
                     }
                 }
