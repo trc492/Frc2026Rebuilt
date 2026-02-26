@@ -33,6 +33,7 @@ import java.util.stream.Stream;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -297,6 +298,7 @@ public class Robot extends FrcRobot
             // Start trace logging.
             if (RobotParams.Preferences.useTraceLog)
             {
+                DataLogManager.start();
                 openTraceLog(matchInfo);
                 setTraceLogEnabled(true);
             }
