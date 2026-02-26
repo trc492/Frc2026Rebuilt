@@ -84,7 +84,7 @@ public class RobotParams
         public static final boolean useAntiTipping              = false;
         // Other Subsystems
         public static final boolean useLeftShooter              = true;
-        public static final boolean useRightShooter             = true;
+        public static final boolean useRightShooter             = false;
         public static final boolean showShooterStatus           = true;
         public static final boolean useRegression               = false;
         public static final boolean useMotionCompensation       = true;
@@ -93,7 +93,7 @@ public class RobotParams
         public static final boolean useClimber                  = false;
         public static final boolean showClimberStatus           = true;
         // Auto Tasks
-        public static final boolean useAutoShootTask            = false;
+        public static final boolean useAutoShootTask            = true;
         public static final boolean useAutoPickupTask           = false;
         public static final boolean useAutoClimbTask            = false;
     }   //class Preferences
