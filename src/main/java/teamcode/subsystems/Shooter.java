@@ -919,17 +919,17 @@ public class Shooter extends TrcSubsystem
 
                 if (!inConflictZone)
                 {
-                    leftFlywheelRPM = rightFlywheelRPM = (shootParams.outputs[0] + shootParams.outputs[1]) / 2.0;
+                    leftFlywheelRPM = rightFlywheelRPM = shootParams.outputs[0];
                 }
                 else if (leftIsFront)
                 {
-                    leftFlywheelRPM = shootParams.outputs[0];
-                    rightFlywheelRPM = shootParams.outputs[1];
+                    leftFlywheelRPM = shootParams.outputs[0] - 0.0;
+                    rightFlywheelRPM = shootParams.outputs[0] + 0.0;
                 }
                 else
                 {
-                    leftFlywheelRPM = shootParams.outputs[1];
-                    rightFlywheelRPM = shootParams.outputs[0];
+                    leftFlywheelRPM = shootParams.outputs[0] + 0.0;
+                    rightFlywheelRPM = shootParams.outputs[0] - 0.0;
                 }
 
                 aimInfo = new AimInfo(
@@ -947,8 +947,9 @@ public class Shooter extends TrcSubsystem
                 goalTrackingState.rightShooterAimInfo = aimInfo.clone();
                 goalTrackingState.rightShooterAimInfo.flywheel1RPM = rightFlywheelRPM;
                 // Shooter aim only controls flywheel RPM and tilt angle, we control the turret position here.
-                if (turret != null)
+                if (turret != null && goalTrackingState.goalTrackingParams.trackPanPos)
                 {
+                    // tracer.traceErr(instanceName, "Tracking Pan=%f", aimInfo.panAngle);
                     turret.setPosition(0.0, aimInfo.panAngle, true, Params.TURRET_POWER_LIMIT, turretReadyEvent);
                     turretReadyEvent = null;
                 }

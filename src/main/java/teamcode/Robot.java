@@ -687,51 +687,13 @@ public class Robot extends FrcRobot
         TrcPose2D shooterFieldPose = robotFieldPose.addRelativePose(new TrcPose2D(0.0, -6.0, 0.0));
         TrcPose2D goalFieldPose = shooterSubsystem.getGoalFieldPose();
         TrcPose2D targetPose = goalFieldPose.relativeTo(shooterFieldPose);
-        // globalTracer.traceErr(
-        //     moduleName, "robotPose=%s, shooterPose=%s, goalPose=%s, targetPose=%s",
-        //     robotFieldPose, shooterFieldPose, goalFieldPose, targetPose);
+        // targetPose angle should be the robot's bearing to target.
+        targetPose.angle = Math.toDegrees(Math.atan2(targetPose.x, targetPose.y));
+        globalTracer.traceDebug(
+            moduleName, "robotPose=%s, shooterPose=%s, goalPose=%s, targetPose=%s",
+            robotFieldPose, shooterFieldPose, goalFieldPose, targetPose);
         return targetPose;
     }   //getShooterDistanceToTarget
-
-    // /**
-    //  * This method re-localizes the robot with AprilTag vision reported info.
-    //  *
-    //  * @param aprilTagObj specifies the detected AprilTag object.
-    //  */
-    // public void relocalize(FrcPhotonVision.DetectedObject aprilTagObj)
-    // {
-    //     // Use vision to relocalize robot's position.
-    //     int aprilTagId = aprilTagObj.target.getFiducialId();
-    //     TrcPose2D robotEstimatedPose = aprilTagObj.robotPose;
-
-    //     if (robotEstimatedPose == null)
-    //     {
-    //         // PhotonVision pose estimator failed to return estimatedPose?! Calculate the pose ourselves.
-    //         robotEstimatedPose = photonVisionFront.getRobotFieldPose(aprilTagObj, false);
-    //         globalTracer.traceInfo(
-    //             moduleName, "Relocalize Robot: aprilTagId=" + aprilTagId +
-    //             ", robotEstimatedPoseFromAprilTag=" + robotEstimatedPose);
-    //     }
-
-    //     TrcPose2D robotPose = robotDrive.driveBase.getFieldPosition();
-    //     double xDelta = robotPose.x - robotEstimatedPose.x;
-    //     double yDelta = robotPose.y - robotEstimatedPose.y;
-    //     double error = TrcUtil.magnitude(xDelta, yDelta);
-    //     // TODO: Check if we need GUIDANCE_ERROR_THRESHOLD.
-    //     if (error > PhotonVision.GUIDANCE_ERROR_THRESHOLD && error < 96.00)
-    //     {
-    //         robotDrive.driveBase.setFieldPosition(robotEstimatedPose, false);
-    //         globalTracer.traceInfo(
-    //             moduleName, "Relocalize Robot: AprilTagId=" + aprilTagId + ", error=" + error +
-    //             ", robotPose=" + robotPose + ", relocalizePose=" + robotEstimatedPose);
-    //     }
-    //     else
-    //     {
-    //         globalTracer.traceInfo(
-    //             moduleName, "Relocalize Robot: aprilTagId=" + aprilTagId + ", error=" + error +
-    //             " (error too large or small to relocalize).");
-    //     }
-    // }   //relocalize
 
     /**
      * This method is called when Comm Status changes state. This is an indication of losing or regaining comm.
