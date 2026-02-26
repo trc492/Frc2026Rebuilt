@@ -529,21 +529,6 @@ public class FrcTeleOp implements TrcRobot.RobotMode
 
             case Y:
                 shoot(pressed, operatorAltFunc);
-                // if (robot.leftTransfer != null && robot.rightTransfer != null)
-                // {
-                //     if (pressed)
-                //     {
-                //         robot.globalTracer.traceInfo(moduleName, ">>>>> Turn on Transfer.");
-                //         robot.rightTransfer.intake(0.25);
-                //         robot.leftTransfer.intake(0.25);
-                //     }
-                //     else
-                //     {
-                //         robot.globalTracer.traceInfo(moduleName, ">>>>> Turn off Transfer.");
-                //         robot.rightTransfer.cancel();
-                //         robot.leftTransfer.cancel();
-                //     }
-                // } 
                 break;
 
             case LeftBumper:
