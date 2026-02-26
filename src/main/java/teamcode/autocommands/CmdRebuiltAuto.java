@@ -196,7 +196,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     }
                     if (robot.shooterSubsystem != null)
                     {
-                        robot.autoShootTask.autoShoot(null, event);
+                        robot.autoShootTask.autoShoot(null, event, true);
                         sm.waitForSingleEvent(event, nextState);
                     }
                     else
@@ -298,7 +298,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                 case SHOOT_FUEL:
                     if (robot.shooterSubsystem != null)
                     {
-                        robot.autoShootTask.autoShoot(null, event);
+                        robot.autoShootTask.autoShoot(null, event, true);
                     }
                     if (climb)
                     {
@@ -388,7 +388,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     {
                         if (robot.shooterSubsystem != null)
                         {
-                            robot.autoShootTask.autoShoot(null, null);
+                            robot.autoShootTask.autoShoot(null, null, false);
                         }
                     }
                     robot.robotBase.purePursuitDrive.start(
@@ -436,7 +436,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                 case SHOOT_NEUTRAL_FUEL:
                     if (robot.shooterSubsystem != null)
                     {
-                        robot.autoShootTask.autoShoot(null, event);
+                        robot.autoShootTask.autoShoot(null, event, true);
                     }
                     if (climb)
                     {

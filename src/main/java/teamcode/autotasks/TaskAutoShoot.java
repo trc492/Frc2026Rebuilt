@@ -46,13 +46,19 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
 
     private static class TaskParams
     {
+        public boolean autoStop = false;
+
+        public TaskParams(boolean autoStop)
+        {
+            this.autoStop = autoStop;
+        }   //TaskParams
+
         public String toString()
         {
-            return "()";
+            return "(autoStop=" + autoStop + ")";
         }   //toString
     }   //class TaskParams
 
-    private final TaskParams autoShootParams = new TaskParams();
     private final Robot robot;
     private final TrcEvent leftShooterReadyEvent;
     private final TrcEvent rightShooterReadyEvent;
@@ -85,16 +91,18 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
      *
      * @param owner specifies the owner to acquire subsystem ownerships, can be null if not requiring ownership.
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
+     * @param autoStop specifies true to detect hopper empty and auto stop, false otherwise.
      */
-    public void autoShoot(String owner, TrcEvent completionEvent)
+    public void autoShoot(String owner, TrcEvent completionEvent, boolean autoStop)
     {
+        TaskParams taskParams = new TaskParams(autoStop);
         tracer.traceInfo(
             moduleName,
-            "autoShoot(owner=" + owner + ", event=" + completionEvent + ", taskParams=" + autoShootParams + ")");
+            "autoShoot(owner=" + owner + ", event=" + completionEvent + ", taskParams=" + taskParams + ")");
         prevGoalTrackingParams = robot.shooterSubsystem.getGoalTrackingParams();
         robot.shooterSubsystem.enableGoalTracking(true, true, true);
         tracer.traceInfo(moduleName, "Enabling Goal Tracking (prevTrackParams=%s).", prevGoalTrackingParams);
-        startAutoTask(owner, State.START, autoShootParams, completionEvent);
+        startAutoTask(owner, State.START, taskParams, completionEvent);
     }   //autoShoot
 
     //
@@ -135,9 +143,9 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
             tracer.traceInfo(
                 moduleName,
                 "Releasing subsystem ownership on behalf of " + owner +
-                "\n\tleftTransfer=" + ownershipMgr.getOwner(robot.leftTransfer) +
-                "\n\trightTransfer=" + ownershipMgr.getOwner(robot.rightTransfer) +
-                "\n\tfeeder=" + ownershipMgr.getOwner(robot.feeder));
+                "\nleftTransfer=" + ownershipMgr.getOwner(robot.leftTransfer) +
+                "\nrightTransfer=" + ownershipMgr.getOwner(robot.rightTransfer) +
+                "\nfeeder=" + ownershipMgr.getOwner(robot.feeder));
             robot.leftTransfer.releaseExclusiveAccess(owner);
             robot.rightTransfer.releaseExclusiveAccess(owner);
             robot.feeder.releaseExclusiveAccess(owner);
@@ -181,6 +189,8 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
         String owner, Object params, State state, TrcTaskMgr.TaskType taskType, TrcRobot.RunMode runMode,
         boolean slowPeriodicLoop)
     {
+        TaskParams taskParams = (TaskParams) params;
+
         switch (state)
         {
             case START:
@@ -218,7 +228,7 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
                     tracer.traceInfo(moduleName, "***** Start left shooter shooting.");
                     leftShooterDone.clear();
                     sm.addEvent(leftShooterDone);
-                    robot.shooterSubsystem.shoot(owner, robot.leftShooter, leftShooterDone);
+                    robot.shooterSubsystem.leftShoot(owner, leftShooterDone, taskParams.autoStop);
                     leftShooterShooting = true;
                 }
 
@@ -228,7 +238,7 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
                     tracer.traceInfo(moduleName, "***** Start right shooter shooting.");
                     rightShooterDone.clear();
                     sm.addEvent(rightShooterDone);
-                    robot.shooterSubsystem.shoot(owner, robot.rightShooter, rightShooterDone);
+                    robot.shooterSubsystem.rightShoot(owner, rightShooterDone, taskParams.autoStop);
                     rightShooterShooting = true;
                 }
 

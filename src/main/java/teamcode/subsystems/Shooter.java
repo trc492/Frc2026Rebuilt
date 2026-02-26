@@ -257,14 +257,17 @@ public class Shooter extends TrcSubsystem
         TrcRollerIntake transfer;
         TrcTimer timer;
         TrcEvent.Callback velTriggerCallback;
+        boolean autoStop;
 
         ShooterContext(
-            TrcShooter shooter, TrcRollerIntake transfer, TrcTimer timer, TrcEvent.Callback velTriggerCallback)
+            TrcShooter shooter, TrcRollerIntake transfer, TrcTimer timer, TrcEvent.Callback velTriggerCallback,
+            boolean autoStop)
         {
             this.shooter = shooter;
             this.transfer = transfer;
             this.timer = timer;
             this.velTriggerCallback = velTriggerCallback;
+            this.autoStop = autoStop;
         }
     }   //class ShooterContext
 
@@ -373,7 +376,7 @@ public class Shooter extends TrcSubsystem
             }
             leftShooterContext = new ShooterContext(
                 leftShooter, leftTransfer, new TrcTimer(instanceName + ".leftTriggerTimer"),
-                this::leftVelTriggerCallback);
+                this::leftVelTriggerCallback, false);
         }
         else
         {
@@ -453,7 +456,7 @@ public class Shooter extends TrcSubsystem
             }
             rightShooterContext = new ShooterContext(
                 rightShooter, rightTransfer, new TrcTimer(instanceName + ".rightTriggerTimer"),
-                this::rightVelTriggerCallback);
+                this::rightVelTriggerCallback, false);
         }
         else
         {
@@ -1022,24 +1025,32 @@ public class Shooter extends TrcSubsystem
      * velocity and Pan/Tilt have aimed at the target and ready to shoot.
      *
      * @param owner specifies the owner that acquired the subsystem ownerships, null if no ownership required.
-     * @param shooter specifies the shooter to shoot fuel.
      * @param completionEvent specifies the event to signal when shooting is done, can be null.
+     * @param context specifies the shooter context object.
      */
-    public void shoot(String owner, TrcShooter shooter, TrcEvent completionEvent)
+    private void shoot(String owner, TrcEvent completionEvent, Object context)
     {
-        if (shooter != null)
-        {
-            ShooterContext shooterContext = shooter == leftShooter ? leftShooterContext: rightShooterContext;
-            TrcTriggerThresholdRange velTrigger = (TrcTriggerThresholdRange) shooter.getShooterMotor1VelTrigger();
-            double currFlywheelRPM = shooter.getShooterMotor1TargetRPM();
+        ShooterContext shooterContext = (ShooterContext) context;
 
-            tracer.traceInfo(instanceName, "shoot(owner=%s, shooter=%s, event=%s)", owner, shooter, completionEvent);
-            velTrigger.setTrigger(
-                currFlywheelRPM - Params.SHOOTER_VEL_TRIGGER_THRESHOLD,
-                currFlywheelRPM + Params.SHOOTER_VEL_TRIGGER_THRESHOLD,
-                Params.SHOOTER_VEL_TRIGGER_SETTLING);
-            velTrigger.enableTrigger(null, TriggerMode.OnInactive, shooterContext.velTriggerCallback);
-            shooterContext.timer.set(Params.SHOOTER_VEL_TRIGGER_TIMEOUT, this::velTriggerTimeout, shooterContext);
+        if (shooterContext != null)
+        {
+            tracer.traceInfo(
+                instanceName, "shoot(owner=%s, event=%s, shooter=%s)",
+                owner, completionEvent, shooterContext == leftShooterContext? "leftShooter": "rightShooter");
+            if (shooterContext.autoStop)
+            {
+                TrcTriggerThresholdRange velTrigger =
+                    (TrcTriggerThresholdRange) shooterContext.shooter.shooterMotor1VelTrigger;
+                double currFlywheelRPM = shooterContext.shooter.getShooterMotor1TargetRPM();
+
+                velTrigger.setTrigger(
+                    currFlywheelRPM - Params.SHOOTER_VEL_TRIGGER_THRESHOLD,
+                    currFlywheelRPM + Params.SHOOTER_VEL_TRIGGER_THRESHOLD,
+                    Params.SHOOTER_VEL_TRIGGER_SETTLING);
+                velTrigger.enableTrigger(null, TriggerMode.OnInactive, shooterContext.velTriggerCallback);
+                shooterContext.timer.set(Params.SHOOTER_VEL_TRIGGER_TIMEOUT, this::velTriggerTimeout, shooterContext);
+            }
+
             shooterContext.transfer.intake(owner, Params.TRANSFER_INTAKE_POWER, 0.0, null);
             if (feeder != null)
             {
@@ -1049,39 +1060,37 @@ public class Shooter extends TrcSubsystem
     }   //shoot
 
     /**
-     * This method starts manual shooting at the specified location.
+     * This method is called to launch the fuel into the left shooter, typically when TrcShooter has reached shooting
+     * velocity and Pan/Tilt have aimed at the target and ready to shoot.
      *
-     * @param entryName specifies the shoot table entry by name.
+     * @param owner specifies the owner that acquired the subsystem ownerships, null if no ownership required.
+     * @param completionEvent specifies the event to signal when shooting is done, can be null.
+     * @param autoStop specifies true to detect hopper empty and auto stop, false otherwise.
      */
-    public void shootAt(String entryName)
+    public void leftShoot(String owner, TrcEvent completionEvent, boolean autoStop)
     {
-        TrcLookupTable.Entry shootParams = shootParamsTable.get(entryName);
+        leftShooterContext.autoStop = autoStop;
+        shoot(owner, completionEvent, leftShooterContext);
+    }   //leftShoot
 
-        if (shootParams != null)
-        {
-            if (robot.autoShootTask != null)
-            {
-                robot.autoShootTask.cancel();
-            }
-
-            if (leftShooter != null)
-            {
-                leftShooter.aimShooter(
-                    null, shootParams.outputs[0], null, 0.0, shootParams.outputs[1], null, 0.0, this::shoot, null);
-            }
-
-            if (rightShooter != null)
-            {
-                rightShooter.aimShooter(
-                    null, shootParams.outputs[0], null, 0.0, shootParams.outputs[1], null, 0.0, this::shoot, null);
-            }
-        }
-    }   //shootAt
+    /**
+     * This method is called to launch the fuel into the right shooter, typically when TrcShooter has reached shooting
+     * velocity and Pan/Tilt have aimed at the target and ready to shoot.
+     *
+     * @param owner specifies the owner that acquired the subsystem ownerships, null if no ownership required.
+     * @param completionEvent specifies the event to signal when shooting is done, can be null.
+     * @param autoStop specifies true to detect hopper empty and auto stop, false otherwise.
+     */
+    public void rightShoot(String owner, TrcEvent completionEvent, boolean autoStop)
+    {
+        rightShooterContext.autoStop = autoStop;
+        shoot(owner, completionEvent, rightShooterContext);
+    }   //rightShoot
 
     /**
      * This method is called when the left shooter velocity is triggered usually means a ball has been shot out.
      *
-     * @param context not used.
+     * @param context not used
      * @param canceled specifies true if the trigger is canceled, false otherwise.
      */
     private void leftVelTriggerCallback(Object context, boolean canceled)
@@ -1097,7 +1106,7 @@ public class Shooter extends TrcSubsystem
     /**
      * This method is called when the right shooter velocity is triggered usually means a ball has been shot out.
      *
-     * @param context not used.
+     * @param context not used
      * @param canceled specifies true if the trigger is canceled, false otherwise.
      */
     private void rightVelTriggerCallback(Object context, boolean canceled)
@@ -1109,6 +1118,41 @@ public class Shooter extends TrcSubsystem
                 Params.SHOOTER_VEL_TRIGGER_TIMEOUT, this::velTriggerTimeout, rightShooterContext);
         }
     }   //rightVelTriggerCallback
+
+    /**
+     * This method starts manual shooting at the specified location.
+     *
+     * @param entryName specifies the shoot table entry by name.
+     * @param autoStop specifies true to detect hopper empty and auto stop, false otherwise.
+     */
+    public void shootAt(String entryName, boolean autoStop)
+    {
+        TrcLookupTable.Entry shootParams = shootParamsTable.get(entryName);
+
+        if (shootParams != null)
+        {
+            if (robot.autoShootTask != null)
+            {
+                robot.autoShootTask.cancel();
+            }
+
+            if (leftShooter != null)
+            {
+                leftShooterContext.autoStop = autoStop;
+                leftShooter.aimShooter(
+                    null, shootParams.outputs[0], null, 0.0, shootParams.outputs[1], null, 0.0,
+                    this::shoot, leftShooterContext, null);
+            }
+
+            if (rightShooter != null)
+            {
+                rightShooterContext.autoStop = autoStop;
+                rightShooter.aimShooter(
+                    null, shootParams.outputs[0], null, 0.0, shootParams.outputs[1], null, 0.0,
+                    this::shoot, rightShooterContext, null);
+            }
+        }
+    }   //shootAt
 
     /**
      * This method is called when the timer has timed out and there is no more balls.
