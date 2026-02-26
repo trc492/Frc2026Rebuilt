@@ -68,12 +68,11 @@ public class Shooter extends TrcSubsystem
 
     public static final TrcLookupTable shootParamsTable = new TrcLookupTable()
         //        name,                 distance,   region,             ShooterVel, HoodAngle,  Tof
-        // .addEntry(HUB_SHOOT_POINT,      80.95,      shootRegions[0],    4350.0,     35.0,       0.84) // TODO: Needs to be tuned
-        .addEntry(null,                 50.0,      shootRegions[0],    4050.0,     18.0,       (1.22-0.79))
-        .addEntry(null,                 58.0,      shootRegions[0],    4050.0,     18.0,       (2.66-2.17))
-        .addEntry(null,                 70.0,      shootRegions[0],    4000.0,     24.0,       (3.24-2.77))
-        .addEntry(null,                 82.0,      shootRegions[0],    4000.0,     32.0,       (2.15-1.75))
-        .addEntry(null,                 94.0,      shootRegions[0],    4150.0,     32.0,       (9.70-8.92))
+        .addEntry(HUB_SHOOT_POINT,      50.0,       shootRegions[0],    4050.0,     18.0,       (1.22-0.79))
+        .addEntry(null,                 58.0,       shootRegions[0],    4050.0,     18.0,       (2.66-2.17))
+        .addEntry(null,                 70.0,       shootRegions[0],    4000.0,     24.0,       (3.24-2.77))
+        .addEntry(null,                 82.0,       shootRegions[0],    4000.0,     32.0,       (2.15-1.75))
+        .addEntry(null,                 94.0,       shootRegions[0],    4150.0,     32.0,       (9.70-8.92))
         .addEntry(null,                 106.0,      shootRegions[0],    4350.0,     35.0,       (9.70-8.92))
         .addEntry(null,                 118.0,      shootRegions[0],    4400.0,     37.0,       (8.97-8.15))
         .addEntry(null,                 130.0,      shootRegions[0],    4600.0,     39.0,       (8.28-7.45))
@@ -257,12 +256,15 @@ public class Shooter extends TrcSubsystem
         TrcShooter shooter;
         TrcRollerIntake transfer;
         TrcTimer timer;
+        TrcEvent.Callback velTriggerCallback;
 
-        ShooterContext(TrcShooter shooter, TrcRollerIntake transfer, TrcTimer timer)
+        ShooterContext(
+            TrcShooter shooter, TrcRollerIntake transfer, TrcTimer timer, TrcEvent.Callback velTriggerCallback)
         {
             this.shooter = shooter;
             this.transfer = transfer;
             this.timer = timer;
+            this.velTriggerCallback = velTriggerCallback;
         }
     }   //class ShooterContext
 
@@ -370,7 +372,8 @@ public class Shooter extends TrcSubsystem
                 leftTransfer = null;
             }
             leftShooterContext = new ShooterContext(
-                leftShooter, leftTransfer, new TrcTimer(instanceName + ".leftTriggerTimer"));
+                leftShooter, leftTransfer, new TrcTimer(instanceName + ".leftTriggerTimer"),
+                this::leftVelTriggerCallback);
         }
         else
         {
@@ -449,7 +452,8 @@ public class Shooter extends TrcSubsystem
                 rightTransfer = null;
             }
             rightShooterContext = new ShooterContext(
-                rightShooter, rightTransfer, new TrcTimer(instanceName + ".rightTriggerTimer"));
+                rightShooter, rightTransfer, new TrcTimer(instanceName + ".rightTriggerTimer"),
+                this::rightVelTriggerCallback);
         }
         else
         {
@@ -1026,7 +1030,7 @@ public class Shooter extends TrcSubsystem
         if (shooter != null)
         {
             ShooterContext shooterContext = shooter == leftShooter ? leftShooterContext: rightShooterContext;
-            TrcTriggerThresholdRange velTrigger = (TrcTriggerThresholdRange) shooter.shooterMotor1VelTrigger;
+            TrcTriggerThresholdRange velTrigger = (TrcTriggerThresholdRange) shooter.getShooterMotor1VelTrigger();
             double currFlywheelRPM = shooter.getShooterMotor1TargetRPM();
 
             tracer.traceInfo(instanceName, "shoot(owner=%s, shooter=%s, event=%s)", owner, shooter, completionEvent);
@@ -1034,7 +1038,7 @@ public class Shooter extends TrcSubsystem
                 currFlywheelRPM - Params.SHOOTER_VEL_TRIGGER_THRESHOLD,
                 currFlywheelRPM + Params.SHOOTER_VEL_TRIGGER_THRESHOLD,
                 Params.SHOOTER_VEL_TRIGGER_SETTLING);
-            velTrigger.enableTrigger(null, TriggerMode.OnBoth, this::velTriggerCallback);
+            velTrigger.enableTrigger(null, TriggerMode.OnInactive, shooterContext.velTriggerCallback);
             shooterContext.timer.set(Params.SHOOTER_VEL_TRIGGER_TIMEOUT, this::velTriggerTimeout, shooterContext);
             shooterContext.transfer.intake(owner, Params.TRANSFER_INTAKE_POWER, 0.0, null);
             if (feeder != null)
@@ -1075,20 +1079,36 @@ public class Shooter extends TrcSubsystem
     }   //shootAt
 
     /**
-     * This method is called when the shooter velocity is triggered usually means a ball has been shot out.
+     * This method is called when the left shooter velocity is triggered usually means a ball has been shot out.
      *
-     * @param context specifies the ShooterContext object.
+     * @param context not used.
      * @param canceled specifies true if the trigger is canceled, false otherwise.
      */
-    private void velTriggerCallback(Object context, boolean canceled)
+    private void leftVelTriggerCallback(Object context, boolean canceled)
     {
         if (!canceled)
         {
-            ShooterContext shooterContext = (ShooterContext) context;
             // Keep resetting trigger timeout as long as balls are shot. It times out when there is no more balls.
-            shooterContext.timer.set(Params.SHOOTER_VEL_TRIGGER_TIMEOUT, this::velTriggerTimeout, shooterContext);
+            leftShooterContext.timer.set(
+                Params.SHOOTER_VEL_TRIGGER_TIMEOUT, this::velTriggerTimeout, leftShooterContext);
         }
-    }   //velTriggerCallback
+    }   //leftVelTriggerCallback
+
+    /**
+     * This method is called when the right shooter velocity is triggered usually means a ball has been shot out.
+     *
+     * @param context not used.
+     * @param canceled specifies true if the trigger is canceled, false otherwise.
+     */
+    private void rightVelTriggerCallback(Object context, boolean canceled)
+    {
+        if (!canceled)
+        {
+            // Keep resetting trigger timeout as long as balls are shot. It times out when there is no more balls.
+            rightShooterContext.timer.set(
+                Params.SHOOTER_VEL_TRIGGER_TIMEOUT, this::velTriggerTimeout, rightShooterContext);
+        }
+    }   //rightVelTriggerCallback
 
     /**
      * This method is called when the timer has timed out and there is no more balls.
