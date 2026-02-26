@@ -68,7 +68,11 @@ public class Shooter extends TrcSubsystem
 
     public static final TrcLookupTable shootParamsTable = new TrcLookupTable()
         //        name,                 distance,   region,             ShooterVel, HoodAngle,  Tof
-        .addEntry(HUB_SHOOT_POINT,      80.95,      shootRegions[0],    4350.0,     35.0,       0.84) // TODO: Needs to be tuned
+        // .addEntry(HUB_SHOOT_POINT,      80.95,      shootRegions[0],    4350.0,     35.0,       0.84) // TODO: Needs to be tuned
+        .addEntry(null,                 50.0,      shootRegions[0],    4050.0,     18.0,       (1.22-0.79))
+        .addEntry(null,                 58.0,      shootRegions[0],    4050.0,     18.0,       (2.66-2.17))
+        .addEntry(null,                 70.0,      shootRegions[0],    4000.0,     24.0,       (3.24-2.77))
+        .addEntry(null,                 82.0,      shootRegions[0],    4000.0,     32.0,       (2.15-1.75))
         .addEntry(null,                 94.0,      shootRegions[0],    4150.0,     32.0,       (9.70-8.92))
         .addEntry(null,                 106.0,      shootRegions[0],    4350.0,     35.0,       (9.70-8.92))
         .addEntry(null,                 118.0,      shootRegions[0],    4400.0,     37.0,       (8.97-8.15))
@@ -139,8 +143,8 @@ public class Shooter extends TrcSubsystem
         public static final double TILT_PID_TOLERANCE           = 1.0;
         public static final boolean TILT_SOFTWARE_PID_ENABLED   = false;
         public static final double TILT_POWER_LIMIT             = 0.2;
-        public static final double TILT_POS_OFFSET              = 17.0;
-        public static final double TILT_MIN_POS                 = TILT_POS_OFFSET;
+        public static final double TILT_POS_OFFSET              = 16.0;
+        public static final double TILT_MIN_POS                 = 17.0;
         public static final double TILT_MAX_POS                 = 47.0;
         public static final double TILT_POS_PRESET_TOLERANCE    = 2.0;
         public static final double[] TILT_POS_PRESETS           = {TILT_MIN_POS, 30.0, 35.0, 40.0, TILT_MAX_POS};
