@@ -458,12 +458,13 @@ public class Robot extends FrcRobot
      * This method zero calibrates all subsystems.
      *
      * @param owner specifies the owner ID to check if the caller has ownership of the motor.
-     * @param event specifies the event to signal when the zero calibration is done.
+     * @param completionEvent specifies the event to signal when the zero calibration is done,
+     *        can be null if not provided.
      */
-    public void zeroCalibrate(String owner, TrcEvent event)
+    public void zeroCalibrate(String owner, TrcEvent completionEvent)
     {
         globalTracer.traceInfo(moduleName, "Zero calibrate all subsystems.");
-        TrcSubsystem.zeroCalibrateAll(owner, event);
+        TrcSubsystem.zeroCalibrateAll(owner, completionEvent);
     }   //zeroCalibrate
 
     /**

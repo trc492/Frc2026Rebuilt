@@ -92,6 +92,7 @@ public class Intake extends TrcSubsystem
         public static final double[] DEPLOYER_POS_PRESETS       = {DEPLOYER_RETRACT_POS, DEPLOYER_EXTEND_POS};
         // Zero calibration
         public static final double DEPLOYER_ZERO_CAL_POWER      = -0.3;
+        public static final double DEPLOYER_ZERO_CAL_TIMEOUT    = 2.0;
         public static final double DEPLOYER_STALL_MIN_POWER     = Math.abs(DEPLOYER_ZERO_CAL_POWER);
         public static final double DEPLOYER_STALL_TOLERANCE     = 0.1;
         public static final double DEPLOYER_STALL_TIMEOUT       = 0.1;
@@ -230,16 +231,18 @@ public class Intake extends TrcSubsystem
    /**
      * This method starts zero calibrate of the subsystem.
      *
-     * @param owner specifies the owner ID to to claim subsystem ownership, can be null if ownership not required.
-     * @param event specifies an event to signal when zero calibration is done, can be null if not provided.
+     * @param owner specifies the owner ID to check if the caller has ownership of the motor.
+     * @param completionEvent specifies the event to signal when the zero calibration is done,
+     *        can be null if not provided.
      */
     @Override
-    public void zeroCalibrate(String owner, TrcEvent event)
+    public void zeroCalibrate(String owner, TrcEvent completionEvent)
     {
         // Intake does not need zero calibration.
         if (deployer != null)
         {
-            deployer.zeroCalibrate(owner, Params.DEPLOYER_ZERO_CAL_POWER, event);
+            deployer.zeroCalibrate(
+                owner, Params.DEPLOYER_ZERO_CAL_POWER, completionEvent, Params.DEPLOYER_ZERO_CAL_TIMEOUT);
         }
     }   //zeroCalibrate
 

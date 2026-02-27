@@ -149,6 +149,7 @@ public class Shooter extends TrcSubsystem
         public static final double TILT_POS_PRESET_TOLERANCE    = 2.0;
         public static final double[] TILT_POS_PRESETS           = {TILT_MIN_POS, 30.0, 35.0, 40.0, TILT_MAX_POS};
         public static final double TILT_ZERO_CAL_POWER          = -0.1;
+        public static final double TILT_ZERO_CAL_TIMEOUT        = 1.0;
         public static final double TILT_STALL_MIN_POWER         = Math.abs(TILT_ZERO_CAL_POWER);
         public static final double TILT_STALL_TOLERANCE         = 0.1;
         public static final double TILT_STALL_TIMEOUT           = 0.1;
@@ -197,6 +198,7 @@ public class Shooter extends TrcSubsystem
         public static final double[] TURRET_POS_PRESETS         =
             {TURRET_MIN_POS, -135.0, -90.0, -45.0, 0.0, 45.0, 90.0, 135.0, TURRET_MAX_POS};
         public static final double TURRET_ZERO_CAL_POWER        = 0.1;
+        public static final double TURRET_ZERO_CAL_TIMEOUT      = 4.0;
         public static final double TURRET_STALL_MIN_POWER       = Math.abs(TURRET_ZERO_CAL_POWER)* 0.9;
         public static final double TURRET_STALL_TOLERANCE       = 2.0;          // in degrees
         public static final double TURRET_STALL_TIMEOUT         = 0.1;
@@ -1200,8 +1202,9 @@ public class Shooter extends TrcSubsystem
     /**
      * This method starts zero calibrate of the subsystem.
      *
-     * @param owner specifies the owner ID to to claim subsystem ownership, can be null if ownership not required.
-     * @param completionEvent specifies an event to signal when zero calibration is done, can be null if not provided.
+     * @param owner specifies the owner ID to check if the caller has ownership of the motor.
+     * @param completionEvent specifies the event to signal when the zero calibration is done,
+     *        can be null if not provided.
      */
     @Override
     public void zeroCalibrate(String owner, TrcEvent completionEvent)
@@ -1210,7 +1213,8 @@ public class Shooter extends TrcSubsystem
         {
             leftTiltZeroCalCallbackEvent.clear();
             leftTiltZeroCalCallbackEvent.setCallback(this::zeroCalCallback, completionEvent);
-            leftShooter.tiltMotor.zeroCalibrate(owner, Params.TILT_ZERO_CAL_POWER, leftTiltZeroCalCallbackEvent);
+            leftShooter.tiltMotor.zeroCalibrate(
+                owner, Params.TILT_ZERO_CAL_POWER, leftTiltZeroCalCallbackEvent, Params.TILT_ZERO_CAL_TIMEOUT);
         }
         else
         {
@@ -1222,7 +1226,8 @@ public class Shooter extends TrcSubsystem
         {
             rightTiltZeroCalCallbackEvent.clear();
             rightTiltZeroCalCallbackEvent.setCallback(this::zeroCalCallback, completionEvent);
-            rightShooter.tiltMotor.zeroCalibrate(owner, Params.TILT_ZERO_CAL_POWER, rightTiltZeroCalCallbackEvent);
+            rightShooter.tiltMotor.zeroCalibrate(
+                owner, Params.TILT_ZERO_CAL_POWER, rightTiltZeroCalCallbackEvent, Params.TILT_ZERO_CAL_TIMEOUT);
         }
         else
         {
@@ -1258,7 +1263,8 @@ public class Shooter extends TrcSubsystem
                         event.cancel();
                     }
                 }, completionEvent);
-            turret.zeroCalibrate(owner, Params.TURRET_ZERO_CAL_POWER, turretZeroCalCallbackEvent);
+            turret.zeroCalibrate(
+                owner, Params.TURRET_ZERO_CAL_POWER, turretZeroCalCallbackEvent, Params.TURRET_ZERO_CAL_TIMEOUT);
         }
     }   //zeroCalibrate
 

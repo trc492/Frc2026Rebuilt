@@ -72,6 +72,7 @@ public class Climber extends TrcSubsystem
         public static final double[] CLIMBER_POS_PRESETS        = {CLIMBER_RETRACT_POS, CLIMBER_EXTEND_POS};
         // Zero calibration
         public static final double CLIMBER_ZERO_CAL_POWER       = -0.3;
+        public static final double CLIMBER_ZERO_CAL_TIMEOUT     = 2.0;
         public static final double CLIMBER_STALL_MIN_POWER      = Math.abs(CLIMBER_ZERO_CAL_POWER);
         public static final double CLIMBER_STALL_TOLERANCE      = 0.1;
         public static final double CLIMBER_STALL_TIMEOUT        = 0.1;
@@ -133,13 +134,14 @@ public class Climber extends TrcSubsystem
    /**
      * This method starts zero calibrate of the subsystem.
      *
-     * @param owner specifies the owner ID to to claim subsystem ownership, can be null if ownership not required.
-     * @param event specifies an event to signal when zero calibration is done, can be null if not provided.
+     * @param owner specifies the owner ID to check if the caller has ownership of the motor.
+     * @param completionEvent specifies the event to signal when the zero calibration is done,
+     *        can be null if not provided.
      */
     @Override
-    public void zeroCalibrate(String owner, TrcEvent event)
+    public void zeroCalibrate(String owner, TrcEvent completionEvent)
     {
-        climber.zeroCalibrate(owner, Params.CLIMBER_ZERO_CAL_POWER, event);
+        climber.zeroCalibrate(owner, Params.CLIMBER_ZERO_CAL_POWER, completionEvent, Params.CLIMBER_ZERO_CAL_TIMEOUT);
     }   //zeroCalibrate
 
     /**
