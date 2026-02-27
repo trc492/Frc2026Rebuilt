@@ -100,8 +100,8 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
             moduleName,
             "autoShoot(owner=" + owner + ", event=" + completionEvent + ", taskParams=" + taskParams + ")");
         prevGoalTrackingParams = robot.shooterSubsystem.getGoalTrackingParams();
-        robot.shooterSubsystem.enableGoalTracking(true, true, true);
         tracer.traceInfo(moduleName, "Enabling Goal Tracking (prevTrackParams=%s).", prevGoalTrackingParams);
+        robot.shooterSubsystem.enableGoalTracking(true, true, true);
         startAutoTask(owner, State.START, taskParams, completionEvent);
     }   //autoShoot
 

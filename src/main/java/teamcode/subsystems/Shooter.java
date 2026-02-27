@@ -946,7 +946,7 @@ public class Shooter extends TrcSubsystem
                 }
 
                 aimInfo = new AimInfo(
-                    targetPose, leftFlywheelRPM, null, targetPanAngle, shootParams.region.value,
+                    targetPose, leftFlywheelRPM, null, targetPanAngle, shootParams.outputs[1],
                     shootParams.outputs[2]);
                 if (dashboard.getBoolean(
                         Dashboard.DBKEY_SHOOTER_USE_MOTION_COMPENSATION,
