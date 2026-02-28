@@ -96,7 +96,7 @@ public class RobotParams
         // Auto Tasks
         public static final boolean useAutoShootTask            = true;
         public static final boolean useAutoPickupTask           = false;
-        public static final boolean useAutoClimbTask            = false;
+        public static final boolean useAutoClimbTask            = true;
     }   //class Preferences
 
     /**

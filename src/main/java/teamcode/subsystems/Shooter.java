@@ -111,6 +111,7 @@ public class Shooter extends TrcSubsystem
         public static final double SHOOTER_VEL_TRIGGER_THRESHOLD= 350.0;       // in RPM
         public static final double SHOOTER_VEL_TRIGGER_SETTLING = 0.0;
         public static final double SHOOTER_VEL_TRIGGER_TIMEOUT  = 1.0;
+        public static final double SHOOTER_RPM_CONFLICT_ZONE_ADJ= 0.0;
         // Left Shooter Motor Characteristics
         public static final String LSHOOTER_PRIMARY_MOTOR_NAME  = SUBSYSTEM_NAME + ".LeftPrimaryMotor";
         public static final boolean LSHOOTER_PRIMARY_MOTOR_INVERTED = false;
@@ -490,6 +491,8 @@ public class Shooter extends TrcSubsystem
                         Params.TURRET_MOTOR_PID_KP, Params.TURRET_MOTOR_PID_KI, Params.TURRET_MOTOR_PID_KD,
                         Params.TURRET_MOTOR_PID_KF, Params.TURRET_MOTOR_PID_IZONE)
                     .setPidControlParams(Params.TURRET_PID_TOLERANCE, Params.TURRET_SOFTWARE_PID_ENABLED), null);
+            // ((FrcCANSparkMax) turret).enableMotionProfile(
+            //     Params.TURRET_MAX_VELOCITY, Params.TURRET_MAX_ACCELERATION, 0.0, 0.0, Params.TURRET_PID_TOLERANCE);
             // There is no lower limit switch, enable stall detection for zero calibration.
             turret.setStallProtection(
                 Params.TURRET_STALL_MIN_POWER, Params.TURRET_STALL_TOLERANCE, Params.TURRET_STALL_TIMEOUT,
@@ -635,6 +638,25 @@ public class Shooter extends TrcSubsystem
     }   //getRightFlywheelRPM
 
     /**
+     * This method sets the flywheel RPM of both shooters.
+     *
+     * @param leftFlywheelRPM specifies the left shooter flywheel RPM.
+     * @param rightFlywheelRPM specifies the right shooter flywheel RPM, can be null to leave it alone.
+     */
+    public void setFlywheelRPM(Double leftFlywheelRPM, Double rightFlywheelRPM)
+    {
+        if (leftShooter != null && leftFlywheelRPM != null)
+        {
+            leftShooter.setShooterMotorRPM(leftFlywheelRPM, null);
+        }
+
+        if (rightShooter != null && rightFlywheelRPM != null)
+        {
+            rightShooter.setShooterMotorRPM(rightFlywheelRPM, null);
+        }
+    }   //setFlywheelRPM
+
+    /**
      * This method stops both the left and right shooters.
      */
     public void stopFlywheel()
@@ -661,25 +683,6 @@ public class Shooter extends TrcSubsystem
         if (leftShooter != null) leftShooter.panMotor.cancel();
         if (rightShooter != null) rightShooter.panMotor.cancel();
     }   //stopPan
-
-    /**
-     * This method sets the flywheel RPM of both shooters.
-     *
-     * @param leftFlywheelRPM specifies the left shooter flywheel RPM.
-     * @param rightFlywheelRPM specifies the right shooter flywheel RPM, can be null to leave it alone.
-     */
-    public void setFlywheelRPM(Double leftFlywheelRPM, Double rightFlywheelRPM)
-    {
-        if (leftShooter != null && leftFlywheelRPM != null)
-        {
-            leftShooter.setShooterMotorRPM(leftFlywheelRPM, null);
-        }
-
-        if (rightShooter != null && rightFlywheelRPM != null)
-        {
-            rightShooter.setShooterMotorRPM(rightFlywheelRPM, null);
-        }
-    }   //setFlywheelRPM
 
     /**
      * This method checks if the left or the right shooter is active.
@@ -962,18 +965,19 @@ public class Shooter extends TrcSubsystem
                 }
                 else if (leftIsFront)
                 {
-                    leftFlywheelRPM = shootParams.outputs[0] - 0.0;
-                    rightFlywheelRPM = shootParams.outputs[0] + 0.0;
+                    leftFlywheelRPM = shootParams.outputs[0] - Params.SHOOTER_RPM_CONFLICT_ZONE_ADJ;
+                    rightFlywheelRPM = shootParams.outputs[0] + Params.SHOOTER_RPM_CONFLICT_ZONE_ADJ;
                 }
                 else
                 {
-                    leftFlywheelRPM = shootParams.outputs[0] + 0.0;
-                    rightFlywheelRPM = shootParams.outputs[0] - 0.0;
+                    leftFlywheelRPM = shootParams.outputs[0] + Params.SHOOTER_RPM_CONFLICT_ZONE_ADJ;
+                    rightFlywheelRPM = shootParams.outputs[0] - Params.SHOOTER_RPM_CONFLICT_ZONE_ADJ;
                 }
 
                 aimInfo = new AimInfo(
                     targetPose, leftFlywheelRPM, null, targetPanAngle, shootParams.outputs[1],
                     shootParams.outputs[2]);
+                // Do robot motion compensation if enabled (aka SOTM).
                 if (dashboard.getBoolean(
                         Dashboard.DBKEY_SHOOTER_USE_MOTION_COMPENSATION,
                         RobotParams.Preferences.useMotionCompensation))
@@ -982,13 +986,13 @@ public class Shooter extends TrcSubsystem
                     aimInfo = leftShooter.compensateRobotMotion(
                         robot.robotBase.driveBase, this::getLeftShooterAimInfo, aimInfo, 0.5, 3);
                 }
+
                 adjustPanAngleToAvoidCrossover(aimInfo);
                 goalTrackingState.rightShooterAimInfo = aimInfo.clone();
                 goalTrackingState.rightShooterAimInfo.flywheel1RPM = rightFlywheelRPM;
                 // Shooter aim only controls flywheel RPM and tilt angle, we control the turret position here.
                 if (turret != null && goalTrackingState.goalTrackingParams.trackPanPos)
                 {
-                    // tracer.traceErr(instanceName, "Tracking Pan=%f", aimInfo.panAngle);
                     turret.setPosition(0.0, aimInfo.panAngle, true, Params.TURRET_POWER_LIMIT, turretReadyEvent);
                     turretReadyEvent = null;
                 }
@@ -1000,8 +1004,6 @@ public class Shooter extends TrcSubsystem
                 aimInfo = new AimInfo(
                     targetPose, shootParams.outputs[0], null, targetPose.angle % 360.0, shootParams.region.value,
                     shootParams.outputs[1]);
-                // We have only one turret, there is no independent right turret.
-                // adjustPanAngleForCrossover(aimInfo);
             }
 
             tracer.traceDebug(
