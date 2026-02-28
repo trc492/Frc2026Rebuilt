@@ -272,26 +272,26 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                         }
                     }
 
-                    // if (robot.climber != null)
-                    // {
-                    //     double climbPower =
-                    //         robot.operatorController.getRightStickY(true) * Climber.Params.CLIMBER_POWER_LIMIT;
+                    if (robot.climber != null)
+                    {
+                        double climbPower =
+                            robot.operatorController.getTrigger(true) * Climber.Params.CLIMBER_POWER_LIMIT;
 
-                    //     if (climbPower != prevClimbPower)
-                    //     {
-                    //         if (operatorAltFunc)
-                    //         {
-                    //             robot.climber.setPower(climbPower);
-                    //         }
-                    //         else
-                    //         {
-                    //             robot.climber.setPidPower(
-                    //                 climbPower, Climber.Params.CLIMBER_POWER_LIMIT, Climber.Params.CLIMBER_MIN_POS,
-                    //                 Climber.Params.CLIMBER_MAX_POS, true);
-                    //         }
-                    //         prevClimbPower = climbPower;
-                    //     }
-                    // }
+                        if (climbPower != prevClimbPower)
+                        {
+                            if (operatorAltFunc)
+                            {
+                                robot.climber.setPower(climbPower);
+                            }
+                            else
+                            {
+                                robot.climber.setPidPower(
+                                    climbPower, Climber.Params.CLIMBER_POWER_LIMIT, Climber.Params.CLIMBER_MIN_POS,
+                                    Climber.Params.CLIMBER_MAX_POS, true);
+                            }
+                            prevClimbPower = climbPower;
+                        }
+                    }
                 }
 
                 if (RobotParams.Preferences.useRumble && robot.driverController != null)

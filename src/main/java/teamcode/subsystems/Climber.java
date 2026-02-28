@@ -97,7 +97,7 @@ public class Climber extends TrcSubsystem
                 Params.CLIMBER_MOTOR_CANID, Params.CANBUS_NAME, Params.CLIMBER_SPARKMAX_PARAMS)
             .setPositionScaleAndOffset(Params.CLIMBER_INCHES_PER_COUNT, Params.CLIMBER_POS_OFFSET);
         climber = new FrcMotorActuator(climberMotorParams).getMotor();
-        // // Limit switch is connected to motor controller.
+        // Limit switch is connected to motor controller.
         // climber.enableLowerLimitSwitch(!Params.CLIMBER_LOWER_LIMITSW_INVERTED);
         climber.setPositionPidParameters(
             new PidParams()
