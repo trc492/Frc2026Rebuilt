@@ -599,9 +599,9 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     {
         if (!altFunc)
         {
-            if (robot.autoShootTask != null)
+            if (robot.autoShootTask != null && pressed)
             {
-                if (pressed)
+                if (!robot.autoShootTask.isActive())
                 {
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Start Auto Shoot.");
                     robot.autoShootTask.autoShoot(null, null, false);

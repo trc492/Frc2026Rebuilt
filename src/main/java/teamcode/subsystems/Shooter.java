@@ -156,7 +156,7 @@ public class Shooter extends TrcSubsystem
         public static final double TILT_POS_PRESET_TOLERANCE    = 2.0;
         public static final double[] TILT_POS_PRESETS           = {TILT_MIN_POS, 30.0, 35.0, 40.0, TILT_MAX_POS};
         public static final double TILT_ZERO_CAL_POWER          = -0.1;
-        public static final double TILT_ZERO_CAL_TIMEOUT        = 1.0;
+        public static final double TILT_ZERO_CAL_TIMEOUT        = 3.0;
         public static final double TILT_STALL_MIN_POWER         = Math.abs(TILT_ZERO_CAL_POWER);
         public static final double TILT_STALL_TOLERANCE         = 0.1;
         public static final double TILT_STALL_TIMEOUT           = 0.1;
@@ -196,9 +196,9 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_PID_TOLERANCE         = 1.0;
         public static final boolean TURRET_SOFTWARE_PID_ENABLED = false;
         public static final double TURRET_POWER_LIMIT           = 0.2; 
-        public static final double TURRET_POS_OFFSET            = 182.25;
+        public static final double TURRET_POS_OFFSET            = 182.25;//143.0;
         public static final double TURRET_MIN_POS               = -171.0;   
-        public static final double TURRET_MAX_POS               = 180.0;
+        public static final double TURRET_MAX_POS               = TURRET_POS_OFFSET - 2.5;//180.0;
         public static final double TURRET_CONFLICT_ZONE_LOW     = 60.0;         //TODO: tune
         public static final double TURRET_CONFLICT_ZONE_HIGH    = 120.0;        //TODO: tune
         public static final double TURRET_POS_PRESET_TOLERANCE  = 2.0;
@@ -642,6 +642,25 @@ public class Shooter extends TrcSubsystem
         if (leftShooter != null) leftShooter.stopShooter();
         if (rightShooter != null) rightShooter.stopShooter();
     }   //stopFlywheel
+
+    /**
+     * This method stops both the left right tilt motors.
+     */
+    public void stopTilt()
+    {
+        // Retract hood, fire and forget.
+        if (leftShooter != null) leftShooter.setTiltAngle(Params.TILT_MIN_POS); 
+        if (rightShooter != null) rightShooter.setTiltAngle(Params.TILT_MIN_POS); 
+    }   //stopTilt
+
+    /**
+     * This method stops both the left right pan motors.
+     */
+    public void stopPan()
+    {
+        if (leftShooter != null) leftShooter.panMotor.cancel();
+        if (rightShooter != null) rightShooter.panMotor.cancel();
+    }   //stopPan
 
     /**
      * This method sets the flywheel RPM of both shooters.
@@ -1194,6 +1213,8 @@ public class Shooter extends TrcSubsystem
         if (leftTransfer != null) leftTransfer.cancel();
         if (rightTransfer != null) rightTransfer.cancel();
         if (feeder != null) feeder.cancel();
+        stopTilt();
+
         if (leftShooterContext != null)
         {
             leftShooterContext.timer.cancel();
@@ -1306,9 +1327,8 @@ public class Shooter extends TrcSubsystem
     @Override
     public void resetState()
     {
-        // Shooter does not support resetState.
-        if (leftShooter != null && leftShooter.tiltMotor != null) leftShooter.setTiltAngle(Params.TILT_MIN_POS); 
-        if (rightShooter != null && rightShooter.tiltMotor != null) rightShooter.setTiltAngle(Params.TILT_MIN_POS); 
+        // Retract hood, fire and forget.
+        stopTilt();
     }   //resetState
 
     /**

@@ -346,11 +346,10 @@ public class Robot extends FrcRobot
     @Override
     public void robotStopMode(RunMode runMode, RunMode nextMode)
     {
-        // Stop RobotDrive.
+        // Stop everything.
+        cancelAll();
         if (runMode != RunMode.DISABLED_MODE && robotBase != null)
         {
-            robotBase.cancel();
-
             if (runMode == RunMode.AUTO_MODE)
             {
                 endOfAutoRobotPose = robotBase.driveBase.getFieldPosition();
@@ -374,7 +373,6 @@ public class Robot extends FrcRobot
 
         if (runMode != RunMode.DISABLED_MODE)
         {
-            cancelAll();
             printPerformanceMetrics(globalTracer);
         }
         // Stop trace logging.

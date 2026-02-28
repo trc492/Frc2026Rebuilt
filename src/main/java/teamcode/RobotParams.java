@@ -87,8 +87,8 @@ public class RobotParams
         public static final boolean useLeftShooter              = true;
         public static final boolean useRightShooter             = true;
         public static final boolean showShooterStatus           = true;
-        public static final Interpolation shooterInterpolation  = Interpolation.LinearInterpolation;
-        public static final boolean useMotionCompensation       = true;
+        public static final Interpolation shooterInterpolation  = Interpolation.PolynomialRegression;
+        public static final boolean useMotionCompensation       = false;
         public static final boolean useIntake                   = true;
         public static final boolean showIntakeStatus            = true;
         public static final boolean useClimber                  = false;

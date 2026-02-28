@@ -165,10 +165,27 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
         if (robot.leftTransfer != null) robot.leftTransfer.cancel();
         if (robot.rightTransfer != null) robot.rightTransfer.cancel();
         if (robot.feeder != null) robot.feeder.cancel();
-        if (prevGoalTrackingParams != null)
+        if (prevGoalTrackingParams == null)
+        {
+            robot.shooterSubsystem.disableGoalTracking();
+            robot.shooterSubsystem.cancel();
+        }
+        else
         {
             tracer.traceInfo(moduleName, "Restoring previous Tracking mode %s.", prevGoalTrackingParams);
             robot.shooterSubsystem.enableGoalTracking(prevGoalTrackingParams);
+            if (!prevGoalTrackingParams.trackFlywheel)
+            {
+                robot.shooterSubsystem.stopFlywheel();
+            }
+            if (!prevGoalTrackingParams.trackTiltPos)
+            {
+                robot.shooterSubsystem.stopTilt();
+            }
+            if (!prevGoalTrackingParams.trackPanPos)
+            {
+                robot.shooterSubsystem.stopPan();
+            }
             prevGoalTrackingParams = null;
         }
     }   //stopSubsystems
@@ -198,6 +215,7 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
                 {
                     tracer.traceInfo(moduleName, "***** Wait for left Shooter ready.");
                     leftShooterReadyEvent.clear();
+                    leftShooterShooting = false;
                     sm.addEvent(leftShooterReadyEvent);
                     robot.leftShooter.waitForShooterReady(leftShooterReadyEvent);
                 }
@@ -206,6 +224,7 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
                 {
                     tracer.traceInfo(moduleName, "***** Wait for right Shooter ready.");
                     rightShooterReadyEvent.clear();
+                    rightShooterShooting = false;
                     sm.addEvent(rightShooterReadyEvent);
                     robot.rightShooter.waitForShooterReady(rightShooterReadyEvent);
                 }
