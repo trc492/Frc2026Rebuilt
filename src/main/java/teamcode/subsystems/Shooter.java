@@ -649,8 +649,8 @@ public class Shooter extends TrcSubsystem
     public void stopTilt()
     {
         // Retract hood, fire and forget.
-        if (leftShooter != null) leftShooter.setTiltAngle(Params.TILT_MIN_POS); 
-        if (rightShooter != null) rightShooter.setTiltAngle(Params.TILT_MIN_POS); 
+        if (leftShooter != null) leftShooter.setTiltAngle(Params.TILT_MIN_POS);
+        if (rightShooter != null) rightShooter.setTiltAngle(Params.TILT_MIN_POS);
     }   //stopTilt
 
     /**
