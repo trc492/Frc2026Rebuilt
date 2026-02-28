@@ -59,6 +59,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     private boolean rumbling = false;
     private double prevPanPower = 0.0;
     private Double prevTiltPower = 0.0;
+    private double prevClimbPower = 0.0;
 
     /**
      * Constructor: Create an instance of the object.
@@ -270,6 +271,27 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                             prevTiltPower = tiltPower;
                         }
                     }
+
+                    // if (robot.climber != null)
+                    // {
+                    //     double climbPower =
+                    //         robot.operatorController.getRightStickY(true) * Climber.Params.CLIMBER_POWER_LIMIT;
+
+                    //     if (climbPower != prevClimbPower)
+                    //     {
+                    //         if (operatorAltFunc)
+                    //         {
+                    //             robot.climber.setPower(climbPower);
+                    //         }
+                    //         else
+                    //         {
+                    //             robot.climber.setPidPower(
+                    //                 climbPower, Climber.Params.CLIMBER_POWER_LIMIT, Climber.Params.CLIMBER_MIN_POS,
+                    //                 Climber.Params.CLIMBER_MAX_POS, true);
+                    //         }
+                    //         prevClimbPower = climbPower;
+                    //     }
+                    // }
                 }
 
                 if (RobotParams.Preferences.useRumble && robot.driverController != null)
@@ -547,7 +569,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             case DpadUp:
                 if (robot.climber != null && pressed)
                 {
-                    robot.climber.setPosition(Climber.Params.CLIMBER_EXTEND_POS, true);
+                    robot.climber.setPosition(Climber.Params.CLIMBER_EXTEND_POS, true, Climber.Params.CLIMBER_POWER_LIMIT);
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Extend climber.");
                 }
                 break;
@@ -555,7 +577,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             case DpadDown:
                 if (robot.climber != null && pressed)
                 {
-                    robot.climber.setPosition(Climber.Params.CLIMBER_RETRACT_POS, true);
+                    robot.climber.setPosition(Climber.Params.CLIMBER_RETRACT_POS, true, Climber.Params.CLIMBER_POWER_LIMIT);
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Retract climber.");
                 }
                 break;

@@ -66,9 +66,9 @@ public class Shooter extends TrcSubsystem
     {
         new TrcLookupTable.Region(0.0, new double[][] {
             // RPM (Cubic Regression)
-            {4871.46703, -29.89811, 0.300502, -0.00067147},
+            {4871.46703+150.0, -29.89811, 0.300502, -0.00067147}, 
             // Hood Angle (Cubic Regression)
-            {-23.31923, 1.06056, -0.00600216, 0.0000113879},
+            {-23.31923-2.0, 1.06056, -0.00600216, 0.0000113879},
             // Time of Flight (Cubic Regression)
             {0.205105, 0.00252013, 0.0000381112, -0.000000152636}
         })

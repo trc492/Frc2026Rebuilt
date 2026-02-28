@@ -91,7 +91,7 @@ public class RobotParams
         public static final boolean useMotionCompensation       = false;
         public static final boolean useIntake                   = true;
         public static final boolean showIntakeStatus            = true;
-        public static final boolean useClimber                  = false;
+        public static final boolean useClimber                  = true;
         public static final boolean showClimberStatus           = true;
         // Auto Tasks
         public static final boolean useAutoShootTask            = true;
