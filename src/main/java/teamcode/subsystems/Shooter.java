@@ -491,8 +491,9 @@ public class Shooter extends TrcSubsystem
                         Params.TURRET_MOTOR_PID_KP, Params.TURRET_MOTOR_PID_KI, Params.TURRET_MOTOR_PID_KD,
                         Params.TURRET_MOTOR_PID_KF, Params.TURRET_MOTOR_PID_IZONE)
                     .setPidControlParams(Params.TURRET_PID_TOLERANCE, Params.TURRET_SOFTWARE_PID_ENABLED), null);
-            // ((FrcCANSparkMax) turret).enableMotionProfile(
-            //     Params.TURRET_MAX_VELOCITY, Params.TURRET_MAX_ACCELERATION, 0.0, 0.0, Params.TURRET_PID_TOLERANCE);
+            // turret.enableMotionProfile(
+            //     Params.TURRET_SOFTWARE_PID_ENABLED, Params.TURRET_MAX_VELOCITY, Params.TURRET_MAX_ACCELERATION,
+            //     0.0, 0.0, Params.TURRET_PID_TOLERANCE);
             // There is no lower limit switch, enable stall detection for zero calibration.
             turret.setStallProtection(
                 Params.TURRET_STALL_MIN_POWER, Params.TURRET_STALL_TOLERANCE, Params.TURRET_STALL_TIMEOUT,
