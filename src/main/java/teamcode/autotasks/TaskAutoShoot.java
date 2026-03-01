@@ -23,6 +23,7 @@
 package teamcode.autotasks;
 
 import teamcode.Robot;
+import teamcode.subsystems.Shooter;
 import trclib.robotcore.TrcAutoTask;
 import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcOwnershipMgr;
@@ -217,7 +218,8 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
                     leftShooterReadyEvent.clear();
                     leftShooterShooting = false;
                     sm.addEvent(leftShooterReadyEvent);
-                    robot.leftShooter.waitForShooterReady(leftShooterReadyEvent);
+                    robot.leftShooter.waitForShooterReady(
+                        leftShooterReadyEvent, Shooter.Params.SHOOTER_READY_TIMEOUT);
                 }
 
                 if (robot.rightShooter != null)
@@ -226,7 +228,8 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
                     rightShooterReadyEvent.clear();
                     rightShooterShooting = false;
                     sm.addEvent(rightShooterReadyEvent);
-                    robot.rightShooter.waitForShooterReady(rightShooterReadyEvent);
+                    robot.rightShooter.waitForShooterReady(
+                        rightShooterReadyEvent, Shooter.Params.SHOOTER_READY_TIMEOUT);
                 }
 
                 if (robot.turret != null)
@@ -234,7 +237,8 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
                     tracer.traceInfo(moduleName, "***** Wait for Turret ready.");
                     turretReadyEvent.clear();
                     sm.addEvent(turretReadyEvent);
-                    robot.shooterSubsystem.waitForTurretReady(turretReadyEvent);
+                    robot.shooterSubsystem.waitForTurretReady(
+                        turretReadyEvent, Shooter.Params.SHOOTER_READY_TIMEOUT);
                 }
 
                 sm.waitForEvents(State.SHOOT, false, false);

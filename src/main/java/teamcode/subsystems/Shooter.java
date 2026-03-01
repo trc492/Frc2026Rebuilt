@@ -112,6 +112,7 @@ public class Shooter extends TrcSubsystem
         public static final double SHOOTER_VEL_TRIGGER_SETTLING = 0.0;
         public static final double SHOOTER_VEL_TRIGGER_TIMEOUT  = 1.0;
         public static final double SHOOTER_RPM_CONFLICT_ZONE_ADJ= 0.0;
+        public static final double SHOOTER_READY_TIMEOUT        = 2.0;          // in sec
         // Left Shooter Motor Characteristics
         public static final String LSHOOTER_PRIMARY_MOTOR_NAME  = SUBSYSTEM_NAME + ".LeftPrimaryMotor";
         public static final boolean LSHOOTER_PRIMARY_MOTOR_INVERTED = false;
@@ -260,6 +261,8 @@ public class Shooter extends TrcSubsystem
         TrcTriggerThresholdZones fieldLengthTrigger = null;
         TrcTriggerThresholdZones fieldWidthTrigger = null;
         TrcShooter.GoalTrackingParams goalTrackingParams = null;
+        TrcEvent turretReadyEvent = null;
+        double turretReadyTimeout = 0.0;
     }   //class GoalTrackingState
 
     private static class ShooterContext
@@ -304,7 +307,6 @@ public class Shooter extends TrcSubsystem
     private final TrcEvent rightTiltZeroCalCallbackEvent;
     private final TrcEvent turretZeroCalCallbackEvent;
     private final TrcDbgTrace tracer;
-    private TrcEvent turretReadyEvent = null;
     private boolean turretZeroCalibrated = false;
 
     /**
@@ -994,8 +996,10 @@ public class Shooter extends TrcSubsystem
                 // Shooter aim only controls flywheel RPM and tilt angle, we control the turret position here.
                 if (turret != null && goalTrackingState.goalTrackingParams.trackPanPos)
                 {
-                    turret.setPosition(0.0, aimInfo.panAngle, true, Params.TURRET_POWER_LIMIT, turretReadyEvent);
-                    turretReadyEvent = null;
+                    turret.setPosition(
+                        0.0, aimInfo.panAngle, true, Params.TURRET_POWER_LIMIT, goalTrackingState.turretReadyEvent,
+                        goalTrackingState.turretReadyTimeout);
+                    goalTrackingState.turretReadyEvent = null;
                 }
             }
             else
@@ -1045,10 +1049,15 @@ public class Shooter extends TrcSubsystem
      * This method waits for the turret finished aiming the target and will signal the given event.
      *
      * @param event specifies the event to signal when aiming is on-target.
+     * @param timeout specifies timeout in seconds.
      */
-    public void waitForTurretReady(TrcEvent event)
+    public void waitForTurretReady(TrcEvent event, double timeout)
     {
-        turretReadyEvent = event;
+        synchronized (goalTrackingState)
+        {
+            goalTrackingState.turretReadyEvent = event;
+            goalTrackingState.turretReadyTimeout = timeout > 0.0? TrcTimer.getCurrentTime() + timeout: 0.0;
+        }
     }   //waitForTurretReady
 
     /**
