@@ -264,7 +264,12 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
                     robot.shooterSubsystem.rightShoot(owner, rightShooterDone, taskParams.autoStop);
                     rightShooterShooting = true;
                 }
-
+                // If autoStop is false, leftShooterDone and rightShooterDone will never signal.
+                // In this case, TaskAutoShoot will "hang" forever in SHOOT state. This is intentional.
+                // This is intended to allow Operator in TeleOp to control when the shooter will stop becasue
+                // we don't want the shooter to stop just because the feeder didn't deliver balls fast enough
+                // that triggers the velTrigger timeout. In TeleOp, the operator can press AutoShoot button again
+                // to cacnel the AutoTask.
                 if ((robot.leftShooter == null || leftShooterShooting) &&
                     (robot.rightShooter == null || rightShooterShooting))
                 {
