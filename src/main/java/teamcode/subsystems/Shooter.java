@@ -156,7 +156,7 @@ public class Shooter extends TrcSubsystem
         public static final double TILT_MAX_POS                 = 47.0;
         public static final double TILT_POS_PRESET_TOLERANCE    = 2.0;
         public static final double[] TILT_POS_PRESETS           = {TILT_MIN_POS, 30.0, 35.0, 40.0, TILT_MAX_POS};
-        public static final double TILT_ZERO_CAL_POWER          = -0.1;
+        public static final double TILT_ZERO_CAL_POWER          = -0.075;
         public static final double TILT_ZERO_CAL_TIMEOUT        = 3.0;
         public static final double TILT_STALL_MIN_POWER         = Math.abs(TILT_ZERO_CAL_POWER);
         public static final double TILT_STALL_TOLERANCE         = 0.1;
@@ -205,7 +205,7 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_POS_PRESET_TOLERANCE  = 2.0;
         public static final double[] TURRET_POS_PRESETS         =
             {TURRET_MIN_POS, -135.0, -90.0, -45.0, 0.0, 45.0, 90.0, 135.0, TURRET_MAX_POS};
-        public static final double TURRET_ZERO_CAL_POWER        = 0.1;
+        public static final double TURRET_ZERO_CAL_POWER        = 0.2;
         public static final double TURRET_ZERO_CAL_TIMEOUT      = 6.0;
         public static final double TURRET_STALL_MIN_POWER       = Math.abs(TURRET_ZERO_CAL_POWER) * 0.9;
         public static final double TURRET_STALL_TOLERANCE       = 2.0;          // in degrees
