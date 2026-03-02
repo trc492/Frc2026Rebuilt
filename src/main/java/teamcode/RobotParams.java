@@ -202,10 +202,10 @@ public class RobotParams
         public static final double fieldLength                  = FrcField.getFieldLength();
         public static final double halfFieldWidth               = fieldWidth / 2.0;
         public static final double halfFieldLength              = fieldLength / 2.0;
-        public static final double allianceAreaWidth            = 182.11;
+        public static final double allianceAreaWidth            = 182.11; // This is actually the distance from the allaince wall to the center of the trench, to rename...
         public static final double[] fieldLengthTriggerPoints   = new double[]
         {
-            allianceAreaWidth-30.0, allianceAreaWidth+30.0, halfFieldLength, fieldLength - (allianceAreaWidth+30.0), fieldLength - (allianceAreaWidth-30.0)
+            allianceAreaWidth-30.0, allianceAreaWidth+30.0, halfFieldLength, fieldLength - (allianceAreaWidth+30.0), fieldLength - (allianceAreaWidth-30.0) // TODO: TUne
         };
         public static final double[] fieldWidthTriggerPoints    = new double[]
         {
