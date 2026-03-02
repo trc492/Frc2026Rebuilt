@@ -209,7 +209,7 @@ public class RobotParams
         };
         public static final double[] fieldWidthTriggerPoints    = new double[]
         {
-            halfFieldWidth-91.0, halfFieldWidth, halfFieldWidth+91.0
+            -halfFieldWidth-91.0, -halfFieldWidth, -halfFieldWidth+91.0
         };
         //
         // AprilTag Poses
