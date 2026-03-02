@@ -729,8 +729,11 @@ public class Shooter extends TrcSubsystem
         {
             synchronized (goalTrackingState)
             {
-                // We crossed field zones, let's re-evaluate tracking modes.
-                setupGoalTrackingMode();
+                if (goalTrackingState.trackingMode != TrackingMode.Disabled)
+                {
+                    // We crossed field zones, let's re-evaluate tracking modes.
+                    setupGoalTrackingMode();
+                }
             }
         }
     }   //fieldTriggerCallback
@@ -877,7 +880,6 @@ public class Shooter extends TrcSubsystem
     {
         synchronized (goalTrackingState)
         {
-            // Disable only if GoalTracking was enabled.
             goalTrackingState.trackingMode = TrackingMode.Disabled;
             goalTrackingState.goalFieldPose = null;
             goalTrackingState.rightShooterAimInfo = null;
@@ -1075,8 +1077,9 @@ public class Shooter extends TrcSubsystem
         if (shooterContext != null)
         {
             tracer.traceInfo(
-                instanceName, "shoot(owner=%s, event=%s, shooter=%s)",
-                owner, completionEvent, shooterContext == leftShooterContext? "leftShooter": "rightShooter");
+                instanceName, "shoot(owner=%s, event=%s, shooter=%s, autoStop=%s)",
+                owner, completionEvent, shooterContext == leftShooterContext? "leftShooter": "rightShooter",
+                shooterContext.autoStop);
             if (shooterContext.autoStop)
             {
                 TrcTriggerThresholdRange velTrigger =

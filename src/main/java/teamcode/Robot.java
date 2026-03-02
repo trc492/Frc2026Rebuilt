@@ -123,6 +123,8 @@ public class Robot extends FrcRobot
     public TaskAutoShoot autoShootTask;
     public TaskAutoPickup autoPickupTask;
     public TaskAutoClimb autoClimbTask;
+    // Miscellaneous
+    private boolean zeroCalibrated = false;
 
     /**
      * Constructor: Create an instance of the object.
@@ -327,6 +329,11 @@ public class Robot extends FrcRobot
                     }
                 }
             }
+            // Zero calibrate it only once. Don't do it again just because we are enabling/disabling robot.
+            if (!zeroCalibrated)
+            {
+                zeroCalibrate(null, null);
+            }
             // Start subsystems.
             if (ledIndicator != null)
             {
@@ -463,6 +470,7 @@ public class Robot extends FrcRobot
     {
         globalTracer.traceInfo(moduleName, "Zero calibrate all subsystems.");
         TrcSubsystem.zeroCalibrateAll(owner, completionEvent);
+        zeroCalibrated = true;
     }   //zeroCalibrate
 
     /**

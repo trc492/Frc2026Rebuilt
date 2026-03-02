@@ -168,6 +168,7 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
         if (robot.feeder != null) robot.feeder.cancel();
         if (prevGoalTrackingParams == null)
         {
+            tracer.traceInfo(moduleName, "No previous GoalTracking, disable it.");
             robot.shooterSubsystem.disableGoalTracking();
             robot.shooterSubsystem.cancel();
         }
