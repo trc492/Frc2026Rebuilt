@@ -99,10 +99,6 @@ public class Dashboard
 
     public static final String DBKEY_INTAKE_POWER                   = "Intake/IntakePower";
     public static final String DBKEY_INTAKE_CURRENT                 = "Intake/IntakeCurrent";
-    public static final String DBKEY_INTAKE_AUTO                    = "Intake/IntakeAuto";
-
-    public static final String DBKEY_DEPLOYER_POWER                 = "Intake/DeployerPower";
-    public static final String DBKEY_DEPLOYER_CURRENT               = "Intake/DeployerCurrent";
     public static final String DBKEY_DEPLOYER_POS                   = "Intake/DeployerPos";
     public static final String DBKEY_DEPLOYER_TARGET                = "Intake/DeployerTarget";
 

@@ -154,10 +154,10 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     passBack = autoChoices.getPassBack();
                     climb = autoChoices.getClimb();
                     climbSide = autoChoices.getClimbSide();
-                    if (robot.intakeSubsystem != null)
-                    {
-                        robot.intakeSubsystem.extend();
-                    }
+                    // if (robot.intakeSubsystem != null)
+                    // {
+                    //     robot.intakeSubsystem.extend();
+                    // }
                     // Do delay if necessary.
                     double startDelay = autoChoices.getStartDelay();
                     if (startDelay > 0.0)
@@ -382,7 +382,8 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
 
                     intakeEvent.clear();
                     sm.addEvent(intakeEvent);
-                    robot.intake.autoIntake(null, intakeEvent, 0.0);
+                    //TODO: there is no hopper full sensor, please rework this code.
+                    robot.intakeSubsystem.setIntakeEnabled(true);
                     
                     if (passBack == PassBack.PASS_BACK)
                     {

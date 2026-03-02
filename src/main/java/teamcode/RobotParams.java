@@ -142,7 +142,7 @@ public class RobotParams
         public static final int CANID_FEEDER_MOTOR              = 47;   //Purple
         // Intake CAN IDs
         public static final int CANID_INTAKE_MOTOR              = 48;   //Gray
-        public static final int CANID_INTAKE_DEPLOYER_MOTOR     = 49;   //White
+        public static final int CANID_INTAKE_DEPLOYER_ENCODER   = 49;   //White
         // Climber CAN IDs
         public static final int CANID_CLIMBER_MOTOR             = 57;   //Purple
 
@@ -151,7 +151,6 @@ public class RobotParams
         public static final int AIN_PRESSURE_SENSOR             = 0;
 
         // Digital Input/Output ports.
-        public static final int DIO_INTAKE_BACK_SENSOR          = 0;
 
         // PWM channels.
         public static final int NUM_LEDS                        = 150;
@@ -172,10 +171,13 @@ public class RobotParams
      */
     public static class Robot
     {
-        public static final String TEAM_FOLDER_PATH             = "/home/lvuser/trc492";
-        public static final String LOG_FOLDER_PATH              = TEAM_FOLDER_PATH + "/tracelogs";
-        public static final String STEER_ZERO_CAL_FILE          = TEAM_FOLDER_PATH + "/SteerZeroCalibration.txt";
-        public static final String FIELD_ZERO_CAL_FILE          = TEAM_FOLDER_PATH + "/FieldZeroCalibration.txt";
+        public static final String VOL_PATH                     = "/u";
+        public static final String DEF_VOL_PATH                 = "/home/lvuser";
+        public static final String TEAM_FOLDER_NAME             = "/trc492";
+        public static String teamFolderPath                     = VOL_PATH + TEAM_FOLDER_NAME;
+        public static final String LOG_FOLDER_NAME              = "/tracelogs";
+        public static final String STEER_ZERO_CAL_FILE_NAME     = "/SteerZeroCalibration.txt";
+        public static final String FIELD_ZERO_CAL_FILE_NAME     = "/FieldZeroCalibration.txt";
         public static final String ROBOT_CODEBASE               = "2026Rebuilt";
         public static final double ROBOT_WIDTH                  = 22.249;
         public static final double ROBOT_LENGTH                 = 22.249;

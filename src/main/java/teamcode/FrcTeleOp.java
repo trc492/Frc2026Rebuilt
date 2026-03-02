@@ -613,7 +613,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         if (robot.intakeSubsystem != null)
         {
             // setIntakeEnabled does trace logging, don't need to do it here.
-            robot.intakeSubsystem.setIntakeEnabled(!robot.intake.isActive());
+            robot.intakeSubsystem.setIntakeEnabled(!robot.intakeSubsystem.isIntakeOn());
         }
     }   //toggleIntake
 

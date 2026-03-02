@@ -26,7 +26,6 @@ import java.util.Locale;
 
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frclib.drivebase.FrcRobotBase;
 import frclib.drivebase.FrcSwerveBase;
 import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcUserChoices;
@@ -37,6 +36,7 @@ import trclib.command.CmdPidDrive;
 import trclib.command.CmdTimedDrive;
 import trclib.controller.TrcPidController;
 import trclib.dataprocessor.TrcUtil;
+import trclib.drivebase.TrcDriveBase.MotorIndex;
 import trclib.motor.TrcMotor;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcRobot;
@@ -599,19 +599,19 @@ public class FrcTest extends FrcTeleOp
                 case Y_TIMED_DRIVE:
                     if (robot.robotBase != null)
                     {
-                        double lfEnc = Math.abs(
-                            robot.robotBase.driveMotors[FrcRobotBase.INDEX_FRONT_LEFT].getMotorPosition());
-                        double rfEnc = Math.abs(
-                            robot.robotBase.driveMotors[FrcRobotBase.INDEX_FRONT_RIGHT].getMotorPosition());
-                        double lbEnc = Math.abs(
-                            robot.robotBase.driveMotors[FrcRobotBase.INDEX_BACK_LEFT] != null?
-                                robot.robotBase.driveMotors[FrcRobotBase.INDEX_BACK_LEFT].getMotorPosition(): 0.0);
-                        double rbEnc = Math.abs(
-                            robot.robotBase.driveMotors[FrcRobotBase.INDEX_BACK_RIGHT] != null?
-                                robot.robotBase.driveMotors[FrcRobotBase.INDEX_BACK_RIGHT].getMotorPosition(): 0.0);
-                        robot.dashboard.displayPrintf(lineNum++, "Enc:lf=%f,rf=%f", lfEnc, rfEnc);
-                        robot.dashboard.displayPrintf(lineNum++, "Enc:lb=%f,rb=%f", lbEnc, rbEnc);
-                        robot.dashboard.displayPrintf(lineNum++, "EncAverage=%f", (lfEnc + rfEnc + lbEnc + rbEnc) / 4.0);
+                        double flEnc = Math.abs(
+                            robot.robotBase.driveMotors[MotorIndex.FrontLeft.value].getMotorPosition());
+                        double frEnc = Math.abs(
+                            robot.robotBase.driveMotors[MotorIndex.FrontRight.value].getMotorPosition());
+                        double blEnc = Math.abs(
+                            robot.robotBase.driveMotors[MotorIndex.BackLeft.value] != null?
+                                robot.robotBase.driveMotors[MotorIndex.BackLeft.value].getMotorPosition(): 0.0);
+                        double brEnc = Math.abs(
+                            robot.robotBase.driveMotors[MotorIndex.BackRight.value] != null?
+                                robot.robotBase.driveMotors[MotorIndex.FrontRight.value].getMotorPosition(): 0.0);
+                        robot.dashboard.displayPrintf(lineNum++, "Enc:fl=%f,fr=%f", flEnc, frEnc);
+                        robot.dashboard.displayPrintf(lineNum++, "Enc:bl=%f,br=%f", blEnc, brEnc);
+                        robot.dashboard.displayPrintf(lineNum++, "EncAverage=%f", (flEnc + frEnc + blEnc + brEnc) / 4.0);
                         robot.dashboard.displayPrintf(
                             lineNum++, "RobotPose=%s", robot.robotBase.driveBase.getFieldPosition());
                     }

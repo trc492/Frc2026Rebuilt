@@ -41,6 +41,7 @@ import teamcode.RobotParams.HwConfig;
 import teamcode.vision.Vision;
 import trclib.controller.TrcPidController;
 import trclib.drivebase.TrcDriveBase;
+import trclib.drivebase.TrcDriveBase.MotorIndex;
 import trclib.drivebase.TrcSwerveDrive;
 import trclib.motor.TrcMotor;
 import trclib.robotcore.TrcDbgTrace;
@@ -147,7 +148,8 @@ public class DriveBase extends TrcSubsystem
                     new boolean[] {false, false, false, false}, 1.0,
                     //new double[] {0.125977, 0.687500 , 0.880859 , 0.234863},
                     new double[] {0.126221, 0.688721, 0.880371, 0.233398},
-                    SteerEncoderMode.CtreFusedCanCoder, RobotParams.Robot.STEER_ZERO_CAL_FILE)
+                    SteerEncoderMode.CtreFusedCanCoder,
+                    RobotParams.Robot.teamFolderPath + RobotParams.Robot.STEER_ZERO_CAL_FILE_NAME)
                 .setSteerMotorInfo(
                     MotorType.CanTalonFx, RobotParams.HwConfig.CANBUS_CANIVORE, null,
                     new String[] {"flSteerMotor", "frSteerMotor", "blSteerMotor", "brSteerMotor"},
@@ -234,7 +236,7 @@ public class DriveBase extends TrcSubsystem
                         HwConfig.CANID_BLSTEER_ENCODER, HwConfig.CANID_BRSTEER_ENCODER},
                     new boolean[] {false, false, false, false}, 1.0,
                     new double[] {0.0, 0.0, 0.0, 0.0}, SteerEncoderMode.SyncToMotorEncoder,
-                    RobotParams.Robot.STEER_ZERO_CAL_FILE)
+                    RobotParams.Robot.teamFolderPath + RobotParams.Robot.STEER_ZERO_CAL_FILE_NAME)
                 .setSteerMotorInfo(
                     MotorType.CanTalonFx, null, null,
                     new String[] {"flSteerMotor", "frSteerMotor", "blSteerMotor", "brSteerMotor"},
@@ -321,7 +323,7 @@ public class DriveBase extends TrcSubsystem
                         HwConfig.CANID_BLSTEER_ENCODER, HwConfig.CANID_BRSTEER_ENCODER},
                     new boolean[] {false, false, false, false}, 1.0,
                     new double[] {0.0, 0.0, 0.0, 0.0}, SteerEncoderMode.SyncToMotorEncoder,
-                    RobotParams.Robot.STEER_ZERO_CAL_FILE)
+                    RobotParams.Robot.teamFolderPath + RobotParams.Robot.STEER_ZERO_CAL_FILE_NAME)
                 .setSteerMotorInfo(
                     MotorType.CanTalonFx, null, null,
                     new String[] {"flSteerMotor", "frSteerMotor", "blSteerMotor", "brSteerMotor"},
@@ -556,15 +558,15 @@ public class DriveBase extends TrcSubsystem
             {
                 // DriveBase debug info.
                 double lfDriveEnc =
-                    robotBase.driveMotors[FrcRobotBase.INDEX_FRONT_LEFT].getPosition();
+                    robotBase.driveMotors[MotorIndex.FrontLeft.value].getPosition();
                 double rfDriveEnc =
-                    robotBase.driveMotors[FrcRobotBase.INDEX_FRONT_RIGHT].getPosition();
+                    robotBase.driveMotors[MotorIndex.FrontRight.value].getPosition();
                 double lbDriveEnc =
                     robotBase.driveMotors.length > 2?
-                        robotBase.driveMotors[FrcRobotBase.INDEX_BACK_LEFT].getPosition(): 0.0;
+                        robotBase.driveMotors[MotorIndex.BackLeft.value].getPosition(): 0.0;
                 double rbDriveEnc =
                     robotBase.driveMotors.length > 2?
-                    robotBase.driveMotors[FrcRobotBase.INDEX_BACK_RIGHT].getPosition(): 0.0;
+                    robotBase.driveMotors[MotorIndex.BackRight.value].getPosition(): 0.0;
                 dashboard.putString(
                     Dashboard.DBKEY_DRIVE_ENC,
                     String.format(
@@ -578,22 +580,22 @@ public class DriveBase extends TrcSubsystem
                         Dashboard.DBKEY_STEER_FRONT,
                         String.format(
                             "angle/motorEnc/absEnc: lf=%.1f/%.3f/%.3f, rf=%.1f/%.3f/%.3f",
-                            swerveBase.swerveModules[FrcRobotBase.INDEX_FRONT_LEFT].getSteerAngle(),
-                            swerveBase.steerMotors[FrcRobotBase.INDEX_FRONT_LEFT].getMotorPosition(),
-                            swerveBase.steerEncoders[FrcRobotBase.INDEX_FRONT_LEFT].getRawPosition(),
-                            swerveBase.swerveModules[FrcRobotBase.INDEX_FRONT_RIGHT].getSteerAngle(),
-                            swerveBase.steerMotors[FrcRobotBase.INDEX_FRONT_RIGHT].getMotorPosition(),
-                            swerveBase.steerEncoders[FrcRobotBase.INDEX_FRONT_RIGHT].getRawPosition()));
+                            swerveBase.swerveModules[MotorIndex.FrontLeft.value].getSteerAngle(),
+                            swerveBase.steerMotors[MotorIndex.FrontLeft.value].getMotorPosition(),
+                            swerveBase.steerEncoders[MotorIndex.FrontLeft.value].getRawPosition(),
+                            swerveBase.swerveModules[MotorIndex.FrontRight.value].getSteerAngle(),
+                            swerveBase.steerMotors[MotorIndex.FrontRight.value].getMotorPosition(),
+                            swerveBase.steerEncoders[MotorIndex.FrontRight.value].getRawPosition()));
                     dashboard.putString(
                         Dashboard.DBKEY_STEER_BACK,
                         String.format(
                             "angle/motorEnc/absEnc: lb=%.1f/%.3f/%.3f, rb=%.1f/%.3f/%.3f",
-                            swerveBase.swerveModules[FrcRobotBase.INDEX_BACK_LEFT].getSteerAngle(),
-                            swerveBase.steerMotors[FrcRobotBase.INDEX_BACK_LEFT].getMotorPosition(),
-                            swerveBase.steerEncoders[FrcRobotBase.INDEX_BACK_LEFT].getRawPosition(),
-                            swerveBase.swerveModules[FrcRobotBase.INDEX_BACK_RIGHT].getSteerAngle(),
-                            swerveBase.steerMotors[FrcRobotBase.INDEX_BACK_RIGHT].getMotorPosition(),
-                            swerveBase.steerEncoders[FrcRobotBase.INDEX_BACK_RIGHT].getRawPosition()));
+                            swerveBase.swerveModules[MotorIndex.BackLeft.value].getSteerAngle(),
+                            swerveBase.steerMotors[MotorIndex.BackLeft.value].getMotorPosition(),
+                            swerveBase.steerEncoders[MotorIndex.BackLeft.value].getRawPosition(),
+                            swerveBase.swerveModules[MotorIndex.BackRight.value].getSteerAngle(),
+                            swerveBase.steerMotors[MotorIndex.BackRight.value].getMotorPosition(),
+                            swerveBase.steerEncoders[MotorIndex.BackRight.value].getRawPosition()));
                 }
             }
 

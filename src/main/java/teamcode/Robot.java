@@ -22,6 +22,7 @@
 
 package teamcode;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -115,8 +116,7 @@ public class Robot extends FrcRobot
     public TrcMotor turret;
     public TrcMotor feeder;
     public Intake intakeSubsystem;
-    public TrcRollerIntake intake;
-    public TrcMotor intakeDeployer;
+    public TrcMotor intake;
     public Climber climberSubsystem;
     public TrcMotor climber;
     // Auto Tasks.
@@ -150,6 +150,7 @@ public class Robot extends FrcRobot
         // Initialize global objects.
         dashboard = new Dashboard().getDashboard();
         traceLogOpened = false;
+        createTeamFolderPath();
         // Create and initialize inputs.
         if (RobotParams.Preferences.hasDriverGameController)
         {
@@ -242,7 +243,6 @@ public class Robot extends FrcRobot
                 {
                     intakeSubsystem = new Intake(this);
                     intake = intakeSubsystem.getIntake();
-                    intakeDeployer = intakeSubsystem.getDeployer();
                 }
 
                 if (RobotParams.Preferences.useClimber)
@@ -475,6 +475,27 @@ public class Robot extends FrcRobot
     }   //turtle
 
     /**
+     * This method checks if the team folder exists. If not, it will try creating the team folder in the VOL_PATH.
+     * If VOL_PATH doesn't exist, it will create the team folder in the DEF_VOL_PATH.
+     */
+    public void createTeamFolderPath()
+    {
+        if (!new File(RobotParams.Robot.teamFolderPath).exists())
+        {
+            String volPath = new File(RobotParams.Robot.VOL_PATH).exists()?
+                RobotParams.Robot.VOL_PATH: RobotParams.Robot.DEF_VOL_PATH;
+            String teamFolderPath = volPath + RobotParams.Robot.TEAM_FOLDER_NAME;
+            File teamFolder = new File(teamFolderPath);
+
+            if (!teamFolder.exists())
+            {
+                teamFolder.mkdir();
+            }
+            RobotParams.Robot.teamFolderPath = teamFolderPath;
+        }
+    }   //createTeamFolderPath
+
+    /**
      * This method creates and opens the trace log with the file name derived from the given match info.
      * Note that the trace log is disabled after it is opened. The caller must explicitly call setTraceLogEnabled
      * to enable/disable it.
@@ -489,7 +510,8 @@ public class Robot extends FrcRobot
                 String.format(Locale.US, "%s_%s%03d", matchInfo.eventName, matchInfo.matchType, matchInfo.matchNumber):
                 getCurrentRunMode().name();
 
-            traceLogOpened = TrcDbgTrace.openTraceLog(RobotParams.Robot.LOG_FOLDER_PATH, fileName);
+            traceLogOpened = TrcDbgTrace.openTraceLog(
+                RobotParams.Robot.teamFolderPath + RobotParams.Robot.LOG_FOLDER_NAME, fileName);
         }
     }   //openTraceLog
 
@@ -525,7 +547,8 @@ public class Robot extends FrcRobot
      */
     private Double getFieldZeroCompassHeading()
     {
-        try (Scanner in = new Scanner(new FileReader(RobotParams.Robot.FIELD_ZERO_CAL_FILE)))
+        try (Scanner in = new Scanner(
+            new FileReader(RobotParams.Robot.teamFolderPath + RobotParams.Robot.FIELD_ZERO_CAL_FILE_NAME)))
         {
             return in.nextDouble();
         }
@@ -543,7 +566,8 @@ public class Robot extends FrcRobot
     {
         if (robotBase != null && robotBase.imu != null && robotInfo.imuType == ImuType.NavX)
         {
-            try (PrintStream out = new PrintStream(new FileOutputStream(RobotParams.Robot.FIELD_ZERO_CAL_FILE)))
+            try (PrintStream out = new PrintStream(
+                new FileOutputStream(RobotParams.Robot.teamFolderPath + RobotParams.Robot.FIELD_ZERO_CAL_FILE_NAME)))
             {
                 double fieldZeroHeading = ((FrcAHRSGyro) robotBase.imu).ahrs.getCompassHeading();
 
