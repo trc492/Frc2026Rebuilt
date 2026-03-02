@@ -197,7 +197,7 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_MOTOR_DEG_PER_COUNT   = 360.0/TURRET_MOTOR_GEAR_RATIO;
         public static final double TURRET_PID_TOLERANCE         = 1.0;
         public static final boolean TURRET_SOFTWARE_PID_ENABLED = false;
-        public static final double TURRET_POWER_LIMIT           = 0.2; 
+        public static final double TURRET_POWER_LIMIT           = 0.35; 
         public static final double TURRET_POS_OFFSET            = 182.25;//143.0;
         public static final double TURRET_MIN_POS               = -171.0;   
         public static final double TURRET_MAX_POS               = TURRET_POS_OFFSET - 2.5;//180.0;
