@@ -252,9 +252,9 @@ public class RobotParams
         //
         public static final TrcPose2D BLUE_HUB_POSE             = new TrcPose2D(-158.32, 181.56, 0.0);
         public static final TrcPose2D BLUE_PASSBACK_AUDIENCE_SIDE =
-            new TrcPose2D(0.0, 0.0, 0.0);
+            new TrcPose2D(-fieldWidth + 48.0, 48.0, 0.0);
         public static final TrcPose2D BLUE_PASSBACK_SCORETABLE_SIDE =
-            new TrcPose2D(0.0, 0.0, 0.0);
+            new TrcPose2D(-48.0, 48.0, 0.0);
         public static final TrcPose2D BLUE_OUTPOST_PICKUP_POSE  =
             new TrcPose2D(-26.22, (30.0/2.0) + 10.0, -180.0); // TODO: Fine tune x and y
         public static final TrcPose2D BLUE_DEPOT_PICKUP_POSE    =
