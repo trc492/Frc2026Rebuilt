@@ -94,7 +94,9 @@ public class DriveBase extends TrcSubsystem
         private static final TrcPidController.PidCoefficients velPidCoeffs =
             new TrcPidController.PidCoefficients(0.0, 0.0, 0.0, 0.00909090909090909090909090909091, 0.0);
         private static final TrcPidController.PidCoefficients steerPidCoeffs =
-            new TrcPidController.PidCoefficients(52.87825, 0.0, 0.0, 0.82872, 0.0);
+            new TrcPidController.PidCoefficients(52.87825, 0.0, 0.0, 0.0, 0.0);
+        private static final TrcPidController.FFCoefficients steerFFCoeffs =
+            new TrcPidController.FFCoefficients(0.0, 0.82872, 0.0);
 
         public static TrcDriveBase.BaseParams baseParams = new TrcDriveBase.BaseParams()
             .setDriveMotorVelocityControl(
@@ -111,6 +113,7 @@ public class DriveBase extends TrcSubsystem
             .setSteerMotorPidParams(
                 new TrcMotor.PidParams()
                     .setPidCoefficients(steerPidCoeffs)
+                    .setFFCoefficients(steerFFCoeffs)
                     .setPidControlParams(0.5, false));
 
         public RebuiltRobotInfo()
