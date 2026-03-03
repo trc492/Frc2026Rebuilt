@@ -238,7 +238,7 @@ public class RobotParams
         //
         // Robot starting positions.
         //
-        public static final double STARTPOS_BLUE_Y              = 156.61 - Robot.ROBOT_LENGTH / 2.0; // TODO: Adjust +/- 2.0 inches based on robot starting positiom
+        public static final double STARTPOS_BLUE_Y              = 156.61 - Robot.ROBOT_LENGTH / 2.0 + Robot.ROBOT_LENGTH; // TODO: Adjust +/- 2.0 inches based on robot starting positiom
         public static final double STARTPOS_OUTPOST_X           = -26.22;
         public static final double STARTPOS_CENTER_X            = -fieldWidth / 2.0;
         public static final double STARTPOS_DEPOT_X             = -fieldWidth + 26.22;

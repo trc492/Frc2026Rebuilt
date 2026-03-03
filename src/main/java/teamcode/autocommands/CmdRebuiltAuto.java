@@ -227,7 +227,10 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                 //     break;
 
                 case PICKUP_DEPOT:
-                    robot.intakeSubsystem.deploy();
+                    if (robot.intakeSubsystem != null)
+                    {
+                        robot.intakeSubsystem.deploy();
+                    }
                     TrcPose2D depotIntermediatePose = RobotParams.Game.BLUE_DEPOT_PICKUP_POSE.clone();
                     if (alliance == Alliance.Blue)
                     {
@@ -275,7 +278,10 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     break;
 
                 case PICKUP_OUTPOST:
-                    robot.intakeSubsystem.deploy();
+                    if (robot.intakeSubsystem != null)
+                    {
+                        robot.intakeSubsystem.deploy();
+                    }
                     TrcPose2D outpostIntermediatePose = RobotParams.Game.BLUE_OUTPOST_PICKUP_POSE.clone();
                     if (alliance == Alliance.Blue)
                     {
@@ -391,7 +397,10 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                                 robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
                                 if (i == deployWaypoint)
                                 {
-                                    robot.intakeSubsystem.deploy();
+                                    if (robot.intakeSubsystem != null)
+                                    {
+                                        robot.intakeSubsystem.deploy();
+                                    }
                                 }
                             });
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.3);
@@ -416,8 +425,11 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
 
                     double endXOffset = (depotSide) ? 35.0 : -35.0;
                     neutralEndPose.x += (alliance == Alliance.Blue) ? endXOffset : -endXOffset;
-
-                    robot.intakeSubsystem.setIntakeEnabled(true);
+                    
+                    if (robot.intakeSubsystem != null)
+                    {
+                        robot.intakeSubsystem.setIntakeEnabled(true);
+                    }
                     
                     if (passBack == PassBack.PASS_BACK)
                     {
