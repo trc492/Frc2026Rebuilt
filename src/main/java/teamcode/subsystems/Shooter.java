@@ -1002,6 +1002,7 @@ public class Shooter extends TrcSubsystem
                         0.0, aimInfo.panAngle, true, Params.TURRET_POWER_LIMIT, goalTrackingState.turretReadyEvent,
                         goalTrackingState.turretReadyTimeout);
                     goalTrackingState.turretReadyEvent = null;
+                    goalTrackingState.turretReadyTimeout = 0.0;
                 }
             }
             else
