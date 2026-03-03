@@ -442,6 +442,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                             robot.autoShootTask.autoShoot(null, null, false);
                         }
                     }
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.6);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
                         robot.robotInfo.baseParams.profiledMaxDriveVelocity,
@@ -469,11 +470,11 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     
                     TrcPose2D returnIntermediatePose = returnScorePose.clone();
 
-                    double returnYOffset = (alliance == Alliance.Blue) ? 65.0 : -65.0;
+                    double returnYOffset = (alliance == Alliance.Blue) ? 60.0 : -60.0;
                     returnIntermediatePose.y += returnYOffset;
 
                     TrcPose2D[] returnPath = new TrcPose2D[] {returnIntermediatePose, returnScorePose};
-                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.6);
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
                         robot.robotInfo.baseParams.profiledMaxDriveVelocity,
