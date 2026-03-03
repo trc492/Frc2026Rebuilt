@@ -107,8 +107,7 @@ public class DriveBase extends TrcSubsystem
             .setYPidParams(drivePidCoeffs, 0.5)
             .setTurnPidParams(turnPidCoeffs, 0.5)
             .setVelocityPidParams(velPidCoeffs)
-             // maxVel:184.4, maxAcc: 6845.1, maxDecel: 14318.0, turnVel: 423.4
-            .setDriveCharacteristics(175.0, 200.0, 90.0, 400.0);
+            .setMotionProfileParams(175.0, 200.0, 90.0);
         public static TrcSwerveDrive.SwerveParams swerveParams = new TrcSwerveDrive.SwerveParams()
             .setSteerMotorPidParams(
                 new TrcMotor.PidParams()
@@ -119,9 +118,10 @@ public class DriveBase extends TrcSubsystem
         public RebuiltRobotInfo()
         {
             this.setBaseParams(baseParams)
+                // maxVel:184.4, maxAcc: 6845.1, maxDecel: 14318.0, turnVel: 423.4
                 .setRobotInfo(
                     RobotType.RebuiltRobot.toString(), ROBOT_WIDTH, ROBOT_LENGTH,
-                    WHEEL_BASE_WIDTH, WHEEL_BASE_LENGTH)
+                    WHEEL_BASE_WIDTH, WHEEL_BASE_LENGTH, 175.0, 400.0)
                 .setPigeon2ImuInfo("Pigeon2", RobotParams.HwConfig.CANID_PIGEON2, RobotParams.HwConfig.CANBUS_CANIVORE)
                 .setDriveMotorInfo(
                     MotorType.CanTalonFx, RobotParams.HwConfig.CANBUS_CANIVORE, null,
@@ -197,7 +197,7 @@ public class DriveBase extends TrcSubsystem
             .setYPidParams(drivePidCoeffs, 0.5)
             .setTurnPidParams(turnPidCoeffs, 0.5)
             .setVelocityPidParams(velPidCoeffs)
-            .setDriveCharacteristics(110.0, 200.0, 90.0, 200.0);
+            .setMotionProfileParams(110.0, 200.0, 90.0);
         public static TrcSwerveDrive.SwerveParams swerveParams = new TrcSwerveDrive.SwerveParams()
             .setSteerMotorPidParams(
                 new TrcMotor.PidParams()
@@ -209,7 +209,7 @@ public class DriveBase extends TrcSubsystem
             this.setBaseParams(baseParams)
                 .setRobotInfo(
                     RobotType.ReefscapeRobot.toString(), ROBOT_WIDTH, ROBOT_LENGTH,
-                    WHEEL_BASE_WIDTH, WHEEL_BASE_LENGTH)
+                    WHEEL_BASE_WIDTH, WHEEL_BASE_LENGTH, 110.0, 200.0)
                 .setNavXImuInfo("NavX", NavXComType.kMXP_SPI)
                 .setDriveMotorInfo(
                     MotorType.CanTalonFx, null, null,
@@ -284,7 +284,7 @@ public class DriveBase extends TrcSubsystem
             .setYPidParams(drivePidCoeffs, 0.5)
             .setTurnPidParams(turnPidCoeffs, 1.0)
             .setVelocityPidParams(velPidCoeffs)
-            .setDriveCharacteristics(157.48, 10000.0, 10000.0, 180.0);
+            .setMotionProfileParams(157.48, 10000.0, 10000.0);
         public static TrcSwerveDrive.SwerveParams swerveParams = new TrcSwerveDrive.SwerveParams()
             .setSteerMotorPidParams(
                 new TrcMotor.PidParams()
@@ -296,7 +296,7 @@ public class DriveBase extends TrcSubsystem
             this.setBaseParams(baseParams)
                 .setRobotInfo(
                     RobotType.MaestroRobot.toString(), ROBOT_WIDTH, ROBOT_LENGTH,
-                    WHEEL_BASE_WIDTH, WHEEL_BASE_LENGTH)
+                    WHEEL_BASE_WIDTH, WHEEL_BASE_LENGTH, 157.48, 180.0)
                 .setNavXImuInfo("NavX", NavXComType.kMXP_SPI)
                 .setDriveMotorInfo(
                     MotorType.CanTalonFx, null, null,
