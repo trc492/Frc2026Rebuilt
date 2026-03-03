@@ -75,6 +75,9 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
     private PassBack passBack;
     private boolean climb;
     private TaskAutoClimb.ClimbSide climbSide;
+    private double neutralZoneCycles;
+
+    private int currentNeutralZoneCycles = 0;
 
     /**
      * Constructor: Create an instance of the object.
@@ -152,6 +155,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     passBack = autoChoices.getPassBack();
                     climb = autoChoices.getClimb();
                     climbSide = autoChoices.getClimbSide();
+                    neutralZoneCycles = autoChoices.getNeutralZoneCycles();
                     // if (robot.intakeSubsystem != null)
                     // {
                     //     robot.intakeSubsystem.extend();
@@ -426,6 +430,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
 
                 
                 case GO_TO_NEUTRAL_ZONE:
+                    currentNeutralZoneCycles++;
                     if (robot.intakeSubsystem != null)
                     {
                         robot.intakeSubsystem.setIntakeEnabled(true);
@@ -553,8 +558,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
                         robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
                         robot.adjustPathByAlliance(alliance, returnPath));
-
-                    sm.waitForSingleEvent(event, State.DONE);
+                    sm.waitForSingleEvent(event, State.SHOOT_NEUTRAL_FUEL);
                     break;
                 
                 case SHOOT_NEUTRAL_FUEL:
@@ -562,27 +566,28 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     {
                         robot.autoShootTask.autoShoot(null, event, true);
                     }
-                    if (climb)
+
+                    State next;
+                    if (currentNeutralZoneCycles < neutralZoneCycles)
                     {
-                        if (robot.shooterSubsystem != null)
-                        {
-                            sm.waitForSingleEvent(event, State.GO_TO_CLIMB_POS);
-                        }
-                        else
-                        {
-                            sm.setState(State.GO_TO_CLIMB_POS);
-                        }
+                        next = State.GO_TO_NEUTRAL_ZONE;
+                    }
+                    else if (climb)
+                    {
+                        next = State.GO_TO_CLIMB_POS;
                     }
                     else
                     {
-                        if (robot.shooterSubsystem != null)
-                        {
-                            sm.waitForSingleEvent(event, State.DONE);
-                        }
-                        else
-                        {
-                            sm.setState(State.DONE);
-                        }
+                        next = State.DONE;
+                    }
+
+                    if (robot.shooterSubsystem != null)
+                    {
+                        sm.waitForSingleEvent(event, next);
+                    }
+                    else
+                    {
+                        sm.setState(next);
                     }
                     break;
                     

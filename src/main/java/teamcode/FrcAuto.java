@@ -169,6 +169,7 @@ public class FrcAuto implements TrcRobot.RobotMode
             userChoices.addChoiceMenu(Dashboard.DBKEY_AUTO_MOVE_TO, moveToChoiceMenu);
             userChoices.addChoiceMenu(Dashboard.DBKEY_AUTO_PASS_BACK, passBackChoiceMenu);
             userChoices.addBoolean(Dashboard.DBKEY_AUTO_CLIMB, false);
+            userChoices.addNumber(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_CYCLES, 0.0);
 
             userChoices.addString(Dashboard.DBKEY_AUTO_PATHFILE, "DrivePath.csv");
             userChoices.addNumber(Dashboard.DBKEY_AUTO_X_DRIVE_DISTANCE, 0.0);      // in feet
@@ -239,6 +240,11 @@ public class FrcAuto implements TrcRobot.RobotMode
             return climbSideChoiceMenu.getCurrentChoiceObject();
         }   //getClimbSide
 
+        public double getNeutralZoneCycles()
+        {
+            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_CYCLES);
+        }   //getNeutralZoneCycles
+
         public String getPathFile()
         {
             return userChoices.getUserString(Dashboard.DBKEY_AUTO_PATHFILE);
@@ -284,6 +290,7 @@ public class FrcAuto implements TrcRobot.RobotMode
                    "passBack=\"" + getPassBack() + "\" " +
                    "climb=\"" + getClimb() + "\" " +
                    "climbSide=\"" + getClimbSide() + "\" " +
+                   "neutralZoneCycles=\"" + getNeutralZoneCycles() + "\" " +
 
                    "pathFile=\"" + getPathFile() + "\" " +
                    "xDistance=" + getXDriveDistance() + " ft " +

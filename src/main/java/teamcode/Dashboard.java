@@ -125,6 +125,7 @@ public class Dashboard
     public static final String DBKEY_AUTO_PASS_BACK                 = "Auto/PassBack";              //Choices
     public static final String DBKEY_AUTO_CLIMB                     = "Auto/Climb";                 //Boolean
     public static final String DBKEY_AUTO_CLIMB_SIDE                = "Auto/ClimbSide";             //Choices
+    public static final String DBKEY_AUTO_NEUTRAL_ZONE_CYCLES       = "Auto/NeutralZoneCycles";     //Number
 
     public static final String DBKEY_AUTO_PATHFILE                  = "Auto/PathFile";              //String
     public static final String DBKEY_AUTO_X_DRIVE_DISTANCE          = "Auto/XDriveDistance";        //Number
