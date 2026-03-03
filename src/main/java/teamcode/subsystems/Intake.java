@@ -22,6 +22,7 @@
 
  package teamcode.subsystems;
 
+import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 
 import frclib.driverio.FrcDashboard;
@@ -136,18 +137,18 @@ public class Intake extends TrcSubsystem
         return intake;
     }   //getIntake
 
-    // private void syncDeployerEncoder()
-    // {
-    //     // encoderPos gives us the physical angle of the deployer.
-    //     FrcCANTalonFX intakeMotor = (FrcCANTalonFX) intake;
-    //     double encoderPos = deployerEncoder.getScaledPosition();
-    //     double motorEncoderPos = encoderPos * Params.DEPLOYER_MOTOR_SCALE;
-    //     StatusCode statusCode = intakeMotor.motor.setPosition(motorEncoderPos);
+    private void syncDeployerEncoder()
+    {
+        FrcCANTalonFX intakeMotor = (FrcCANTalonFX) intake;
+        // encoderPos gives us a range between 0.0 to 1.0.
+        double encoderPos = deployerEncoder.getScaledPosition();
+        double motorEncoderPos = encoderPos * Params.DEPLOYER_MOTOR_SCALE;
+        StatusCode statusCode = intakeMotor.motor.setPosition(motorEncoderPos);
 
-    //     robot.globalTracer.traceInfo(
-    //         instanceName, "SyncDeployerEncoder(encPos=%f, motorEncPos=%f, status=%s)",
-    //         encoderPos, motorEncoderPos, statusCode);
-    // }   //syncDeployerEncoder
+        robot.globalTracer.traceInfo(
+            instanceName, "SyncDeployerEncoder(encPos=%f, motorEncPos=%f, status=%s)",
+            encoderPos, motorEncoderPos, statusCode);
+    }   //syncDeployerEncoder
 
     public void setIntakeEnabled(boolean enabled)
     {
@@ -168,7 +169,7 @@ public class Intake extends TrcSubsystem
     {
         // Stop intake if it's ON.
         setIntakeEnabled(false);
-        // syncDeployerEncoder();
+        syncDeployerEncoder();
         intake.setPosition(Params.DEPLOYER_RETRACT_POS);
     }   //retract
 

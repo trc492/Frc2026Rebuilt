@@ -59,6 +59,7 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
     {
         ClimbSide climbSide;
         Alliance alliance;
+
         TaskParams(ClimbSide climbSide, Alliance alliance)
         {
             this.climbSide = climbSide;
@@ -122,7 +123,9 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
         // For example:
         // return owner == null ||
         //        subsystem1.acquireExclusiveAccess(owner) && subsystem2.acquireExclusiveAccess(owner);
-        return owner == null || robot.robotBase.driveBase.acquireExclusiveAccess(owner);
+        return owner == null ||
+               robot.robotBase.driveBase.acquireExclusiveAccess(owner) &&
+               robot.climber.acquireExclusiveAccess(owner);
     }   //acquireSubsystemsOwnership
 
     /**
@@ -140,8 +143,10 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
             tracer.traceInfo(
                 moduleName,
                 "Releasing subsystem ownership on behalf of " + owner +
-                "\n\trobotDrive=" + ownershipMgr.getOwner(robot.robotBase.driveBase));
+                "\n\trobotDrive=" + ownershipMgr.getOwner(robot.robotBase.driveBase) +
+                "\n\tclimber=" + ownershipMgr.getOwner(robot.climber));
             robot.robotBase.driveBase.releaseExclusiveAccess(owner);
+            robot.climber.releaseExclusiveAccess(owner);
         }
     }   //releaseSubsystemsOwnership
 
@@ -156,6 +161,7 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
     {
         tracer.traceInfo(moduleName, "Stopping subsystems.");
         robot.robotBase.cancel(owner);
+        robot.climber.cancel();
     }   //stopSubsystems
 
     /**
@@ -182,52 +188,47 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
                 // TODO: Do we need to do anything in start?
                 sm.setState(State.DRIVE_TO_SIDE);
                 break;
-            
+
             case DRIVE_TO_SIDE:
+                TrcPose2D climbSidePose = taskParams.climbSide == ClimbSide.DEPOT?
+                    RobotParams.Game.BLUE_DEPOT_CLIMB_POSE: RobotParams.Game.BLUE_OUTPOST_CLIMB_POSE;
+                TrcPose2D climbSideIntermediatePose = climbSidePose.clone();
+
                 climberEvent.clear();
                 sm.addEvent(climberEvent);
-                robot.climber.setPosition(0.0, Climber.Params.CLIMBER_EXTEND_POS, true, Climber.Params.CLIMBER_POWER_LIMIT, climberEvent);
+                robot.climber.setPosition(
+                    owner, 0.0, Climber.Params.CLIMBER_EXTEND_POS, true, Climber.Params.CLIMBER_POWER_LIMIT,
+                    climberEvent, 0.0);
 
-                boolean isDepot = taskParams.climbSide == ClimbSide.DEPOT ? true: false;
-                TrcPose2D climbSidePose = isDepot ? RobotParams.Game.BLUE_DEPOT_CLIMB_POSE : RobotParams.Game.BLUE_OUTPOST_CLIMB_POSE;
-                TrcPose2D climbSideIntermediatePose = climbSidePose.clone();
-                if (taskParams.alliance == Alliance.Blue)
-                {
-                    climbSideIntermediatePose.y += 12.0;
-                }
-                else
-                {
-                    climbSideIntermediatePose.y -= 12.0;
-                }
-
-                TrcPose2D[] climbSidePath = {climbSideIntermediatePose, climbSidePose};
+                event.clear();
+                sm.addEvent(event);
+                climbSideIntermediatePose.y += taskParams.alliance == Alliance.Blue? 12.0: -12.0;
                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
                 robot.robotBase.purePursuitDrive.start(
-                    null, event, 0.0, false,
+                    owner, event, 0.0, false,
                     robot.robotInfo.baseParams.profiledMaxDriveVelocity,
                     robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
                     robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
-                    robot.adjustPathByAlliance(taskParams.alliance, climbSidePath));
+                    robot.adjustPathByAlliance(taskParams.alliance, climbSideIntermediatePose, climbSidePose));
+
                 sm.waitForEvents(State.ALIGN_CLIMBER, true);
                 break;
-            
+
             case ALIGN_CLIMBER:
                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.3);
                 robot.robotBase.purePursuitDrive.start(
-                    null, event, 0.0, false,
+                    owner, event, 0.0, true,
                     robot.robotInfo.baseParams.profiledMaxDriveVelocity,
                     robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
                     robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
-                    new TrcPose2D(0.0, 20.0, 0.0)); // TODO: Tune this
+                    new TrcPose2D(0.0, -20.0, 0.0)); // TODO: Tune this
                 sm.waitForSingleEvent(event, State.CLIMB);
                 break;
 
-            
             case CLIMB:
-                // robot.climberSubsystem.climb();
-                climberEvent.clear();
-                sm.addEvent(climberEvent);
-                robot.climber.setPosition(0.0, Climber.Params.CLIMBER_RETRACT_POS, true, Climber.Params.CLIMBER_POWER_LIMIT, climberEvent);
+                robot.climber.setPosition(
+                    owner, 0.0, Climber.Params.CLIMBER_RETRACT_POS, true, Climber.Params.CLIMBER_POWER_LIMIT,
+                    climberEvent, 0.0);
                 sm.waitForSingleEvent(climberEvent, State.DONE);
                 break;
 

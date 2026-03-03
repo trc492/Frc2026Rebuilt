@@ -525,7 +525,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         robot.robotInfo.baseParams.profiledMaxDriveVelocity,
                         robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
                         robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
-                        robot.adjustPoseByAlliance(neutralEndPose, alliance));
+                        robot.adjustPoseByAlliance(alliance, neutralEndPose));
                     sm.waitForSingleEvent(event, State.RETURN_TO_SCORE_POS);
                     break;
                 
@@ -597,8 +597,8 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         robot.robotInfo.baseParams.profiledMaxDriveVelocity,
                         robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
                         robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
-                        robot.adjustPoseByAlliance(RobotParams.Game.BLUE_CLIMB_LOOKOUT_POSE, alliance));
-                        sm.waitForSingleEvent(event, State.CLIMB);
+                        robot.adjustPoseByAlliance(alliance, RobotParams.Game.BLUE_CLIMB_LOOKOUT_POSE));
+                    sm.waitForSingleEvent(event, State.CLIMB);
                     break;
 
                 case CLIMB:

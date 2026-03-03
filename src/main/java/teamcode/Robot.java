@@ -644,7 +644,7 @@ public class Robot extends FrcRobot
     {
         int startPosIndex = FrcAuto.autoChoices.getStartPos().value;
         Alliance alliance = FrcAuto.autoChoices.getAlliance();
-        TrcPose2D robotPose = adjustPoseByAlliance(RobotParams.Game.blueStartPoses[startPosIndex], alliance);
+        TrcPose2D robotPose = adjustPoseByAlliance(alliance, RobotParams.Game.blueStartPoses[startPosIndex]);
         setFieldPosition(robotPose, false);
     }   //setRobotStartPosition
 
@@ -758,13 +758,13 @@ public class Robot extends FrcRobot
     /**
      * This method adjusts the given pose in the blue alliance to be the specified alliance.
      *
+     * @param alliance specifies the alliance to be converted to.
      * @param x specifies x position in the blue alliance.
      * @param y specifies y position in the blue alliance.
      * @param heading specifies heading in the blue alliance.
-     * @param alliance specifies the alliance to be converted to.
      * @return pose adjusted to be in the specified alliance.
      */
-    public TrcPose2D adjustPoseByAlliance(double x, double y, double heading, Alliance alliance)
+    public TrcPose2D adjustPoseByAlliance(Alliance alliance, double x, double y, double heading)
     {
         TrcPose2D newPose = new TrcPose2D(x, y, heading);
 
@@ -793,13 +793,13 @@ public class Robot extends FrcRobot
     /**
      * This method adjusts the given pose in the blue alliance to be the specified alliance.
      *
-     * @param pose specifies pose in the blue alliance.
      * @param alliance specifies the alliance to be converted to.
+     * @param pose specifies pose in the blue alliance.
      * @return pose adjusted to be in the specified alliance.
      */
-    public TrcPose2D adjustPoseByAlliance(TrcPose2D pose, Alliance alliance)
+    public TrcPose2D adjustPoseByAlliance(Alliance alliance, TrcPose2D pose)
     {
-        return adjustPoseByAlliance(pose.x, pose.y, pose.angle, alliance);
+        return adjustPoseByAlliance(alliance, pose.x, pose.y, pose.angle);
     }   //adjustPoseByAlliance
 
     /**
@@ -809,11 +809,10 @@ public class Robot extends FrcRobot
      * @param poses specifies an array of poses in the blue alliance.
      * @return pose adjusted to be in the specified alliance.
      */
-    public TrcPose2D[] adjustPathByAlliance(
-        Alliance alliance, TrcPose2D... poses)
+    public TrcPose2D[] adjustPathByAlliance(Alliance alliance, TrcPose2D... poses)
     {
         return Stream.of(poses)
-                     .map(pose -> adjustPoseByAlliance(pose, alliance))
+                     .map(pose -> adjustPoseByAlliance(alliance, pose))
                      .toArray(TrcPose2D[]::new);
     }   //adjustPathByAlliance
 

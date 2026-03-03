@@ -791,7 +791,7 @@ public class Shooter extends TrcSubsystem
             {
                 // Goal Tracking is not ON, just use the alliance's Hub pose.
                 Alliance alliance = FrcAuto.autoChoices.getAlliance();
-                goalFieldPose = robot.adjustPoseByAlliance(RobotParams.Game.BLUE_HUB_POSE, alliance);
+                goalFieldPose = robot.adjustPoseByAlliance(alliance, RobotParams.Game.BLUE_HUB_POSE);
             }
             return goalFieldPose;
         }
@@ -816,16 +816,16 @@ public class Shooter extends TrcSubsystem
         {
             // Alliance Hub tracking mode.
             goalTrackingState.goalFieldPose =
-                robot.adjustPoseByAlliance(RobotParams.Game.BLUE_HUB_POSE, alliance);
+                robot.adjustPoseByAlliance(alliance, RobotParams.Game.BLUE_HUB_POSE);
         }
         else
         {
             // Passback tracking mode.
             goalTrackingState.goalFieldPose =
                 robot.adjustPoseByAlliance(
+                    alliance,
                     fieldWidthZone <= 1? RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
-                                        RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE,
-                    alliance);
+                                        RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE);
         }
         goalTrackingState.rightShooterAimInfo = null;
 
