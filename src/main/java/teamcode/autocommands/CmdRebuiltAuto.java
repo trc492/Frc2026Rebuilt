@@ -227,10 +227,10 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                 //     break;
 
                 case PICKUP_DEPOT:
-                    if (robot.intakeSubsystem != null)
-                    {
-                        robot.intakeSubsystem.deploy();
-                    }
+                    // if (robot.intakeSubsystem != null)
+                    // {
+                    //     robot.intakeSubsystem.deploy();
+                    // }
                     TrcPose2D depotIntermediatePose = RobotParams.Game.BLUE_DEPOT_PICKUP_POSE.clone();
                     if (alliance == Alliance.Blue)
                     {
@@ -278,10 +278,10 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     break;
 
                 case PICKUP_OUTPOST:
-                    if (robot.intakeSubsystem != null)
-                    {
-                        robot.intakeSubsystem.deploy();
-                    }
+                    // if (robot.intakeSubsystem != null)
+                    // {
+                    //     robot.intakeSubsystem.deploy();
+                    // }
                     TrcPose2D outpostIntermediatePose = RobotParams.Game.BLUE_OUTPOST_PICKUP_POSE.clone();
                     if (alliance == Alliance.Blue)
                     {
@@ -354,6 +354,10 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     break;
                 
                 case GO_TO_NEUTRAL_ZONE:
+                    if (robot.intakeSubsystem != null)
+                    {
+                        robot.intakeSubsystem.setIntakeEnabled(true);
+                    }
                     boolean isDepot = (startPos == AutoStartPos.START_POS_DEPOT) || 
                         (startPos == AutoStartPos.START_POS_CENTER && moveTo == MoveTo.DEPOT);
 
@@ -371,39 +375,39 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     TrcPose2D neutralPickupPose = isDepot ? 
                         RobotParams.Game.BLUE_DEPOT_NEUTRAL_PICKUP_POSE.clone() : RobotParams.Game.BLUE_OUTPOST_NEUTRAL_PICKUP_POSE.clone();
 
-                    double yOffset = (alliance == Alliance.Blue) ? 30.0 : -30.0;
+                    double yOffset = (alliance == Alliance.Blue) ? 60.0 : -60.0;
                     neutralIntermediatePose.y += yOffset;
                     
                     double xOffset = (isDepot) ? 48.0 : -48.0;
                     neutralPickupPose.x += (alliance == Alliance.Blue) ? xOffset : -xOffset;
 
                     TrcPose2D[] approachPath;
-                    int deployWaypoint;
+                    // int deployWaypoint;
                     if (startPos == AutoStartPos.START_POS_CENTER)
                     {
-                        deployWaypoint = 1;
+                        // deployWaypoint = 2;
                         approachPath = new TrcPose2D[] {centerIntermediatePose, neutralIntermediatePose, neutralPickupPose};
                         //approachPath = new TrcPose2D[] {centerIntermediatePose};
                     } 
                     else
                     {
-                        deployWaypoint = 0;
+                        // deployWaypoint = 1;
                         approachPath = new TrcPose2D[] {neutralIntermediatePose, neutralPickupPose};
                     }
 
-                    robot.robotBase.purePursuitDrive.setWaypointEventHandler(
-                            (i, wp) ->
-                            {
-                                robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
-                                if (i == deployWaypoint)
-                                {
-                                    if (robot.intakeSubsystem != null)
-                                    {
-                                        robot.intakeSubsystem.deploy();
-                                    }
-                                }
-                            });
-                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.3);
+                    // robot.robotBase.purePursuitDrive.setWaypointEventHandler(
+                    //         (i, wp) ->
+                    //         {
+                    //             robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
+                    //             if (i == deployWaypoint)
+                    //             {
+                    //                 if (robot.intakeSubsystem != null)
+                    //                 {
+                    //                     robot.intakeSubsystem.deploy();
+                    //                 }
+                    //             }
+                    //         });
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
                         robot.robotInfo.baseParams.profiledMaxDriveVelocity,
@@ -423,7 +427,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         RobotParams.Game.BLUE_DEPOT_NEUTRAL_PICKUP_POSE.clone() : 
                         RobotParams.Game.BLUE_OUTPOST_NEUTRAL_PICKUP_POSE.clone();
 
-                    double endXOffset = (depotSide) ? 35.0 : -35.0;
+                    double endXOffset = (depotSide) ? 150.0 : -150.0;
                     neutralEndPose.x += (alliance == Alliance.Blue) ? endXOffset : -endXOffset;
                     
                     if (robot.intakeSubsystem != null)
@@ -465,11 +469,11 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     
                     TrcPose2D returnIntermediatePose = returnScorePose.clone();
 
-                    double returnYOffset = (alliance == Alliance.Blue) ? 30.0 : -30.0;
+                    double returnYOffset = (alliance == Alliance.Blue) ? 65.0 : -65.0;
                     returnIntermediatePose.y += returnYOffset;
 
                     TrcPose2D[] returnPath = new TrcPose2D[] {returnIntermediatePose, returnScorePose};
-
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.6);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
                         robot.robotInfo.baseParams.profiledMaxDriveVelocity,
@@ -477,7 +481,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
                         robot.adjustPathByAlliance(alliance, returnPath));
 
-                    sm.waitForSingleEvent(event, State.SHOOT_NEUTRAL_FUEL);
+                    sm.waitForSingleEvent(event, State.DONE);
                     break;
                 
                 case SHOOT_NEUTRAL_FUEL:

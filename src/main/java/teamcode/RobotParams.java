@@ -262,9 +262,9 @@ public class RobotParams
         public static final TrcPose2D BLUE_DEPOT_PICKUP_POSE    =
             new TrcPose2D(-fieldWidth + 40.0, Robot.ROBOT_WIDTH / 2.0, -90.0); // TODO: Fine tune x and y
         public static final TrcPose2D BLUE_OUTPOST_NEUTRAL_PICKUP_POSE =
-            new TrcPose2D(-30.0, fieldLength / 2.0, 90.0); // TODO: Fine tune x and y
+            new TrcPose2D(-30.0, fieldLength / 2.0, -90.0); // TODO: Fine tune x and y
         public static final TrcPose2D BLUE_DEPOT_NEUTRAL_PICKUP_POSE =
-            new TrcPose2D(-fieldWidth + 30.0, fieldLength / 2.0, -90.0); // TODO: Fine tune x and y
+            new TrcPose2D(-fieldWidth + 12.0, fieldLength / 2.0 - 24.0, 90.0); // TODO: Fine tune x and y
 
         public static final TrcPose2D BLUE_CLIMB_LOOKOUT_POSE           =
             new TrcPose2D(170.22, 65.0, -180.0); // TODO: Fine tune x and y
