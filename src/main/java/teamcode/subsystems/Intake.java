@@ -33,6 +33,7 @@ import teamcode.Dashboard;
 import teamcode.FrcTest;
 import teamcode.Robot;
 import teamcode.RobotParams;
+import teamcode.indicators.LEDIndicator;
 import trclib.motor.TrcMotor;
 import trclib.motor.TrcMotor.PidParams;
 import trclib.robotcore.TrcEvent;
@@ -152,6 +153,10 @@ public class Intake extends TrcSubsystem
     {
         intakeOn = enabled;
         intake.setPower(enabled? Params.INTAKE_POWER: 0.0);
+        if (robot.ledIndicator != null)
+        {
+            robot.ledIndicator.setStatusPatternState(LEDIndicator.INTAKE_ON, enabled);
+        }
     }   //setIntakeEnabled
 
     public boolean isIntakeOn()
