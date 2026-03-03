@@ -238,7 +238,7 @@ public class RobotParams
         //
         // Robot starting positions.
         //
-        public static final double STARTPOS_BLUE_SIDE_Y         = 156.61 + Robot.ROBOT_LENGTH / 2.0;
+        public static final double STARTPOS_BLUE_SIDE_Y         = 156.61 - Robot.ROBOT_LENGTH / 2.0 + 24.0;
         public static final double STARTPOS_BLUE_CENTER_Y       = 156.61 - Robot.ROBOT_LENGTH / 2.0;
         public static final double STARTPOS_OUTPOST_X           = -26.22;
         public static final double STARTPOS_CENTER_X            = -fieldWidth / 2.0;
@@ -259,11 +259,12 @@ public class RobotParams
         public static final TrcPose2D BLUE_PASSBACK_SCORETABLE_SIDE =
             new TrcPose2D(-48.0, 48.0, 0.0);
         public static final TrcPose2D BLUE_OUTPOST_PICKUP_POSE  =
-            new TrcPose2D(-26.22, (30.0/2.0) + 10.0, -180.0); // TODO: Fine tune x and y
+            new TrcPose2D(-26.22, Robot.ROBOT_LENGTH/2.0 + 10.0, -180.0); // TODO: Fine tune x and y
+            // new TrcPose2D(-26.22, (30.0/2.0) + 10.0, -180.0); // TODO: Fine tune x and y
         public static final TrcPose2D BLUE_DEPOT_PICKUP_POSE    =
-            new TrcPose2D(-fieldWidth + 40.0, Robot.ROBOT_WIDTH / 2.0, -90.0); // TODO: Fine tune x and y
+            new TrcPose2D(-fieldWidth + 40.0, Robot.ROBOT_WIDTH / 2.0, 90.0); // TODO: Fine tune x and y
         public static final TrcPose2D BLUE_OUTPOST_NEUTRAL_PICKUP_POSE =
-            new TrcPose2D(-12.0, fieldLength / 2.0, -90.0); // TODO: Fine tune x and y
+            new TrcPose2D(-12.0, fieldLength / 2.0 - 24.0, -90.0); // TODO: Fine tune x and y
         public static final TrcPose2D BLUE_DEPOT_NEUTRAL_PICKUP_POSE =
             new TrcPose2D(-fieldWidth + 12.0, fieldLength / 2.0 - 24.0, 90.0); // TODO: Fine tune x and y
 
