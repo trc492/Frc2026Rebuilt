@@ -386,24 +386,29 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
 
                 //     TrcPose2D[] fullPath;
                 //     int intakeWaypointIndex;
-                //     if (startPos == AutoStartPos.START_POS_CENTER) {
+                //     if (startPos == AutoStartPos.START_POS_CENTER)
+                //     {
                 //         fullPath = new TrcPose2D[] {centerIntermediatePose, neutralIntermediatePose, neutralPickupPose, neutralEndPose};
-                //         intakeWaypointIndex = 2;
-                //     } else {
-                //         fullPath = new TrcPose2D[] {neutralIntermediatePose, neutralPickupPose, neutralEndPose};
                 //         intakeWaypointIndex = 1;
+                //     }
+                //     else
+                //     {
+                //         fullPath = new TrcPose2D[] {neutralIntermediatePose, neutralPickupPose, neutralEndPose};
+                //         intakeWaypointIndex = 0;
                 //     }
 
                 //     robot.robotBase.purePursuitDrive.setWaypointEventHandler((i, wp) -> {
                 //         robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
                         
-                //         if (i == intakeWaypointIndex) {
-                //             if (robot.intakeSubsystem != null) {
+                //         if (i == intakeWaypointIndex)
+                //         {
+                //             if (robot.intakeSubsystem != null)
+                //             {
                 //                 robot.intakeSubsystem.setIntakeEnabled(true);
                 //             }
-                //             robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
-
-                //             if (passBack == PassBack.PASS_BACK && robot.shooterSubsystem != null) {
+                //             robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.6);
+                //             if (passBack == PassBack.PASS_BACK && robot.shooterSubsystem != null)
+                //             {
                 //                 robot.autoShootTask.autoShoot(null, null, false);
                 //             }
                 //         }
