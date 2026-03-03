@@ -330,7 +330,9 @@ public class Robot extends FrcRobot
                 }
             }
             // Zero calibrate it only once. Don't do it again just because we are enabling/disabling robot.
-            if (!zeroCalibrated)
+            if (!zeroCalibrated &&
+                dashboard.getBoolean(
+                    Dashboard.DBKEY_PREFERENCE_SUBSYSTEM_ZEROCAL, RobotParams.Preferences.zeroCalSubsystems))
             {
                 zeroCalibrate(null, null);
             }

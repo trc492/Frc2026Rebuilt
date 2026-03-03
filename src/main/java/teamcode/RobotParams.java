@@ -73,6 +73,7 @@ public class RobotParams
         // Master switches for Subsystems
         public static final boolean useSubsystems               = robotType == RobotType.RebuiltRobot;
         public static final boolean showSubsystems              = true;
+        public static final boolean zeroCalSubsystems           = !inCompetition;
         public static final boolean showSubsystemGraphs         = true;
         public static final String testSubsystemName            = Shooter.Params.TURRET_MOTOR_NAME;
         // Drive Base Subsystem

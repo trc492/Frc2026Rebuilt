@@ -39,6 +39,7 @@ public class Dashboard
     public static final String DBKEY_PREFERENCE_DEBUG_PIDDRIVE      = "Preferences/DebugPidDrive";
     public static final String DBKEY_PREFERENCE_VISION_STATUS       = "Preferences/VisionStatus";
     public static final String DBKEY_PREFERENCE_SUBSYSTEM_STATUS    = "Preferences/SubsystemStatus";
+    public static final String DBKEY_PREFERENCE_SUBSYSTEM_ZEROCAL   = "Preferences/SubsystemZeroCal";
 
     // Drive Base.
     public static final String DBKEY_ROBOT_POSE                     = "DriveBase/RobotPose";
@@ -213,6 +214,7 @@ public class Dashboard
         dashboard.refreshKey(DBKEY_PREFERENCE_DEBUG_PIDDRIVE, RobotParams.Preferences.debugPidDrive);
         dashboard.refreshKey(DBKEY_PREFERENCE_VISION_STATUS, RobotParams.Preferences.showVisionStatus);
         dashboard.refreshKey(DBKEY_PREFERENCE_SUBSYSTEM_STATUS, RobotParams.Preferences.showSubsystems);
+        dashboard.refreshKey(DBKEY_PREFERENCE_SUBSYSTEM_ZEROCAL, RobotParams.Preferences.zeroCalSubsystems);
         // Drive Base.
         dashboard.refreshKey(DBKEY_ROBOT_POSE, "");
         dashboard.refreshKey(DBKEY_DRIVE_ENC, "");
