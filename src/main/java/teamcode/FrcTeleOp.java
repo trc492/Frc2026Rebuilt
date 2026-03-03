@@ -22,9 +22,11 @@
 
 package teamcode;
 
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcXboxController;
+import teamcode.autotasks.TaskAutoClimb.ClimbSide;
 import teamcode.subsystems.Climber;
 import teamcode.subsystems.Shooter;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
@@ -583,7 +585,18 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 break;
 
             case DpadLeft:
+                if (robot.climber != null && pressed)
+                {
+                    robot.autoClimbTask.autoClimb(null, null, FrcAuto.autoChoices.getAlliance() != null ? FrcAuto.autoChoices.getAlliance() : Alliance.Blue, ClimbSide.OUTPOST);
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> Auto climbing on outpost side.");
+                }
+                break;
             case DpadRight:
+                if (robot.climber != null && pressed)
+                {
+                    robot.autoClimbTask.autoClimb(null, null, FrcAuto.autoChoices.getAlliance() != null ? FrcAuto.autoChoices.getAlliance() : Alliance.Blue, ClimbSide.DEPOT);
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> Auto climbing on depot side.");
+                }
                 break;
 
             case Back:
