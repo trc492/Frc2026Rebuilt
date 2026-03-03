@@ -46,7 +46,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
     private enum State
     {
         START,
-        SHOOT_PRELOAD,
+        // SHOOT_PRELOAD,
         PICKUP_DEPOT,
         PICKUP_OUTPOST,
         FINISH_PICKUP,
@@ -64,7 +64,6 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
     private final FrcAuto.AutoChoices autoChoices;
     private final TrcTimer timer;
     private final TrcEvent event;
-    private final TrcEvent intakeEvent;
     private final TrcStateMachine<State> sm;
 
     private FrcAuto.AutoStartPos startPos;
@@ -90,7 +89,6 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
 
         timer = new TrcTimer(moduleName);
         event = new TrcEvent(moduleName);
-        intakeEvent = new TrcEvent(moduleName);
         sm = new TrcStateMachine<>(moduleName);
         sm.start(State.START);
     }   //CmdRebuiltAuto
@@ -158,21 +156,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     // {
                     //     robot.intakeSubsystem.extend();
                     // }
-                    // Do delay if necessary.
-                    double startDelay = autoChoices.getStartDelay();
-                    if (startDelay > 0.0)
-                    {
-                        robot.globalTracer.traceInfo(moduleName, "***** Do delay " + startDelay + "s.");
-                        timer.set(startDelay, event);
-                        sm.waitForSingleEvent(event, State.SHOOT_PRELOAD);
-                    }
-                    else
-                    {
-                        sm.setState(State.SHOOT_PRELOAD);       
-                    }
-                    break;
 
-                case SHOOT_PRELOAD:
                     State nextState;
                     if ((startPos == AutoStartPos.START_POS_DEPOT || (startPos == AutoStartPos.START_POS_CENTER && moveTo == MoveTo.DEPOT)) && depotPickup)
                     {
@@ -194,16 +178,53 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     {
                         nextState = State.DONE;
                     }
-                    if (robot.shooterSubsystem != null)
+
+                    // Do delay if necessary.
+                    double startDelay = autoChoices.getStartDelay();
+                    if (startDelay > 0.0)
                     {
-                        robot.autoShootTask.autoShoot(null, event, true);
+                        robot.globalTracer.traceInfo(moduleName, "***** Do delay " + startDelay + "s.");
+                        timer.set(startDelay, event);
                         sm.waitForSingleEvent(event, nextState);
                     }
                     else
                     {
-                        sm.setState(nextState);
+                        sm.setState(nextState);       
                     }
                     break;
+
+                // case SHOOT_PRELOAD:
+                //     State nextState;
+                //     if ((startPos == AutoStartPos.START_POS_DEPOT || (startPos == AutoStartPos.START_POS_CENTER && moveTo == MoveTo.DEPOT)) && depotPickup)
+                //     {
+                //         nextState = State.PICKUP_DEPOT;
+                //     }
+                //     else if ((startPos == AutoStartPos.START_POS_OUTPOST || (startPos == AutoStartPos.START_POS_CENTER && moveTo == MoveTo.OUTPOST)) && outpostPickup)
+                //     {
+                //         nextState = State.PICKUP_OUTPOST;
+                //     }
+                //     else if (neutralZonePickup)
+                //     {
+                //         nextState = State.GO_TO_NEUTRAL_ZONE;
+                //     }
+                //     else if (climb)
+                //     {
+                //         nextState = State.GO_TO_CLIMB_POS;
+                //     }
+                //     else
+                //     {
+                //         nextState = State.DONE;
+                //     }
+                //     if (robot.shooterSubsystem != null)
+                //     {
+                //         robot.autoShootTask.autoShoot(null, event, true);
+                //         sm.waitForSingleEvent(event, nextState);
+                //     }
+                //     else
+                //     {
+                //         sm.setState(nextState);
+                //     }
+                //     break;
 
                 case PICKUP_DEPOT:  
                     TrcPose2D depotIntermediatePose = RobotParams.Game.BLUE_DEPOT_PICKUP_POSE.clone();
@@ -380,9 +401,6 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     double endXOffset = (depotSide) ? 35.0 : -35.0;
                     neutralEndPose.x += (alliance == Alliance.Blue) ? endXOffset : -endXOffset;
 
-                    intakeEvent.clear();
-                    sm.addEvent(intakeEvent);
-                    //TODO: there is no hopper full sensor, please rework this code.
                     robot.intakeSubsystem.setIntakeEnabled(true);
                     
                     if (passBack == PassBack.PASS_BACK)
@@ -398,7 +416,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
                         robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
                         robot.adjustPoseByAlliance(neutralEndPose, alliance));
-                    sm.waitForEvents(State.RETURN_TO_SCORE_POS, false);
+                    sm.waitForSingleEvent(event, State.RETURN_TO_SCORE_POS);
                     break;
                 
                 case RETURN_TO_SCORE_POS:
