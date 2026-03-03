@@ -352,6 +352,73 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         }
                     }
                     break;
+
+                // TODO: Review code for single state:
+                // case GO_TO_NEUTRAL_ZONE:
+                //     boolean isDepot = (startPos == AutoStartPos.START_POS_DEPOT) || 
+                //         (startPos == AutoStartPos.START_POS_CENTER && moveTo == MoveTo.DEPOT);
+
+                //     TrcPose2D centerIntermediatePose = isDepot ? 
+                //         RobotParams.Game.STARTPOS_BLUE_DEPOT.clone() : RobotParams.Game.STARTPOS_BLUE_OUTPOST.clone();
+                    
+                //     if (alliance == Alliance.Blue)
+                //     {
+                //         centerIntermediatePose.y -= 10.0;
+                //     }
+                //     else
+                //     {
+                //         centerIntermediatePose.y += 10.0;
+                //     }
+
+                //     TrcPose2D neutralIntermediatePose = centerIntermediatePose.clone();
+                //     TrcPose2D neutralPickupPose = isDepot ? 
+                //         RobotParams.Game.BLUE_DEPOT_NEUTRAL_PICKUP_POSE.clone() : RobotParams.Game.BLUE_OUTPOST_NEUTRAL_PICKUP_POSE.clone();
+
+                //     double yOffset = (alliance == Alliance.Blue) ? 60.0 : -60.0;
+                //     neutralIntermediatePose.y += yOffset;
+                    
+                //     double xOffset = (isDepot) ? 48.0 : -48.0;
+                //     neutralPickupPose.x += (alliance == Alliance.Blue) ? xOffset : -xOffset;
+
+                //     TrcPose2D neutralEndPose = neutralPickupPose.clone();
+                //     double endXOffset = (isDepot) ? 150.0 : -150.0;
+                //     neutralEndPose.x += (alliance == Alliance.Blue) ? endXOffset : -endXOffset;
+
+                //     TrcPose2D[] fullPath;
+                //     int intakeWaypointIndex;
+                //     if (startPos == AutoStartPos.START_POS_CENTER) {
+                //         fullPath = new TrcPose2D[] {centerIntermediatePose, neutralIntermediatePose, neutralPickupPose, neutralEndPose};
+                //         intakeWaypointIndex = 2;
+                //     } else {
+                //         fullPath = new TrcPose2D[] {neutralIntermediatePose, neutralPickupPose, neutralEndPose};
+                //         intakeWaypointIndex = 1;
+                //     }
+
+                //     robot.robotBase.purePursuitDrive.setWaypointEventHandler((i, wp) -> {
+                //         robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
+                        
+                //         if (i == intakeWaypointIndex) {
+                //             if (robot.intakeSubsystem != null) {
+                //                 robot.intakeSubsystem.setIntakeEnabled(true);
+                //             }
+                //             robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
+
+                //             if (passBack == PassBack.PASS_BACK && robot.shooterSubsystem != null) {
+                //                 robot.autoShootTask.autoShoot(null, null, false);
+                //             }
+                //         }
+                //     });
+
+                //     robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
+                //     robot.robotBase.purePursuitDrive.start(
+                //         null, event, 0.0, false,
+                //         robot.robotInfo.baseParams.profiledMaxDriveVelocity,
+                //         robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
+                //         robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
+                //         robot.adjustPathByAlliance(alliance, fullPath));
+                //     sm.waitForSingleEvent(event, State.RETURN_TO_SCORE_POS);
+                //     break;
+
                 
                 case GO_TO_NEUTRAL_ZONE:
                     if (robot.intakeSubsystem != null)
