@@ -172,6 +172,11 @@ public class Intake extends TrcSubsystem
         intake.setPosition(Params.DEPLOYER_RETRACT_POS);
     }   //retract
 
+    public void deploy()
+    {
+        intake.setPower(0.0, Params.INTAKE_POWER, 1.0);
+    }   //deploy
+
     //
     // Implements TrcSubsystem abstract methods.
     //
