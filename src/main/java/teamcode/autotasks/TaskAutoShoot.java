@@ -246,8 +246,8 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
                 break;
 
             case SHOOT:
-                if (robot.leftShooter != null &&  !leftShooterShooting &&
-                    leftShooterReadyEvent.isSignaled() && turretReadyEvent.isSignaled())
+                if (robot.leftShooter != null &&  !leftShooterShooting && leftShooterReadyEvent.isSignaled() &&
+                    (robot.turret == null || turretReadyEvent.isSignaled()))
                 {
                     tracer.traceInfo(moduleName, "***** Start left shooter shooting.");
                     leftShooterDone.clear();
@@ -256,8 +256,8 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
                     leftShooterShooting = true;
                 }
 
-                if (robot.rightShooter != null && !rightShooterShooting &&
-                    rightShooterReadyEvent.isSignaled() && turretReadyEvent.isSignaled())
+                if (robot.rightShooter != null && !rightShooterShooting && rightShooterReadyEvent.isSignaled() &&
+                    (robot.turret == null || turretReadyEvent.isSignaled()))
                 {
                     tracer.traceInfo(moduleName, "***** Start right shooter shooting.");
                     rightShooterDone.clear();
