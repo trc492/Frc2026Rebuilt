@@ -145,7 +145,9 @@ public class FrcTest extends FrcTeleOp
             userChoices.addNumber(Dashboard.DBKEY_TEST_ROBOT_POS, 0.0);
             userChoices.addNumber(Dashboard.DBKEY_TEST_TARGET_POS, 0.0);
 
-            userChoices.addString(Dashboard.DBKEY_TEST_SUBSYSTEM_NAME, RobotParams.Preferences.testSubsystemName);
+            userChoices.addString(
+                Dashboard.DBKEY_TEST_SUBSYSTEM_NAME,
+                RobotParams.Preferences.testSubsystemName != null? RobotParams.Preferences.testSubsystemName: "");
             userChoices.addNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KP, 0.0);
             userChoices.addNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KI, 0.0);
             userChoices.addNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KD, 0.0);

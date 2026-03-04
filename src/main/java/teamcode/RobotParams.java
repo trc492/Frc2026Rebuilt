@@ -25,7 +25,6 @@ package teamcode;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import frclib.robotcore.FrcField;
 import teamcode.subsystems.DriveBase.RobotType;
-import teamcode.subsystems.Intake;
 import trclib.dataprocessor.TrcLookupTable.Interpolation;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
@@ -74,8 +73,8 @@ public class RobotParams
         public static final boolean useSubsystems               = robotType == RobotType.RebuiltRobot;
         public static final boolean showSubsystems              = true;
         public static final boolean zeroCalSubsystems           = !inCompetition;
-        public static final boolean showSubsystemGraphs         = true;
-        public static final String testSubsystemName            = Intake.Params.INTAKE_MOTOR_NAME;
+        public static final boolean showSubsystemGraphs         = false;
+        public static final String testSubsystemName            = null;//Shooter.Params.LSHOOTER_PRIMARY_MOTOR_NAME;
         // Drive Base Subsystem
         public static final boolean useDriveBase                = true;
         public static final boolean showDriveBaseStatus         = true;
@@ -199,14 +198,15 @@ public class RobotParams
         // Field configuration and dimensions in inches.
         //
         public static final boolean mirroredField               = false;
-        public static final double fieldWidth                   = FrcField.getFieldWidth();
-        public static final double fieldLength                  = FrcField.getFieldLength();
-        public static final double halfFieldWidth               = fieldWidth / 2.0;
-        public static final double halfFieldLength              = fieldLength / 2.0;
-        public static final double allianceAreaWidth            = 182.11; // This is actually the distance from the allaince wall to the center of the trench, to rename...
+        public static final double fieldWidth                   = FrcField.getFieldWidth();     //317.69
+        public static final double fieldLength                  = FrcField.getFieldLength();    //651.22
+        public static final double halfFieldWidth               = fieldWidth / 2.0;             //158.845
+        public static final double halfFieldLength              = fieldLength / 2.0;            //325.61
+        public static final double allianceAreaWidth            = 182.11;   // Distance from allaince wall to center of trench.
         public static final double[] fieldLengthTriggerPoints   = new double[]
         {
-            allianceAreaWidth-30.0, allianceAreaWidth+30.0, halfFieldLength, fieldLength - (allianceAreaWidth+30.0), fieldLength - (allianceAreaWidth-30.0) // TODO: TUne
+            allianceAreaWidth-30.0, allianceAreaWidth+30.0, halfFieldLength,
+            fieldLength - (allianceAreaWidth+30.0), fieldLength - (allianceAreaWidth-30.0)
         };
         public static final double[] fieldWidthTriggerPoints    = new double[]
         {
@@ -238,14 +238,17 @@ public class RobotParams
         //
         // Robot starting positions.
         //
-        public static final double STARTPOS_BLUE_SIDE_Y         = 156.61 - Robot.ROBOT_LENGTH / 2.0 + 24.0;
-        public static final double STARTPOS_BLUE_CENTER_Y       = 156.61 - Robot.ROBOT_LENGTH / 2.0;
+        public static final double STARTPOS_BLUE_SIDE_Y         = 156.61 + Robot.ROBOT_LENGTH / 2.0;    //167.7345
+        public static final double STARTPOS_BLUE_CENTER_Y       = 156.61 - Robot.ROBOT_LENGTH / 2.0;    //145.4855
         public static final double STARTPOS_OUTPOST_X           = -26.22;
-        public static final double STARTPOS_CENTER_X            = -fieldWidth / 2.0;
-        public static final double STARTPOS_DEPOT_X             = -fieldWidth + 26.22;
-        public static final TrcPose2D STARTPOS_BLUE_OUTPOST     = new TrcPose2D(STARTPOS_OUTPOST_X, STARTPOS_BLUE_SIDE_Y, -90.0);
-        public static final TrcPose2D STARTPOS_BLUE_CENTER      = new TrcPose2D(STARTPOS_CENTER_X, STARTPOS_BLUE_CENTER_Y, 0.0);
-        public static final TrcPose2D STARTPOS_BLUE_DEPOT       = new TrcPose2D(STARTPOS_DEPOT_X, STARTPOS_BLUE_SIDE_Y, 90.0);
+        public static final double STARTPOS_CENTER_X            = -fieldWidth / 2.0;                    //-158.845
+        public static final double STARTPOS_DEPOT_X             = -fieldWidth + 26.22;                  //-291.47
+        public static final TrcPose2D STARTPOS_BLUE_OUTPOST     =
+            new TrcPose2D(STARTPOS_OUTPOST_X, STARTPOS_BLUE_SIDE_Y, -90.0);         //(-26.22,167.7345,-90.0)
+        public static final TrcPose2D STARTPOS_BLUE_CENTER      =
+            new TrcPose2D(STARTPOS_CENTER_X, STARTPOS_BLUE_CENTER_Y, 0.0);    //(-158.845,145.4855,0.0)
+        public static final TrcPose2D STARTPOS_BLUE_DEPOT       =
+            new TrcPose2D(STARTPOS_DEPOT_X, STARTPOS_BLUE_SIDE_Y, 90.0);      //(-291.47,167.7345,90.0)
         public static final TrcPose2D[] blueStartPoses          =
         {
             STARTPOS_BLUE_OUTPOST, STARTPOS_BLUE_CENTER, STARTPOS_BLUE_DEPOT
@@ -253,20 +256,20 @@ public class RobotParams
         //
         // Robot field positions.
         //
-        public static final TrcPose2D BLUE_HUB_POSE             = new TrcPose2D(-158.32, 181.56, 0.0);
+        public static final TrcPose2D BLUE_HUB_POSE             =
+            new TrcPose2D(-fieldWidth/2.0, 182.11, 0.0);                    //(-158.845,182.11,0.0)
         public static final TrcPose2D BLUE_PASSBACK_AUDIENCE_SIDE =
-            new TrcPose2D(-fieldWidth + 48.0, 48.0, 0.0);
+            new TrcPose2D(-fieldWidth + 48.0, 48.0, 0.0);                   //(-269.69,48.0,0.0)
         public static final TrcPose2D BLUE_PASSBACK_SCORETABLE_SIDE =
-            new TrcPose2D(-48.0, 48.0, 0.0);
+            new TrcPose2D(-48.0, 48.0, 0.0);                                //(-48.0,48.0,0.0)
         public static final TrcPose2D BLUE_OUTPOST_PICKUP_POSE  =
-            new TrcPose2D(-26.22, Robot.ROBOT_LENGTH/2.0 + 10.0, -180.0); // TODO: Fine tune x and y
-            // new TrcPose2D(-26.22, (30.0/2.0) + 10.0, -180.0); // TODO: Fine tune x and y
+            new TrcPose2D(-26.22, Robot.ROBOT_LENGTH/2.0 + 10.0, -180.0);           //(-26.22,32.249,-180.0)
         public static final TrcPose2D BLUE_DEPOT_PICKUP_POSE    =
-            new TrcPose2D(-fieldWidth + 40.0, Robot.ROBOT_WIDTH / 2.0, 90.0); // TODO: Fine tune x and y
+            new TrcPose2D(-fieldWidth + 40.0, Robot.ROBOT_WIDTH / 2.0, 90.0); //(-277.69,22.249,90.0)
         public static final TrcPose2D BLUE_OUTPOST_NEUTRAL_PICKUP_POSE =
-            new TrcPose2D(-12.0, fieldLength / 2.0 - 44.0, -90.0); // TODO: Fine tune x and y
+            new TrcPose2D(-55.89, fieldLength / 2.0 - 44.0, -90.0);                  //(-55.89,281.61,-90.0)
         public static final TrcPose2D BLUE_DEPOT_NEUTRAL_PICKUP_POSE =
-            new TrcPose2D(-fieldWidth + 53.0, fieldLength / 2.0 - 44.0, 90.0); // TODO: Fine tune x and y
+            new TrcPose2D(-fieldWidth + 55.89, fieldLength / 2.0 - 44.0, 90.0);//(-261.8,281.61,90.0)
 
         public static final TrcPose2D BLUE_CLIMB_LOOKOUT_POSE           =
             new TrcPose2D(170.22, 65.0, -180.0); // TODO: Fine tune x and y

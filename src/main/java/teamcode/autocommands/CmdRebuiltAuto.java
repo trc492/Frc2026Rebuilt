@@ -303,14 +303,21 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     atDepot = startPos == AutoStartPos.START_POS_DEPOT || 
                               startPos == AutoStartPos.START_POS_CENTER && moveTo == MoveTo.DEPOT;
 
+                    // (-291.47,167.7345,90.0) or (-26.22,167.7345,-90.0)
                     startPose = atDepot? RobotParams.Game.STARTPOS_BLUE_DEPOT: RobotParams.Game.STARTPOS_BLUE_OUTPOST;
+                    // (-261.8,281.61,90.0) or (-55.89,281.61,-90.0)
                     pickupPose = atDepot?
                         RobotParams.Game.BLUE_DEPOT_NEUTRAL_PICKUP_POSE.clone():
                         RobotParams.Game.BLUE_OUTPOST_NEUTRAL_PICKUP_POSE.clone();
                     endPose = pickupPose.clone();
+                    // (-111.8,281.61,90.0) or (-205.89,281.61,-90.0)
                     endPose.x += atDepot? 150.0: -150.0;    // Plow distance
                     intermediatePose = pickupPose.clone();
-                    intermediatePose.x += atDepot? -12.0: 12.0;
+                    // (-279.8,281.61,90.0) or (-37.89,281.61,-90.0)
+                    intermediatePose.x += atDepot? -18.0: 18.0;
+                    robot.globalTracer.traceInfo(
+                        moduleName, "NeutralZonePath:\nstartPose=%s\nintermediatePose=%s\npickupPose=%s\nendPose=%s",
+                        startPose, intermediatePose, pickupPose, endPose);
                     sm.setState(State.CYCLE_NEUTRAL_ZONE);
                     break;
 
@@ -388,6 +395,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                 case SHOOT_NEUTRAL_FUEL:
                     nextState = ++currentNeutralZoneCycles < neutralZoneCycles? State.CYCLE_NEUTRAL_ZONE:
                                 climb? State.GO_TO_CLIMB_POS: State.DONE;
+                    robot.globalTracer.traceInfo(moduleName, "Shooting NeutralZone cycle " + currentNeutralZoneCycles);
                     if (robot.autoShootTask != null)
                     {
                         robot.autoShootTask.autoShoot(null, event, true);
