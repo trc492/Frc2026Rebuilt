@@ -392,7 +392,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         robot.robotInfo.baseParams.profiledMaxDriveVelocity,
                         robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
                         robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
-                        robot.adjustPathByAlliance(alliance, pickupPose)); //intermediate2Pose, intermediate1Pose, startPose));
+                        robot.adjustPathByAlliance(alliance, pickupPose, intermediate2Pose, intermediate1Pose, startPose));
                     sm.waitForSingleEvent(event, State.DONE);
                     break;
 
