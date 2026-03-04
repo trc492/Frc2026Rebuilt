@@ -330,14 +330,20 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         (i, wp) ->
                         {
                             robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
-                                                
-                            if (i == 3)
+                            if (i == 2)
                             {
-                                // At pickupPose.
                                 if (robot.intakeSubsystem != null)
                                 {
                                     robot.intakeSubsystem.setIntakeEnabled(true);
                                 }
+                            }                  
+                            if (i == 3)
+                            {
+                                // At pickupPose.
+                                // if (robot.intakeSubsystem != null)
+                                // {
+                                //     robot.intakeSubsystem.setIntakeEnabled(true);
+                                // }
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.6);
                                 if (passBack == PassBack.PASS_BACK && robot.autoShootTask != null)
                                 {
