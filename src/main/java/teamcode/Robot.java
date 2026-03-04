@@ -189,7 +189,8 @@ public class Robot extends FrcRobot
         robotBase = robotDriveBase.getRobotBase();
 
         // Create and initialize sensors and indicators.
-        ledIndicator = robotInfo.ledInfos != null? new LEDIndicator(robotInfo.ledInfos): null;
+        ledIndicator =
+            RobotParams.Preferences.useLED && robotInfo.ledInfos != null? new LEDIndicator(robotInfo.ledInfos): null;
 
         // Create and initialize Vision subsystem.
         if (RobotParams.Preferences.useVision && robotInfo.camInfos != null)

@@ -25,7 +25,7 @@ package teamcode;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import frclib.robotcore.FrcField;
 import teamcode.subsystems.DriveBase.RobotType;
-import teamcode.subsystems.Shooter;
+import teamcode.subsystems.Intake;
 import trclib.dataprocessor.TrcLookupTable.Interpolation;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
@@ -55,7 +55,7 @@ public class RobotParams
         // Driver feedback
         // Status Update: Dashboard Update may affect robot loop time, don't do it when in competition.
         public static final boolean updateDashboard             = !inCompetition;   // Start up default value.
-        public static final boolean useLED                      = false;
+        public static final boolean useLED                      = true;
         public static final boolean useRumble                   = false;
         public static final boolean hasDriverGameController     = true;
         public static final boolean hasOperatorGameController   = robotType == RobotType.RebuiltRobot;
@@ -75,13 +75,13 @@ public class RobotParams
         public static final boolean showSubsystems              = true;
         public static final boolean zeroCalSubsystems           = !inCompetition;
         public static final boolean showSubsystemGraphs         = true;
-        public static final String testSubsystemName            = Shooter.Params.TURRET_MOTOR_NAME;
+        public static final String testSubsystemName            = Intake.Params.INTAKE_MOTOR_NAME;
         // Drive Base Subsystem
         public static final boolean useDriveBase                = true;
         public static final boolean showDriveBaseStatus         = true;
         public static final boolean debugDriveBase              = false;
         public static final boolean debugPidDrive               = false;
-        public static final boolean showDrivePower              = true;
+        public static final boolean showDrivePower              = false;
         public static final boolean useGyroAssist               = false;
         public static final boolean useAntiTipping              = false;
         // Other Subsystems

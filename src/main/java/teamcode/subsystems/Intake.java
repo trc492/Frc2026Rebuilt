@@ -23,7 +23,6 @@
  package teamcode.subsystems;
 
 import com.ctre.phoenix6.StatusCode;
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 
 import frclib.driverio.FrcDashboard;
 import frclib.motor.FrcCANTalonFX;
@@ -63,8 +62,6 @@ public class Intake extends TrcSubsystem
         public static final String DEPLOYER_ENCODER_NAME        = SUBSYSTEM_NAME + ".DeployerEncoder";
         public static final int DEPLOYER_ENCODER_CANID          = RobotParams.HwConfig.CANID_INTAKE_DEPLOYER_ENCODER;
         public static final boolean DEPLOYER_ENCODER_INVERTED   = true;
-        public static final double DEPLOYER_ENCODER_SCALE       = 1.0;
-        public static final double DEPLOYER_ENCODER_POS_OFFSET  = 0.0;
         public static final double DEPLOYER_ENCODER_ZERO_OFFSET = 0.335449;
 
         public static final double DEPLOYER_PID_KP              = 0.0;
@@ -76,10 +73,10 @@ public class Intake extends TrcSubsystem
         public static final boolean DEPLOYER_SOFTWARE_PID_ENABLED = false;
 
         public static final double DEPLOYER_POWER_LIMIT         = 0.5;
-        public static final double DEPLOYER_MOTOR_SCALE         = 0.00170586140147116;
+        public static final double DEPLOYER_POS_SCALE           = 360.0;
         public static final double DEPLOYER_POS_OFFSET          = 0.0;
         public static final double DEPLOYER_MIN_POS             = DEPLOYER_POS_OFFSET;
-        public static final double DEPLOYER_MAX_POS             = 100.0;
+        public static final double DEPLOYER_MAX_POS             = 114.0;
         public static final double DEPLOYER_POS_PRESET_TOLERANCE = 5.0;
         public static final double DEPLOYER_RETRACT_POS         = DEPLOYER_MAX_POS;
         public static final double DEPLOYER_EXTEND_POS          = DEPLOYER_MIN_POS;
@@ -106,7 +103,7 @@ public class Intake extends TrcSubsystem
             .setPrimaryMotor(
                 Params.INTAKE_MOTOR_NAME, Params.INTAKE_MOTOR_TYPE, Params.INTAKE_MOTOR_INVERTED,
                 true, true, Params.INTAKE_MOTOR_CANID, Params.CANBUS_NAME, null)
-            // .setPositionScaleAndOffset(Params.DEPLOYER_MOTOR_SCALE, Params.DEPLOYER_POS_OFFSET)
+            .setPositionScaleAndOffset(Params.DEPLOYER_POS_SCALE, Params.DEPLOYER_POS_OFFSET)
             .setPositionPresets(Params.DEPLOYER_POS_PRESET_TOLERANCE, Params.DEPLOYER_POS_PRESETS);
 
         intake = new FrcMotorActuator(intakeParams).getMotor();
@@ -122,14 +119,6 @@ public class Intake extends TrcSubsystem
         deployerEncoder.setAbsoluteRange(true);
         deployerEncoder.setZeroOffset(Params.DEPLOYER_ENCODER_ZERO_OFFSET);
         deployerEncoder.setInverted(Params.DEPLOYER_ENCODER_INVERTED);
-        // deployerEncoder.setScaleAndOffset(
-        //     Params.DEPLOYER_ENCODER_SCALE, Params.DEPLOYER_ENCODER_POS_OFFSET, Params.DEPLOYER_ENCODER_ZERO_OFFSET);
-
-        FrcCANTalonFX intakeMotor = (FrcCANTalonFX) intake;
-        intakeMotor.setFeedbackDevice(
-            FeedbackSensorSourceValue.SyncCANcoder, deployerEncoder.getDeviceID(),
-            Params.DEPLOYER_MOTOR_SCALE, 1.0, false);
-        // syncDeployerEncoder();
     }   //Intake
 
     public TrcMotor getIntake()
@@ -142,12 +131,14 @@ public class Intake extends TrcSubsystem
         FrcCANTalonFX intakeMotor = (FrcCANTalonFX) intake;
         // encoderPos gives us a range between 0.0 to 1.0.
         double encoderPos = deployerEncoder.getScaledPosition();
-        double motorEncoderPos = encoderPos * Params.DEPLOYER_MOTOR_SCALE;
-        StatusCode statusCode = intakeMotor.motor.setPosition(motorEncoderPos);
+        StatusCode statusCode = intakeMotor.motor.setPosition(encoderPos);
 
-        robot.globalTracer.traceInfo(
-            instanceName, "SyncDeployerEncoder(encPos=%f, motorEncPos=%f, status=%s)",
-            encoderPos, motorEncoderPos, statusCode);
+        if (statusCode != StatusCode.OK)
+        {
+            robot.globalTracer.traceWarn(
+                instanceName, "SyncDeployerEncoder(encPos=%f, motorPos=%f, status=%s) failed.",
+                encoderPos, intake.getPosition(), statusCode);
+        }
     }   //syncDeployerEncoder
 
     public void setIntakeEnabled(boolean enabled)
@@ -164,6 +155,15 @@ public class Intake extends TrcSubsystem
     {
         return intakeOn;
     }   //isIntakeOn
+
+    public double getDeployerPosition()
+    {
+        syncDeployerEncoder();
+        double pos = intake.getPosition();
+        if (pos > 300.0) pos -= 360.0;
+
+        return pos;
+    }   //getDeployerPosition
 
     public void retract()
     {
@@ -231,14 +231,14 @@ public class Intake extends TrcSubsystem
                 dashboard.putNumber(Dashboard.DBKEY_INTAKE_CURRENT, intake.getCurrent());
                 dashboard.putString(
                     Dashboard.DBKEY_DEPLOYER_POS,
-                    String.format("%8.6f/%8.6f", intake.getPosition(), deployerEncoder.getScaledPosition()));
+                    String.format("%8.6f/%8.6f", getDeployerPosition(), deployerEncoder.getScaledPosition()));
                 dashboard.putNumber(Dashboard.DBKEY_DEPLOYER_TARGET, intake.getPidTarget());
             }
         }
 
         if (dashboard.getBoolean(Dashboard.DBKEY_INTAKE_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs))
         {
-            dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, intake.getPosition());
+            dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, getDeployerPosition());
             dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET, intake.getPidTarget());
         }
 
