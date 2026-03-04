@@ -46,8 +46,8 @@
               "topic": "/FMSInfo/IsRedAlliance",
               "period": 0.06,
               "data_type": "boolean",
-              "true_color": 4283215696,
-              "false_color": 4294198070,
+              "true_color": 4294901760,
+              "false_color": 4278190335,
               "true_icon": "None",
               "false_icon": "None"
             }
@@ -151,6 +151,19 @@
             "type": "Toggle Switch",
             "properties": {
               "topic": "/SmartDashboard/Vision/Relocalizate",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "SubsystemZeroCal",
+            "x": 384.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Preferences/SubsystemZeroCal",
               "period": 0.06,
               "data_type": "boolean"
             }
@@ -1414,24 +1427,138 @@
             "x": 1280.0,
             "y": 0.0,
             "width": 256.0,
-            "height": 256.0,
+            "height": 384.0,
             "type": "List Layout",
             "properties": {
               "label_position": "TOP"
             },
-            "children": []
+            "children": [
+              {
+                "title": "IntakePower",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Intake/IntakePower",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "IntakeCurrent",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Intake/IntakeCurrent",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "DeployerPos",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Intake/DeployerPos",
+                  "period": 0.06,
+                  "data_type": "string",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "DeployerTarget",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Intake/DeployerTarget",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              }
+            ]
           },
           {
             "title": "Climber",
             "x": 1280.0,
-            "y": 256.0,
+            "y": 384.0,
             "width": 256.0,
-            "height": 256.0,
+            "height": 384.0,
             "type": "List Layout",
             "properties": {
               "label_position": "TOP"
             },
-            "children": []
+            "children": [
+              {
+                "title": "ClimberPower",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Climber/ClimberPower",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "ClimberCurrent",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Climber/ClimberCurrent",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "ClimberPos",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Climber/ClimberPos",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "ClimberTarget",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Climber/ClimberTarget",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              }
+            ]
           }
         ],
         "containers": []
@@ -1629,27 +1756,27 @@
             }
           },
           {
-            "title": "photonvision_Port_1182_Output_MJPEG_Server",
+            "title": "photonvision_Port_1184_Output_MJPEG_Server",
             "x": 512.0,
             "y": 0.0,
             "width": 512.0,
             "height": 512.0,
             "type": "Camera Stream",
             "properties": {
-              "topic": "/CameraPublisher/photonvision_Port_1182_Output_MJPEG_Server",
+              "topic": "/CameraPublisher/photonvision_Port_1184_Output_MJPEG_Server",
               "period": 0.06,
               "rotation_turns": 0
             }
           },
           {
-            "title": "photonvision_Port_1184_Output_MJPEG_Server",
+            "title": "photonvision_Port_1182_Output_MJPEG_Server",
             "x": 0.0,
             "y": 0.0,
             "width": 512.0,
             "height": 512.0,
             "type": "Camera Stream",
             "properties": {
-              "topic": "/CameraPublisher/photonvision_Port_1184_Output_MJPEG_Server",
+              "topic": "/CameraPublisher/photonvision_Port_1182_Output_MJPEG_Server",
               "period": 0.06,
               "rotation_turns": 0
             }
@@ -1797,6 +1924,111 @@
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": true
+            }
+          },
+          {
+            "title": "ClimbSide",
+            "x": 128.0,
+            "y": 128.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Auto/ClimbSide",
+              "period": 0.06,
+              "sort_options": false
+            }
+          },
+          {
+            "title": "MoveTo",
+            "x": 384.0,
+            "y": 128.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Auto/MoveTo",
+              "period": 0.06,
+              "sort_options": false
+            }
+          },
+          {
+            "title": "PassBack",
+            "x": 640.0,
+            "y": 128.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Auto/PassBack",
+              "period": 0.06,
+              "sort_options": false
+            }
+          },
+          {
+            "title": "Climb",
+            "x": 128.0,
+            "y": 256.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Auto/Climb",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "DepotPickup",
+            "x": 256.0,
+            "y": 256.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Auto/DepotPickup",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "NeutralZonePickup",
+            "x": 384.0,
+            "y": 256.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Auto/NeutralZonePickup",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "OutpostPickup",
+            "x": 512.0,
+            "y": 256.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Auto/OutpostPickup",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "NeutralZoneCycles",
+            "x": 640.0,
+            "y": 256.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Auto/NeutralZoneCycles",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
             }
           }
         ]
