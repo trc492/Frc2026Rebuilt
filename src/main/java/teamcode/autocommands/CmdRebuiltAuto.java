@@ -317,7 +317,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     // intermediate1Pose.x -= 12.0;
 
                     intermediate2Pose = pickupPose.clone();
-                    double intermediate2XOffset = (atDepot) ? 12.0 : 12.0;
+                    double intermediate2XOffset = (atDepot) ? -10.0 : 10.0;
                     intermediate2Pose.x += (alliance == Alliance.Blue) ? intermediate2XOffset : -intermediate2XOffset;
                     // intermediate1Pose.y = intermediate2Pose.y - 24.0;
                     robot.globalTracer.traceErr(moduleName, "Forward: int1=%s, int2=%s, pickup=%s, end=%s",
