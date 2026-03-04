@@ -30,6 +30,7 @@ import frclib.drivebase.FrcSwerveBase;
 import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcUserChoices;
 import frclib.driverio.FrcXboxController;
+import teamcode.subsystems.Intake;
 import teamcode.subsystems.Shooter;
 import trclib.command.CmdDriveMotorsTest;
 import trclib.command.CmdPidDrive;
@@ -869,10 +870,14 @@ public class FrcTest extends FrcTeleOp
                         {
                             if (robot.leftTransfer.isActive())
                             {
+                                robot.globalTracer.traceInfo(
+                                    moduleName, ">>>>> Tune %s: Cancel Auto Left Transfer!", subsystemName);
                                 robot.leftTransfer.cancel();
                             }
                             else
                             {
+                                robot.globalTracer.traceInfo(
+                                    moduleName, ">>>>> Tune %s: Start Auto Left Transfer!", subsystemName);
                                 robot.leftTransfer.autoIntake(null);
                             }
                         }
@@ -881,10 +886,14 @@ public class FrcTest extends FrcTeleOp
                         {
                             if (robot.rightTransfer.isActive())
                             {
+                                robot.globalTracer.traceInfo(
+                                    moduleName, ">>>>> Tune %s: Cancel Auto Right Transfer!", subsystemName);
                                 robot.rightTransfer.cancel();
                             }
                             else
                             {
+                                robot.globalTracer.traceInfo(
+                                    moduleName, ">>>>> Tune %s: Start Auto Right Transfer!", subsystemName);
                                 robot.rightTransfer.autoIntake(null);
                             }
                         }
@@ -893,12 +902,25 @@ public class FrcTest extends FrcTeleOp
                         {
                             if (robot.feeder.getPower() != 0.0)
                             {
+                                robot.globalTracer.traceInfo(
+                                    moduleName, ">>>>> Tune %s: Stop Feeder!", subsystemName);
                                 robot.feeder.setPower(0.0);
                             }
                             else
                             {
+                                robot.globalTracer.traceInfo(
+                                    moduleName, ">>>>> Tune %s: Start Feeder!", subsystemName);
                                 robot.feeder.setPower(1.0);
                             }
+                        }
+                        else if (robot.intakeSubsystem != null &&
+                                 subsystemName.equalsIgnoreCase(Intake.Params.INTAKE_MOTOR_NAME))
+                        {
+                            boolean intakeOn = robot.intakeSubsystem.isIntakeOn();
+                            robot.globalTracer.traceInfo(
+                                moduleName, ">>>>> Tune %s: Turn %s Intake!",
+                                subsystemName, intakeOn? "Off": "On");
+                            robot.intakeSubsystem.setIntakeEnabled(!intakeOn);
                         }
                     }
                     passToTeleOp = false;
@@ -978,6 +1000,8 @@ public class FrcTest extends FrcTeleOp
                     {
                         String subsystemName = testChoices.getSubsystemName();
 
+                        robot.globalTracer.traceInfo(
+                            moduleName, ">>>>> Tune %s: Position up!", subsystemName);
                         if (robot.leftShooter.tiltMotor != null &&
                             subsystemName.equalsIgnoreCase(Shooter.Params.LTILT_MOTOR_NAME))
                         {
@@ -993,6 +1017,11 @@ public class FrcTest extends FrcTeleOp
                         {
                             robot.turret.presetPositionUp(moduleName, Shooter.Params.TURRET_POWER_LIMIT);
                         }
+                        else if (robot.intake != null &&
+                                 subsystemName.equalsIgnoreCase(Intake.Params.INTAKE_MOTOR_NAME))
+                        {
+                            robot.intake.presetPositionUp(moduleName, Intake.Params.DEPLOYER_POWER_LIMIT);
+                        }
                     }
                     passToTeleOp = false;
                 }
@@ -1005,6 +1034,8 @@ public class FrcTest extends FrcTeleOp
                     {
                         String subsystemName = testChoices.getSubsystemName();
 
+                        robot.globalTracer.traceInfo(
+                            moduleName, ">>>>> Tune %s: Position down!", subsystemName);
                         if (robot.leftShooter.tiltMotor != null &&
                             subsystemName.equalsIgnoreCase(Shooter.Params.LTILT_MOTOR_NAME))
                         {
@@ -1019,6 +1050,11 @@ public class FrcTest extends FrcTeleOp
                                  subsystemName.equalsIgnoreCase(Shooter.Params.TURRET_MOTOR_NAME))
                         {
                             robot.turret.presetPositionDown(moduleName, Shooter.Params.TURRET_POWER_LIMIT);
+                        }
+                        else if (robot.intake != null &&
+                                 subsystemName.equalsIgnoreCase(Intake.Params.INTAKE_MOTOR_NAME))
+                        {
+                            robot.intake.presetPositionDown(moduleName, Intake.Params.DEPLOYER_POWER_LIMIT);
                         }
                     }
                     passToTeleOp = false;

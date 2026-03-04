@@ -25,6 +25,7 @@ package teamcode;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import frclib.robotcore.FrcField;
 import teamcode.subsystems.DriveBase.RobotType;
+import teamcode.subsystems.Intake;
 import trclib.dataprocessor.TrcLookupTable.Interpolation;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
@@ -74,7 +75,7 @@ public class RobotParams
         public static final boolean showSubsystems              = true;
         public static final boolean zeroCalSubsystems           = !inCompetition;
         public static final boolean showSubsystemGraphs         = false;
-        public static final String testSubsystemName            = null;//Shooter.Params.LSHOOTER_PRIMARY_MOTOR_NAME;
+        public static final String testSubsystemName            = Intake.Params.INTAKE_MOTOR_NAME;//Shooter.Params.LSHOOTER_PRIMARY_MOTOR_NAME;
         // Drive Base Subsystem
         public static final boolean useDriveBase                = true;
         public static final boolean showDriveBaseStatus         = true;

@@ -62,9 +62,9 @@ public class Intake extends TrcSubsystem
         public static final String DEPLOYER_ENCODER_NAME        = SUBSYSTEM_NAME + ".DeployerEncoder";
         public static final int DEPLOYER_ENCODER_CANID          = RobotParams.HwConfig.CANID_INTAKE_DEPLOYER_ENCODER;
         public static final boolean DEPLOYER_ENCODER_INVERTED   = true;
-        public static final double DEPLOYER_ENCODER_ZERO_OFFSET = 0.335449;
+        public static final double DEPLOYER_ENCODER_ZERO_OFFSET = 0.33;
 
-        public static final double DEPLOYER_PID_KP              = 0.0;
+        public static final double DEPLOYER_PID_KP              = 0.1;
         public static final double DEPLOYER_PID_KI              = 0.0;
         public static final double DEPLOYER_PID_KD              = 0.0;
         public static final double DEPLOYER_PID_KF              = 0.0;
@@ -74,7 +74,7 @@ public class Intake extends TrcSubsystem
 
         public static final double DEPLOYER_POWER_LIMIT         = 0.5;
         public static final double DEPLOYER_POS_SCALE           = 360.0;
-        public static final double DEPLOYER_POS_OFFSET          = 0.0;
+        public static final double DEPLOYER_POS_OFFSET          = 4.0;
         public static final double DEPLOYER_MIN_POS             = DEPLOYER_POS_OFFSET;
         public static final double DEPLOYER_MAX_POS             = 114.0;
         public static final double DEPLOYER_POS_PRESET_TOLERANCE = 5.0;
