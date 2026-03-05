@@ -399,6 +399,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
 
                     TrcPose2D returnPose = startPose.clone();
                     returnPose.angle = alliance == Alliance.Blue ? 0.0: -180.0;
+                    returnPose.y -= alliance == Alliance.Blue ?  18.0: -18.0;
                     // Going back the same route we came, just in reverse.
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,

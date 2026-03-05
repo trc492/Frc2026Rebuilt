@@ -82,15 +82,15 @@ public class DriveBase extends TrcSubsystem
         public final static double ROBOT_LENGTH                 = RobotParams.Robot.ROBOT_LENGTH;
         public final static double WHEEL_BASE_WIDTH             = 22.249;
         public final static double WHEEL_BASE_LENGTH            = 22.249;
-
+        //0.368615
         private static final TrcPidController.PidCoefficients driveMotorVelPidCoeffs =
-            new TrcPidController.PidCoefficients(0.368615, 0.0, 0.0, 0.0, 0.0);
+            new TrcPidController.PidCoefficients(0.15, 0.0, 0.0, 0.0, 0.0);
         private static final TrcPidController.FFCoefficients driveMotorVelFFCoeffs =
-            new TrcPidController.FFCoefficients(0.0, 0.141525, 0.0);
+            new TrcPidController.FFCoefficients(0.25, 0.11, 0.0);
         private static final TrcPidController.PidCoefficients drivePidCoeffs =
-            new TrcPidController.PidCoefficients(0.025, 0.0, 0.0038, 0.0, 0.0);
+            new TrcPidController.PidCoefficients(0.01, 0.0, 0.0, 0.0, 0.0);
         private static final TrcPidController.PidCoefficients turnPidCoeffs =
-            new TrcPidController.PidCoefficients(0.025, 0.0, 0.0025, 0.0, 5.0);
+            new TrcPidController.PidCoefficients(0.02, 0.0, 0.000, 0.0, 0.0);
         private static final TrcPidController.PidCoefficients velPidCoeffs =
             new TrcPidController.PidCoefficients(0.0, 0.0, 0.0, 0.00909090909090909090909090909091, 0.0);
         private static final TrcPidController.PidCoefficients steerPidCoeffs =
@@ -102,7 +102,7 @@ public class DriveBase extends TrcSubsystem
             .setDriveMotorVelocityControl(
                 driveMotorVelPidCoeffs, driveMotorVelFFCoeffs, DRIVE_WHEEL_DIAMETER*Math.PI/DRIVE_MOTOR_GEAR_RATIO,
                 false)
-            .setPidTolerances(1.0, 1.0)
+            .setPidTolerances(2.0, 2.0)
             .setXPidParams(drivePidCoeffs, 0.5)
             .setYPidParams(drivePidCoeffs, 0.5)
             .setTurnPidParams(turnPidCoeffs, 0.5)
