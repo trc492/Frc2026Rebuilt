@@ -263,6 +263,7 @@ public class Shooter extends TrcSubsystem
         TrcShooter.GoalTrackingParams goalTrackingParams = null;
         TrcEvent turretReadyEvent = null;
         double turretReadyTimeout = 0.0;
+        boolean noPassback = false;
     }   //class GoalTrackingState
 
     private static class ShooterContext
@@ -808,6 +809,7 @@ public class Shooter extends TrcSubsystem
         int fieldWidthZone = goalTrackingState.fieldWidthTrigger.getCurrentZone();
 
         goalTrackingState.trackingMode =
+            goalTrackingState.noPassback ||
             fieldLengthZone == 0 && alliance == Alliance.Blue ||
             fieldLengthZone == 5 && alliance == Alliance.Red?
                 TrackingMode.AllianceHub: TrackingMode.Passback;
@@ -830,20 +832,22 @@ public class Shooter extends TrcSubsystem
         goalTrackingState.rightShooterAimInfo = null;
 
         tracer.traceInfo(
-            instanceName, "GoalTracking(trackingMode=%s, goalPose=%s).",
-            goalTrackingState.trackingMode, goalTrackingState.goalFieldPose);
+            instanceName, "GoalTracking(trackingMode=%s, goalPose=%s, noPassback=%s).",
+            goalTrackingState.trackingMode, goalTrackingState.goalFieldPose, goalTrackingState.noPassback);
     }   //setupGoalTrackingMode
 
     /**
      * This method enables GoalTracking.
      *
      * @param goalTrackingParams specifies the Goal Tracking parameters.
+     * @param noPassback specifies true to force shooters to tracking AllianceHub only.
      */
-    public void enableGoalTracking(TrcShooter.GoalTrackingParams goalTrackingParams)
+    public void enableGoalTracking(TrcShooter.GoalTrackingParams goalTrackingParams, boolean noPassback)
     {
         synchronized (goalTrackingState)
         {
             goalTrackingState.goalTrackingParams = goalTrackingParams;
+            goalTrackingState.noPassback = noPassback;
             setupGoalTrackingMode();
 
             if (leftShooter != null)
@@ -867,10 +871,12 @@ public class Shooter extends TrcSubsystem
      *        change tilt position.
      * @param trackPanPos specifies true to change pan position according to goal bearing, false to not
      *        change pan position.
+     * @param noPassback specifies true to force shooters to tracking AllianceHub only.
      */
-    public void enableGoalTracking(boolean trackFlywheel, boolean trackTiltPos, boolean trackPanPos)
+    public void enableGoalTracking(
+        boolean trackFlywheel, boolean trackTiltPos, boolean trackPanPos, boolean noPassback)
     {
-        enableGoalTracking(new TrcShooter.GoalTrackingParams(trackFlywheel, trackTiltPos, trackPanPos));
+        enableGoalTracking(new TrcShooter.GoalTrackingParams(trackFlywheel, trackTiltPos, trackPanPos), noPassback);
     }   //enableGoalTracking
 
     /**

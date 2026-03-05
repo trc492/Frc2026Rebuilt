@@ -459,8 +459,8 @@ public class DriveBase extends TrcSubsystem
                             cancoder.getDeviceID(), swerveInfo.steerGearRatio, 1.0, true);
                         // CTRE expects CCW+ but we are CW+, invert steering to correct it.
                         // swerveBase.swerveModules[i].setSteerInverted(true);
-                        TrcDbgTrace.globalTraceErr(
-                            moduleName, "%s: setting ZeroOffset=%f", swerveInfo.steerEncoderZeros[i]);
+                        TrcDbgTrace.globalTraceDebug(
+                            moduleName, "%s: Setting ZeroOffset=%f", swerveInfo.steerEncoderZeros[i]);
 
                     }
                 }
