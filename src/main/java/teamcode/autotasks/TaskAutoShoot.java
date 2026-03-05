@@ -58,7 +58,7 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
 
         public String toString()
         {
-            return "(autoStop=" + autoStop + " noPassback=" + noPassback + ")";
+            return "(autoStop=" + autoStop + ", noPassback=" + noPassback + ")";
         }   //toString
     }   //class TaskParams
 
@@ -96,6 +96,7 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
      * @param owner specifies the owner to acquire subsystem ownerships, can be null if not requiring ownership.
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      * @param autoStop specifies true to detect hopper empty and auto stop, false otherwise.
+     * @param noPassback specifies true to force shooters to tracking AllianceHub only.
      */
     public void autoShoot(String owner, TrcEvent completionEvent, boolean autoStop, boolean noPassback)
     {

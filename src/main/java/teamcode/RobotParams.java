@@ -241,7 +241,7 @@ public class RobotParams
         //
         public static final double STARTPOS_BLUE_SIDE_Y         = 156.61 + Robot.ROBOT_LENGTH / 2.0;    //167.7345
         public static final double STARTPOS_BLUE_CENTER_Y       = 156.61 - Robot.ROBOT_LENGTH / 2.0;    //145.4855
-        public static final double STARTPOS_OUTPOST_X           = -26.22;
+        public static final double STARTPOS_OUTPOST_X           = -17.22;
         public static final double STARTPOS_CENTER_X            = -fieldWidth / 2.0;                    //-158.845
         public static final double STARTPOS_DEPOT_X             = -fieldWidth + 17.22;                  //-291.47
         public static final TrcPose2D STARTPOS_BLUE_OUTPOST     =
@@ -268,7 +268,7 @@ public class RobotParams
         public static final TrcPose2D BLUE_DEPOT_PICKUP_POSE    =
             new TrcPose2D(-fieldWidth + 40.0, Robot.ROBOT_WIDTH / 2.0, 90.0); //(-277.69,22.249,90.0)
         public static final TrcPose2D BLUE_OUTPOST_NEUTRAL_PICKUP_POSE =
-            new TrcPose2D(-55.89, fieldLength / 2.0 - 44.0, -90.0);                  //(-55.89,281.61,-90.0)
+            new TrcPose2D(-55.89, fieldLength / 2.0 - 20.0, -90.0);                  //(-55.89,281.61,-90.0)
         public static final TrcPose2D BLUE_DEPOT_NEUTRAL_PICKUP_POSE =
             new TrcPose2D(-fieldWidth + 55.89, fieldLength / 2.0 - 20.0, 90.0);//(-261.8,281.61,90.0)
 
