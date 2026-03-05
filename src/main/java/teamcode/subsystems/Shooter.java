@@ -779,6 +779,19 @@ public class Shooter extends TrcSubsystem
     }   //getGoalTrackingParams
 
     /**
+     * This method returns the current goal tracking no passback parameter.
+     *
+     * @return goal tracking no passback parameters.
+     */
+    public boolean getGoalTrackingNoPassbackParams()
+    {
+        synchronized (goalTrackingState)
+        {
+            return goalTrackingState.noPassback;
+        }
+    }   //getGoalTrackingNoPassbackParams
+
+    /**
      * This method returns the tracked goal field pose.
      *
      * @return goal field pose.

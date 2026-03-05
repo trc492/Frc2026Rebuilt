@@ -185,7 +185,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     if (robot.shooterSubsystem != null)
                     {
                         robot.globalTracer.traceInfo(moduleName, "***** Enabling GoalTracking on turret only.");
-                        robot.shooterSubsystem.enableGoalTracking(false, false, true);
+                        robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
                     }
 
                     if (depotPickup &&

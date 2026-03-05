@@ -68,6 +68,7 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
     private final TrcEvent rightShooterDone;
 
     private TrcShooter.GoalTrackingParams prevGoalTrackingParams = null;
+    private boolean prevNoPassback = false;
     private boolean leftShooterShooting = false;
     private boolean rightShooterShooting = false;
 
@@ -101,8 +102,9 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
             moduleName,
             "autoShoot(owner=" + owner + ", event=" + completionEvent + ", taskParams=" + taskParams + ")");
         prevGoalTrackingParams = robot.shooterSubsystem.getGoalTrackingParams();
+        prevNoPassback = robot.shooterSubsystem.getGoalTrackingNoPassbackParams();
         tracer.traceInfo(moduleName, "Enabling Goal Tracking (prevTrackParams=%s).", prevGoalTrackingParams);
-        robot.shooterSubsystem.enableGoalTracking(true, true, true);
+        robot.shooterSubsystem.enableGoalTracking(true, true, true, false);
         startAutoTask(owner, State.START, taskParams, completionEvent);
     }   //autoShoot
 
@@ -175,7 +177,7 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
         else
         {
             tracer.traceInfo(moduleName, "Restoring previous Tracking mode %s.", prevGoalTrackingParams);
-            robot.shooterSubsystem.enableGoalTracking(prevGoalTrackingParams);
+            robot.shooterSubsystem.enableGoalTracking(prevGoalTrackingParams, prevNoPassback);
             if (!prevGoalTrackingParams.trackFlywheel)
             {
                 robot.shooterSubsystem.stopFlywheel();
