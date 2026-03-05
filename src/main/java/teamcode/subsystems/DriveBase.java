@@ -90,7 +90,7 @@ public class DriveBase extends TrcSubsystem
         private static final TrcPidController.PidCoefficients drivePidCoeffs =
             new TrcPidController.PidCoefficients(0.01, 0.0, 0.0, 0.0, 0.0);
         private static final TrcPidController.PidCoefficients turnPidCoeffs =
-            new TrcPidController.PidCoefficients(0.02, 0.0, 0.000, 0.0, 0.0);
+            new TrcPidController.PidCoefficients(0.02, 0.0, 0.0, 0.0, 0.0);
         private static final TrcPidController.PidCoefficients velPidCoeffs =
             new TrcPidController.PidCoefficients(0.0, 0.0, 0.0, 0.00909090909090909090909090909091, 0.0);
         private static final TrcPidController.PidCoefficients steerPidCoeffs =
@@ -269,9 +269,9 @@ public class DriveBase extends TrcSubsystem
         private static final TrcPidController.PidCoefficients driveMotorVelPidCoeffs =
             new TrcPidController.PidCoefficients(0.35, 0.0, 0.0, 0.12, 0.0);
         private static final TrcPidController.PidCoefficients drivePidCoeffs =
-            new TrcPidController.PidCoefficients(0.017, 0.0, 0.0025, 0.0, 5.0);
+            new TrcPidController.PidCoefficients(0.017, 0.0, 0.0025, 0.0, 0.0);
         private static final TrcPidController.PidCoefficients turnPidCoeffs =
-            new TrcPidController.PidCoefficients(0.0065, 0.0, 0.0004, 0.0, 10.0);
+            new TrcPidController.PidCoefficients(0.0065, 0.0, 0.0004, 0.0, 0.0);
         private static final TrcPidController.PidCoefficients velPidCoeffs =
             new TrcPidController.PidCoefficients(0.0, 0.0, 0.0, 1.0/171.0, 0.0);
         private static final TrcPidController.PidCoefficients steerPidCoeffs =
