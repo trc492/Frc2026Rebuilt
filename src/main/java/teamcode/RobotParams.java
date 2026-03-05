@@ -85,8 +85,8 @@ public class RobotParams
         public static final boolean useGyroAssist               = false;
         public static final boolean useAntiTipping              = false;
         // Other Subsystems
-        public static final boolean useLeftShooter              = false;
-        public static final boolean useRightShooter             = false;
+        public static final boolean useLeftShooter              = true;
+        public static final boolean useRightShooter             = true;
         public static final boolean showShooterStatus           = true;
         public static final Interpolation shooterInterpolation  = Interpolation.PolynomialRegression;
         public static final boolean useMotionCompensation       = false;

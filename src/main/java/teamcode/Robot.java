@@ -64,6 +64,7 @@ import teamcode.vision.Vision;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
 import trclib.motor.TrcMotor;
 import trclib.pathdrive.TrcPose2D;
+import trclib.robotcore.TrcAutoTask;
 import trclib.robotcore.TrcBuildInfo;
 import trclib.robotcore.TrcDbgTrace;
 import trclib.robotcore.TrcEvent;
@@ -460,6 +461,7 @@ public class Robot extends FrcRobot
         if (robotBase != null) robotBase.cancel();
         TrcSubsystem.cancelAll();
         // Cancel auto tasks.
+        TrcAutoTask.cancelAllTasks();
     }   //cancelAll
 
     /**

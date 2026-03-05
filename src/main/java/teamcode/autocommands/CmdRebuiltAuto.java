@@ -168,6 +168,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     climb = autoChoices.getClimb();
                     climbSide = autoChoices.getClimbSide();
                     neutralZoneCycles = autoChoices.getNeutralZoneCycles();
+                    robot.robotBase.purePursuitDrive.getTurnPidCtrl().setNoOscillation(true);
                     // Do zero calibration.
                     zeroCalEvent.clear();
                     sm.addEvent(zeroCalEvent);
@@ -323,20 +324,22 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     intermediatePose = pickupPose.clone();
                     // (-279.8,281.61,90.0) or (-37.89,281.61,-90.0)
                     intermediatePose.x += atDepot? -18.0: 18.0;
-                    neutralZoneReturnPath = new TrcPose2D[] {intermediatePose, pickupPose, endPose};
+                    neutralZonePath = new TrcPose2D[] {intermediatePose, pickupPose, endPose};
                     robot.globalTracer.traceInfo(
                         moduleName, "NeutralZonePath:\nstartPose=%s\nintermediatePose=%s\npickupPose=%s\nendPose=%s",
                         startPose, intermediatePose, pickupPose, endPose);
 
                     TrcPose2D returnIntermediatePose = intermediatePose.clone();
-                    returnIntermediatePose.angle = -180.0;
+                    returnIntermediatePose.angle = 180.0;
                     TrcPose2D returnPose = startPose.clone();
-                    returnPose.angle = -180.0;
+                    returnPose.angle = 180.0;
+                    returnPose.x += 10.0;
                     returnPose.y -= 18.0;
                     neutralZoneReturnPath = new TrcPose2D[] {pickupPose, returnIntermediatePose, returnPose};
                     robot.globalTracer.traceInfo(
-                        moduleName, "NeutralZoneReturnPath:\nstartPose=%s\npickupPose=%s\nintermediatePose=%s\nreturnPose=%s",
-                        startPose, pickupPose, returnIntermediatePose, returnPose);
+                        moduleName,
+                        "NeutralZoneReturnPath:\nrobotPose=%s\npickupPose=%s\nintermediatePose=%s\nreturnPose=%s",
+                        robot.robotBase.driveBase.getFieldPosition(), pickupPose, returnIntermediatePose, returnPose);
 
                     sm.setState(State.CYCLE_NEUTRAL_ZONE);
                     break;

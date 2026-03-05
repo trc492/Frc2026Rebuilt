@@ -165,7 +165,7 @@ public class FrcAuto implements TrcRobot.RobotMode
 
             userChoices.addBoolean(Dashboard.DBKEY_AUTO_DEPOT_PICKUP, false);
             userChoices.addBoolean(Dashboard.DBKEY_AUTO_OUTPOST_PICKUP, false);
-            userChoices.addBoolean(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_PICKUP, false);
+            userChoices.addBoolean(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_PICKUP, true);
             userChoices.addChoiceMenu(Dashboard.DBKEY_AUTO_MOVE_TO, moveToChoiceMenu);
             userChoices.addChoiceMenu(Dashboard.DBKEY_AUTO_PASS_BACK, passBackChoiceMenu);
             userChoices.addBoolean(Dashboard.DBKEY_AUTO_CLIMB, false);

@@ -1274,6 +1274,7 @@ public class Shooter extends TrcSubsystem
     {
         if (leftShooter != null && leftShooter.tiltMotor != null)
         {
+            tracer.traceInfo(instanceName, "ZeroCalibrate left shooter.");
             leftTiltZeroCalCallbackEvent.clear();
             leftTiltZeroCalCallbackEvent.setCallback(this::zeroCalCallback, completionEvent);
             leftShooter.tiltMotor.zeroCalibrate(
@@ -1287,6 +1288,7 @@ public class Shooter extends TrcSubsystem
 
         if (rightShooter != null && rightShooter.tiltMotor != null)
         {
+            tracer.traceInfo(instanceName, "ZeroCalibrate right shooter.");
             rightTiltZeroCalCallbackEvent.clear();
             rightTiltZeroCalCallbackEvent.setCallback(this::zeroCalCallback, completionEvent);
             rightShooter.tiltMotor.zeroCalibrate(
@@ -1300,6 +1302,7 @@ public class Shooter extends TrcSubsystem
 
         if (turret != null)
         {
+            tracer.traceInfo(instanceName, "ZeroCalibrate turret.");
             turretZeroCalCallbackEvent.clear();
             turretZeroCalCallbackEvent.setCallback(
                 (ctxt, canceled) ->
