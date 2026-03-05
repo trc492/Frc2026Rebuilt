@@ -49,6 +49,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
         ZERO_CAL_DONE,
         PICKUP_DEPOT,
         PICKUP_OUTPOST,
+        OUTPOST_DELAY,
         FINISH_PICKUP,
         SHOOT_FUEL,
         CREATE_NEUTRAL_ZONE_PATH,
@@ -252,7 +253,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                 case PICKUP_OUTPOST:
                     pickupPose = RobotParams.Game.BLUE_OUTPOST_PICKUP_POSE;
                     intermediatePose = pickupPose.clone();
-                    intermediatePose.y += 36.0;
+                    intermediatePose.y += 48.0;
 
                     robot.robotBase.purePursuitDrive.setWaypointEventHandler(
                         (i, wp) ->
@@ -263,7 +264,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.3);
                                 if (robot.intakeSubsystem != null)
                                 {
-                                    robot.intakeSubsystem.deploy();
+                                    robot.intakeSubsystem.setIntakeEnabled(true);
                                 }
                             }
                         });
@@ -274,6 +275,11 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
                         robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
                         robot.adjustPathByAlliance(alliance, intermediatePose, pickupPose));
+                    sm.waitForSingleEvent(event, State.OUTPOST_DELAY);
+                    break;
+                
+                case OUTPOST_DELAY:
+                    timer.set(3.0, event);
                     sm.waitForSingleEvent(event, State.FINISH_PICKUP);
                     break;
                 
@@ -435,7 +441,9 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                 case CLIMB:
                     if (robot.climberSubsystem != null)
                     {
-                        robot.autoClimbTask.autoClimb(null, event, alliance, climbSide);
+                        double timeLeft = RobotParams.Game.AUTONOMOUS_PERIOD - TrcTimer.getCurrentTime();
+                        double climbTime = 3.5;
+                        robot.autoClimbTask.autoClimb(null, event, alliance, climbSide, timeLeft < climbTime ? 0.0 : timeLeft - climbTime);
                         sm.waitForSingleEvent(event, State.DONE);
                     }
                     else

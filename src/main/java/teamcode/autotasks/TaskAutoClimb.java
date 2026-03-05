@@ -32,6 +32,7 @@ import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcOwnershipMgr;
 import trclib.robotcore.TrcRobot;
 import trclib.robotcore.TrcTaskMgr;
+import trclib.timer.TrcTimer;
 
 /**
  * This class implements auto-assist task.
@@ -45,6 +46,7 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
         START,
         DRIVE_TO_SIDE,
         ALIGN_CLIMBER,
+        CLIMB_DELAY,
         CLIMB,
         DONE
     }   //enum State
@@ -59,20 +61,23 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
     {
         ClimbSide climbSide;
         Alliance alliance;
+        double climbDelay;
 
-        TaskParams(ClimbSide climbSide, Alliance alliance)
+        TaskParams(ClimbSide climbSide, Alliance alliance, double climbDelay)
         {
             this.climbSide = climbSide;
             this.alliance = alliance;
+            this.climbDelay = climbDelay;
         }   //TaskParams
 
         public String toString()
         {
-            return "(climbSide=" + climbSide + ", alliance=" + alliance + ")";
+            return "(climbSide=" + climbSide + ", alliance=" + alliance + ", climbDelay=" + climbDelay + ")";
         }   //toString
     }   //class TaskParams
 
     private final Robot robot;
+    private final TrcTimer timer;
     private final TrcEvent event;
     private final TrcEvent climberEvent;
 
@@ -85,6 +90,7 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
     {
         super(moduleName, TrcTaskMgr.TaskType.POST_PERIODIC_TASK);
         this.robot = robot;
+        timer = new TrcTimer(moduleName);
         this.event = new TrcEvent(moduleName + ".event");
         this.climberEvent = new TrcEvent(moduleName + ".climberEvent");
     }   //TaskAutoClimb
@@ -95,9 +101,9 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
      * @param owner specifies the owner to acquire subsystem ownerships, can be null if not requiring ownership.
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
-    public void autoClimb(String owner, TrcEvent completionEvent, Alliance alliance, ClimbSide climbSide)
+    public void autoClimb(String owner, TrcEvent completionEvent, Alliance alliance, ClimbSide climbSide, double climbDelay)
     {
-        TaskParams autoClimbParams = new TaskParams(climbSide, alliance);
+        TaskParams autoClimbParams = new TaskParams(climbSide, alliance, climbDelay);
         tracer.traceInfo(
             moduleName,
             "autoClimb(owner=" + owner + ", event=" + completionEvent + ", taskParams=" + autoClimbParams + ")");
@@ -160,6 +166,7 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
     protected void stopSubsystems(String owner)
     {
         tracer.traceInfo(moduleName, "Stopping subsystems.");
+        timer.cancel();
         robot.robotBase.cancel(owner);
         robot.climber.cancel();
     }   //stopSubsystems
@@ -223,6 +230,18 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
                     robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
                     new TrcPose2D(0.0, -20.0, 0.0)); // TODO: Tune this
                 sm.waitForSingleEvent(event, State.CLIMB);
+                break;
+            
+            case CLIMB_DELAY:
+                if (taskParams.climbDelay == 0.0)
+                {
+                    sm.setState(State.CLIMB);
+                }
+                else
+                {
+                    timer.set(taskParams.climbDelay, event);
+                    sm.waitForSingleEvent(event, State.CLIMB);
+                }
                 break;
 
             case CLIMB:

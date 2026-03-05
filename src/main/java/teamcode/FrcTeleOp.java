@@ -586,7 +586,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             case DpadLeft:
                 if (robot.climber != null && pressed)
                 {
-                    robot.autoClimbTask.autoClimb(null, null, FrcAuto.autoChoices.getAlliance(), ClimbSide.OUTPOST);
+                    robot.autoClimbTask.autoClimb(null, null, FrcAuto.autoChoices.getAlliance(), ClimbSide.OUTPOST, 0.0);
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Auto climbing on outpost side.");
                 }
                 break;
@@ -594,7 +594,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             case DpadRight:
                 if (robot.climber != null && pressed)
                 {
-                    robot.autoClimbTask.autoClimb(null, null, FrcAuto.autoChoices.getAlliance(), ClimbSide.DEPOT);
+                    robot.autoClimbTask.autoClimb(null, null, FrcAuto.autoChoices.getAlliance(), ClimbSide.DEPOT, 0.0);
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Auto climbing on depot side.");
                 }
                 break;
