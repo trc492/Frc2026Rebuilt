@@ -290,7 +290,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     nextState = climb? State.GO_TO_CLIMB_POS: State.DONE;
                     if (robot.shooterSubsystem != null)
                     {
-                        robot.autoShootTask.autoShoot(null, event, true);
+                        robot.autoShootTask.autoShoot(null, event, true, true);
                         sm.waitForSingleEvent(event, nextState);
                     }
                     else
@@ -326,21 +326,21 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         (i, wp) ->
                         {
                             robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
-                            if (i == 1)
-                            {
-                                // At intermediatePose.
-                                if (robot.intakeSubsystem != null)
-                                {
-                                    robot.intakeSubsystem.setIntakeEnabled(true);
-                                }
-                            }                  
-                            else if (i == 2)
+                            // if (i == 1)
+                            // {
+                            //     // At startPose.
+                            //     if (robot.intakeSubsystem != null)
+                            //     {
+                            //         robot.intakeSubsystem.setIntakeEnabled(true);
+                            //     }
+                            // }                  
+                            if (i == 2)
                             {
                                 // At pickupPose.
-                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.6);
+                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
                                 if (passBack == PassBack.PASS_BACK && robot.autoShootTask != null)
                                 {
-                                    robot.autoShootTask.autoShoot(null, null, false);
+                                    robot.autoShootTask.autoShoot(null, null, false, false);
                                 }
                             }
                         });
@@ -360,7 +360,12 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         }
                     }
 
-                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.3);
+                    if (robot.intakeSubsystem != null)
+                    {
+                        robot.intakeSubsystem.setIntakeEnabled(true);
+                    }
+
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.7);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
                         robot.robotInfo.baseParams.profiledMaxDriveVelocity,
@@ -372,7 +377,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
 
                 case RETURN_TO_SCORE_POS:
                     robot.robotBase.purePursuitDrive.setWaypointEventHandler(null);
-                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.3);
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.7);
                     if (robot.intakeSubsystem != null)
                     {
                         robot.intakeSubsystem.setIntakeEnabled(false);
@@ -382,14 +387,20 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     {
                         robot.autoShootTask.cancel();
                     }
+
+                    TrcPose2D returnIntermediatePose = intermediatePose.clone();
+                    returnIntermediatePose.angle = alliance == Alliance.Blue ? 0.0 : -180.0;
+
+                    TrcPose2D returnPose = startPose.clone();
+                    returnPose.angle = alliance == Alliance.Blue ? 0.0: -180.0;
                     // Going back the same route we came, just in reverse.
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
                         robot.robotInfo.baseParams.profiledMaxDriveVelocity,
                         robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
                         robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
-                        robot.adjustPathByAlliance(alliance, pickupPose, intermediatePose, startPose));
-                    sm.waitForSingleEvent(event, State.DONE);
+                        robot.adjustPathByAlliance(alliance, pickupPose, returnIntermediatePose, returnPose));
+                    sm.waitForSingleEvent(event, State.SHOOT_NEUTRAL_FUEL);
                     break;
 
                 case SHOOT_NEUTRAL_FUEL:
@@ -398,7 +409,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     robot.globalTracer.traceInfo(moduleName, "Shooting NeutralZone cycle " + currentNeutralZoneCycles);
                     if (robot.autoShootTask != null)
                     {
-                        robot.autoShootTask.autoShoot(null, event, true);
+                        robot.autoShootTask.autoShoot(null, event, true, true);
                         sm.waitForSingleEvent(event, nextState);
                     }
                     else

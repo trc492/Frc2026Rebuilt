@@ -243,7 +243,7 @@ public class RobotParams
         public static final double STARTPOS_BLUE_CENTER_Y       = 156.61 - Robot.ROBOT_LENGTH / 2.0;    //145.4855
         public static final double STARTPOS_OUTPOST_X           = -26.22;
         public static final double STARTPOS_CENTER_X            = -fieldWidth / 2.0;                    //-158.845
-        public static final double STARTPOS_DEPOT_X             = -fieldWidth + 26.22;                  //-291.47
+        public static final double STARTPOS_DEPOT_X             = -fieldWidth + 17.22;                  //-291.47
         public static final TrcPose2D STARTPOS_BLUE_OUTPOST     =
             new TrcPose2D(STARTPOS_OUTPOST_X, STARTPOS_BLUE_SIDE_Y, -90.0);         //(-26.22,167.7345,-90.0)
         public static final TrcPose2D STARTPOS_BLUE_CENTER      =
@@ -270,7 +270,7 @@ public class RobotParams
         public static final TrcPose2D BLUE_OUTPOST_NEUTRAL_PICKUP_POSE =
             new TrcPose2D(-55.89, fieldLength / 2.0 - 44.0, -90.0);                  //(-55.89,281.61,-90.0)
         public static final TrcPose2D BLUE_DEPOT_NEUTRAL_PICKUP_POSE =
-            new TrcPose2D(-fieldWidth + 55.89, fieldLength / 2.0 - 44.0, 90.0);//(-261.8,281.61,90.0)
+            new TrcPose2D(-fieldWidth + 55.89, fieldLength / 2.0 - 20.0, 90.0);//(-261.8,281.61,90.0)
 
         public static final TrcPose2D BLUE_CLIMB_LOOKOUT_POSE           =
             new TrcPose2D(170.22, 65.0, -180.0); // TODO: Fine tune x and y

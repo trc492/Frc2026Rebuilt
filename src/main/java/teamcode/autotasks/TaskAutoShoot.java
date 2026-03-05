@@ -48,15 +48,17 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
     private static class TaskParams
     {
         public boolean autoStop = false;
+        public boolean noPassback = false;
 
-        public TaskParams(boolean autoStop)
+        public TaskParams(boolean autoStop, boolean noPassback)
         {
             this.autoStop = autoStop;
+            this.noPassback = noPassback;
         }   //TaskParams
 
         public String toString()
         {
-            return "(autoStop=" + autoStop + ")";
+            return "(autoStop=" + autoStop + " noPassback=" + noPassback + ")";
         }   //toString
     }   //class TaskParams
 
@@ -95,16 +97,16 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      * @param autoStop specifies true to detect hopper empty and auto stop, false otherwise.
      */
-    public void autoShoot(String owner, TrcEvent completionEvent, boolean autoStop)
+    public void autoShoot(String owner, TrcEvent completionEvent, boolean autoStop, boolean noPassback)
     {
-        TaskParams taskParams = new TaskParams(autoStop);
+        TaskParams taskParams = new TaskParams(autoStop, noPassback);
         tracer.traceInfo(
             moduleName,
             "autoShoot(owner=" + owner + ", event=" + completionEvent + ", taskParams=" + taskParams + ")");
         prevGoalTrackingParams = robot.shooterSubsystem.getGoalTrackingParams();
         prevNoPassback = robot.shooterSubsystem.getGoalTrackingNoPassbackParams();
         tracer.traceInfo(moduleName, "Enabling Goal Tracking (prevTrackParams=%s).", prevGoalTrackingParams);
-        robot.shooterSubsystem.enableGoalTracking(true, true, true, false);
+        robot.shooterSubsystem.enableGoalTracking(true, true, true, noPassback);
         startAutoTask(owner, State.START, taskParams, completionEvent);
     }   //autoShoot
 

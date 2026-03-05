@@ -639,7 +639,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 if (!robot.autoShootTask.isActive())
                 {
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Start Auto Shoot.");
-                    robot.autoShootTask.autoShoot(null, null, false);
+                    robot.autoShootTask.autoShoot(null, null, false, false);
                 }
                 else
                 {

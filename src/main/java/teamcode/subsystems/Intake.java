@@ -52,7 +52,7 @@ public class Intake extends TrcSubsystem
         public static final boolean INTAKE_MOTOR_INVERTED       = true;
         public static final int INTAKE_MOTOR_CANID              = RobotParams.HwConfig.CANID_INTAKE_MOTOR;
         // Intake Parameters
-        public static final double INTAKE_POWER                 = 0.75;
+        public static final double INTAKE_POWER                 = 1.0;
 
         // Deployer:
         // PID Parameters
