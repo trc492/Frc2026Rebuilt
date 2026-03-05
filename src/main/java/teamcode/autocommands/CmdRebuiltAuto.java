@@ -85,6 +85,8 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
     private TrcPose2D intermediatePose = null;
     private TrcPose2D pickupPose = null;
     private TrcPose2D endPose = null;
+    private TrcPose2D[] neutralZonePath = null;
+    private TrcPose2D[] neutralZoneReturnPath = null;
 
     /**
      * Constructor: Create an instance of the object.
@@ -321,9 +323,21 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     intermediatePose = pickupPose.clone();
                     // (-279.8,281.61,90.0) or (-37.89,281.61,-90.0)
                     intermediatePose.x += atDepot? -18.0: 18.0;
+                    neutralZoneReturnPath = new TrcPose2D[] {intermediatePose, pickupPose, endPose};
                     robot.globalTracer.traceInfo(
                         moduleName, "NeutralZonePath:\nstartPose=%s\nintermediatePose=%s\npickupPose=%s\nendPose=%s",
                         startPose, intermediatePose, pickupPose, endPose);
+
+                    TrcPose2D returnIntermediatePose = intermediatePose.clone();
+                    returnIntermediatePose.angle = -180.0;
+                    TrcPose2D returnPose = startPose.clone();
+                    returnPose.angle = -180.0;
+                    returnPose.y -= 18.0;
+                    neutralZoneReturnPath = new TrcPose2D[] {pickupPose, returnIntermediatePose, returnPose};
+                    robot.globalTracer.traceInfo(
+                        moduleName, "NeutralZoneReturnPath:\nstartPose=%s\npickupPose=%s\nintermediatePose=%s\nreturnPose=%s",
+                        startPose, pickupPose, returnIntermediatePose, returnPose);
+
                     sm.setState(State.CYCLE_NEUTRAL_ZONE);
                     break;
 
@@ -332,14 +346,6 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         (i, wp) ->
                         {
                             robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
-                            // if (i == 1)
-                            // {
-                            //     // At startPose.
-                            //     if (robot.intakeSubsystem != null)
-                            //     {
-                            //         robot.intakeSubsystem.setIntakeEnabled(true);
-                            //     }
-                            // }                  
                             if (i == 2)
                             {
                                 // At pickupPose.
@@ -377,7 +383,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         robot.robotInfo.baseParams.profiledMaxDriveVelocity,
                         robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
                         robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
-                        robot.adjustPathByAlliance(alliance, intermediatePose, pickupPose, endPose));
+                        robot.adjustPathByAlliance(alliance, neutralZonePath));
                     sm.waitForSingleEvent(event, State.RETURN_TO_SCORE_POS);
                     break;
 
@@ -394,19 +400,13 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         robot.autoShootTask.cancel();
                     }
 
-                    TrcPose2D returnIntermediatePose = intermediatePose.clone();
-                    returnIntermediatePose.angle = alliance == Alliance.Blue ? 0.0 : -180.0;
-
-                    TrcPose2D returnPose = startPose.clone();
-                    returnPose.angle = alliance == Alliance.Blue ? 0.0: -180.0;
-                    returnPose.y -= alliance == Alliance.Blue ?  18.0: -18.0;
                     // Going back the same route we came, just in reverse.
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
                         robot.robotInfo.baseParams.profiledMaxDriveVelocity,
                         robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
                         robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
-                        robot.adjustPathByAlliance(alliance, pickupPose, returnIntermediatePose, returnPose));
+                        robot.adjustPathByAlliance(alliance, neutralZoneReturnPath));
                     sm.waitForSingleEvent(event, State.SHOOT_NEUTRAL_FUEL);
                     break;
 

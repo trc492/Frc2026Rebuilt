@@ -247,7 +247,7 @@ public class RobotParams
         public static final TrcPose2D STARTPOS_BLUE_OUTPOST     =
             new TrcPose2D(STARTPOS_OUTPOST_X, STARTPOS_BLUE_SIDE_Y, -90.0);         //(-26.22,167.7345,-90.0)
         public static final TrcPose2D STARTPOS_BLUE_CENTER      =
-            new TrcPose2D(STARTPOS_CENTER_X, STARTPOS_BLUE_CENTER_Y, 180.0);    //(-158.845,145.4855,180.0)
+            new TrcPose2D(STARTPOS_CENTER_X, STARTPOS_BLUE_CENTER_Y, 180.0);  //(-158.845,145.4855,180.0)
         public static final TrcPose2D STARTPOS_BLUE_DEPOT       =
             new TrcPose2D(STARTPOS_DEPOT_X, STARTPOS_BLUE_SIDE_Y, 90.0);      //(-291.47,167.7345,90.0)
         public static final TrcPose2D[] blueStartPoses          =
