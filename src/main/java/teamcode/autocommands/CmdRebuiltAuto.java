@@ -182,7 +182,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         sm.addEvent(event);
                         timer.set(startDelay, event);
                     }
-                    sm.waitForEvents(State.ZERO_CAL_DONE, false, true);
+                    sm.waitForEvents(State.ZERO_CAL_DONE, false, true, 2.0);
                     break;
 
                 case ZERO_CAL_DONE:
@@ -258,6 +258,11 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     intermediatePose = pickupPose.clone();
                     intermediatePose.y += 48.0;
 
+                    if (robot.intakeSubsystem != null)
+                    {
+                        robot.intakeSubsystem.setIntakeEnabled(true);
+                    }
+
                     robot.robotBase.purePursuitDrive.setWaypointEventHandler(
                         (i, wp) ->
                         {
@@ -265,13 +270,9 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                             if (i == 1)
                             {
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.3);
-                                if (robot.intakeSubsystem != null)
-                                {
-                                    robot.intakeSubsystem.setIntakeEnabled(true);
-                                }
                             }
                         });
-                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
                         robot.robotInfo.baseParams.profiledMaxDriveVelocity,
@@ -333,8 +334,8 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     returnIntermediatePose.angle = 0.0;
                     TrcPose2D returnPose = startPose.clone();
                     returnPose.angle = 0.0;
-                    returnPose.x += 7.0;
-                    returnPose.y -= 40.0;
+                    returnPose.x += atDepot? 7.0 : -10.0;
+                    returnPose.y -= atDepot? 40.0: 50.0;
                     neutralZoneReturnPath = new TrcPose2D[] {pickupPose, returnIntermediatePose, returnPose};
                     robot.globalTracer.traceInfo(
                         moduleName,
