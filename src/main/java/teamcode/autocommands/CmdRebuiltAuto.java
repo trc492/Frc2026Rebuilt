@@ -445,9 +445,10 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                 case CLIMB:
                     if (robot.climberSubsystem != null)
                     {
-                        double timeLeft = RobotParams.Game.AUTONOMOUS_PERIOD - TrcTimer.getCurrentTime();
-                        double climbTime = 3.5;
-                        robot.autoClimbTask.autoClimb(null, event, alliance, climbSide, timeLeft < climbTime ? 0.0 : timeLeft - climbTime);
+                        double climbDelay =
+                            RobotParams.Game.AUTONOMOUS_PERIOD - TrcTimer.getModeElapsedTime() - 3.5;
+                        robot.autoClimbTask.autoClimb(
+                            null, event, alliance, climbSide, climbDelay > 0.0? climbDelay: 0.0);
                         sm.waitForSingleEvent(event, State.DONE);
                     }
                     else

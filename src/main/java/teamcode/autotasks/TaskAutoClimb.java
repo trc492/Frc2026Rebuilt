@@ -44,7 +44,6 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
     public enum State
     {
         START,
-        DRIVE_TO_SIDE,
         ALIGN_CLIMBER,
         CLIMB_DELAY,
         CLIMB,
@@ -100,10 +99,11 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
      *
      * @param owner specifies the owner to acquire subsystem ownerships, can be null if not requiring ownership.
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
+     * @param climbDelay specifies the delay time to wait before climbing, must be positive or there will be no delay.
      */
     public void autoClimb(String owner, TrcEvent completionEvent, Alliance alliance, ClimbSide climbSide, double climbDelay)
     {
-        TaskParams autoClimbParams = new TaskParams(climbSide, alliance, climbDelay);
+        TaskParams autoClimbParams = new TaskParams(climbSide, alliance, climbDelay > 0.0? climbDelay: 0.0);
         tracer.traceInfo(
             moduleName,
             "autoClimb(owner=" + owner + ", event=" + completionEvent + ", taskParams=" + autoClimbParams + ")");
@@ -192,31 +192,26 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
         switch (state)
         {
             case START:
-                // TODO: Do we need to do anything in start?
-                sm.setState(State.DRIVE_TO_SIDE);
-                break;
-
-            case DRIVE_TO_SIDE:
-                TrcPose2D climbSidePose = taskParams.climbSide == ClimbSide.DEPOT?
-                    RobotParams.Game.BLUE_DEPOT_CLIMB_POSE: RobotParams.Game.BLUE_OUTPOST_CLIMB_POSE;
-                TrcPose2D climbSideIntermediatePose = climbSidePose.clone();
-
                 climberEvent.clear();
                 sm.addEvent(climberEvent);
                 robot.climber.setPosition(
                     owner, 0.0, Climber.Params.CLIMBER_EXTEND_POS, true, Climber.Params.CLIMBER_POWER_LIMIT,
                     climberEvent, 0.0);
 
+                TrcPose2D climbSidePose = taskParams.climbSide == ClimbSide.DEPOT?
+                    RobotParams.Game.BLUE_DEPOT_CLIMB_POSE: RobotParams.Game.BLUE_OUTPOST_CLIMB_POSE;
+                TrcPose2D intermediatePose = climbSidePose.clone();
+
+                intermediatePose.x += taskParams.climbSide == ClimbSide.DEPOT? 12.0: -12.0;
                 event.clear();
                 sm.addEvent(event);
-                climbSideIntermediatePose.y += taskParams.alliance == Alliance.Blue? 12.0: -12.0;
                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
                 robot.robotBase.purePursuitDrive.start(
                     owner, event, 0.0, false,
                     robot.robotInfo.baseParams.profiledMaxDriveVelocity,
                     robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
                     robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
-                    robot.adjustPathByAlliance(taskParams.alliance, climbSideIntermediatePose, climbSidePose));
+                    robot.adjustPathByAlliance(taskParams.alliance, intermediatePose, climbSidePose));
 
                 sm.waitForEvents(State.ALIGN_CLIMBER, true);
                 break;
@@ -233,14 +228,14 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
                 break;
             
             case CLIMB_DELAY:
-                if (taskParams.climbDelay == 0.0)
-                {
-                    sm.setState(State.CLIMB);
-                }
-                else
+                if (taskParams.climbDelay > 0.0)
                 {
                     timer.set(taskParams.climbDelay, event);
                     sm.waitForSingleEvent(event, State.CLIMB);
+                }
+                else
+                {
+                    sm.setState(State.CLIMB);
                 }
                 break;
 
