@@ -272,7 +272,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.3);
                             }
                         });
-                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.6);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
                         robot.robotInfo.baseParams.profiledMaxDriveVelocity,
@@ -283,15 +283,15 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     break;
                 
                 case OUTPOST_DELAY:
-                    timer.set(3.0, event);
+                    timer.set(2.0, event);
                     sm.waitForSingleEvent(event, State.FINISH_PICKUP);
                     break;
                 
                 case FINISH_PICKUP:
-                    if (robot.intakeSubsystem != null)
-                    {
-                        robot.intakeSubsystem.setIntakeEnabled(false);
-                    }
+                    // if (robot.intakeSubsystem != null)
+                    // {
+                    //     robot.intakeSubsystem.setIntakeEnabled(false);
+                    // }
                     robot.robotBase.purePursuitDrive.setWaypointEventHandler(null);
                     sm.setState(State.SHOOT_FUEL);
                     break;
