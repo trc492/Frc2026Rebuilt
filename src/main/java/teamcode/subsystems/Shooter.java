@@ -65,31 +65,24 @@ public class Shooter extends TrcSubsystem
     public static final TrcLookupTable.Region[] shootRegions =
     {
         new TrcLookupTable.Region(0.0, new double[][] {
-            // RPM (Cubic Regression)
-            {4871.46703+150.0, -29.89811, 0.300502, -0.00067147}, 
-            // Hood Angle (Cubic Regression)
-            {-23.31923-2.0, 1.06056, -0.00600216, 0.0000113879},
-            // Time of Flight (Cubic Regression)
+            // RPM (Quadratic Regression)
+            {3035.18519, 17.19577, -0.020668}, 
+            // Hood Angle (Linear Regression)
+            {13.33333, 0.0833333},
+            // Time of Flight (Cubic Regression) // NOT USED
             {0.205105, 0.00252013, 0.0000381112, -0.000000152636}
         })
     };
 
     public static final TrcLookupTable shootParamsTable = new TrcLookupTable()
         //        name,                 distance,   region,             ShooterVel, HoodAngle,  Tof
-        .addEntry(HUB_SHOOT_POINT,      50.0,       shootRegions[0],    4050.0,     18.0,       (1.22-0.79))
-        .addEntry(null,                 58.0,       shootRegions[0],    4050.0,     18.0,       (2.66-2.17))
-        .addEntry(null,                 70.0,       shootRegions[0],    4000.0,     24.0,       (3.24-2.77))
-        .addEntry(null,                 82.0,       shootRegions[0],    4000.0,     32.0,       (2.15-1.75))
-        .addEntry(null,                 94.0,       shootRegions[0],    4150.0,     32.0,       (9.70-8.92))
-        .addEntry(null,                 106.0,      shootRegions[0],    4350.0,     35.0,       (9.70-8.92))
-        .addEntry(null,                 118.0,      shootRegions[0],    4400.0,     37.0,       (8.97-8.15))
-        .addEntry(null,                 130.0,      shootRegions[0],    4600.0,     39.0,       (8.28-7.45))
-        .addEntry(null,                 142.0,      shootRegions[0],    4800.0,     39.0,       (8.05-7.205))
-        .addEntry(null,                 154.0,      shootRegions[0],    4950.0,     39.0,       (3.95-3.00))
-        .addEntry(null,                 166.0,      shootRegions[0],    5100.0,     39.0,       (5.54-4.58))
-        .addEntry(null,                 178.0,      shootRegions[0],    5250.0,     39.0,       (8.12-7.125))
-        .addEntry(null,                 190.0,      shootRegions[0],    5400.0,     40.0,       (9.08-8.07))
-        .addEntry(null,                 202.0,      shootRegions[0],    5600.0,     40.0,       (5.475-4.45));
+        .addEntry(HUB_SHOOT_POINT,                 56.0,       shootRegions[0],    3950.0,     18.0,       (2.66-2.17))
+        .addEntry(null,                 80.0,       shootRegions[0],    4250.0,     20.0,       (2.15-1.75))
+        .addEntry(null,                 104.0,      shootRegions[0],    4600.0,     22.0,       (9.70-8.92))
+        .addEntry(null,                 128.0,      shootRegions[0],    4900.0,     24.0,       (8.28-7.45))
+        .addEntry(null,                 152.0,      shootRegions[0],    5200.0,     26.0,       (3.95-3.00))
+        .addEntry(null,                 176.0,      shootRegions[0],    5400.0,     28.0,       (8.12-7.125))
+        .addEntry(null,                 200.0,      shootRegions[0],    5650.0,     30.0,       (5.475-4.45));
 
     public static final class Params
     {
