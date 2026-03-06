@@ -194,6 +194,12 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
             case START:
                 climberEvent.clear();
                 sm.addEvent(climberEvent);
+                if (robot.shooterSubsystem != null)
+                {
+                    robot.globalTracer.traceInfo(moduleName, "***** Enabling GoalTracking on turret only.");
+                    robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
+                }
+                robot.robotBase.purePursuitDrive.getTurnPidCtrl().setNoOscillation(true);
                 robot.climber.setPosition(
                     owner, 0.0, Climber.Params.CLIMBER_EXTEND_POS, true, Climber.Params.CLIMBER_POWER_LIMIT,
                     climberEvent, 0.0);
@@ -202,10 +208,10 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
                     RobotParams.Game.BLUE_DEPOT_CLIMB_POSE: RobotParams.Game.BLUE_OUTPOST_CLIMB_POSE;
                 TrcPose2D intermediatePose = climbSidePose.clone();
 
-                intermediatePose.x += taskParams.climbSide == ClimbSide.DEPOT? 12.0: -12.0;
+                intermediatePose.x += taskParams.climbSide == ClimbSide.DEPOT? -12.0: 12.0;
                 event.clear();
                 sm.addEvent(event);
-                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
+                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.35);
                 robot.robotBase.purePursuitDrive.start(
                     owner, event, 0.0, false,
                     robot.robotInfo.baseParams.profiledMaxDriveVelocity,
@@ -217,14 +223,14 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
                 break;
 
             case ALIGN_CLIMBER:
-                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.3);
+                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.15);
                 robot.robotBase.purePursuitDrive.start(
                     owner, event, 0.0, true,
                     robot.robotInfo.baseParams.profiledMaxDriveVelocity,
                     robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
                     robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
-                    new TrcPose2D(0.0, -20.0, 0.0)); // TODO: Tune this
-                sm.waitForSingleEvent(event, State.CLIMB);
+                    new TrcPose2D(0.0, -21.0, 0.0)); // TODO: Tune this
+                sm.waitForSingleEvent(event, State.CLIMB_DELAY);
                 break;
             
             case CLIMB_DELAY:

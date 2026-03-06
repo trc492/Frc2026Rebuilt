@@ -67,8 +67,8 @@ public class Climber extends TrcSubsystem
         public static final double CLIMBER_MIN_POS              = CLIMBER_POS_OFFSET;
         public static final double CLIMBER_MAX_POS              = 26.5;
         public static final double CLIMBER_POS_PRESET_TOLERANCE = 5.0;
-        public static final double CLIMBER_RETRACT_POS          = CLIMBER_MIN_POS + 0.0625;
-        public static final double CLIMBER_EXTEND_POS           = 25.5;
+        public static final double CLIMBER_RETRACT_POS          = 20.7;
+        public static final double CLIMBER_EXTEND_POS           = 25.4;
         public static final double[] CLIMBER_POS_PRESETS        = {CLIMBER_RETRACT_POS, CLIMBER_EXTEND_POS};
         // Zero calibration
         public static final double CLIMBER_ZERO_CAL_POWER       = -0.15;
