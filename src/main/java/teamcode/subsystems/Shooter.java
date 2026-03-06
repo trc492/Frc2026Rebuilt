@@ -76,7 +76,7 @@ public class Shooter extends TrcSubsystem
 
     public static final TrcLookupTable shootParamsTable = new TrcLookupTable()
         //        name,                 distance,   region,             ShooterVel, HoodAngle,  Tof
-        .addEntry(HUB_SHOOT_POINT,                 56.0,       shootRegions[0],    3950.0,     18.0,       (2.66-2.17))
+        .addEntry(HUB_SHOOT_POINT,      56.0,       shootRegions[0],    3950.0,     18.0,       (2.66-2.17))
         .addEntry(null,                 80.0,       shootRegions[0],    4250.0,     20.0,       (2.15-1.75))
         .addEntry(null,                 104.0,      shootRegions[0],    4600.0,     22.0,       (9.70-8.92))
         .addEntry(null,                 128.0,      shootRegions[0],    4900.0,     24.0,       (8.28-7.45))

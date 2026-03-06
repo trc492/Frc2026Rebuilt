@@ -192,14 +192,14 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
         switch (state)
         {
             case START:
-                climberEvent.clear();
-                sm.addEvent(climberEvent);
                 if (robot.shooterSubsystem != null)
                 {
                     robot.globalTracer.traceInfo(moduleName, "***** Enabling GoalTracking on turret only.");
                     robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
                 }
-                robot.robotBase.purePursuitDrive.getTurnPidCtrl().setNoOscillation(true);
+
+                climberEvent.clear();
+                sm.addEvent(climberEvent);
                 robot.climber.setPosition(
                     owner, 0.0, Climber.Params.CLIMBER_EXTEND_POS, true, Climber.Params.CLIMBER_POWER_LIMIT,
                     climberEvent, 0.0);
@@ -211,6 +211,7 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
                 intermediatePose.x += taskParams.climbSide == ClimbSide.DEPOT? -12.0: 12.0;
                 event.clear();
                 sm.addEvent(event);
+                robot.robotBase.purePursuitDrive.getTurnPidCtrl().setNoOscillation(true);
                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.35);
                 robot.robotBase.purePursuitDrive.start(
                     owner, event, 0.0, false,
@@ -230,7 +231,7 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
                     robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
                     robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
                     new TrcPose2D(0.0, -21.0, 0.0)); // TODO: Tune this
-                sm.waitForSingleEvent(event, State.CLIMB_DELAY);
+                sm.waitForSingleEvent(event, State.CLIMB_DELAY, 1.5);
                 break;
             
             case CLIMB_DELAY:
