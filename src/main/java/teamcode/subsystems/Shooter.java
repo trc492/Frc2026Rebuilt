@@ -32,6 +32,7 @@ import frclib.subsystem.FrcRollerIntake;
 import frclib.subsystem.FrcShooter;
 import teamcode.Dashboard;
 import teamcode.FrcAuto;
+import teamcode.FrcAuto.AutoStartPos;
 import teamcode.FrcTest;
 import teamcode.Robot;
 import teamcode.RobotParams;
@@ -42,6 +43,7 @@ import trclib.motor.TrcMotor.PidParams;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
 import trclib.robotcore.TrcEvent;
+import trclib.robotcore.TrcRobot;
 import trclib.sensor.TrcTriggerThresholdRange;
 import trclib.sensor.TrcTriggerThresholdZones;
 import trclib.sensor.TrcTrigger.TriggerMode;
@@ -1309,19 +1311,17 @@ public class Shooter extends TrcSubsystem
                     if (!canceled)
                     {
                         turretZeroCalibrated = true;
-                        turret.setPosition(owner, 0.0, 0.0, true, Params.TURRET_POWER_LIMIT, null, 0.0);
-                        // TrcRobot.RunMode runMode = TrcRobot.getRunMode();
-                        // FrcAuto.AutoStartPos startPos =
-                        //     runMode == TrcRobot.RunMode.AUTO_MODE ? FrcAuto.autoChoices.getStartPos() : null;
-                        // double turretTargetPos =
-                        //     startPos == null || startPos == AutoStartPos.START_POS_CENTER ? 0.0:
-                        //     startPos == AutoStartPos.START_POS_DEPOT ? 45.0: -45.0;
-                        // // Fire and forget.
-                        // turret.setPosition(owner, 0.0, turretTargetPos, true, Params.TURRET_POWER_LIMIT, null, 0.0);
-                        // if (event != null)
-                        // {
-                        //     zeroCalCallback(event, false);
-                        // }
+                        TrcRobot.RunMode runMode = TrcRobot.getRunMode();
+                        FrcAuto.AutoStartPos startPos =
+                            runMode == TrcRobot.RunMode.AUTO_MODE ? FrcAuto.autoChoices.getStartPos() : null;
+                        double turretTargetPos =
+                            startPos != null && startPos == AutoStartPos.START_POS_CENTER? 180.0: 0.0;
+                        // Fire and forget.
+                        turret.setPosition(owner, 0.0, turretTargetPos, true, Params.TURRET_POWER_LIMIT, null, 0.0);
+                        if (event != null)
+                        {
+                            zeroCalCallback(event, false);
+                        }
                     }
                     else if (event != null)
                     {
