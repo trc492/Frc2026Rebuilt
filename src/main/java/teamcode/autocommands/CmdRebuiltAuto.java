@@ -320,7 +320,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         RobotParams.Game.BLUE_OUTPOST_NEUTRAL_PICKUP_POSE.clone();
                     endPose = pickupPose.clone();
                     // (-111.8,281.61,90.0) or (-205.89,281.61,-90.0)
-                    endPose.x += atDepot? 150.0: -150.0;    // Plow distance
+                    endPose.x += atDepot? 115.0: -115.0;    // Plow distance
                     intermediatePose = pickupPose.clone();
                     // (-279.8,281.61,90.0) or (-37.89,281.61,-90.0)
                     intermediatePose.x += atDepot? -18.0: 18.0;
@@ -330,11 +330,11 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         startPose, intermediatePose, pickupPose, endPose);
 
                     TrcPose2D returnIntermediatePose = intermediatePose.clone();
-                    returnIntermediatePose.angle = 180.0;
+                    returnIntermediatePose.angle = 0.0;
                     TrcPose2D returnPose = startPose.clone();
-                    returnPose.angle = 180.0;
-                    returnPose.x += 10.0;
-                    returnPose.y -= 18.0;
+                    returnPose.angle = 0.0;
+                    returnPose.x += 7.0;
+                    returnPose.y -= 40.0;
                     neutralZoneReturnPath = new TrcPose2D[] {pickupPose, returnIntermediatePose, returnPose};
                     robot.globalTracer.traceInfo(
                         moduleName,
@@ -392,7 +392,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
 
                 case RETURN_TO_SCORE_POS:
                     robot.robotBase.purePursuitDrive.setWaypointEventHandler(null);
-                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.7);
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
                     if (robot.intakeSubsystem != null)
                     {
                         robot.intakeSubsystem.setIntakeEnabled(false);
@@ -417,6 +417,10 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     nextState = ++currentNeutralZoneCycles < neutralZoneCycles? State.CYCLE_NEUTRAL_ZONE:
                                 climb? State.GO_TO_CLIMB_POS: State.DONE;
                     robot.globalTracer.traceInfo(moduleName, "Shooting NeutralZone cycle " + currentNeutralZoneCycles);
+                    if (robot.intakeSubsystem != null)
+                    {
+                        robot.intakeSubsystem.setIntakeEnabled(true);
+                    }
                     if (robot.autoShootTask != null)
                     {
                         robot.autoShootTask.autoShoot(null, event, true, true);

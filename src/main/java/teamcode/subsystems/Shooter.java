@@ -108,7 +108,7 @@ public class Shooter extends TrcSubsystem
         public static final double SHOOTER_MOTOR_OFF_DELAY      = 0.5;         // in sec
         public static final double SHOOTER_VEL_TRIGGER_THRESHOLD= 350.0;       // in RPM
         public static final double SHOOTER_VEL_TRIGGER_SETTLING = 0.0;
-        public static final double SHOOTER_VEL_TRIGGER_TIMEOUT  = 1.0;
+        public static final double SHOOTER_VEL_TRIGGER_TIMEOUT  = 3.0;
         public static final double SHOOTER_RPM_CONFLICT_ZONE_ADJ= 0.0;
         public static final double SHOOTER_READY_TIMEOUT        = 5.0;          // in sec
         // Left Shooter Motor Characteristics
