@@ -1022,8 +1022,8 @@ public class Shooter extends TrcSubsystem
                 // Called by compensateRobotMotion.
                 shootParams = shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), interpolation);
                 aimInfo = new AimInfo(
-                    targetPose, shootParams.outputs[0], null, targetPose.angle % 360.0, shootParams.region.value,
-                    shootParams.outputs[1]);
+                    targetPose, shootParams.outputs[0], null, targetPose.angle % 360.0, shootParams.outputs[1],
+                    shootParams.outputs[2]);
             }
 
             tracer.traceDebug(
