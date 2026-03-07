@@ -409,7 +409,11 @@ public class Robot extends FrcRobot
             if (hasVisionPoseEstimator)
             {
                 FrcSwerveDrive swerveDrive = (FrcSwerveDrive) robotBase.driveBase;
-                swerveDrive.visionUpdate();
+                boolean seenAprilTag = swerveDrive.visionUpdate();
+                if (ledIndicator != null)
+                {
+                    ledIndicator.setStatusPatternState(LEDIndicator.APRILTAG_FOUND, seenAprilTag);
+                }
             }
             else if (trcVisionRelocalize != null)
             {
