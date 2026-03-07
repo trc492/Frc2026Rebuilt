@@ -126,6 +126,7 @@ public class Robot extends FrcRobot
     public TaskAutoClimb autoClimbTask;
     // Miscellaneous
     private boolean zeroCalibrated = false;
+    private boolean backgroundRelocalize = true;    //default to ON.
 
     /**
      * Constructor: Create an instance of the object.
@@ -393,15 +394,9 @@ public class Robot extends FrcRobot
     }   //robotStopMode
 
     /**
-     * This method is called periodically in the specified run mode. This is typically used to execute periodic tasks
-     * that's common to all run modes.
-     *
-     * @param runMode specifies the current run mode.
-     * @param slowPeriodicLoop specifies true if it is running the slow periodic loop on the main robot thread,
-     *        false otherwise.
+     * This method relocalizes the robot using vision.
      */
-    @Override
-    public void robotPeriodic(RunMode runMode, boolean slowPeriodicLoop)
+    public void relocalizeRobot()
     {
         if (vision != null && shooterSubsystem != null && shooterSubsystem.isTurretZeroCalibrated() &&
             dashboard.getBoolean(Dashboard.DBKEY_VISION_RELOCALIZE, RobotParams.Preferences.visionRelocalizeEnabled))
@@ -439,6 +434,33 @@ public class Robot extends FrcRobot
                         aprilTagObj.timestamp, aprilTagObj.robotPose);
                 }
             }
+        }
+    }   //relocalizeRobot
+
+    /**
+     * This method enables/disables background relocalization.
+     *
+     * @param enabled specifies true to enable background relocalization, false to disable.
+     */
+    public void setBackgroundRelocalizeEnabled(boolean enabled)
+    {
+        backgroundRelocalize = enabled;
+    }   //setBackgroundRelocalizeEnabled
+
+    /**
+     * This method is called periodically in the specified run mode. This is typically used to execute periodic tasks
+     * that's common to all run modes.
+     *
+     * @param runMode specifies the current run mode.
+     * @param slowPeriodicLoop specifies true if it is running the slow periodic loop on the main robot thread,
+     *        false otherwise.
+     */
+    @Override
+    public void robotPeriodic(RunMode runMode, boolean slowPeriodicLoop)
+    {
+        if (backgroundRelocalize)
+        {
+            relocalizeRobot();
         }
 
         if (slowPeriodicLoop)
