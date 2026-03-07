@@ -69,8 +69,8 @@ public class Shooter extends TrcSubsystem
             {3035.18519, 17.19577, -0.020668}, 
             // Hood Angle (Linear Regression)
             {13.33333, 0.0833333},
-            // Time of Flight (Cubic Regression) // NOT USED
-            {0.205105, 0.00252013, 0.0000381112, -0.000000152636}
+            // Time of Flight (Constant),
+            {1.2}
         })
     };
 
@@ -1001,7 +1001,7 @@ public class Shooter extends TrcSubsystem
                 {
                     // Compensate for robot motion.
                     aimInfo = leftShooter.compensateRobotMotion(
-                        robot.robotBase.driveBase, this::getLeftShooterAimInfo, aimInfo, 0.5, 3);
+                        robot.robotBase.driveBase, this::getLeftShooterAimInfo, aimInfo, 0.1, 20);
                 }
 
                 adjustPanAngleToAvoidCrossover(aimInfo);
