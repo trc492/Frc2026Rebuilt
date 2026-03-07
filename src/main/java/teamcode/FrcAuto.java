@@ -26,7 +26,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcMatchInfo;
 import frclib.driverio.FrcUserChoices;
-import teamcode.autocommands.CmdAuto;
+import teamcode.autocommands.CmdRebuiltAuto;
+import teamcode.autotasks.TaskAutoClimb;
 import trclib.command.CmdPidDrive;
 import trclib.command.CmdPurePursuitDrive;
 import trclib.command.CmdTimedDrive;
@@ -49,7 +50,7 @@ public class FrcAuto implements TrcRobot.RobotMode
     //
     public enum AutoStrategy
     {
-        TEMPLATE_AUTO,
+        REBUILT_AUTO,
         PP_DRIVE,
         PID_DRIVE,
         TIMED_DRIVE,
@@ -59,9 +60,9 @@ public class FrcAuto implements TrcRobot.RobotMode
 
     public enum AutoStartPos
     {
-        POS_1(0),
-        POS_2(1),
-        POS_3(2);
+        START_POS_OUTPOST(0),
+        START_POS_CENTER(1),
+        START_POS_DEPOT(2);
         // The value can be used as index into arrays if necessary.
         public int value;
         AutoStartPos(int value)
@@ -69,6 +70,22 @@ public class FrcAuto implements TrcRobot.RobotMode
             this.value = value;
         }   //AutoStartPos
     }   //enum AutoStartPos
+
+    // Specifies what side we want to move to after shooting preloads
+    public enum MoveTo
+    {
+        NONE,
+        OUTPOST,
+        DEPOT
+    }   //enum MoveTo
+
+    // Specifies what we want to do when going to the neutral zone
+    public enum PassBack
+    {
+        NONE,
+        HOARD,
+        PASS_BACK
+    }   //enum PassBack
 
     /**
      * This class encapsulates all user choices for autonomous mode from the smart dashboard.
@@ -83,32 +100,28 @@ public class FrcAuto implements TrcRobot.RobotMode
      */
     public static class AutoChoices
     {
-        // Smart dashboard keys for Autonomous choices.
-        private static final String DBKEY_AUTO_ALLIANCE = "Auto/Alliance";                  //Choices
-        private static final String DBKEY_AUTO_STRATEGY = "Auto/Strategy";                  //Choices
-        private static final String DBKEY_AUTO_START_POS = "Auto/StartPos";                 //Choices
-        private static final String DBKEY_AUTO_START_DELAY = "Auto/StartDelay";             //Number
-        private static final String DBKEY_AUTO_PATHFILE = "Auto/PathFile";                  //String
-        private static final String DBKEY_AUTO_X_DRIVE_DISTANCE = "Auto/XDriveDistance";    //Number
-        private static final String DBKEY_AUTO_Y_DRIVE_DISTANCE = "Auto/YDriveDistance";    //Number
-        private static final String DBKEY_AUTO_TURN_ANGLE = "Auto/TurnAngle";               //Number
-        private static final String DBKEY_AUTO_DRIVE_TIME = "Auto/DriveTime";               //Number
-        private static final String DBKEY_AUTO_DRIVE_POWER = "Auto/DrivePower";             //Number
-
         private final FrcUserChoices userChoices = new FrcUserChoices();
         // Choice menus
         private final FrcChoiceMenu<DriverStation.Alliance> allianceMenu;
         private final FrcChoiceMenu<AutoStrategy> autoStrategyMenu;
         private final FrcChoiceMenu<AutoStartPos> autoStartPosMenu;
 
+        private final FrcChoiceMenu<MoveTo> moveToChoiceMenu;
+        private final FrcChoiceMenu<PassBack> passBackChoiceMenu;
+        private final FrcChoiceMenu<TaskAutoClimb.ClimbSide> climbSideChoiceMenu;
+
         public AutoChoices()
         {
             //
             // Create autonomous mode specific choice menus.
             //
-            allianceMenu = new FrcChoiceMenu<>(DBKEY_AUTO_ALLIANCE);
-            autoStrategyMenu = new FrcChoiceMenu<>(DBKEY_AUTO_STRATEGY);
-            autoStartPosMenu = new FrcChoiceMenu<>(DBKEY_AUTO_START_POS);
+            allianceMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_ALLIANCE);
+            autoStrategyMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_STRATEGY);
+            autoStartPosMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_START_POS);
+
+            moveToChoiceMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_MOVE_TO);
+            passBackChoiceMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_PASS_BACK);
+            climbSideChoiceMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_CLIMB_SIDE);
             //
             // Populate autonomous mode choice menus.
             //
@@ -121,29 +134,49 @@ public class FrcAuto implements TrcRobot.RobotMode
             }
             else
             {
-                autoStrategyMenu.addChoice("Template Auto", AutoStrategy.TEMPLATE_AUTO);
+                autoStrategyMenu.addChoice("Rebuilt Auto", AutoStrategy.REBUILT_AUTO, true, false);
                 autoStrategyMenu.addChoice("Pure Pursuit Drive", AutoStrategy.PP_DRIVE);
                 autoStrategyMenu.addChoice("PID Drive", AutoStrategy.PID_DRIVE);
                 autoStrategyMenu.addChoice("Timed Drive", AutoStrategy.TIMED_DRIVE);
             }
-            autoStrategyMenu.addChoice("Do Nothing", AutoStrategy.DO_NOTHING, true, true);
+            autoStrategyMenu.addChoice("Do Nothing", AutoStrategy.DO_NOTHING, false, true);
 
-            autoStartPosMenu.addChoice("Start Position 1", AutoStartPos.POS_1, true, false);
-            autoStartPosMenu.addChoice("Start Position 2", AutoStartPos.POS_2);
-            autoStartPosMenu.addChoice("Start Position 3", AutoStartPos.POS_3, false, true);
+            autoStartPosMenu.addChoice("Start Position Outpost", AutoStartPos.START_POS_OUTPOST, true, false);
+            autoStartPosMenu.addChoice("Start Position Center", AutoStartPos.START_POS_CENTER);
+            autoStartPosMenu.addChoice("Start Position Depot", AutoStartPos.START_POS_DEPOT, false, true);
+
+            moveToChoiceMenu.addChoice("None", MoveTo.NONE, true, false);
+            moveToChoiceMenu.addChoice("Outpost Side", MoveTo.OUTPOST);
+            moveToChoiceMenu.addChoice("Depot Side", MoveTo.DEPOT, false, true);
+
+            passBackChoiceMenu.addChoice("None", PassBack.NONE, true, false);
+            passBackChoiceMenu.addChoice("Hoard", PassBack.HOARD);
+            passBackChoiceMenu.addChoice("Pass Back", PassBack.PASS_BACK, false, true);
+
+            climbSideChoiceMenu.addChoice("Depot Side", TaskAutoClimb.ClimbSide.DEPOT, true, false);
+            climbSideChoiceMenu.addChoice("Outpost Side", TaskAutoClimb.ClimbSide.OUTPOST, false, true);
             //
             // Initialize dashboard with default choice values.
             //
-            userChoices.addChoiceMenu(DBKEY_AUTO_ALLIANCE, allianceMenu);
-            userChoices.addChoiceMenu(DBKEY_AUTO_STRATEGY, autoStrategyMenu);
-            userChoices.addChoiceMenu(DBKEY_AUTO_START_POS, autoStartPosMenu);
-            userChoices.addNumber(DBKEY_AUTO_START_DELAY, 0.0);
-            userChoices.addString(DBKEY_AUTO_PATHFILE, "DrivePath.csv");
-            userChoices.addNumber(DBKEY_AUTO_X_DRIVE_DISTANCE, 0.0);    // in feet
-            userChoices.addNumber(DBKEY_AUTO_Y_DRIVE_DISTANCE, 0.0);    // in feet
-            userChoices.addNumber(DBKEY_AUTO_TURN_ANGLE, 0.0);          // in degrees
-            userChoices.addNumber(DBKEY_AUTO_DRIVE_TIME, 0.0);          // in seconds
-            userChoices.addNumber(DBKEY_AUTO_DRIVE_POWER, 0.0);
+            userChoices.addChoiceMenu(Dashboard.DBKEY_AUTO_ALLIANCE, allianceMenu);
+            userChoices.addChoiceMenu(Dashboard.DBKEY_AUTO_STRATEGY, autoStrategyMenu);
+            userChoices.addChoiceMenu(Dashboard.DBKEY_AUTO_START_POS, autoStartPosMenu);
+            userChoices.addNumber(Dashboard.DBKEY_AUTO_START_DELAY, 0.0);
+
+            userChoices.addBoolean(Dashboard.DBKEY_AUTO_DEPOT_PICKUP, false);
+            userChoices.addBoolean(Dashboard.DBKEY_AUTO_OUTPOST_PICKUP, false);
+            userChoices.addBoolean(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_PICKUP, true);
+            userChoices.addChoiceMenu(Dashboard.DBKEY_AUTO_MOVE_TO, moveToChoiceMenu);
+            userChoices.addChoiceMenu(Dashboard.DBKEY_AUTO_PASS_BACK, passBackChoiceMenu);
+            userChoices.addBoolean(Dashboard.DBKEY_AUTO_CLIMB, false);
+            userChoices.addNumber(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_CYCLES, 0.0);
+
+            userChoices.addString(Dashboard.DBKEY_AUTO_PATHFILE, "DrivePath.csv");
+            userChoices.addNumber(Dashboard.DBKEY_AUTO_X_DRIVE_DISTANCE, 0.0);      // in feet
+            userChoices.addNumber(Dashboard.DBKEY_AUTO_Y_DRIVE_DISTANCE, 0.0);      // in feet
+            userChoices.addNumber(Dashboard.DBKEY_AUTO_TURN_ANGLE, 0.0);            // in degrees
+            userChoices.addNumber(Dashboard.DBKEY_AUTO_DRIVE_TIME, 0.0);            // in seconds
+            userChoices.addNumber(Dashboard.DBKEY_AUTO_DRIVE_POWER, 0.0);
         }   //AutoChoices
 
         //
@@ -169,37 +202,77 @@ public class FrcAuto implements TrcRobot.RobotMode
 
         public double getStartDelay()
         {
-            return userChoices.getUserNumber(DBKEY_AUTO_START_DELAY);
+            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_START_DELAY);
         }   //getStartDelay
+
+        public boolean depotPickup()
+        {
+            return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_DEPOT_PICKUP);
+        }   //depotPickup
+
+        public boolean outpostPickup()
+        {
+            return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_OUTPOST_PICKUP);
+        }   //outpostPickup
+
+        public boolean neutralZonePickup()
+        {
+            return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_PICKUP);
+        }   //neutralZonePickup
+
+        public MoveTo getMoveTo()
+        {
+            return moveToChoiceMenu.getCurrentChoiceObject();
+        }   //getMoveTo
+
+        public PassBack getPassBack()
+        {
+            return passBackChoiceMenu.getCurrentChoiceObject();
+        }   //getPassBack
+
+        public boolean getClimb()
+        {
+            return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_CLIMB);
+        }   //getClimb
+
+        public TaskAutoClimb.ClimbSide getClimbSide()
+        {
+            return climbSideChoiceMenu.getCurrentChoiceObject();
+        }   //getClimbSide
+
+        public double getNeutralZoneCycles()
+        {
+            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_CYCLES);
+        }   //getNeutralZoneCycles
 
         public String getPathFile()
         {
-            return userChoices.getUserString(DBKEY_AUTO_PATHFILE);
+            return userChoices.getUserString(Dashboard.DBKEY_AUTO_PATHFILE);
         }   //getPathFile
 
         public double getXDriveDistance()
         {
-            return userChoices.getUserNumber(DBKEY_AUTO_X_DRIVE_DISTANCE);
+            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_X_DRIVE_DISTANCE);
         }   //getXDriveDistance
 
         public double getYDriveDistance()
         {
-            return userChoices.getUserNumber(DBKEY_AUTO_Y_DRIVE_DISTANCE);
+            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_Y_DRIVE_DISTANCE);
         }   //getYDriveDistance
 
         public double getTurnAngle()
         {
-            return userChoices.getUserNumber(DBKEY_AUTO_TURN_ANGLE);
+            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_TURN_ANGLE);
         }   //getTurnAngle
 
         public double getDriveTime()
         {
-            return userChoices.getUserNumber(DBKEY_AUTO_DRIVE_TIME);
+            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_DRIVE_TIME);
         }   //getDriveTime
 
         public double getDrivePower()
         {
-            return userChoices.getUserNumber(DBKEY_AUTO_DRIVE_TIME);
+            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_DRIVE_TIME);
         }   //getDrivePower
 
         @Override
@@ -209,6 +282,16 @@ public class FrcAuto implements TrcRobot.RobotMode
                    "strategy=\"" + getStrategy() + "\" " +
                    "startPos=\"" + getStartPos() + "\" " +
                    "startDelay=" + getStartDelay() + " sec " +
+
+                   "depotPickup=\"" + depotPickup() + "\" " +
+                   "outpostPickup=\"" + outpostPickup() + "\" " +
+                   "neutralZonePickup=\"" + neutralZonePickup() + "\" " +
+                   "moveTo=\"" + getMoveTo() + "\" " +
+                   "passBack=\"" + getPassBack() + "\" " +
+                   "climb=\"" + getClimb() + "\" " +
+                   "climbSide=\"" + getClimbSide() + "\" " +
+                   "neutralZoneCycles=\"" + getNeutralZoneCycles() + "\" " +
+
                    "pathFile=\"" + getPathFile() + "\" " +
                    "xDistance=" + getXDriveDistance() + " ft " +
                    "yDistance=" + getYDriveDistance() + " ft " +
@@ -288,10 +371,10 @@ public class FrcAuto implements TrcRobot.RobotMode
         //
         switch (autoChoices.getStrategy())
         {
-            case TEMPLATE_AUTO:
+            case REBUILT_AUTO:
                 if (robot.robotBase != null)
                 {
-                    autoCommand = new CmdAuto(robot, autoChoices);
+                    autoCommand = new CmdRebuiltAuto(robot, autoChoices);
                 }
                 break;
 
@@ -303,7 +386,7 @@ public class FrcAuto implements TrcRobot.RobotMode
                         robot.robotInfo.baseParams.yDrivePidCoeffs, robot.robotInfo.baseParams.turnPidCoeffs,
                         robot.robotInfo.baseParams.velPidCoeffs);
                     ((CmdPurePursuitDrive) autoCommand).start(
-                        0.0, false, RobotParams.Robot.TEAM_FOLDER_PATH + "/" + autoChoices.getPathFile(), false);
+                        0.0, false, RobotParams.Robot.teamFolderPath + "/" + autoChoices.getPathFile(), false);
                 }
                 break;
 

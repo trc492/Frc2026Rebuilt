@@ -23,8 +23,12 @@
 package teamcode;
 
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import frclib.robotcore.FrcField;
 import teamcode.subsystems.DriveBase.RobotType;
+import teamcode.subsystems.Intake;
+import trclib.dataprocessor.TrcLookupTable.Interpolation;
 import trclib.pathdrive.TrcPose2D;
+import trclib.robotcore.TrcDbgTrace;
 
 /**
  * This class contains robot and subsystem constants and parameters.
@@ -51,36 +55,49 @@ public class RobotParams
         // Driver feedback
         // Status Update: Dashboard Update may affect robot loop time, don't do it when in competition.
         public static final boolean updateDashboard             = !inCompetition;   // Start up default value.
-        public static final boolean useLED                      = false;
+        public static final boolean useLED                      = true;
         public static final boolean useRumble                   = false;
-        public static final boolean useOneGameController        = false;
+        public static final boolean hasDriverGameController     = true;
+        public static final boolean hasOperatorGameController   = robotType == RobotType.RebuiltRobot;
         // Vision
-        public static final boolean useVision                   = false;
-        public static final boolean showVisionStatus            = false;
+        public static final boolean useVision                   = true;
+        public static final boolean showVisionStatus            = true;
         public static final boolean usePhotonVision             = true;
         public static final boolean useOpenCvVision             = false;
         public static final boolean useWebcamAprilTagVision     = false;
         public static final boolean useWebcamColorBlobVision    = false;
         public static final boolean useSolvePnp                 = false;
         public static final boolean useStreamCamera             = false;
-        public static final boolean doVisionRelocalize          = false;
+        public static final boolean visionRelocalizeEnabled     = true;
+        public static final boolean useWpiLibPoseEstimator      = true;
         // Master switches for Subsystems
-        public static final boolean useSubsystems               = true;
+        public static final boolean useSubsystems               = robotType == RobotType.RebuiltRobot;
         public static final boolean showSubsystems              = true;
+        public static final boolean zeroCalSubsystems           = !inCompetition;
+        public static final boolean showSubsystemGraphs         = false;
+        public static final String testSubsystemName            = Intake.Params.INTAKE_MOTOR_NAME;//Shooter.Params.LSHOOTER_PRIMARY_MOTOR_NAME;
         // Drive Base Subsystem
-        public static final boolean useDriveBase                = false;
-        public static final boolean showDriveBaseStatus         = false;
+        public static final boolean useDriveBase                = true;
+        public static final boolean showDriveBaseStatus         = true;
         public static final boolean debugDriveBase              = false;
         public static final boolean debugPidDrive               = false;
         public static final boolean showDrivePower              = false;
         public static final boolean useGyroAssist               = false;
         public static final boolean useAntiTipping              = false;
         // Other Subsystems
-        public static final boolean useShooter                  = true;
+        public static final boolean useLeftShooter              = true;
+        public static final boolean useRightShooter             = true;
         public static final boolean showShooterStatus           = true;
-        public static final boolean showShooterGraphs           = true;
-        public static final boolean useRegression               = true;
+        public static final Interpolation shooterInterpolation  = Interpolation.PolynomialRegression;
+        public static final boolean useMotionCompensation       = false;
+        public static final boolean useIntake                   = true;
+        public static final boolean showIntakeStatus            = true;
+        public static final boolean useClimber                  = true;
+        public static final boolean showClimberStatus           = true;
         // Auto Tasks
+        public static final boolean useAutoShootTask            = true;
+        public static final boolean useAutoPickupTask           = false;
+        public static final boolean useAutoClimbTask            = true;
     }   //class Preferences
 
     /**
@@ -91,8 +108,12 @@ public class RobotParams
         // Joystick ports.
         public static final int XBOX_DRIVER_CONTROLLER          = 0;
         public static final int XBOX_OPERATOR_CONTROLLER        = 1;
+        // CAN Bus Names
+        public static final String CANBUS_CANIVORE              = "2026_CANivore";
         // CAN IDs.
-        public static final int CANID_PIGEON2                   = 1;
+        public static final int CANID_PDP                       = 1;
+        public static final int CANID_PCM                       = 2;
+        public static final int CANID_PIGEON2                   = 10;
         // Drive Motor CAN IDs.
         public static final int CANID_FLDRIVE_MOTOR             = 3;    //Orange
         public static final int CANID_FRDRIVE_MOTOR             = 4;    //Yellow
@@ -107,16 +128,24 @@ public class RobotParams
         public static final int CANID_FRSTEER_ENCODER           = 24;   //Yellow
         public static final int CANID_BLSTEER_ENCODER           = 25;   //Green
         public static final int CANID_BRSTEER_ENCODER           = 26;   //Blue
-        // Subsystem CAN IDs.
-        public static final int CANID_SHOOTER_LEFT_MOTOR        = 7;    //Purple
-        public static final int CANID_SHOOTER_RIGHT_MOTOR       = 8;    //Gray
-        public static final int CANID_PAN_MOTOR                 = 9;    //White
-        public static final int CANID_TILT_MOTOR                = 17;   //Purple
-
-        // Miscellaneous CAN IDs.
-        public static final int CANID_PDP                       = 30;
-        public static final int CANID_PCM                       = 31;
-        // Subsystem CAN IDs.
+        // Left Shooter CAN IDs.
+        public static final int CANID_LSHOOTER_PRIMARY_MOTOR    = 7;    //Purple
+        public static final int CANID_LSHOOTER_FOLLOWER_MOTOR   = 8;    //Gray
+        public static final int CANID_LSHOOTER_TILT_MOTOR       = 9;    //White
+        public static final int CANID_LTRANSFER_MOTOR           = 37;   //Purple
+        // Right Shooter CAN IDs.
+        public static final int CANID_RSHOOTER_PRIMARY_MOTOR    = 27;   //Purple
+        public static final int CANID_RSHOOTER_FOLLOWER_MOTOR   = 28;   //Gray
+        public static final int CANID_RSHOOTER_TILT_MOTOR       = 29;   //White
+        public static final int CANID_RTRANSFER_MOTOR           = 38;   //Gray
+        // Common Shooter CAN IDs.
+        public static final int CANID_TURRET_MOTOR              = 39;   //White
+        public static final int CANID_FEEDER_MOTOR              = 47;   //Purple
+        // Intake CAN IDs
+        public static final int CANID_INTAKE_MOTOR              = 48;   //Gray
+        public static final int CANID_INTAKE_DEPLOYER_ENCODER   = 49;   //White
+        // Climber CAN IDs
+        public static final int CANID_CLIMBER_MOTOR             = 57;   //Purple
 
         // Analog Input ports.
         public static final int AIN_ULTRASONIC                  = 0;
@@ -125,7 +154,7 @@ public class RobotParams
         // Digital Input/Output ports.
 
         // PWM channels.
-        public static final int NUM_LEDS                        = 30;
+        public static final int NUM_LEDS                        = 150;
         public static final int PWM_CHANNEL_LED                 = 0;
 
         // Relay channels.
@@ -133,30 +162,9 @@ public class RobotParams
         // Pneumatic channels.
 
         // PDP Channels.
-        // Drive Base PDP Channels.
         public static final ModuleType PDP_MODULE_TYPE          = ModuleType.kRev;
-        public static final int PDP_CHANNEL_LFDRIVE_MOTOR       = 11;
-        public static final int PDP_CHANNEL_RFDRIVE_MOTOR       = 5;
-        public static final int PDP_CHANNEL_LBDRIVE_MOTOR       = 13;
-        public static final int PDP_CHANNEL_RBDRIVE_MOTOR       = 3;
-        public static final int PDP_CHANNEL_LFSTEER_MOTOR       = 10;
-        public static final int PDP_CHANNEL_RFSTEER_MOTOR       = 6;
-        public static final int PDP_CHANNEL_LBSTEER_MOTOR       = 12;
-        public static final int PDP_CHANNEL_RBSTEER_MOTOR       = 4;
-        // Miscellaneous PDP Channels.
-        public static final int PDP_CHANNEL_ROBORIO             = 20;
-        public static final int PDP_CHANNEL_VRM                 = 18;
-        public static final int PDP_CHANNEL_PCM                 = 19;
-        public static final int PDP_CHANNEL_RADIO_POE           = 22;
-        public static final int PDP_CHANNEL_ETHERNET_SWITCH     = 21;
-        public static final int PDP_CHANNEL_CAMERA              = 0;
-        public static final int PDP_CHANNEL_LED                 = 14;
 
         public static final double BATTERY_CAPACITY_WATT_HOUR   = 18.0*12.0;
-
-        // Ultrasonic sensors.
-        // public static final double SONAR_INCHES_PER_VOLT        = 1.0/0.0098; //9.8mV per inch
-        // public static final double SONAR_ERROR_THRESHOLD        = 50.0; //value should not jump 50-in per time slice.
     }   //class HwConfig
 
     /**
@@ -164,13 +172,16 @@ public class RobotParams
      */
     public static class Robot
     {
-        public static final String TEAM_FOLDER_PATH             = "/home/lvuser/trc492";
-        public static final String LOG_FOLDER_PATH              = TEAM_FOLDER_PATH + "/tracelogs";
-        public static final String STEER_ZERO_CAL_FILE          = TEAM_FOLDER_PATH + "/SteerZeroCalibration.txt";
-        public static final String FIELD_ZERO_CAL_FILE          = TEAM_FOLDER_PATH + "/FieldZeroCalibration.txt";
+        public static final String VOL_PATH                     = "/u";
+        public static final String DEF_VOL_PATH                 = "/home/lvuser";
+        public static final String TEAM_FOLDER_NAME             = "/trc492";
+        public static String teamFolderPath                     = VOL_PATH + TEAM_FOLDER_NAME;
+        public static final String LOG_FOLDER_NAME              = "/tracelogs";
+        public static final String STEER_ZERO_CAL_FILE_NAME     = "/SteerZeroCalibration.txt";
+        public static final String FIELD_ZERO_CAL_FILE_NAME     = "/FieldZeroCalibration.txt";
         public static final String ROBOT_CODEBASE               = "2026Rebuilt";
-        public static final double ROBOT_LENGTH                 = 35.5;
-        public static final double ROBOT_WIDTH                  = 35.5;
+        public static final double ROBOT_WIDTH                  = 22.249;
+        public static final double ROBOT_LENGTH                 = 22.249;
     }   //class Robot
 
     /**
@@ -185,64 +196,88 @@ public class RobotParams
         public static final double TELEOP_PERIOD                = 140.0;    // in seconds
         public static final double ENDGAME_THRESHOLD            = 30.0;     // in seconds
         //
-        // Game element locations and dimensions.
+        // Field configuration and dimensions in inches.
         //
-        // Array of AprilTag poses indexed by AprilTag ID.
-        public static final TrcPose2D[] APRILTAG_POSES          =
+        public static final boolean mirroredField               = false;
+        public static final double fieldWidth                   = FrcField.getFieldWidth();     //317.69
+        public static final double fieldLength                  = FrcField.getFieldLength();    //651.22
+        public static final double halfFieldWidth               = fieldWidth / 2.0;             //158.845
+        public static final double halfFieldLength              = fieldLength / 2.0;            //325.61
+        public static final double allianceAreaWidth            = 182.11;   // Distance from allaince wall to center of trench.
+        public static final double[] fieldLengthTriggerPoints   = new double[]
         {
-        /*ID01*/    new TrcPose2D(-25.98, 657.48, -126.0), //z=58.5
-        /*ID02*/    new TrcPose2D(-291.34, 657.48, 126.0), //z=58.5
-        /*ID03*/    new TrcPose2D(-317.32, 455.12, 90.0), //z=51.125
-        /*ID04*/    new TrcPose2D(-241.73, 365.35, 0.0), //z=73.5466,pitch=30
-        /*ID05*/    new TrcPose2D(-75.2, 365.35, 0.0), //z=73.5466,pitch=30
-        /*ID06*/    new TrcPose2D(-130.32, 530.32, 60.0), //z=12.125
-        /*ID07*/    new TrcPose2D(-158.66, 546.85, 0.0), //z=12.125
-        /*ID08*/    new TrcPose2D(-187.01, 530.32, -60.0), //z=12.125
-        /*ID09*/    new TrcPose2D(-187.01, 497.64, -120.0), //z=12.125
-        /*ID10*/    new TrcPose2D(-158.66, 481.5, 180.0), //z=12.125
-        /*ID11*/    new TrcPose2D(-130.32, 497.64, 120.0), //z=12.125
-        /*ID12*/    new TrcPose2D(-25.98, 33.46, -54.0), //z=58.5
-        /*ID13*/    new TrcPose2D(-291.34, 33.46, 54.0), //z=58.5
-        /*ID14*/    new TrcPose2D(-241.73, 325.59, 180.0), //z=73.5466,pitch=30
-        /*ID15*/    new TrcPose2D(-75.2, 325.59, 180.0), //z=73.5466,pitch=30
-        /*ID16*/    new TrcPose2D(0.0, 235.83, -90.0), //z=51.125
-        /*ID17*/    new TrcPose2D(-130.32, 160.24, 120.0), //z=12.125
-        /*ID18*/    new TrcPose2D(-158.66, 144.09, 180.0), //z=12.125
-        /*ID19*/    new TrcPose2D(-187.01, 160.24, -120.0), //z=12.125
-        /*ID20*/    new TrcPose2D(-187.01, 192.91, -60.0), //z=12.125
-        /*ID21*/    new TrcPose2D(-158.66, 209.45, 0.0), //z=12.125
-        /*ID22*/    new TrcPose2D(-130.32, 192.91, 60.0) //z=12.125
+            allianceAreaWidth-30.0, allianceAreaWidth+30.0, halfFieldLength,
+            fieldLength - (allianceAreaWidth+30.0), fieldLength - (allianceAreaWidth-30.0)
         };
+        public static final double[] fieldWidthTriggerPoints    = new double[]
+        {
+            -halfFieldWidth-91.0, -halfFieldWidth, -halfFieldWidth+91.0
+        };
+        //
+        // AprilTag Poses
+        //
+        private static TrcPose2D[] getAprilTagFieldPoses()
+        {
+            TrcPose2D[] poses = new TrcPose2D[32];
+
+            for (int i = 0; i < poses.length; i++)
+            {
+                poses[i] = FrcField.getAprilTagFieldPose(i + 1);
+                TrcDbgTrace.globalTraceDebug("AprilTagPoses", "[%d] %s", i, poses[i]);
+            }
+
+            return poses;
+        }   //getAprilTagFieldPoses
+
+        public static final TrcPose2D[] aprilTagFieldPoses      = getAprilTagFieldPoses();
+        public static final int[] blueHubAprilTags              = new int[] {10, 2, 5, 9, 11, 8, 3, 4};
+        public static final int[] redHubAprilTags               = new int[] {26, 18, 21, 25, 24, 27, 19, 20};
+        public static final int[] anyHubAprilTags               =
+            new int[] {10, 26, 2, 18, 5, 21, 9, 25, 11, 24, 8, 27, 3, 19, 4, 20};
+        public static final int[] blueTowerAprilTags            = new int[] {31, 32};
+        public static final int[] redTowerAprilTags             = new int[] {15, 16};
         //
         // Robot starting positions.
         //
-        public static final double STARTPOS_BLUE_Y              = Robot.ROBOT_LENGTH / 2.0;
-        public static final double STARTPOS_RED_Y               = Field.LENGTH - STARTPOS_BLUE_Y;
-        public static final double STARTPOS_1_X                 = -42.19;
-        public static final double STARTPOS_2_X                 = -108.19;
-        public static final double STARTPOS_3_X                 = -174.19;
-        public static final TrcPose2D STARTPOS_BLUE_1           = new TrcPose2D(STARTPOS_1_X, STARTPOS_BLUE_Y, 180.0);
-        public static final TrcPose2D STARTPOS_BLUE_2           = new TrcPose2D(STARTPOS_2_X, STARTPOS_BLUE_Y, 180.0);
-        public static final TrcPose2D STARTPOS_BLUE_3           = new TrcPose2D(STARTPOS_3_X, STARTPOS_BLUE_Y, 180.0);
-        public static final TrcPose2D STARTPOS_RED_1            = new TrcPose2D(STARTPOS_1_X, STARTPOS_RED_Y, 0.0);
-        public static final TrcPose2D STARTPOS_RED_2            = new TrcPose2D(STARTPOS_2_X, STARTPOS_RED_Y, 0.0);
-        public static final TrcPose2D STARTPOS_RED_3            = new TrcPose2D(STARTPOS_3_X, STARTPOS_RED_Y, 0.0);
-        public static final TrcPose2D[] startPoses              =
+        public static final double STARTPOS_BLUE_SIDE_Y         = 156.61 + Robot.ROBOT_LENGTH / 2.0;    //167.7345
+        public static final double STARTPOS_BLUE_CENTER_Y       = 156.61 - Robot.ROBOT_LENGTH / 2.0;    //145.4855
+        public static final double STARTPOS_OUTPOST_X           = -17.22;
+        public static final double STARTPOS_CENTER_X            = -fieldWidth / 2.0;                    //-158.845
+        public static final double STARTPOS_DEPOT_X             = -fieldWidth + 17.22;                  //-291.47
+        public static final TrcPose2D STARTPOS_BLUE_OUTPOST     =
+            new TrcPose2D(STARTPOS_OUTPOST_X, STARTPOS_BLUE_SIDE_Y, -90.0);         //(-26.22,167.7345,-90.0)
+        public static final TrcPose2D STARTPOS_BLUE_CENTER      =
+            new TrcPose2D(STARTPOS_CENTER_X, STARTPOS_BLUE_CENTER_Y, 180.0);  //(-158.845,145.4855,180.0)
+        public static final TrcPose2D STARTPOS_BLUE_DEPOT       =
+            new TrcPose2D(STARTPOS_DEPOT_X, STARTPOS_BLUE_SIDE_Y, 90.0);      //(-291.47,167.7345,90.0)
+        public static final TrcPose2D[] blueStartPoses          =
         {
-            STARTPOS_BLUE_1, STARTPOS_BLUE_2, STARTPOS_BLUE_3
+            STARTPOS_BLUE_OUTPOST, STARTPOS_BLUE_CENTER, STARTPOS_BLUE_DEPOT
         };
-    }   //class Game
+        //
+        // Robot field positions.
+        //
+        public static final TrcPose2D BLUE_HUB_POSE             =
+            new TrcPose2D(-fieldWidth/2.0, 182.11, 0.0);                    //(-158.845,182.11,0.0)
+        public static final TrcPose2D BLUE_PASSBACK_AUDIENCE_SIDE =
+            new TrcPose2D(-fieldWidth + 48.0, 48.0, 0.0);                   //(-269.69,48.0,0.0)
+        public static final TrcPose2D BLUE_PASSBACK_SCORETABLE_SIDE =
+            new TrcPose2D(-48.0, 48.0, 0.0);                                //(-48.0,48.0,0.0)
+        public static final TrcPose2D BLUE_OUTPOST_PICKUP_POSE  =
+            new TrcPose2D(-26.22, Robot.ROBOT_LENGTH/2.0 + 11.0, -180.0);           //(-26.22,32.249,-180.0)
+        public static final TrcPose2D BLUE_DEPOT_PICKUP_POSE    =
+            new TrcPose2D(-fieldWidth + 40.0, Robot.ROBOT_WIDTH / 2.0, 90.0); //(-277.69,22.249,90.0)
+        public static final TrcPose2D BLUE_OUTPOST_NEUTRAL_PICKUP_POSE =
+            new TrcPose2D(-55.89, fieldLength / 2.0 - 24.0, -90.0);                  //(-55.89,281.61,-90.0)
+        public static final TrcPose2D BLUE_DEPOT_NEUTRAL_PICKUP_POSE =
+            new TrcPose2D(-fieldWidth + 55.89, fieldLength / 2.0 - 24.0, 90.0);//(-261.8,281.61,90.0)
 
-    /**
-     * This class contains field dimension constants. Generally, these should not change. But some seasons may have
-     * slight variations of the field dimensions.
-     */
-    public static class Field
-    {
-        // Field dimensions in inches.
-        public static final double LENGTH                       = 54.0*12.0;
-        public static final double WIDTH                        = 27.0*12.0;
-        public static final boolean mirroredField               = false;
-    }   //class Field
+        public static final TrcPose2D BLUE_CLIMB_LOOKOUT_POSE           =
+            new TrcPose2D(170.22, 65.0, -180.0); // TODO: Fine tune x and y
+        public static final TrcPose2D BLUE_DEPOT_CLIMB_POSE             =
+            new TrcPose2D(-190.95, 44.29, -90.0); // TODO: Determine x and y
+        public static final TrcPose2D BLUE_OUTPOST_CLIMB_POSE             =
+            new TrcPose2D(-98.61, 42.29, 90.0); // TODO: Determine x and y
+    }   //class Game
 
 }   //class RobotParams

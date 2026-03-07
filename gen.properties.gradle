@@ -1,0 +1,70 @@
+/*
+ * Copyright (c) 2026 Titan Robotics Club (http://www.titanrobotics.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+def getGitBranch() {
+    def branch = ''
+    def command = "git rev-parse --abbrev-ref HEAD"
+    def process = command.execute()
+    process.in.eachLine { line -> branch = line }
+    process.err.eachLine { line -> println "Error: " + line } // Optional: print errors
+    process.waitFor()
+    return branch.trim()
+}
+
+import java.text.SimpleDateFormat
+
+task generateProperties {
+    def outputDir = file("$buildDir/generated-resources/main")
+
+    // Explicitly declare the output directory for the task
+    outputs.dir outputDir
+
+    // Define local variables to hold the values, and also register them as inputs
+    def buildHostValue = System.getenv('COMPUTERNAME') ?: InetAddress.localHost.hostName
+    def buildUserValue = System.getProperty('user.name')
+    def buildTimestampValue = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())
+    def gitBranchValue = getGitBranch()
+
+    inputs.property('buildHost', buildHostValue)
+    inputs.property('buildUser', buildUserValue)
+    inputs.property('buildTimestamp', buildTimestampValue)
+    inputs.property('gitBranch', gitBranchValue)
+
+    doLast {
+        outputDir.mkdirs() // Ensure the directory exists
+        def buildInfoFile = file("$outputDir/buildInfo.properties")
+
+        buildInfoFile.text = """
+            build.host=${buildHostValue}
+            build.user=${buildUserValue}
+            build.timestamp=${buildTimestampValue}
+            build.branch=${gitBranchValue}
+        """.stripIndent()
+    }
+}
+
+// Ensure this task is run before processing resources
+sourceSets {
+    main {
+        output.dir generateProperties.outputs.files, builtBy: generateProperties
+    }
+}
