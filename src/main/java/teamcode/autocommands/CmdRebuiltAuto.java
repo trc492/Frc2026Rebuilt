@@ -346,6 +346,11 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     break;
 
                 case CYCLE_NEUTRAL_ZONE:
+                    if (currentNeutralZoneCycles > 0)
+                    {
+                        robot.autoShootTask.cancel();
+                        neutralZonePath[0].angle = 0.0;
+                    }
                     robot.robotBase.purePursuitDrive.setWaypointEventHandler(
                         (i, wp) ->
                         {
@@ -425,7 +430,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     if (robot.autoShootTask != null)
                     {
                         robot.autoShootTask.autoShoot(null, event, true, true);
-                        sm.waitForSingleEvent(event, nextState);
+                        sm.waitForSingleEvent(event, nextState, 8.0);
                     }
                     else
                     {
