@@ -189,6 +189,7 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_MOTOR_GEAR_RATIO      = 0.9571438827*(20.0*130.0/40.0);   // Load/Motor
         public static final double TURRET_MOTOR_DEG_PER_COUNT   = 360.0/TURRET_MOTOR_GEAR_RATIO;
         public static final double TURRET_PID_TOLERANCE         = 3.0;
+        public static final double TURRET_PID_SETTLING          = 0.0;
         public static final boolean TURRET_SOFTWARE_PID_ENABLED = false;
         public static final double TURRET_POWER_LIMIT           = 0.35; 
         public static final double TURRET_POS_OFFSET            = 182.25;//143.0;
@@ -205,7 +206,6 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_STALL_TOLERANCE       = 2.0;          // in degrees
         public static final double TURRET_STALL_TIMEOUT         = 0.1;
         public static final double TURRET_STALL_RESET_TIMEOUT   = 0.5;
-        public static final double TURRET_PID_SETTLING          = 0.0;
 
         public static final double CAM_ROTATE_RADIUS            = 5.800896;     // inches from turret center
         public static final double LTURRET_X_OFFSET             = -7.375;       // inches from robot center
@@ -487,7 +487,9 @@ public class Shooter extends TrcSubsystem
                     .setPidCoefficients(
                         Params.TURRET_MOTOR_PID_KP, Params.TURRET_MOTOR_PID_KI, Params.TURRET_MOTOR_PID_KD,
                         Params.TURRET_MOTOR_PID_KF, Params.TURRET_MOTOR_PID_IZONE)
-                    .setPidControlParams(Params.TURRET_PID_TOLERANCE, Params.TURRET_PID_SETTLING, Params.TURRET_SOFTWARE_PID_ENABLED), null);
+                    .setPidControlParams(
+                        Params.TURRET_PID_TOLERANCE, Params.TURRET_PID_SETTLING, Params.TURRET_SOFTWARE_PID_ENABLED),
+                null);
             // turret.enableMotionProfile(
             //     Params.TURRET_SOFTWARE_PID_ENABLED, Params.TURRET_MAX_VELOCITY, Params.TURRET_MAX_ACCELERATION,
             //     0.0, 0.0, Params.TURRET_PID_TOLERANCE);
