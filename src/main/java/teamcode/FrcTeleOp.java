@@ -25,7 +25,6 @@ package teamcode;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcXboxController;
-import teamcode.autotasks.TaskAutoClimb.ClimbSide;
 import teamcode.subsystems.Climber;
 import teamcode.subsystems.Shooter;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
@@ -511,7 +510,6 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 break;
 
             case X:
-
                 if (pressed)
                 {
                     if (robot.leftShooter != null)
@@ -686,22 +684,22 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     {
         if (!altFunc)
         {
-            if (robot.autoShootTask != null && pressed)
+            if (robot.autoShootTask != null)
             {
-                if (!robot.autoShootTask.isActive())
+                if (pressed && !robot.autoShootTask.isActive())
                 {
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Start Auto Shoot.");
                     robot.intakeSubsystem.setIntakeEnabled(true);
                     robot.autoShootTask.autoShoot(null, null, false, false);
                 }
+                else
+                {
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> Stop Auto Shoot.");
+                    robot.intakeSubsystem.setIntakeEnabled(false);
+                    robot.autoShootTask.cancel();
+                    robot.shooterSubsystem.resetState();
+                }
             } 
-            else
-            {
-                robot.globalTracer.traceInfo(moduleName, ">>>>> Stop Auto Shoot.");
-                robot.intakeSubsystem.setIntakeEnabled(false);
-                robot.autoShootTask.cancel();
-                robot.shooterSubsystem.resetState();
-            }
         }
         else if (robot.shooterSubsystem != null)
         {

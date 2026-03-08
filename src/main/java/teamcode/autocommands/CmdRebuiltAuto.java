@@ -65,7 +65,6 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
     private final FrcAuto.AutoChoices autoChoices;
     private final TrcTimer timer;
     private final TrcEvent event;
-    private final TrcEvent zeroCalEvent;
     private final TrcStateMachine<State> sm;
 
     private FrcAuto.AutoStartPos startPos;
@@ -101,7 +100,6 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
 
         timer = new TrcTimer(moduleName);
         event = new TrcEvent(moduleName);
-        zeroCalEvent = new TrcEvent(moduleName + ".zeroCal");
         sm = new TrcStateMachine<>(moduleName);
         sm.start(State.START);
     }   //CmdRebuiltAuto
@@ -173,9 +171,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     climbSide = autoChoices.getClimbSide();
                     neutralZoneCycles = autoChoices.getNeutralZoneCycles();
                     robot.robotBase.purePursuitDrive.getTurnPidCtrl().setNoOscillation(true);
-                    // Do zero calibration.
-                    // zeroCalEvent.clear();
-                    // sm.addEvent(zeroCalEvent);
+                    // Do zero calibration (fire and forget).
                     robot.zeroCalibrate(null, null);
                     // Do delay if necessary.
                     double startDelay = autoChoices.getStartDelay();
@@ -195,7 +191,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     if (robot.shooterSubsystem != null)
                     {
                         robot.globalTracer.traceInfo(moduleName, "***** Enabling GoalTracking on turret only.");
-                        robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
+                        robot.shooterSubsystem.enableGoalTracking(true, false, true, true);
                     }
 
                     if (depotPickup &&
