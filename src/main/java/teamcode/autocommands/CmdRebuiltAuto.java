@@ -174,19 +174,21 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     neutralZoneCycles = autoChoices.getNeutralZoneCycles();
                     robot.robotBase.purePursuitDrive.getTurnPidCtrl().setNoOscillation(true);
                     // Do zero calibration.
-                    zeroCalEvent.clear();
-                    sm.addEvent(zeroCalEvent);
-                    robot.zeroCalibrate(null, zeroCalEvent);
+                    // zeroCalEvent.clear();
+                    // sm.addEvent(zeroCalEvent);
+                    robot.zeroCalibrate(null, null);
                     // Do delay if necessary.
                     double startDelay = autoChoices.getStartDelay();
                     if (startDelay > 0.0)
                     {
                         robot.globalTracer.traceInfo(moduleName, "***** Do delay " + startDelay + "s.");
-                        event.clear();
-                        sm.addEvent(event);
                         timer.set(startDelay, event);
+                        sm.waitForSingleEvent(event, State.ZERO_CAL_DONE);
                     }
-                    sm.waitForEvents(State.ZERO_CAL_DONE, false, true, 2.0);
+                    else
+                    {
+                        sm.setState(State.ZERO_CAL_DONE);
+                    }
                     break;
 
                 case ZERO_CAL_DONE:

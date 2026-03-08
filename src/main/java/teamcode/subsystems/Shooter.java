@@ -1271,12 +1271,12 @@ public class Shooter extends TrcSubsystem
         if (leftShooter != null && leftShooter.tiltMotor != null)
         {
             tracer.traceInfo(instanceName, "ZeroCalibrate left shooter.");
-            // leftTiltZeroCalCallbackEvent.clear();
-            // leftTiltZeroCalCallbackEvent.setCallback(this::zeroCalCallback, completionEvent);
-            // leftShooter.tiltMotor.zeroCalibrate(
-            //     owner, Params.TILT_ZERO_CAL_POWER, leftTiltZeroCalCallbackEvent, Params.TILT_ZERO_CAL_TIMEOUT);
-            leftShooter.tiltMotor.resetPosition(false);
-            leftTiltZeroCalCallbackEvent.signal();
+            leftTiltZeroCalCallbackEvent.clear();
+            leftTiltZeroCalCallbackEvent.setCallback(this::zeroCalCallback, completionEvent);
+            leftShooter.tiltMotor.zeroCalibrate(
+                owner, Params.TILT_ZERO_CAL_POWER, leftTiltZeroCalCallbackEvent, Params.TILT_ZERO_CAL_TIMEOUT);
+            // leftShooter.tiltMotor.resetPosition(false);
+            // leftTiltZeroCalCallbackEvent.signal();
         }
         else
         {
