@@ -43,7 +43,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     protected static final boolean traceButtonEvents = true;
 
     public static final double DEF_DRIVE_NORMAL_SCALE = 1.0;
-    public static final double DEF_DRIVE_SLOW_SCALE = 0.2;
+    public static final double DEF_DRIVE_SLOW_SCALE = 0.15;
     public static final double DEF_TURN_NORMAL_SCALE = 0.5;
     public static final double DEF_TURN_SLOW_SCALE = 0.2;
     //
@@ -584,10 +584,50 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 break;
 
             case DpadLeft:
-                if (robot.climber != null && pressed)
+                // if (robot.climber != null && pressed)
+                // {
+                //     robot.autoClimbTask.autoClimb(null, null, FrcAuto.autoChoices.getAlliance(), ClimbSide.OUTPOST, 0.0);
+                //     robot.globalTracer.traceInfo(moduleName, ">>>>> Auto climbing on outpost side.");
+                // }
+
+                // TODO: Remove hack that reverse the transfer and feeder.
+                if (pressed)
                 {
-                    robot.autoClimbTask.autoClimb(null, null, FrcAuto.autoChoices.getAlliance(), ClimbSide.OUTPOST, 0.0);
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> Auto climbing on outpost side.");
+                    if (robot.leftShooter != null)
+                    {
+                        robot.leftShooter.shooterMotor1.setPower(-0.2);
+                        robot.leftTransfer.setPower(-0.5);
+                    }
+
+                    if (robot.rightShooter != null)
+                    {
+                        robot.leftShooter.shooterMotor1.setPower(-0.2);
+                        robot.leftTransfer.setPower(-0.5);
+                    }
+
+                    if (robot.feeder != null)
+                    {
+                        robot.feeder.setPower(-0.5);
+                    }
+                }
+                else
+                {
+                    if (robot.leftShooter != null)
+                    {
+                        robot.leftShooter.cancel();
+                        robot.leftTransfer.cancel();
+                    }
+
+                    if (robot.rightShooter != null)
+                    {
+                        robot.rightShooter.cancel();
+                        robot.rightTransfer.cancel();
+                    }
+
+                    if (robot.feeder != null)
+                    {
+                        robot.feeder.cancel();
+                    }
                 }
                 break;
 

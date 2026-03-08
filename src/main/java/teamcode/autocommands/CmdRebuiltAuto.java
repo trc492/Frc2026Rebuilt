@@ -128,6 +128,10 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
     public void cancel()
     {
         timer.cancel();
+        if (robot.shooterSubsystem != null)
+        {
+            robot.shooterSubsystem.disableGoalTracking();
+        }
         sm.stop();
     }   //cancel
 
@@ -358,7 +362,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                             if (i == 2)
                             {
                                 // At pickupPose.
-                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
+                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.4);
                                 if (passBack == PassBack.PASS_BACK && robot.autoShootTask != null)
                                 {
                                     robot.autoShootTask.autoShoot(null, null, false, false);

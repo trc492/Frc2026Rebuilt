@@ -29,7 +29,6 @@ import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcOwnershipMgr;
 import trclib.robotcore.TrcRobot;
 import trclib.robotcore.TrcTaskMgr;
-import trclib.subsystem.TrcShooter;
 
 /**
  * This class implements auto-assist task.
@@ -69,8 +68,6 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
     private final TrcEvent leftShooterDone;
     private final TrcEvent rightShooterDone;
 
-    private TrcShooter.GoalTrackingParams prevGoalTrackingParams = null;
-    private boolean prevNoPassback = false;
     private boolean leftShooterShooting = false;
     private boolean rightShooterShooting = false;
 
@@ -104,9 +101,6 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
         tracer.traceInfo(
             moduleName,
             "autoShoot(owner=" + owner + ", event=" + completionEvent + ", taskParams=" + taskParams + ")");
-        prevGoalTrackingParams = robot.shooterSubsystem.getGoalTrackingParams();
-        prevNoPassback = robot.shooterSubsystem.getGoalTrackingNoPassbackParams();
-        tracer.traceInfo(moduleName, "Enabling Goal Tracking (prevTrackParams=%s).", prevGoalTrackingParams);
         robot.shooterSubsystem.enableGoalTracking(true, true, true, noPassback);
         startAutoTask(owner, State.START, taskParams, completionEvent);
     }   //autoShoot
@@ -171,30 +165,8 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
         if (robot.leftTransfer != null) robot.leftTransfer.cancel();
         if (robot.rightTransfer != null) robot.rightTransfer.cancel();
         if (robot.feeder != null) robot.feeder.cancel();
-        if (prevGoalTrackingParams == null)
-        {
-            tracer.traceInfo(moduleName, "No previous GoalTracking, disable it.");
-            robot.shooterSubsystem.disableGoalTracking();
-            robot.shooterSubsystem.cancel();
-        }
-        else
-        {
-            tracer.traceInfo(moduleName, "Restoring previous Tracking mode %s.", prevGoalTrackingParams);
-            robot.shooterSubsystem.enableGoalTracking(prevGoalTrackingParams, prevNoPassback);
-            if (!prevGoalTrackingParams.trackFlywheel)
-            {
-                robot.shooterSubsystem.stopFlywheel();
-            }
-            if (!prevGoalTrackingParams.trackTiltPos)
-            {
-                robot.shooterSubsystem.stopTilt();
-            }
-            if (!prevGoalTrackingParams.trackPanPos)
-            {
-                robot.shooterSubsystem.stopPan();
-            }
-            prevGoalTrackingParams = null;
-        }
+        robot.shooterSubsystem.disableGoalTracking();
+        robot.shooterSubsystem.cancel();
     }   //stopSubsystems
 
     /**
