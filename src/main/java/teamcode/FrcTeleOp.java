@@ -25,7 +25,6 @@ package teamcode;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcXboxController;
-import teamcode.autotasks.TaskAutoClimb.ClimbSide;
 import teamcode.subsystems.Climber;
 import teamcode.subsystems.Shooter;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
@@ -43,7 +42,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     protected static final boolean traceButtonEvents = true;
 
     public static final double DEF_DRIVE_NORMAL_SCALE = 1.0;
-    public static final double DEF_DRIVE_SLOW_SCALE = 0.2;
+    public static final double DEF_DRIVE_SLOW_SCALE = 0.15;
     public static final double DEF_TURN_NORMAL_SCALE = 0.5;
     public static final double DEF_TURN_SLOW_SCALE = 0.2;
     //
@@ -495,19 +494,17 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 break;
 
             case B:
-                if (robot.feeder != null)
+                if (robot.shooterSubsystem != null && pressed)
                 {
-                    if (pressed)
+                    if (robot.shooterSubsystem.isGoalTrackingEnabled())
                     {
-                        double feederPower =
-                            operatorAltFunc? Shooter.Params.FEEDER_REVERSE_POWER: Shooter.Params.FEEDER_FORWARD_POWER;
-                        robot.feeder.setPower(feederPower);
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> Set feeder power to " + feederPower);
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Disable GoalTracking.");
+                        robot.shooterSubsystem.disableGoalTracking();
                     }
                     else
                     {
-                        robot.feeder.cancel();
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> Stop feeder.");
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Enable GoalTracking.");
+                        robot.shooterSubsystem.enableGoalTracking(true, false, true, false);
                     }
                 }
                 break;
@@ -515,38 +512,41 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             case X:
                 if (pressed)
                 {
-                    if (robot.leftTransfer != null)
+                    if (robot.leftShooter != null)
                     {
-                        if (!operatorAltFunc)
-                        {
-                            robot.leftTransfer.intake(Shooter.Params.TRANSFER_INTAKE_POWER);
-                            robot.globalTracer.traceInfo(moduleName, ">>>>> Left Transfer intake.");
-                        }
-                        else
-                        {
-                            robot.leftTransfer.eject(Shooter.Params.TRANSFER_EJECT_POWER);
-                            robot.globalTracer.traceInfo(moduleName, ">>>>> Left Transfer eject.");
-                        }
+                        robot.leftShooter.shooterMotor1.setPower(-0.2);
+                        robot.leftTransfer.setPower(-0.5);
                     }
 
-                    if (robot.rightTransfer != null)
+                    if (robot.rightShooter != null)
                     {
-                        if (!operatorAltFunc)
-                        {
-                            robot.rightTransfer.intake(Shooter.Params.TRANSFER_INTAKE_POWER);
-                            robot.globalTracer.traceInfo(moduleName, ">>>>> Right Transfer intake.");
-                        }
-                        else
-                        {
-                            robot.rightTransfer.eject(Shooter.Params.TRANSFER_EJECT_POWER);
-                            robot.globalTracer.traceInfo(moduleName, ">>>>> Right Transfer eject.");
-                        }
+                        robot.rightShooter.shooterMotor1.setPower(-0.2);
+                        robot.rightTransfer.setPower(-0.5);
+                    }
+
+                    if (robot.feeder != null)
+                    {
+                        robot.feeder.setPower(-0.5);
                     }
                 }
                 else
                 {
-                    if (robot.leftTransfer != null) robot.leftTransfer.cancel();
-                    if (robot.rightTransfer != null) robot.rightTransfer.cancel(); 
+                    if (robot.leftShooter != null)
+                    {
+                        robot.leftShooter.cancel();
+                        robot.leftTransfer.cancel();
+                    }
+
+                    if (robot.rightShooter != null)
+                    {
+                        robot.rightShooter.cancel();
+                        robot.rightTransfer.cancel();
+                    }
+
+                    if (robot.feeder != null)
+                    {
+                        robot.feeder.cancel();
+                    }
                 }
                 break;
 
@@ -584,18 +584,68 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 break;
 
             case DpadLeft:
-                if (robot.climber != null && pressed)
+                // if (robot.climber != null && pressed)
+                // {
+                //     robot.autoClimbTask.autoClimb(null, null, FrcAuto.autoChoices.getAlliance(), ClimbSide.OUTPOST, 0.0);
+                //     robot.globalTracer.traceInfo(moduleName, ">>>>> Auto climbing on outpost side.");
+                // }
+                if (robot.feeder != null)
                 {
-                    robot.autoClimbTask.autoClimb(null, null, FrcAuto.autoChoices.getAlliance(), ClimbSide.OUTPOST, 0.0);
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> Auto climbing on outpost side.");
+                    if (pressed)
+                    {
+                        double feederPower =
+                            operatorAltFunc? Shooter.Params.FEEDER_REVERSE_POWER: Shooter.Params.FEEDER_FORWARD_POWER;
+                        robot.feeder.setPower(feederPower);
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Set feeder power to " + feederPower);
+                    }
+                    else
+                    {
+                        robot.feeder.cancel();
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Stop feeder.");
+                    }
                 }
                 break;
 
             case DpadRight:
-                if (robot.climber != null && pressed)
+                // if (robot.climber != null && pressed)
+                // {
+                //     robot.autoClimbTask.autoClimb(null, null, FrcAuto.autoChoices.getAlliance(), ClimbSide.DEPOT, 0.0);
+                //     robot.globalTracer.traceInfo(moduleName, ">>>>> Auto climbing on depot side.");
+                // }
+                if (pressed)
                 {
-                    robot.autoClimbTask.autoClimb(null, null, FrcAuto.autoChoices.getAlliance(), ClimbSide.DEPOT, 0.0);
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> Auto climbing on depot side.");
+                    if (robot.leftTransfer != null)
+                    {
+                        if (!operatorAltFunc)
+                        {
+                            robot.leftTransfer.intake(Shooter.Params.TRANSFER_INTAKE_POWER);
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Left Transfer intake.");
+                        }
+                        else
+                        {
+                            robot.leftTransfer.eject(Shooter.Params.TRANSFER_EJECT_POWER);
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Left Transfer eject.");
+                        }
+                    }
+
+                    if (robot.rightTransfer != null)
+                    {
+                        if (!operatorAltFunc)
+                        {
+                            robot.rightTransfer.intake(Shooter.Params.TRANSFER_INTAKE_POWER);
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Right Transfer intake.");
+                        }
+                        else
+                        {
+                            robot.rightTransfer.eject(Shooter.Params.TRANSFER_EJECT_POWER);
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Right Transfer eject.");
+                        }
+                    }
+                }
+                else
+                {
+                    if (robot.leftTransfer != null) robot.leftTransfer.cancel();
+                    if (robot.rightTransfer != null) robot.rightTransfer.cancel(); 
                 }
                 break;
 
@@ -634,20 +684,22 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     {
         if (!altFunc)
         {
-            if (robot.autoShootTask != null && pressed)
+            if (robot.autoShootTask != null)
             {
-                if (!robot.autoShootTask.isActive())
+                if (pressed && !robot.autoShootTask.isActive())
                 {
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Start Auto Shoot.");
+                    robot.intakeSubsystem.setIntakeEnabled(true);
                     robot.autoShootTask.autoShoot(null, null, false, false);
                 }
                 else
                 {
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Stop Auto Shoot.");
+                    robot.intakeSubsystem.setIntakeEnabled(false);
                     robot.autoShootTask.cancel();
                     robot.shooterSubsystem.resetState();
                 }
-            }
+            } 
         }
         else if (robot.shooterSubsystem != null)
         {

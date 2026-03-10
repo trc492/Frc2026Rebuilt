@@ -69,8 +69,8 @@ public class Shooter extends TrcSubsystem
             {3035.18519, 17.19577, -0.020668}, 
             // Hood Angle (Linear Regression)
             {13.33333, 0.0833333},
-            // Time of Flight (Cubic Regression) // NOT USED
-            {0.205105, 0.00252013, 0.0000381112, -0.000000152636}
+            // Time of Flight (Constant),
+            {1.2}
         })
     };
 
@@ -103,9 +103,9 @@ public class Shooter extends TrcSubsystem
         public static final double SHOOTER_MOTOR_OFF_DELAY      = 0.5;         // in sec
         public static final double SHOOTER_VEL_TRIGGER_THRESHOLD= 350.0;       // in RPM
         public static final double SHOOTER_VEL_TRIGGER_SETTLING = 0.0;
-        public static final double SHOOTER_VEL_TRIGGER_TIMEOUT  = 3.0;
+        public static final double SHOOTER_VEL_TRIGGER_TIMEOUT  = 2.0;
         public static final double SHOOTER_RPM_CONFLICT_ZONE_ADJ= 0.0;
-        public static final double SHOOTER_READY_TIMEOUT        = 5.0;          // in sec
+        public static final double SHOOTER_READY_TIMEOUT        = 2.0;          // in sec
         // Left Shooter Motor Characteristics
         public static final String LSHOOTER_PRIMARY_MOTOR_NAME  = SUBSYSTEM_NAME + ".LeftPrimaryMotor";
         public static final boolean LSHOOTER_PRIMARY_MOTOR_INVERTED = false;
@@ -188,7 +188,8 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_MOTOR_PID_IZONE       = 0.0;
         public static final double TURRET_MOTOR_GEAR_RATIO      = 0.9571438827*(20.0*130.0/40.0);   // Load/Motor
         public static final double TURRET_MOTOR_DEG_PER_COUNT   = 360.0/TURRET_MOTOR_GEAR_RATIO;
-        public static final double TURRET_PID_TOLERANCE         = 1.0;
+        public static final double TURRET_PID_TOLERANCE         = 3.0;
+        public static final double TURRET_PID_SETTLING          = 0.0;
         public static final boolean TURRET_SOFTWARE_PID_ENABLED = false;
         public static final double TURRET_POWER_LIMIT           = 0.35; 
         public static final double TURRET_POS_OFFSET            = 182.25;//143.0;
@@ -196,7 +197,7 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_MAX_POS               = TURRET_POS_OFFSET - 2.5;//180.0;
         public static final double TURRET_CONFLICT_ZONE_LOW     = 60.0;         //TODO: tune
         public static final double TURRET_CONFLICT_ZONE_HIGH    = 120.0;        //TODO: tune
-        public static final double TURRET_POS_PRESET_TOLERANCE  = 2.0;
+        public static final double TURRET_POS_PRESET_TOLERANCE  = 5.0;
         public static final double[] TURRET_POS_PRESETS         =
             {TURRET_MIN_POS, -135.0, -90.0, -45.0, 0.0, 45.0, 90.0, 135.0, TURRET_MAX_POS};
         public static final double TURRET_ZERO_CAL_POWER        = 0.2;
@@ -486,7 +487,9 @@ public class Shooter extends TrcSubsystem
                     .setPidCoefficients(
                         Params.TURRET_MOTOR_PID_KP, Params.TURRET_MOTOR_PID_KI, Params.TURRET_MOTOR_PID_KD,
                         Params.TURRET_MOTOR_PID_KF, Params.TURRET_MOTOR_PID_IZONE)
-                    .setPidControlParams(Params.TURRET_PID_TOLERANCE, Params.TURRET_SOFTWARE_PID_ENABLED), null);
+                    .setPidControlParams(
+                        Params.TURRET_PID_TOLERANCE, Params.TURRET_PID_SETTLING, Params.TURRET_SOFTWARE_PID_ENABLED),
+                null);
             // turret.enableMotionProfile(
             //     Params.TURRET_SOFTWARE_PID_ENABLED, Params.TURRET_MAX_VELOCITY, Params.TURRET_MAX_ACCELERATION,
             //     0.0, 0.0, Params.TURRET_PID_TOLERANCE);
@@ -1001,7 +1004,7 @@ public class Shooter extends TrcSubsystem
                 {
                     // Compensate for robot motion.
                     aimInfo = leftShooter.compensateRobotMotion(
-                        robot.robotBase.driveBase, this::getLeftShooterAimInfo, aimInfo, 0.5, 3);
+                        robot.robotBase.driveBase, this::getLeftShooterAimInfo, aimInfo, 0.1, 20);
                 }
 
                 adjustPanAngleToAvoidCrossover(aimInfo);
@@ -1022,8 +1025,8 @@ public class Shooter extends TrcSubsystem
                 // Called by compensateRobotMotion.
                 shootParams = shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), interpolation);
                 aimInfo = new AimInfo(
-                    targetPose, shootParams.outputs[0], null, targetPose.angle % 360.0, shootParams.region.value,
-                    shootParams.outputs[1]);
+                    targetPose, shootParams.outputs[0], null, targetPose.angle % 360.0, shootParams.outputs[1],
+                    shootParams.outputs[2]);
             }
 
             tracer.traceDebug(
@@ -1272,6 +1275,8 @@ public class Shooter extends TrcSubsystem
             leftTiltZeroCalCallbackEvent.setCallback(this::zeroCalCallback, completionEvent);
             leftShooter.tiltMotor.zeroCalibrate(
                 owner, Params.TILT_ZERO_CAL_POWER, leftTiltZeroCalCallbackEvent, Params.TILT_ZERO_CAL_TIMEOUT);
+            // leftShooter.tiltMotor.resetPosition(false);
+            // leftTiltZeroCalCallbackEvent.signal();
         }
         else
         {
@@ -1286,6 +1291,8 @@ public class Shooter extends TrcSubsystem
             rightTiltZeroCalCallbackEvent.setCallback(this::zeroCalCallback, completionEvent);
             rightShooter.tiltMotor.zeroCalibrate(
                 owner, Params.TILT_ZERO_CAL_POWER, rightTiltZeroCalCallbackEvent, Params.TILT_ZERO_CAL_TIMEOUT);
+            // rightShooter.tiltMotor.resetPosition(false);
+            // rightTiltZeroCalCallbackEvent.signal();
         }
         else
         {

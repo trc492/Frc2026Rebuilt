@@ -150,7 +150,7 @@ public class DriveBase extends TrcSubsystem
                         HwConfig.CANID_BLSTEER_ENCODER, HwConfig.CANID_BRSTEER_ENCODER},
                     new boolean[] {false, false, false, false}, 1.0,
                     //new double[] {0.125977, 0.687500 , 0.880859 , 0.234863},
-                    new double[] {0.126221, 0.35791015625, 0.880371, 0.233398},
+                    new double[] {0.126221, 0.35791015625, -0.456787, 0.233398},
                     //new double[] {0.000000, -0.353516, -0.000732, 0.001709},
                     SteerEncoderMode.CtreFusedCanCoder,
                     RobotParams.Robot.teamFolderPath + RobotParams.Robot.STEER_ZERO_CAL_FILE_NAME)

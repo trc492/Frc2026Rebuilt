@@ -1,0 +1,290 @@
+Robot.robotStartMode_INFO [0.315387102] Sat Mar 07 22:38:55 UTC 2026: ***** AUTO_MODE *****
+Robot.robotStartMode_INFO [0.316272779] <BuildInfo Host="TRC492-DS2024" User="User" Timestamp="2026-03-07 14:21:48" Branch="dev" />
+FrcAuto.startMode_INFO [0.318410768] <Info name="MatchInfo" date="Sat Mar 07 22:38:55 UTC 2026" event="WABON" type="Qualification" match=13 replay=1 alliance="Blue" location=1 gameMsg="" />
+FrcAuto.startMode_INFO [0.323654535] <Info name="AutoChoices" alliance="Blue" strategy="REBUILT_AUTO" startPos="START_POS_DEPOT" startDelay=0.0 sec depotPickup="false" outpostPickup="false" neutralZonePickup="true" moveTo="DEPOT" passBack="NONE" climb="false" climbSide="DEPOT" neutralZoneCycles="2.0" pathFile="DrivePath.csv" xDistance=0.0 ft yDistance=0.0 ft turnDegrees=0.0 deg driveTime=0.0 sec drivePower=0.0"  />
+CmdRebuiltAuto.cmdPeriodic_INFO [0.383880757] <Event name="StateInfo" time="0.383636423" tag="vvvvv" CmdRebuiltAuto.state="START" />
+Robot.zeroCalibrate_INFO [0.393488084] Zero calibrate all subsystems.
+TrcSubsystem.zeroCalibrateAll_INFO [0.419274275] ZeroCalibrate(Subsystem=Shooter, owner=null, event=(Shooter.zeroCal=CLEARED))
+Shooter.zeroCalibrate_INFO [0.422855703] ZeroCalibrate left shooter.
+Shooter.zeroCalibrate_INFO [0.437042398] ZeroCalibrate right shooter.
+Shooter.zeroCalibrate_INFO [0.461430823] ZeroCalibrate turret.
+TrcWatchdogMgr.checkForExpiration_WARN [0.479088408] ([1.7729231362013805E9]main.watchdog:threshold=1.0,expiredTime=1.7691365619993217E9,expired=true,paused=false) expired.
+TrcDbgTrace.checkForExpiration_INFO [0.483963558] Thread stack: 
+java.base@17.0.9.7-frc/java.lang.invoke.MethodTypeForm.canonicalize(Unknown Source)
+java.base@17.0.9.7-frc/java.lang.invoke.MethodTypeForm.findForm(Unknown Source)
+java.base@17.0.9.7-frc/java.lang.invoke.MethodType.makeImpl(Unknown Source)
+java.base@17.0.9.7-frc/java.lang.invoke.MethodType.changeReturnType(Unknown Source)
+java.base@17.0.9.7-frc/java.lang.invoke.DirectMethodHandle.makeAllocator(Unknown Source)
+java.base@17.0.9.7-frc/java.lang.invoke.DirectMethodHandle.make(Unknown Source)
+java.base@17.0.9.7-frc/java.lang.invoke.MethodHandles$Lookup.getDirectConstructorCommon(Unknown Source)
+java.base@17.0.9.7-frc/java.lang.invoke.MethodHandles$Lookup.getDirectConstructor(Unknown Source)
+java.base@17.0.9.7-frc/java.lang.invoke.MethodHandles$Lookup.findConstructor(Unknown Source)
+java.base@17.0.9.7-frc/java.lang.invoke.InnerClassLambdaMetafactory.buildCallSite(Unknown Source)
+java.base@17.0.9.7-frc/java.lang.invoke.LambdaMetafactory.metafactory(Unknown Source)
+java.base@17.0.9.7-frc/java.lang.invoke.LambdaForm$DMH/0xabcc02c0.invokeStatic(LambdaForm$DMH)
+java.base@17.0.9.7-frc/java.lang.invoke.Invokers$Holder.invokeExact_MT(Unknown Source)
+java.base@17.0.9.7-frc/java.lang.invoke.BootstrapMethodInvoker.invoke(Unknown Source)
+java.base@17.0.9.7-frc/java.lang.invoke.CallSite.makeSite(Unknown Source)
+java.base@17.0.9.7-frc/java.lang.invoke.MethodHandleNatives.linkCallSiteImpl(Unknown Source)
+java.base@17.0.9.7-frc/java.lang.invoke.MethodHandleNatives.linkCallSite(Unknown Source)
+app//teamcode.subsystems.Shooter.zeroCalibrate(Shooter.java:1300)
+app//trclib.subsystem.TrcSubsystem.zeroCalibrateAll(TrcSubsystem.java:193)
+app//teamcode.Robot.zeroCalibrate(Robot.java:504)
+app//teamcode.autocommands.CmdRebuiltAuto.cmdPeriodic(CmdRebuiltAuto.java:175)
+app//teamcode.FrcAuto.periodic(FrcAuto.java:462)
+app//frclib.robotcore.FrcRobot.startCompetition(FrcRobot.java:618)
+app//edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:436)
+app//edu.wpi.first.wpilibj.RobotBase.startRobot(RobotBase.java:527)
+app//teamcode.Main.main(Main.java:33)
+TrcSubsystem.zeroCalibrateAll_INFO [0.49293611] ZeroCalibrate(Subsystem=Climber, owner=null, event=(Climber.zeroCal=CLEARED))
+CmdRebuiltAuto.cmdPeriodic_INFO [0.496827893] <Event name="StateInfo" time="0.49659222" tag="^^^^^" CmdRebuiltAuto.state="START" />
+Shooter.TurretMotor.isMotorStalled_INFO [0.653084245] Stall detection triggered.
+Shooter.TurretMotor.zeroCalibratingMotor_WARN [0.661964661] Stalled, lower limit switch may not exist or might have failed!
+Shooter.TurretMotor.pidCtrlTask_INFO [0.666035126] Zero calibration done, event=(Shooter.turretZeroCalCallback=CLEARED)
+Shooter.TurretMotor.pidCtrlTask_INFO [0.67598863] controlMode: Power,onTarget=false(0.2272939234972/null), stalled=false, expired=false, event=(Shooter.turretZeroCalCallback=SIGNALED)
+Shooter.TurretMotor.isMotorStalled_INFO [0.704689009] Stall detection triggered.
+Shooter.LeftTiltMotor.isMotorStalled_INFO [0.712568574] Stall detection triggered.
+Shooter.LeftTiltMotor.zeroCalibratingMotor_WARN [0.720196956] Stalled, lower limit switch may not exist or might have failed!
+Shooter.LeftTiltMotor.pidCtrlTask_INFO [0.729815944] Zero calibration done, event=(Shooter.leftTiltZeroCalCallback=CLEARED)
+Shooter.LeftTiltMotor.pidCtrlTask_INFO [0.733373958] controlMode: Power,onTarget=false(-0.07548722624778748/null), stalled=false, expired=false, event=(Shooter.leftTiltZeroCalCallback=SIGNALED)
+Shooter.LeftTiltMotor.isMotorStalled_INFO [0.747672643] Stall detection triggered.
+Shooter.LeftTiltMotor.checkStallReset_INFO [0.750839776] Resetting stall.
+Climber.Motor.isMotorStalled_INFO [0.791265559] Stall detection triggered.
+Climber.Motor.zeroCalibratingMotor_WARN [0.803357495] Stalled, lower limit switch may not exist or might have failed!
+Climber.Motor.pidCtrlTask_INFO [0.808434033] Zero calibration done, event=(Climber.zeroCal=CLEARED)
+Climber.Motor.pidCtrlTask_INFO [0.812330677] controlMode: Power,onTarget=false(-0.16549241542816162/null), stalled=false, expired=false, event=(Climber.zeroCal=SIGNALED)
+CmdRebuiltAuto.cmdPeriodic_INFO [2.499551698] <Event name="StateInfo" time="2.499226309" tag="vvvvv" CmdRebuiltAuto.state="ZERO_CAL_DONE" />
+CmdRebuiltAuto.cmdPeriodic_INFO [2.501683335] ***** Enabling GoalTracking on turret only.
+Shooter.setupGoalTrackingMode_INFO [2.509432872] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=182.110000,angle=0.000000), noPassback=true).
+Shooter.LeftShooter.enableGoalTracking_INFO [2.520903338] Enable GoalTracking (trackingParams=(trackFlywheel=false,trackTiltPos=false,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [2.527783981] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [2.530836401] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [2.550621678] Enable GoalTracking (trackingParams=(trackFlywheel=false,trackTiltPos=false,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [2.554601642] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [2.559876798] Cancel: stopping motor.
+CmdRebuiltAuto.cmdPeriodic_INFO [2.566217167] <Event name="StateInfo" time="2.56381424" tag="^^^^^" CmdRebuiltAuto.state="ZERO_CAL_DONE" />
+CmdRebuiltAuto.cmdPeriodic_INFO [2.731282779] <Event name="StateInfo" time="2.730890204" tag="vvvvv" CmdRebuiltAuto.state="CREATE_NEUTRAL_ZONE_PATH" />
+CmdRebuiltAuto.cmdPeriodic_INFO [2.73512356] NeutralZonePath:
+startPose=(x=-300.457165,y=167.734500,angle=90.000000)
+intermediatePose=(x=-279.787165,y=301.610236,angle=90.000000)
+pickupPose=(x=-261.787165,y=301.610236,angle=90.000000)
+endPose=(x=-181.787165,y=301.610236,angle=90.000000)
+CmdRebuiltAuto.cmdPeriodic_INFO [2.739896936] NeutralZoneReturnPath:
+robotPose=(x=-300.457165,y=167.734500,angle=89.997253)
+pickupPose=(x=-261.787165,y=301.610236,angle=90.000000)
+intermediatePose=(x=-279.787165,y=301.610236,angle=0.000000)
+returnPose=(x=-293.457165,y=127.734500,angle=0.000000)
+CmdRebuiltAuto.cmdPeriodic_INFO [2.742556828] <Event name="StateInfo" time="2.741631868" tag="^^^^^" CmdRebuiltAuto.state="CREATE_NEUTRAL_ZONE_PATH" />
+CmdRebuiltAuto.cmdPeriodic_INFO [2.775156146] <Event name="StateInfo" time="2.774349645" tag="vvvvv" CmdRebuiltAuto.state="CYCLE_NEUTRAL_ZONE" />
+purePursuitDrive.start_INFO [2.850219995] Path=TrcPath(degrees=true, [Waypoint(simple=true,index=0,pose=(x=-300.457165,y=167.734500,angle=89.980774),vel=0.0), Waypoint(simple=false,index=-1,timestep=0.3915294401013754,pose=(x=-288.781833,y=243.401554,angle=89.988536),vel=168.05331133619572,encPos=0.0,accel=0.0,jerk=0.0), Waypoint(simple=true,index=1,pose=(x=-279.800001,y=301.612217,angle=89.994507),vel=132.81566172707196), Waypoint(simple=true,index=2,pose=(x=-261.800001,y=301.613943,angle=89.994507),vel=120.00000000000001), Waypoint(simple=true,index=3,pose=(x=-181.800001,y=301.621613,angle=89.994507),vel=0.0)])
+CmdRebuiltAuto.cmdPeriodic_INFO [2.856087702] <Event name="StateInfo" time="2.855844808" tag="^^^^^" CmdRebuiltAuto.state="CYCLE_NEUTRAL_ZONE" RobotPose=(x=-300.457165,y=167.734500,angle=89.983521) TargetPose=(x=-181.800001,y=301.621613,angle=89.994507) vel=(x=-0.000000,y=0.000000,angle=-0.000000) Path=TrcPath(degrees=true, [Waypoint(simple=true,index=0,pose=(x=0.000000,y=0.000000,angle=0.000000),vel=0.0), Waypoint(simple=false,index=-1,timestep=0.3915294401013754,pose=(x=-75.663132,y=11.700722,angle=0.007762),vel=168.05331133619572,encPos=0.0,accel=0.0,jerk=0.0), Waypoint(simple=true,index=1,pose=(x=-133.870778,y=20.702087,angle=0.013733),vel=132.81566172707196), Waypoint(simple=true,index=2,pose=(x=-133.866464,y=38.702087,angle=0.013733),vel=120.00000000000001), Waypoint(simple=true,index=3,pose=(x=-133.847289,y=118.702085,angle=0.013733),vel=0.0)]) />
+OV9782_LeftShooter.getRobotEstimatedInfo_ERR [3.542960992] [fpgaTime=90620882] PhotonVision.getAllUnreadResults threw an exception.
+Index 34 out of bounds for length 34
+TrcDbgTrace.getRobotEstimatedInfo_ERR [3.551303099] Stack Trace (depth=18):
+org.photonvision.common.dataflow.structures.Packet.decodeByte(Packet.java:297)
+org.photonvision.common.dataflow.structures.Packet.decodeList(Packet.java:413)
+org.photonvision.struct.PhotonTrackedTargetSerde.unpack(PhotonTrackedTargetSerde.java:128)
+org.photonvision.struct.PhotonTrackedTargetSerde.unpack(PhotonTrackedTargetSerde.java:43)
+org.photonvision.common.dataflow.structures.Packet.decodeList(Packet.java:419)
+org.photonvision.struct.PhotonPipelineResultSerde.unpack(PhotonPipelineResultSerde.java:78)
+org.photonvision.struct.PhotonPipelineResultSerde.unpack(PhotonPipelineResultSerde.java:43)
+org.photonvision.common.networktables.PacketSubscriber.parse(PacketSubscriber.java:66)
+org.photonvision.common.networktables.PacketSubscriber.getAllChanges(PacketSubscriber.java:110)
+org.photonvision.PhotonCamera.getAllUnreadResults(PhotonCamera.java:262)
+frclib.vision.FrcPhotonVision.getRobotEstimatedInfo(FrcPhotonVision.java:750)
+frclib.drivebase.FrcSwerveDrive.visionUpdate(FrcSwerveDrive.java:169)
+teamcode.Robot.relocalizeRobot(Robot.java:407)
+teamcode.Robot.robotPeriodic(Robot.java:463)
+frclib.robotcore.FrcRobot.startCompetition(FrcRobot.java:617)
+edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:436)
+edu.wpi.first.wpilibj.RobotBase.startRobot(RobotBase.java:527)
+teamcode.Main.main(Main.java:33)
+Shooter.setupGoalTrackingMode_INFO [3.762053488] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=182.110000,angle=0.000000), noPassback=true).
+OV9782_RightShooter.getRobotEstimatedInfo_ERR [3.927719094] [fpgaTime=91000898] PhotonVision.getAllUnreadResults threw an exception.
+Index 328 out of bounds for length 328
+TrcDbgTrace.getRobotEstimatedInfo_ERR [3.93119722] Stack Trace (depth=18):
+org.photonvision.common.dataflow.structures.Packet.decodeByte(Packet.java:297)
+org.photonvision.common.dataflow.structures.Packet.decodeList(Packet.java:413)
+org.photonvision.struct.PhotonTrackedTargetSerde.unpack(PhotonTrackedTargetSerde.java:131)
+org.photonvision.struct.PhotonTrackedTargetSerde.unpack(PhotonTrackedTargetSerde.java:43)
+org.photonvision.common.dataflow.structures.Packet.decodeList(Packet.java:419)
+org.photonvision.struct.PhotonPipelineResultSerde.unpack(PhotonPipelineResultSerde.java:78)
+org.photonvision.struct.PhotonPipelineResultSerde.unpack(PhotonPipelineResultSerde.java:43)
+org.photonvision.common.networktables.PacketSubscriber.parse(PacketSubscriber.java:66)
+org.photonvision.common.networktables.PacketSubscriber.getAllChanges(PacketSubscriber.java:110)
+org.photonvision.PhotonCamera.getAllUnreadResults(PhotonCamera.java:262)
+frclib.vision.FrcPhotonVision.getRobotEstimatedInfo(FrcPhotonVision.java:750)
+frclib.drivebase.FrcSwerveDrive.visionUpdate(FrcSwerveDrive.java:169)
+teamcode.Robot.relocalizeRobot(Robot.java:407)
+teamcode.Robot.robotPeriodic(Robot.java:463)
+frclib.robotcore.FrcRobot.startCompetition(FrcRobot.java:617)
+edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:436)
+edu.wpi.first.wpilibj.RobotBase.startRobot(RobotBase.java:527)
+teamcode.Main.main(Main.java:33)
+CmdRebuiltAuto.lambda$cmdPeriodic$2_INFO [4.624867068] WaypointHandler: index=1
+CmdRebuiltAuto.lambda$cmdPeriodic$2_INFO [4.772771308] WaypointHandler: index=2
+Shooter.setupGoalTrackingMode_INFO [5.552519545] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=182.110000,angle=0.000000), noPassback=true).
+purePursuitDrive.driveTask_INFO [7.065716046] Done: index=4/5, stalled=false, timeout=false, posOnTarget=true, headingOnTarget=true, robotPose=(x=-180.461796,y=301.958093,angle=90.423453)
+purePursuitDrive.driveTask_INFO [7.073237656] Signal completion event (CmdRebuiltAuto=CLEARED).
+CmdRebuiltAuto.cmdPeriodic_INFO [7.10662647] <Event name="StateInfo" time="7.106246808" tag="vvvvv" CmdRebuiltAuto.state="RETURN_TO_SCORE_POS" />
+TaskAutoShoot.cancel_INFO [7.109140493] Canceling auto task operation.
+purePursuitDrive.start_INFO [7.112913028] Path=TrcPath(degrees=true, [Waypoint(simple=true,index=0,pose=(x=-181.280767,y=302.135018,angle=83.316310),vel=0.0), Waypoint(simple=false,index=-1,timestep=0.022546338319610882,pose=(x=-257.841640,y=301.635955,angle=89.672440),vel=175.0,encPos=0.0,accel=0.0,jerk=0.0), Waypoint(simple=true,index=1,pose=(x=-261.787165,y=301.610236,angle=90.000000),vel=175.0), Waypoint(simple=true,index=2,pose=(x=-279.787165,y=301.610236,angle=0.000000),vel=175.0), Waypoint(simple=false,index=-1,timestep=1.9444444444444444,pose=(x=-280.122102,y=297.349999,angle=0.000000),vel=175.0,encPos=0.0,accel=0.0,jerk=0.0), Waypoint(simple=true,index=3,pose=(x=-293.457165,y=127.734500,angle=0.000000),vel=0.0)])
+CmdRebuiltAuto.cmdPeriodic_INFO [7.134498414] <Event name="StateInfo" time="7.126824026" tag="^^^^^" CmdRebuiltAuto.state="RETURN_TO_SCORE_POS" RobotPose=(x=-182.153679,y=302.510506,angle=79.472197) TargetPose=(x=-293.457165,y=127.734500,angle=0.000000) vel=(x=0.198617,y=-1.377587,angle=-43.458885) Path=TrcPath(degrees=true, [Waypoint(simple=true,index=0,pose=(x=0.000000,y=0.000000,angle=0.000000),vel=0.0), Waypoint(simple=false,index=-1,timestep=0.022546338319610882,pose=(x=-8.415097,y=-76.098637,angle=6.356130),vel=175.0,encPos=0.0,accel=0.0,jerk=0.0), Waypoint(simple=true,index=1,pose=(x=-8.848764,y=-80.020341,angle=6.683690),vel=175.0), Waypoint(simple=true,index=2,pose=(x=-10.943748,y=-97.898010,angle=-83.316310),vel=175.0), Waypoint(simple=false,index=-1,timestep=1.9444444444444444,pose=(x=-6.751448,y=-98.726511,angle=-83.316310),vel=175.0,encPos=0.0,accel=0.0,jerk=0.0), Waypoint(simple=true,index=3,pose=(x=160.159273,y=-131.712157,angle=-83.316310),vel=0.0)]) />
+Shooter.setupGoalTrackingMode_INFO [8.359937674] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=182.110000,angle=0.000000), noPassback=true).
+Shooter.setupGoalTrackingMode_INFO [10.055245749] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=182.110000,angle=0.000000), noPassback=true).
+Shooter.setupGoalTrackingMode_INFO [10.73196681] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=182.110000,angle=0.000000), noPassback=true).
+purePursuitDrive.driveTask_INFO [11.881149358] Done: index=5/6, stalled=false, timeout=false, posOnTarget=true, headingOnTarget=true, robotPose=(x=-292.122069,y=126.820621,angle=0.358019)
+purePursuitDrive.driveTask_INFO [11.883283452] Signal completion event (CmdRebuiltAuto=CLEARED).
+CmdRebuiltAuto.cmdPeriodic_INFO [11.915332464] <Event name="StateInfo" time="11.914402171" tag="vvvvv" CmdRebuiltAuto.state="SHOOT_NEUTRAL_FUEL" />
+CmdRebuiltAuto.cmdPeriodic_INFO [11.931336375] Shooting NeutralZone cycle 1
+TaskAutoShoot.autoShoot_INFO [11.93918513] autoShoot(owner=null, event=(CmdRebuiltAuto=SIGNALED), taskParams=(autoStop=true, noPassback=true))
+TaskAutoShoot.autoShoot_INFO [11.943422519] Enabling Goal Tracking (prevTrackParams=(trackFlywheel=false,trackTiltPos=false,trackPanPos=true)).
+Shooter.setupGoalTrackingMode_INFO [11.945838652] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=182.110000,angle=0.000000), noPassback=true).
+Shooter.LeftShooter.enableGoalTracking_INFO [11.948567147] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [11.952308544] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [11.955332711] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [11.962883392] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [11.967911852] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [11.96963] Cancel: stopping motor.
+CmdRebuiltAuto.cmdPeriodic_INFO [11.977467491] <Event name="StateInfo" time="11.977207929" tag="^^^^^" CmdRebuiltAuto.state="SHOOT_NEUTRAL_FUEL" />
+TaskAutoShoot.autoTask_INFO [12.0715741] <Event name="StateInfo" time="12.07101086" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [12.083347088] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [12.093800187] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [12.095348923] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [12.099581162] <Event name="StateInfo" time="12.099382155" tag="^^^^^" TaskAutoShoot.state="START" />
+Shooter.TurretMotor.pidCtrlTask_INFO [12.134693711] controlMode: Position,onTarget=true(58.11744559754146/57.96761791918443), stalled=false, expired=false, event=(TaskAutoShoot.turretReady=SIGNALED)
+TaskAutoShoot.autoTask_INFO [12.174697964] <Event name="StateInfo" time="12.174515802" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [12.17688949] <Event name="StateInfo" time="12.176701272" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [12.246703324] <Event name="StateInfo" time="12.241113221" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [12.24737517] <Event name="StateInfo" time="12.247183082" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [12.329626612] <Event name="StateInfo" time="12.328188211" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [12.331074098] <Event name="StateInfo" time="12.330830646" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [12.407306973] <Event name="StateInfo" time="12.403547876" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [12.410127296] <Event name="StateInfo" time="12.409790423" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [12.494660268] <Event name="StateInfo" time="12.493952134" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [12.504440942] <Event name="StateInfo" time="12.504221573" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [12.575123052] <Event name="StateInfo" time="12.573820379" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [12.586514233] <Event name="StateInfo" time="12.576848493" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [12.670678387] <Event name="StateInfo" time="12.670452056" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [12.691337481] <Event name="StateInfo" time="12.691041488" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [12.783149529] <Event name="StateInfo" time="12.78147153" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [12.787516812] <Event name="StateInfo" time="12.78614292" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.LeftShooter.goalTrackingTask_INFO [12.857051074] Shooter.LeftShooter is Ready: rpm1=5035.835337/5118.687634, rpm2=3121.406250/0.000000, tilt=25.605145/25.600862, pan=null/null
+Shooter.RightShooter.goalTrackingTask_INFO [12.886102188] Shooter.RightShooter is Ready: rpm1=5074.642428/5118.687634, rpm2=3066.328125/0.000000, tilt=25.565618/25.600862, pan=null/null
+TaskAutoShoot.autoTask_INFO [12.890932687] <Event name="StateInfo" time="12.890720776" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [12.893929038] ***** Start left shooter shooting.
+Shooter.shoot_INFO [12.896023391] shoot(owner=null, event=(TaskAutoShoot.leftShooterDone=CLEARED), shooter=leftShooter, autoStop=true)
+Shooter.LeftTransferMotor.cancel_INFO [12.947087301] Cancel: stopping motor.
+TaskAutoShoot.runTaskState_INFO [12.954246862] ***** Start right shooter shooting.
+Shooter.shoot_INFO [12.956911265] shoot(owner=null, event=(TaskAutoShoot.rightShooterDone=CLEARED), shooter=rightShooter, autoStop=true)
+Shooter.RightTransferMotor.cancel_INFO [12.963301252] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [12.969997967] <Event name="StateInfo" time="12.969108472" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.RightShooter.cancel_INFO [19.020469415] owner=null
+Shooter.RightShooter.disableGoalTracking_INFO [19.026566996] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [19.034156313] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [19.040014545] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [19.04563313] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [19.048955145] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [19.052685911] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [19.055007124] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [19.060865362] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [19.0666754] owner=null
+Shooter.LeftShooter.disableGoalTracking_INFO [19.069691976] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [19.073554892] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [19.076412083] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [19.080515642] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [19.084456753] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [19.08778421] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [19.09043597] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [19.093222719] Cancel: stopping motor.
+CmdRebuiltAuto.cmdPeriodic_INFO [19.984450345] <Event name="StateInfo" time="19.983805541" tag="vvvvv" CmdRebuiltAuto.state="CYCLE_NEUTRAL_ZONE" />
+TaskAutoShoot.cancel_INFO [20.008982418] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [20.018971918] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [20.02602814] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [20.046630721] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [20.053039295] Cancel: stopping motor.
+TaskAutoShoot.stopSubsystems_INFO [20.057698905] Restoring previous Tracking mode (trackFlywheel=false,trackTiltPos=false,trackPanPos=true).
+TaskAutoShoot.stopSubsystems_INFO [20.061269883] Restoring previous Passback mode true.
+Shooter.setupGoalTrackingMode_INFO [20.068982996] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=182.110000,angle=0.000000), noPassback=true).
+Shooter.LeftShooter.enableGoalTracking_INFO [20.072270881] Enable GoalTracking (trackingParams=(trackFlywheel=false,trackTiltPos=false,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [20.080343923] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [20.086206004] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [20.090306706] Enable GoalTracking (trackingParams=(trackFlywheel=false,trackTiltPos=false,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [20.093649491] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [20.099370253] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [20.106383612] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [20.111602379] Cancel: stopping motor.
+purePursuitDrive.start_INFO [20.163526941] Path=TrcPath(degrees=true, [Waypoint(simple=true,index=0,pose=(x=-291.553348,y=126.964412,angle=8.290297),vel=0.0), Waypoint(simple=false,index=-1,timestep=0.3562305134888857,pose=(x=-286.406870,y=203.353745,angle=4.664157),vel=175.0,encPos=0.0,accel=0.0,jerk=0.0), Waypoint(simple=false,index=-1,timestep=0.21882056370513975,pose=(x=-282.216396,y=265.553085,angle=1.711604),vel=175.0,encPos=0.0,accel=0.0,jerk=0.0), Waypoint(simple=true,index=1,pose=(x=-279.787165,y=301.610236,angle=0.000000),vel=155.3061492665374), Waypoint(simple=true,index=2,pose=(x=-225.787165,y=301.610236,angle=90.000000),vel=120.0), Waypoint(simple=true,index=3,pose=(x=-145.787165,y=301.610236,angle=90.000000),vel=0.0)])
+CmdRebuiltAuto.cmdPeriodic_INFO [20.172877461] <Event name="StateInfo" time="20.172193367" tag="^^^^^" CmdRebuiltAuto.state="CYCLE_NEUTRAL_ZONE" RobotPose=(x=-291.553348,y=126.964412,angle=8.290297) TargetPose=(x=-145.787165,y=301.610236,angle=90.000000) vel=(x=-0.000000,y=0.000000,angle=-0.000000) Path=TrcPath(degrees=true, [Waypoint(simple=true,index=0,pose=(x=0.000000,y=0.000000,angle=0.000000),vel=0.0), Waypoint(simple=false,index=-1,timestep=0.3562305134888857,pose=(x=-5.921775,y=76.333145,angle=-3.626140),vel=175.0,encPos=0.0,accel=0.0,jerk=0.0), Waypoint(simple=false,index=-1,timestep=0.21882056370513975,pose=(x=-10.743528,y=138.486734,angle=-6.578693),vel=175.0,encPos=0.0,accel=0.0,jerk=0.0), Waypoint(simple=true,index=1,pose=(x=-13.538713,y=174.517363,angle=-8.290297),vel=155.3061492665374), Waypoint(simple=true,index=2,pose=(x=39.896999,y=182.303549,angle=81.709703),vel=120.0), Waypoint(simple=true,index=3,pose=(x=119.061017,y=193.838639,angle=81.709703),vel=0.0)]) />
+FrcRobot.startCompetition_INFO [20.736897128] *** Transitioning from AUTO_MODE to DISABLED_MODE ***
+Shooter.LeftShooter.disableGoalTracking_INFO [20.754752639] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [20.767689618] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [20.775885401] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [20.779240948] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [20.781531464] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [20.782812397] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [20.787621252] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [20.789156347] Cancel: stopping motor.
+Robot.cancelAll_INFO [20.793224036] Cancel all operations.
+CmdRebuiltAuto.lambda$cmdPeriodic$2_INFO [20.798735096] WaypointHandler: index=-1
+Shooter.LeftShooter.cancel_INFO [20.800789699] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [20.802068963] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [20.804258765] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [20.808815576] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [20.810086549] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [20.814095001] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [20.815894842] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [20.822928836] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [20.82425299] Cancel: stopping motor.
+Intake.IntakeMotor.cancel_INFO [20.908473911] Cancel: stopping motor.
+Climber.Motor.cancel_INFO [20.918913261] Cancel: stopping motor.
+TaskAutoShoot.cancel_INFO [20.923358518] Canceling auto task operation.
+TaskAutoClimb.cancel_INFO [20.927336061] Canceling auto task operation.
+FrcRobot.printPerformanceMetrics_INFO [20.988721873] [FrcRobot] Loop Performance Metrics:
+Average Loop Interval = 0.001410s (freq=709.337Hz, min=0.000661s, max=0.586098s)
+[03]                StartTask=0.000000s
+[04]          PrePeriodicTask=0.000110s
+[07]               UpdateTask=0.000892s
+[02]                StartMode=0.000000s
+[06]         PostPeriodicTask=0.000266s
+[08]                 StopTask=0.000000s
+[09]                 StopMode=0.000001s
+[00]                RobotInit=13.391748s
+[01]           RobotStartMode=0.000009s
+[05]                 Periodic=0.000053s
+[10]            RobotStopMode=0.000001s
+
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.993353938] FrcDashboard.task: STANDALONE_TASK=6.574446620793339E-4/0.01074564258667746
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.003512245] TrcWatchdogMgr: STANDALONE_TASK=2.3138212903225805E-4/0.9896183232903225
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.014168476] flDriveMotor.pidCtrlTask: OUTPUT_TASK=2.7196699861687414E-5/0.011684698180812272
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.025072264] flDriveMotor.odometryCleanupTask: STOP_TASK=6.290165E-4/10.4121677795
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.026687224] frDriveMotor.pidCtrlTask: OUTPUT_TASK=1.6940759994971083E-5/0.01168465313628363
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.030807577] blDriveMotor.pidCtrlTask: OUTPUT_TASK=1.1432881835323696E-5/0.011684498901697045
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.033260628] brDriveMotor.pidCtrlTask: OUTPUT_TASK=1.3201596480201131E-5/0.01168449782602137
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.035755352] flSteerMotor.pidCtrlTask: OUTPUT_TASK=2.1930936517913263E-5/0.01168449705644249
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.038102308] frSteerMotor.pidCtrlTask: OUTPUT_TASK=1.6237753739786298E-5/0.011684565685857951
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.041784002] blSteerMotor.pidCtrlTask: OUTPUT_TASK=1.591777073906486E-5/0.011684393775389643
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.043963895] brSteerMotor.pidCtrlTask: OUTPUT_TASK=1.6266146178984414E-5/0.011684396738813475
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.047600419] FrcSwerveDrive.odometryTask: INPUT_TASK=0.002774701790275762/0.014957825187953556
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.082482875] FrcSwerveDrive.stopTask: STOP_TASK=0.003766102/10.4127148155
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.085697045] purePursuitDrive.driveTask: POST_PERIODIC_TASK=0.007605557644268774/0.07050661759683793
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.09856525] LED: OUTPUT_TASK=5.870028743718593E-5/0.011685235416582914
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.100989619] Shooter.LeftPrimaryMotor.pidCtrlTask: OUTPUT_TASK=1.76493391959799E-5/0.011685153622487437
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.105823434] Shooter.LeftFollowerMotor.pidCtrlTask: OUTPUT_TASK=5.43123216080402E-6/0.011685151623241206
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.107594733] Shooter.LeftTiltMotor.pidCtrlTask: OUTPUT_TASK=3.42704093078759E-4/0.011685077959804046
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.110431174] Shooter.LeftShooter.ShooterMotor1VelTrigger.triggerTask: PRE_PERIODIC_TASK=3.103197816091954E-4/0.06946035490804597
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.11295475] Shooter.LeftShooter.goalTracking: POST_PERIODIC_TASK=0.027835460487179487/0.05164947389458689
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.123521549] Shooter.LeftTransferMotor.pidCtrlTask: OUTPUT_TASK=6.9837563426274805E-6/0.011684665714267772
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.126257007] Shooter.RightPrimaryMotor.pidCtrlTask: OUTPUT_TASK=1.587642835614718E-5/0.011684591193771191
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.127589314] Shooter.RightFollowerMotor.pidCtrlTask: OUTPUT_TASK=6.572871781991712E-6/0.011684497403867889
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.129568222] Shooter.RightTiltMotor.pidCtrlTask: OUTPUT_TASK=3.0822194323747333E-4/0.011684317101343716
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.130987739] Shooter.RightShooter.ShooterMotor1VelTrigger.triggerTask: PRE_PERIODIC_TASK=1.909478275862069E-4/0.06945853124137931
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.133425288] Shooter.RightShooter.goalTracking: POST_PERIODIC_TASK=0.005621051948717949/0.051283419319088315
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.138763707] Shooter.RightTransferMotor.pidCtrlTask: OUTPUT_TASK=1.0456510924158714E-5/0.011684313271848316
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.139963176] Shooter.TurretMotor.pidCtrlTask: OUTPUT_TASK=7.101117226268207E-4/0.011684312051732797
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.143479543] Shooter.FeederMotor.pidCtrlTask: OUTPUT_TASK=5.6491099949773975E-6/0.011684303807634355
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.150304248] ShooterfieldLengthTrigger.triggerTask: PRE_PERIODIC_TASK=2.0770203490672266E-5/0.0014051990512492774
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.152288635] ShooterfieldWidthTrigger.triggerTask: PRE_PERIODIC_TASK=5.88151214279193E-6/0.0014051999608782981
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.156235827] Intake.IntakeMotor.pidCtrlTask: OUTPUT_TASK=6.553065411173886E-6/0.011683970380288762
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.161614147] Climber.Motor.pidCtrlTask: OUTPUT_TASK=6.949351770022596E-5/0.011684094644363544
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [21.181744858] TaskAutoShoot: POST_PERIODIC_TASK=5.638516175E-4/0.01976586303

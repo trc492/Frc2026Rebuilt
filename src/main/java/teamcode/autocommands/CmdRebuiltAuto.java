@@ -65,7 +65,6 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
     private final FrcAuto.AutoChoices autoChoices;
     private final TrcTimer timer;
     private final TrcEvent event;
-    private final TrcEvent zeroCalEvent;
     private final TrcStateMachine<State> sm;
 
     private FrcAuto.AutoStartPos startPos;
@@ -101,7 +100,6 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
 
         timer = new TrcTimer(moduleName);
         event = new TrcEvent(moduleName);
-        zeroCalEvent = new TrcEvent(moduleName + ".zeroCal");
         sm = new TrcStateMachine<>(moduleName);
         sm.start(State.START);
     }   //CmdRebuiltAuto
@@ -128,6 +126,10 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
     public void cancel()
     {
         timer.cancel();
+        if (robot.shooterSubsystem != null)
+        {
+            robot.shooterSubsystem.disableGoalTracking();
+        }
         sm.stop();
     }   //cancel
 
@@ -169,27 +171,27 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     climbSide = autoChoices.getClimbSide();
                     neutralZoneCycles = autoChoices.getNeutralZoneCycles();
                     robot.robotBase.purePursuitDrive.getTurnPidCtrl().setNoOscillation(true);
-                    // Do zero calibration.
-                    zeroCalEvent.clear();
-                    sm.addEvent(zeroCalEvent);
-                    robot.zeroCalibrate(null, zeroCalEvent);
+                    // Do zero calibration (fire and forget).
+                    robot.zeroCalibrate(null, null);
                     // Do delay if necessary.
                     double startDelay = autoChoices.getStartDelay();
                     if (startDelay > 0.0)
                     {
                         robot.globalTracer.traceInfo(moduleName, "***** Do delay " + startDelay + "s.");
-                        event.clear();
-                        sm.addEvent(event);
                         timer.set(startDelay, event);
+                        sm.waitForSingleEvent(event, State.ZERO_CAL_DONE);
                     }
-                    sm.waitForEvents(State.ZERO_CAL_DONE, false, true, 2.0);
+                    else
+                    {
+                        sm.setState(State.ZERO_CAL_DONE);
+                    }
                     break;
 
                 case ZERO_CAL_DONE:
                     if (robot.shooterSubsystem != null)
                     {
                         robot.globalTracer.traceInfo(moduleName, "***** Enabling GoalTracking on turret only.");
-                        robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
+                        robot.shooterSubsystem.enableGoalTracking(true, false, true, true);
                     }
 
                     if (depotPickup &&
@@ -321,7 +323,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         RobotParams.Game.BLUE_OUTPOST_NEUTRAL_PICKUP_POSE.clone();
                     endPose = pickupPose.clone();
                     // (-111.8,281.61,90.0) or (-205.89,281.61,-90.0)
-                    endPose.x += atDepot? 115.0: -115.0;    // Plow distance
+                    endPose.x += atDepot? 102.0: -102.0;    // Plow distance
                     intermediatePose = pickupPose.clone();
                     // (-279.8,281.61,90.0) or (-37.89,281.61,-90.0)
                     intermediatePose.x += atDepot? -18.0: 18.0;
@@ -358,7 +360,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                             if (i == 2)
                             {
                                 // At pickupPose.
-                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
+                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.4);
                                 if (passBack == PassBack.PASS_BACK && robot.autoShootTask != null)
                                 {
                                     robot.autoShootTask.autoShoot(null, null, false, false);
