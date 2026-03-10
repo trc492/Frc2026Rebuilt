@@ -820,7 +820,7 @@ public class Shooter extends TrcSubsystem
         goalTrackingState.trackingMode =
             goalTrackingState.noPassback ||
             fieldLengthZone == 0 && alliance == Alliance.Blue ||
-            fieldLengthZone == 5 && alliance == Alliance.Red?
+            fieldLengthZone == RobotParams.Game.fieldLengthTriggerPoints.length && alliance == Alliance.Red?
                 TrackingMode.AllianceHub: TrackingMode.Passback;
 
         if (goalTrackingState.trackingMode == TrackingMode.AllianceHub)
@@ -832,11 +832,21 @@ public class Shooter extends TrcSubsystem
         else
         {
             // Passback tracking mode.
+            // Check if we should point to the audience side or the scoretable side.
             goalTrackingState.goalFieldPose =
                 robot.adjustPoseByAlliance(
                     alliance,
                     fieldWidthZone <= 1? RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
-                                        RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE);
+                                         RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE);
+            // Check for hub shadow zone.
+            if ((fieldWidthZone == 1 || fieldWidthZone == 2) && (fieldLengthZone == 2 || fieldLengthZone == 5))
+            {
+                // We are in hub shadown zone, don't passback there.
+                if (robot.autoShootTask != null && robot.autoShootTask.isActive())
+                {
+                    robot.autoShootTask.cancel();
+                }
+            }
         }
         goalTrackingState.rightShooterAimInfo = null;
 
@@ -963,7 +973,7 @@ public class Shooter extends TrcSubsystem
     {
         synchronized (goalTrackingState)
         {
-            AimInfo aimInfo;
+            AimInfo aimInfo = null;
             Interpolation interpolation = Dashboard.getShooterInterpolation();
             TrcLookupTable.Entry shootParams;
 
@@ -971,53 +981,60 @@ public class Shooter extends TrcSubsystem
             {
                 // Get AimInfo by Oodometry.
                 targetPose = robot.getShooterToTargetPose();
-                shootParams = shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), interpolation);
-                double targetPanAngle = targetPose.angle % 360.0;
-                double absPanAngle = Math.abs(targetPanAngle);
-                boolean inConflictZone =
-                    absPanAngle >= Params.TURRET_CONFLICT_ZONE_LOW && absPanAngle <= Params.TURRET_CONFLICT_ZONE_HIGH;
-                boolean leftIsFront = targetPanAngle < 0.0;
-                double leftFlywheelRPM, rightFlywheelRPM;
+                if (targetPose != null)
+                {
+                    shootParams = shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), interpolation);
+                    double targetPanAngle = targetPose.angle % 360.0;
+                    double absPanAngle = Math.abs(targetPanAngle);
+                    boolean inConflictZone =
+                        absPanAngle >= Params.TURRET_CONFLICT_ZONE_LOW && absPanAngle <= Params.TURRET_CONFLICT_ZONE_HIGH;
+                    boolean leftIsFront = targetPanAngle < 0.0;
+                    double leftFlywheelRPM, rightFlywheelRPM;
 
-                if (!inConflictZone)
-                {
-                    leftFlywheelRPM = rightFlywheelRPM = shootParams.outputs[0];
-                }
-                else if (leftIsFront)
-                {
-                    leftFlywheelRPM = shootParams.outputs[0] - Params.SHOOTER_RPM_CONFLICT_ZONE_ADJ;
-                    rightFlywheelRPM = shootParams.outputs[0] + Params.SHOOTER_RPM_CONFLICT_ZONE_ADJ;
+                    if (!inConflictZone)
+                    {
+                        leftFlywheelRPM = rightFlywheelRPM = shootParams.outputs[0];
+                    }
+                    else if (leftIsFront)
+                    {
+                        leftFlywheelRPM = shootParams.outputs[0] - Params.SHOOTER_RPM_CONFLICT_ZONE_ADJ;
+                        rightFlywheelRPM = shootParams.outputs[0] + Params.SHOOTER_RPM_CONFLICT_ZONE_ADJ;
+                    }
+                    else
+                    {
+                        leftFlywheelRPM = shootParams.outputs[0] + Params.SHOOTER_RPM_CONFLICT_ZONE_ADJ;
+                        rightFlywheelRPM = shootParams.outputs[0] - Params.SHOOTER_RPM_CONFLICT_ZONE_ADJ;
+                    }
+
+                    aimInfo = new AimInfo(
+                        targetPose, leftFlywheelRPM, null, targetPanAngle, shootParams.outputs[1],
+                        shootParams.outputs[2]);
+                    // Do robot motion compensation if enabled (aka SOTM).
+                    if (dashboard.getBoolean(
+                            Dashboard.DBKEY_SHOOTER_USE_MOTION_COMPENSATION,
+                            RobotParams.Preferences.useMotionCompensation))
+                    {
+                        // Compensate for robot motion.
+                        aimInfo = leftShooter.compensateRobotMotion(
+                            robot.robotBase.driveBase, this::getLeftShooterAimInfo, aimInfo, 0.1, 20);
+                    }
+
+                    adjustPanAngleToAvoidCrossover(aimInfo);
+                    goalTrackingState.rightShooterAimInfo = aimInfo.clone();
+                    goalTrackingState.rightShooterAimInfo.flywheel1RPM = rightFlywheelRPM;
+                    // Shooter aim only controls flywheel RPM and tilt angle, we control the turret position here.
+                    if (turret != null && goalTrackingState.goalTrackingParams.trackPanPos)
+                    {
+                        turret.setPosition(
+                            0.0, aimInfo.panAngle, true, Params.TURRET_POWER_LIMIT, goalTrackingState.turretReadyEvent,
+                            goalTrackingState.turretReadyTimeout);
+                        goalTrackingState.turretReadyEvent = null;
+                        goalTrackingState.turretReadyTimeout = 0.0;
+                    }
                 }
                 else
                 {
-                    leftFlywheelRPM = shootParams.outputs[0] + Params.SHOOTER_RPM_CONFLICT_ZONE_ADJ;
-                    rightFlywheelRPM = shootParams.outputs[0] - Params.SHOOTER_RPM_CONFLICT_ZONE_ADJ;
-                }
-
-                aimInfo = new AimInfo(
-                    targetPose, leftFlywheelRPM, null, targetPanAngle, shootParams.outputs[1],
-                    shootParams.outputs[2]);
-                // Do robot motion compensation if enabled (aka SOTM).
-                if (dashboard.getBoolean(
-                        Dashboard.DBKEY_SHOOTER_USE_MOTION_COMPENSATION,
-                        RobotParams.Preferences.useMotionCompensation))
-                {
-                    // Compensate for robot motion.
-                    aimInfo = leftShooter.compensateRobotMotion(
-                        robot.robotBase.driveBase, this::getLeftShooterAimInfo, aimInfo, 0.1, 20);
-                }
-
-                adjustPanAngleToAvoidCrossover(aimInfo);
-                goalTrackingState.rightShooterAimInfo = aimInfo.clone();
-                goalTrackingState.rightShooterAimInfo.flywheel1RPM = rightFlywheelRPM;
-                // Shooter aim only controls flywheel RPM and tilt angle, we control the turret position here.
-                if (turret != null && goalTrackingState.goalTrackingParams.trackPanPos)
-                {
-                    turret.setPosition(
-                        0.0, aimInfo.panAngle, true, Params.TURRET_POWER_LIMIT, goalTrackingState.turretReadyEvent,
-                        goalTrackingState.turretReadyTimeout);
-                    goalTrackingState.turretReadyEvent = null;
-                    goalTrackingState.turretReadyTimeout = 0.0;
+                    goalTrackingState.rightShooterAimInfo = null;
                 }
             }
             else
