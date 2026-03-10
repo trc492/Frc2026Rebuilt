@@ -323,7 +323,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         RobotParams.Game.BLUE_OUTPOST_NEUTRAL_PICKUP_POSE.clone();
                     endPose = pickupPose.clone();
                     // (-111.8,281.61,90.0) or (-205.89,281.61,-90.0)
-                    endPose.x += atDepot? 115.0: -115.0;    // Plow distance
+                    endPose.x += atDepot? 102.0: -102.0;    // Plow distance
                     intermediatePose = pickupPose.clone();
                     // (-279.8,281.61,90.0) or (-37.89,281.61,-90.0)
                     intermediatePose.x += atDepot? -18.0: 18.0;
