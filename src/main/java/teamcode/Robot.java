@@ -748,22 +748,15 @@ public class Robot extends FrcRobot
      */
     public TrcPose2D getShooterToTargetPose()
     {
-        TrcPose2D targetPose = null;
+        TrcPose2D robotFieldPose = robotBase.driveBase.getFieldPosition();
+        TrcPose2D shooterFieldPose = robotFieldPose.addRelativePose(new TrcPose2D(0.0, -6.0, 0.0));
         TrcPose2D goalFieldPose = shooterSubsystem.getGoalFieldPose();
-
-        if (goalFieldPose != null)
-        {
-            TrcPose2D robotFieldPose = robotBase.driveBase.getFieldPosition();
-            TrcPose2D shooterFieldPose = robotFieldPose.addRelativePose(new TrcPose2D(0.0, -6.0, 0.0));
-
-            targetPose = goalFieldPose.relativeTo(shooterFieldPose);
-            // targetPose angle should be the robot's bearing to target.
-            targetPose.angle = Math.toDegrees(Math.atan2(targetPose.x, targetPose.y));
-            globalTracer.traceDebug(
-                moduleName, "robotPose=%s, shooterPose=%s, goalPose=%s, targetPose=%s",
-                robotFieldPose, shooterFieldPose, goalFieldPose, targetPose);
-        }
-
+        TrcPose2D targetPose = goalFieldPose.relativeTo(shooterFieldPose);
+        // targetPose angle should be the robot's bearing to target.
+        targetPose.angle = Math.toDegrees(Math.atan2(targetPose.x, targetPose.y));
+        globalTracer.traceDebug(
+            moduleName, "robotPose=%s, shooterPose=%s, goalPose=%s, targetPose=%s",
+            robotFieldPose, shooterFieldPose, goalFieldPose, targetPose);
         return targetPose;
     }   //getShooterDistanceToTarget
 

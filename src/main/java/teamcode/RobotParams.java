@@ -203,6 +203,16 @@ public class RobotParams
         public static final double fieldLength                  = FrcField.getFieldLength();    //651.22
         public static final double halfFieldWidth               = fieldWidth / 2.0;             //158.845
         public static final double halfFieldLength              = fieldLength / 2.0;            //325.61
+        public static final double allianceAreaWidth            = 182.11;   // Distance from allaince wall to center of trench.
+        public static final double[] fieldLengthTriggerPoints   = new double[]
+        {
+            allianceAreaWidth-30.0, allianceAreaWidth+30.0, halfFieldLength,
+            fieldLength - (allianceAreaWidth+30.0), fieldLength - (allianceAreaWidth-30.0)
+        };
+        public static final double[] fieldWidthTriggerPoints    = new double[]
+        {
+            -halfFieldWidth-91.0, -halfFieldWidth, -halfFieldWidth+91.0
+        };
         //
         // AprilTag Poses
         //
@@ -233,14 +243,13 @@ public class RobotParams
         public static final double STARTPOS_BLUE_CENTER_Y       = 156.61 - Robot.ROBOT_LENGTH / 2.0;    //145.4855
         public static final double STARTPOS_OUTPOST_X           = -17.22;
         public static final double STARTPOS_CENTER_X            = -fieldWidth / 2.0;                    //-158.845
-        public static final double STARTPOS_DEPOT_X             = -fieldWidth - STARTPOS_OUTPOST_X;     //-300.47
-
-        public static final TrcPose2D STARTPOS_BLUE_OUTPOST     =           // (-17.22,167.7345,-90.0)
-            new TrcPose2D(STARTPOS_OUTPOST_X, STARTPOS_BLUE_SIDE_Y, -90.0);
-        public static final TrcPose2D STARTPOS_BLUE_CENTER      =           // (-158.845,145.4855,180.0)
-            new TrcPose2D(STARTPOS_CENTER_X, STARTPOS_BLUE_CENTER_Y, 180.0);
-        public static final TrcPose2D STARTPOS_BLUE_DEPOT       =           // (-300.47,167.7345,90.0)
-            new TrcPose2D(STARTPOS_DEPOT_X, STARTPOS_BLUE_SIDE_Y, 90.0);
+        public static final double STARTPOS_DEPOT_X             = -fieldWidth + 17.22;                  //-291.47
+        public static final TrcPose2D STARTPOS_BLUE_OUTPOST     =
+            new TrcPose2D(STARTPOS_OUTPOST_X, STARTPOS_BLUE_SIDE_Y, -90.0);         //(-26.22,167.7345,-90.0)
+        public static final TrcPose2D STARTPOS_BLUE_CENTER      =
+            new TrcPose2D(STARTPOS_CENTER_X, STARTPOS_BLUE_CENTER_Y, 180.0);  //(-158.845,145.4855,180.0)
+        public static final TrcPose2D STARTPOS_BLUE_DEPOT       =
+            new TrcPose2D(STARTPOS_DEPOT_X, STARTPOS_BLUE_SIDE_Y, 90.0);      //(-291.47,167.7345,90.0)
         public static final TrcPose2D[] blueStartPoses          =
         {
             STARTPOS_BLUE_OUTPOST, STARTPOS_BLUE_CENTER, STARTPOS_BLUE_DEPOT
@@ -248,53 +257,27 @@ public class RobotParams
         //
         // Robot field positions.
         //
-        public static final TrcPose2D BLUE_HUB_POSE             =           // (-158.845,182.11,0.0)
-            new TrcPose2D(-fieldWidth/2.0, 182.11, 0.0);
-        public static final TrcPose2D BLUE_HUB_BACK_CENTER_POSE =           // (-158.845, 215.87, 0.0)
-            new TrcPose2D(-fieldWidth/2.0, 182.11 + 33.76, 0.0);
-        public static final TrcPose2D BLUE_PASSBACK_AUDIENCE_SIDE =         // (-238.2675,78.305,0.0)
-            new TrcPose2D(-fieldWidth*3.0/4.0, 78.305, 0.0);
-        public static final TrcPose2D BLUE_PASSBACK_SCORETABLE_SIDE =       // (-79.4225,78.305.0,0.0)
-            new TrcPose2D(-fieldWidth/4.0, 78.305, 0.0);
-        public static final double HUB_WIDTH                    = 60.0;     // inches
-        public static final double deadZoneAngleRad             =           // 19.761664387128421576707179475099 deg
-            Math.atan2(fieldWidth/2.0 - Math.abs(BLUE_PASSBACK_SCORETABLE_SIDE.x) - HUB_WIDTH/2.0,  //49.4225
-                       BLUE_HUB_BACK_CENTER_POSE.y - BLUE_PASSBACK_SCORETABLE_SIDE.y);              //137.565
-        public static final double deadZoneLength               = HUB_WIDTH/2.0/Math.tan(deadZoneAngleRad); //83.503465020992462947038292275785
-        public static final TrcPose2D BLUE_HUB_DEAD_ZONE_CENTER_POSE =      // (-158.845, 299.373465, 0.0)
-            new TrcPose2D(-fieldWidth/2.0, BLUE_HUB_BACK_CENTER_POSE.y + deadZoneLength, 0.0);
-        public static final TrcPose2D BLUE_OUTPOST_PICKUP_POSE  =           // (-26.22,33.249,-180.0)
-            new TrcPose2D(-26.22, Robot.ROBOT_LENGTH/2.0 + 11.0, -180.0);
-        public static final TrcPose2D BLUE_DEPOT_PICKUP_POSE    =           // (-277.69,11.1245,90.0)
-            new TrcPose2D(-fieldWidth + 40.0, Robot.ROBOT_WIDTH / 2.0, 90.0);
-        public static final TrcPose2D BLUE_OUTPOST_NEUTRAL_PICKUP_POSE =    // (-55.89,301.61,-90.0)
-            new TrcPose2D(-55.89, fieldLength / 2.0 - 24.0, -90.0);
-        public static final TrcPose2D BLUE_DEPOT_NEUTRAL_PICKUP_POSE =      // (-261.8,301.61,90.0)
-            new TrcPose2D(-fieldWidth + 55.89, fieldLength / 2.0 - 24.0, 90.0);
+        public static final TrcPose2D BLUE_HUB_POSE             =
+            new TrcPose2D(-fieldWidth/2.0, 182.11, 0.0);                    //(-158.845,182.11,0.0)
+        public static final TrcPose2D BLUE_PASSBACK_AUDIENCE_SIDE =
+            new TrcPose2D(-fieldWidth + 60.0, 48.0, 0.0);                   //(-269.69,48.0,0.0)
+        public static final TrcPose2D BLUE_PASSBACK_SCORETABLE_SIDE =
+            new TrcPose2D(-60.0, 48.0, 0.0);                                //(-48.0,48.0,0.0)
+        public static final TrcPose2D BLUE_OUTPOST_PICKUP_POSE  =
+            new TrcPose2D(-26.22, Robot.ROBOT_LENGTH/2.0 + 11.0, -180.0);           //(-26.22,32.249,-180.0)
+        public static final TrcPose2D BLUE_DEPOT_PICKUP_POSE    =
+            new TrcPose2D(-fieldWidth + 40.0, Robot.ROBOT_WIDTH / 2.0, 90.0); //(-277.69,22.249,90.0)
+        public static final TrcPose2D BLUE_OUTPOST_NEUTRAL_PICKUP_POSE =
+            new TrcPose2D(-55.89, fieldLength / 2.0 - 24.0, -90.0);                  //(-55.89,281.61,-90.0)
+        public static final TrcPose2D BLUE_DEPOT_NEUTRAL_PICKUP_POSE =
+            new TrcPose2D(-fieldWidth + 55.89, fieldLength / 2.0 - 24.0, 90.0);//(-261.8,281.61,90.0)
 
-        public static final TrcPose2D BLUE_CLIMB_LOOKOUT_POSE   =
+        public static final TrcPose2D BLUE_CLIMB_LOOKOUT_POSE           =
             new TrcPose2D(170.22, 65.0, -180.0); // TODO: Fine tune x and y
-        public static final TrcPose2D BLUE_DEPOT_CLIMB_POSE     =
+        public static final TrcPose2D BLUE_DEPOT_CLIMB_POSE             =
             new TrcPose2D(-190.95, 44.29, -90.0); // TODO: Determine x and y
-        public static final TrcPose2D BLUE_OUTPOST_CLIMB_POSE   =
+        public static final TrcPose2D BLUE_OUTPOST_CLIMB_POSE             =
             new TrcPose2D(-98.61, 42.29, 90.0); // TODO: Determine x and y
-
-        public static final double allianceAreaWidth            = 182.11;   // Distance from alliance wall to center of trench.
-        public static final double[] fieldLengthTriggerPoints   = new double[]
-        {
-            // 152.11, 215.87, 299.373465, 325.61
-            allianceAreaWidth-30.0, BLUE_HUB_BACK_CENTER_POSE.y, BLUE_HUB_DEAD_ZONE_CENTER_POSE.y, halfFieldLength,
-            // 351.846535, 435.35
-            fieldLength - BLUE_HUB_DEAD_ZONE_CENTER_POSE.y, fieldLength - BLUE_HUB_BACK_CENTER_POSE.y,
-            // 499.11
-            fieldLength - (allianceAreaWidth-30.0)
-        };
-        public static final double[] fieldWidthTriggerPoints    = new double[]
-        {
-            // -188.846, -158.845, -128.845
-            -halfFieldWidth - HUB_WIDTH/2.0, -halfFieldWidth, -halfFieldWidth + HUB_WIDTH/2.0
-        };
-
     }   //class Game
 
 }   //class RobotParams

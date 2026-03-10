@@ -664,11 +664,8 @@ public class FrcTest extends FrcTeleOp
                     if (robot.vision != null)
                     {
                         TrcPose2D targetPose = robot.getShooterToTargetPose();
-                        if (targetPose != null)
-                        {
-                            robot.dashboard.putNumber(
-                                Dashboard.DBKEY_SHOOTER_DISTANCE_TO_TARGET, Math.hypot(targetPose.x, targetPose.y));
-                        }
+                        robot.dashboard.putNumber(
+                            Dashboard.DBKEY_SHOOTER_DISTANCE_TO_TARGET, Math.hypot(targetPose.x, targetPose.y));
                     }
                     break;
 
