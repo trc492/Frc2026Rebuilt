@@ -51,6 +51,7 @@ import trclib.subsystem.TrcRollerIntake;
 import trclib.subsystem.TrcRollerIntake.TriggerAction;
 import trclib.subsystem.TrcShooter;
 import trclib.subsystem.TrcShooter.AimInfo;
+import trclib.subsystem.TrcShooter.TargetInfo;
 import trclib.subsystem.TrcSubsystem;
 import trclib.timer.TrcTimer;
 
@@ -966,105 +967,90 @@ public class Shooter extends TrcSubsystem
      * This method is called by left shooter GoalTracking to get AimInfo for aiming at the target.
      *
      * @param targetPose specifies the targetPose for looking up AimInfo in the shooting table. This is used by
-     *        compensateRobotMotion, other callers set this to null.
+     *        compensateRobotMotion.
      * @return AimInfo containing information to aim at the target.
      */
-    private AimInfo getLeftShooterAimInfo(TrcPose2D targetPose)
+    private AimInfo getLeftShooterAimInfo()
     {
         synchronized (goalTrackingState)
         {   
             AimInfo aimInfo = null;
-            Interpolation interpolation = Dashboard.getShooterInterpolation();
-            TrcLookupTable.Entry shootParams;
-
-            if (targetPose == null)
+            TrcPose2D targetPose = robot.getShooterToTargetPose();
+            // Get AimInfo by Oodometry.
+            if (targetPose != null)
             {
-                // Get AimInfo by Oodometry.
-                targetPose = robot.getShooterToTargetPose();
-                if (targetPose != null)
+                Interpolation interpolation = Dashboard.getShooterInterpolation();
+                TrcLookupTable.Entry shootParams =
+                    shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), interpolation);
+                // Do robot motion compensation if enabled (aka SOTM).
+                if (dashboard.getBoolean(
+                        Dashboard.DBKEY_SHOOTER_USE_MOTION_COMPENSATION,
+                        RobotParams.Preferences.useMotionCompensation))
                 {
+                    // Compensate for robot motion.
+                    TargetInfo targetInfo = leftShooter.compensateRobotMotion(
+                        robot.robotBase.driveBase, this::getTargetInfo,
+                        new TargetInfo(targetPose, shootParams.outputs[2]), 0.1, 5);
+                    targetPose = targetInfo.targetPose;
                     shootParams = shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), interpolation);
-                    aimInfo = new AimInfo(targetPose, null, null, null, null, shootParams.outputs[2]);
-                    // Do robot motion compensation if enabled (aka SOTM).
-                    if (dashboard.getBoolean(
-                            Dashboard.DBKEY_SHOOTER_USE_MOTION_COMPENSATION,
-                            RobotParams.Preferences.useMotionCompensation))
-                    {
-                        // Compensate for robot motion.
-                        aimInfo = leftShooter.compensateRobotMotion(
-                            robot.robotBase.driveBase, this::getLeftShooterAimInfo, aimInfo, 0.1, 20);
-                        targetPose = aimInfo.targetPose;
-                        shootParams = shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), interpolation);
-                    }
+                }
 
-                    double targetPanAngle = Math.toDegrees(Math.atan2(targetPose.x, targetPose.y)) % 360.0;
-                    double absPanAngle = Math.abs(targetPanAngle);
-                    boolean inConflictZone =
-                        absPanAngle >= Params.TURRET_CONFLICT_ZONE_LOW && absPanAngle <= Params.TURRET_CONFLICT_ZONE_HIGH;
-                    boolean leftIsFront = targetPanAngle < 0.0;
-                    double leftFlywheelRPM, rightFlywheelRPM;
+                double targetPanAngle = Math.toDegrees(Math.atan2(targetPose.x, targetPose.y)) % 360.0;
+                double absPanAngle = Math.abs(targetPanAngle);
+                boolean inConflictZone =
+                    absPanAngle >= Params.TURRET_CONFLICT_ZONE_LOW && absPanAngle <= Params.TURRET_CONFLICT_ZONE_HIGH;
+                boolean leftIsFront = targetPanAngle < 0.0;
+                double leftFlywheelRPM, rightFlywheelRPM;
 
-                    if (!inConflictZone)
-                    {
-                        leftFlywheelRPM = rightFlywheelRPM = shootParams.outputs[0];
-                    }
-                    else if (leftIsFront)
-                    {
-                        leftFlywheelRPM = shootParams.outputs[0] - Params.SHOOTER_RPM_CONFLICT_ZONE_ADJ;
-                        rightFlywheelRPM = shootParams.outputs[0] + Params.SHOOTER_RPM_CONFLICT_ZONE_ADJ;
-                    }
-                    else
-                    {
-                        leftFlywheelRPM = shootParams.outputs[0] + Params.SHOOTER_RPM_CONFLICT_ZONE_ADJ;
-                        rightFlywheelRPM = shootParams.outputs[0] - Params.SHOOTER_RPM_CONFLICT_ZONE_ADJ;
-                    }
-
-                    aimInfo.flywheel1RPM = leftFlywheelRPM;
-                    aimInfo.panAngle = targetPanAngle;
-                    aimInfo.tiltAngle = shootParams.outputs[1];
-                    adjustPanAngleToAvoidCrossover(aimInfo);
-
-                    goalTrackingState.rightShooterAimInfo = aimInfo.clone();
-                    goalTrackingState.rightShooterAimInfo.flywheel1RPM = rightFlywheelRPM;
-                    // Shooter aim only controls flywheel RPM and tilt angle, we control the turret position here.
-                    if (turret != null && goalTrackingState.goalTrackingParams.trackPanPos)
-                    {
-                        turret.setPosition(
-                            0.0, aimInfo.panAngle, true, Params.TURRET_POWER_LIMIT,
-                            goalTrackingState.turretReadyEvent, goalTrackingState.turretReadyTimeout);
-                        goalTrackingState.turretReadyEvent = null;
-                        goalTrackingState.turretReadyTimeout = 0.0;
-                    }
+                if (!inConflictZone)
+                {
+                    leftFlywheelRPM = rightFlywheelRPM = shootParams.outputs[0];
+                }
+                else if (leftIsFront)
+                {
+                    leftFlywheelRPM = shootParams.outputs[0] - Params.SHOOTER_RPM_CONFLICT_ZONE_ADJ;
+                    rightFlywheelRPM = shootParams.outputs[0] + Params.SHOOTER_RPM_CONFLICT_ZONE_ADJ;
                 }
                 else
                 {
-                    goalTrackingState.rightShooterAimInfo = null;
+                    leftFlywheelRPM = shootParams.outputs[0] + Params.SHOOTER_RPM_CONFLICT_ZONE_ADJ;
+                    rightFlywheelRPM = shootParams.outputs[0] - Params.SHOOTER_RPM_CONFLICT_ZONE_ADJ;
                 }
+
+                aimInfo = new AimInfo(leftFlywheelRPM, null, targetPanAngle, shootParams.outputs[1]);
+                adjustPanAngleToAvoidCrossover(aimInfo);
+
+                goalTrackingState.rightShooterAimInfo = aimInfo.clone();
+                goalTrackingState.rightShooterAimInfo.flywheel1RPM = rightFlywheelRPM;
+                // Shooter aim only controls flywheel RPM and tilt angle, we control the turret position here.
+                if (turret != null && goalTrackingState.goalTrackingParams.trackPanPos)
+                {
+                    turret.setPosition(
+                        0.0, aimInfo.panAngle, true, Params.TURRET_POWER_LIMIT,
+                        goalTrackingState.turretReadyEvent, goalTrackingState.turretReadyTimeout);
+                    // turretReadyEvent is a one-shot event, so consume it.
+                    goalTrackingState.turretReadyEvent = null;
+                    goalTrackingState.turretReadyTimeout = 0.0;
+                }
+                tracer.traceDebug(
+                    instanceName, "aimInfo=%s, distance=%f, bearing=%f",
+                    aimInfo, Math.hypot(targetPose.x, targetPose.y), targetPanAngle);
             }
             else
             {
-                // Called by compensateRobotMotion.
-                shootParams = shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), interpolation);
-                aimInfo = new AimInfo(
-                    targetPose, null, null, null, null, shootParams.outputs[2]);
+                goalTrackingState.rightShooterAimInfo = null;
             }
-
-            tracer.traceDebug(
-                instanceName, "aimInfo=%s, distance=%f, bearing=%f",
-                aimInfo, Math.hypot(aimInfo.targetPose.x, aimInfo.targetPose.y), aimInfo.targetPose.angle % 360.0);
 
             return aimInfo;
         }
     }   //getLeftShooterAimInfo
 
-    /**
+     /**
      * This method is called by right shooter GoalTracking to get AimInfo for aiming at the target.
      *
-     * @param targetPose specifies the targetPose for looking up AimInfo in the shooting table. This is used by
-     *        compensateRobotMotion, other callers set this to null.
      * @return AimInfo containing information to aim at the target.
      */
-    private AimInfo getRightShooterAimInfo(TrcPose2D targetPose)
+    private AimInfo getRightShooterAimInfo()
     {
         synchronized (goalTrackingState)
         {
@@ -1072,6 +1058,23 @@ public class Shooter extends TrcSubsystem
             return goalTrackingState.rightShooterAimInfo;
         }
     }   //getRightShooterAimInfo
+
+    /**
+     * This method is called by compensateRobotMotion to get the TargetInfo of a given target distance.
+     *
+     * @param targetPose specifies the targetPose for looking up TOF in the shooting table. This is used by
+     *        compensateRobotMotion.
+     * @return targetInfo with the specified targetPose.
+     */
+    private TargetInfo getTargetInfo(TrcPose2D targetPose)
+    {
+        // Called by compensateRobotMotion.
+        TrcLookupTable.Entry shootParams =
+            shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), Dashboard.getShooterInterpolation());
+
+        tracer.traceDebug(instanceName, "targetPose=" + targetPose + ", shootParams=" + shootParams + "");
+        return new TargetInfo(targetPose, shootParams.outputs[2]);
+    }   //getTargetInfo
 
     /**
      * This method checks if the turret is zero calibrated.
