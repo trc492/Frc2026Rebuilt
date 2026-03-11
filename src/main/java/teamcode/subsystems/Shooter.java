@@ -954,7 +954,7 @@ public class Shooter extends TrcSubsystem
                     shootParams = shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), interpolation);
                 }
 
-                double targetPanAngle = Math.toDegrees(Math.atan2(targetPose.x, targetPose.y)) % 360.0;
+                double targetPanAngle = Math.toDegrees(Math.atan2(targetPose.x, targetPose.y));
                 double absPanAngle = Math.abs(targetPanAngle);
                 boolean inConflictZone =
                     absPanAngle >= Params.TURRET_CONFLICT_ZONE_LOW && absPanAngle <= Params.TURRET_CONFLICT_ZONE_HIGH;
