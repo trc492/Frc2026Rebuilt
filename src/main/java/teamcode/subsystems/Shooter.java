@@ -75,7 +75,7 @@ public class Shooter extends TrcSubsystem
         })
     };
 
-    public static final TrcLookupTable shootParamsTable = new TrcLookupTable()
+    public static final TrcLookupTable hubShootParamsTable = new TrcLookupTable()
         //        name,                 distance,   region,             ShooterVel, HoodAngle,  Tof
         .addEntry(HUB_SHOOT_POINT,      56.0,       shootRegions[0],    3950.0,     18.0,       (2.66-2.17))
         .addEntry(null,                 80.0,       shootRegions[0],    4250.0,     20.0,       (2.15-1.75))
@@ -84,6 +84,8 @@ public class Shooter extends TrcSubsystem
         .addEntry(null,                 152.0,      shootRegions[0],    5200.0,     26.0,       (3.95-3.00))
         .addEntry(null,                 176.0,      shootRegions[0],    5400.0,     28.0,       (8.12-7.125))
         .addEntry(null,                 200.0,      shootRegions[0],    5650.0,     30.0,       (5.475-4.45));
+
+    public static final TrcLookupTable passbackShootParamsTable = hubShootParamsTable;
 
     public static final class Params
     {
@@ -935,6 +937,8 @@ public class Shooter extends TrcSubsystem
         {   
             AimInfo aimInfo = null;
             TrcPose2D targetPose = robot.getShooterToTargetPose();
+            TrcLookupTable shootParamsTable = goalTrackingState.trackingMode == TrackingMode.Passback?
+                passbackShootParamsTable: hubShootParamsTable;
             // Get AimInfo by Oodometry.
             if (targetPose != null)
             {
@@ -1022,12 +1026,14 @@ public class Shooter extends TrcSubsystem
      * This method is called by compensateRobotMotion to get the TargetInfo of a given target distance.
      *
      * @param targetPose specifies the targetPose for looking up TOF in the shooting table. This is used by
-     *        compensateRobotMotion.
+     *        compensateRobotMotion. This assumes the caller has acquired the goalTrackingState lock.
      * @return targetInfo with the specified targetPose.
      */
     private TargetInfo getTargetInfo(TrcPose2D targetPose)
     {
         // Called by compensateRobotMotion.
+        TrcLookupTable shootParamsTable = goalTrackingState.trackingMode == TrackingMode.Passback?
+            passbackShootParamsTable: hubShootParamsTable;
         TrcLookupTable.Entry shootParams =
             shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), Dashboard.getShooterInterpolation());
 
@@ -1168,7 +1174,8 @@ public class Shooter extends TrcSubsystem
      */
     public void shootAt(String entryName, boolean autoStop)
     {
-        TrcLookupTable.Entry shootParams = shootParamsTable.get(entryName);
+        TrcLookupTable.Entry shootParams = goalTrackingState.trackingMode == TrackingMode.Passback?
+            passbackShootParamsTable.get(entryName): hubShootParamsTable.get(entryName);
 
         if (shootParams != null)
         {
