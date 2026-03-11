@@ -1019,10 +1019,10 @@ public class Shooter extends TrcSubsystem
                         rightFlywheelRPM = shootParams.outputs[0] - Params.SHOOTER_RPM_CONFLICT_ZONE_ADJ;
                     }
 
-                    adjustPanAngleToAvoidCrossover(aimInfo);
                     aimInfo.flywheel1RPM = leftFlywheelRPM;
                     aimInfo.panAngle = targetPanAngle;
                     aimInfo.tiltAngle = shootParams.outputs[1];
+                    adjustPanAngleToAvoidCrossover(aimInfo);
 
                     goalTrackingState.rightShooterAimInfo = aimInfo.clone();
                     goalTrackingState.rightShooterAimInfo.flywheel1RPM = rightFlywheelRPM;
