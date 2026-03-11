@@ -954,7 +954,9 @@ public class Shooter extends TrcSubsystem
                     shootParams = shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), interpolation);
                 }
 
-                double targetPanAngle = Math.toDegrees(Math.atan2(targetPose.x, targetPose.y));
+                double targetPanAngle = leftShooter.adjustPanAngleToAvoidCrossover(
+                    Math.toDegrees(Math.atan2(targetPose.x, targetPose.y)),
+                    Params.TURRET_MIN_POS, Params.TURRET_MAX_POS);
                 double absPanAngle = Math.abs(targetPanAngle);
                 boolean inConflictZone =
                     absPanAngle >= Params.TURRET_CONFLICT_ZONE_LOW && absPanAngle <= Params.TURRET_CONFLICT_ZONE_HIGH;
@@ -977,9 +979,6 @@ public class Shooter extends TrcSubsystem
                 }
 
                 aimInfo = new AimInfo(leftFlywheelRPM, null, targetPanAngle, shootParams.outputs[1]);
-                aimInfo.panAngle = leftShooter.adjustPanAngleToAvoidCrossover(
-                    aimInfo.panAngle, Params.TURRET_MIN_POS, Params.TURRET_MAX_POS);
-
                 goalTrackingState.rightShooterAimInfo = aimInfo.clone();
                 goalTrackingState.rightShooterAimInfo.flywheel1RPM = rightFlywheelRPM;
                 // Shooter aim only controls flywheel RPM and tilt angle, we control the turret position here.
