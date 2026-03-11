@@ -51,6 +51,7 @@ import trclib.subsystem.TrcRollerIntake;
 import trclib.subsystem.TrcRollerIntake.TriggerAction;
 import trclib.subsystem.TrcShooter;
 import trclib.subsystem.TrcShooter.AimInfo;
+import trclib.subsystem.TrcShooter.TargetInfo;
 import trclib.subsystem.TrcSubsystem;
 import trclib.timer.TrcTimer;
 
@@ -74,7 +75,7 @@ public class Shooter extends TrcSubsystem
         })
     };
 
-    public static final TrcLookupTable shootParamsTable = new TrcLookupTable()
+    public static final TrcLookupTable hubShootParamsTable = new TrcLookupTable()
         //        name,                 distance,   region,             ShooterVel, HoodAngle,  Tof
         .addEntry(HUB_SHOOT_POINT,      56.0,       shootRegions[0],    3950.0,     18.0,       (2.66-2.17))
         .addEntry(null,                 80.0,       shootRegions[0],    4250.0,     20.0,       (2.15-1.75))
@@ -83,6 +84,8 @@ public class Shooter extends TrcSubsystem
         .addEntry(null,                 152.0,      shootRegions[0],    5200.0,     26.0,       (3.95-3.00))
         .addEntry(null,                 176.0,      shootRegions[0],    5400.0,     28.0,       (8.12-7.125))
         .addEntry(null,                 200.0,      shootRegions[0],    5650.0,     30.0,       (5.475-4.45));
+
+    public static final TrcLookupTable passbackShootParamsTable = hubShootParamsTable;
 
     public static final class Params
     {
@@ -820,7 +823,7 @@ public class Shooter extends TrcSubsystem
         goalTrackingState.trackingMode =
             goalTrackingState.noPassback ||
             fieldLengthZone == 0 && alliance == Alliance.Blue ||
-            fieldLengthZone == 5 && alliance == Alliance.Red?
+            fieldLengthZone == RobotParams.Game.fieldLengthTriggerPoints.length && alliance == Alliance.Red?
                 TrackingMode.AllianceHub: TrackingMode.Passback;
 
         if (goalTrackingState.trackingMode == TrackingMode.AllianceHub)
@@ -832,11 +835,21 @@ public class Shooter extends TrcSubsystem
         else
         {
             // Passback tracking mode.
+            // Check if we should point to the audience side or the scoretable side.
             goalTrackingState.goalFieldPose =
                 robot.adjustPoseByAlliance(
                     alliance,
                     fieldWidthZone <= 1? RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
-                                        RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE);
+                                         RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE);
+            // Check for hub shadow zone.
+            if ((fieldWidthZone == 1 || fieldWidthZone == 2) && (fieldLengthZone == 2 || fieldLengthZone == 5))
+            {
+                // We are in hub shadown zone, don't passback there.
+                if (robot.autoShootTask != null && robot.autoShootTask.isActive())
+                {
+                    robot.autoShootTask.cancel();
+                }
+            }
         }
         goalTrackingState.rightShooterAimInfo = null;
 
@@ -912,67 +925,42 @@ public class Shooter extends TrcSubsystem
     }   //disableGoalTracking
 
     /**
-     * This method checks if the target pan angle crosses the hardstop. If so, it will adjust the pan angle so the
-     * turret will turn the other way avoid crossing over the hard stop.
-     *
-     * @param aimInfo specifies the AimInfo.
-     */
-    private void adjustPanAngleToAvoidCrossover(AimInfo aimInfo)
-    {
-        // Check for crossing over hardstop.
-        if (aimInfo.panAngle < Params.TURRET_MIN_POS)
-        {
-            if (aimInfo.panAngle + 360.0 > Params.TURRET_MAX_POS)
-            {
-                tracer.traceDebug(instanceName, "Crossing hardstop CCW to dead zone at %f", aimInfo.panAngle);
-                // We landed inside the dead zone, just stay at the edge of it.
-                aimInfo.panAngle = Params.TURRET_MIN_POS;
-            }
-            else
-            {
-                aimInfo.panAngle += 360.0;
-                tracer.traceDebug(
-                    instanceName, "Crossing hardstop CCW, spin it the other way to %f", aimInfo.panAngle);
-            }
-        }
-        else if (aimInfo.panAngle > Params.TURRET_MAX_POS)
-        {
-            if (aimInfo.panAngle - 360.0 < Params.TURRET_MIN_POS)
-            {
-                tracer.traceDebug(instanceName, "Crossing hardstop CW to dead zone at %f", aimInfo.panAngle);
-                // We landed inside the dead zone, just stay at the edge of it.
-                aimInfo.panAngle = Params.TURRET_MAX_POS;
-            }
-            else
-            {
-                aimInfo.panAngle -= 360.0;
-                tracer.traceDebug(
-                    instanceName, "Crossing hardstop CW, spin it the other way to %f", aimInfo.panAngle);
-            }
-        }
-    }   //adjustPanAngleToAvoidCrossover
-
-    /**
      * This method is called by left shooter GoalTracking to get AimInfo for aiming at the target.
      *
      * @param targetPose specifies the targetPose for looking up AimInfo in the shooting table. This is used by
-     *        compensateRobotMotion, other callers set this to null.
+     *        compensateRobotMotion.
      * @return AimInfo containing information to aim at the target.
      */
-    private AimInfo getLeftShooterAimInfo(TrcPose2D targetPose)
+    private AimInfo getLeftShooterAimInfo()
     {
         synchronized (goalTrackingState)
-        {
-            AimInfo aimInfo;
-            Interpolation interpolation = Dashboard.getShooterInterpolation();
-            TrcLookupTable.Entry shootParams;
-
-            if (targetPose == null)
+        {   
+            AimInfo aimInfo = null;
+            TrcPose2D targetPose = robot.getShooterToTargetPose();
+            TrcLookupTable shootParamsTable = goalTrackingState.trackingMode == TrackingMode.Passback?
+                passbackShootParamsTable: hubShootParamsTable;
+            // Get AimInfo by Oodometry.
+            if (targetPose != null)
             {
-                // Get AimInfo by Oodometry.
-                targetPose = robot.getShooterToTargetPose();
-                shootParams = shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), interpolation);
-                double targetPanAngle = targetPose.angle % 360.0;
+                Interpolation interpolation = Dashboard.getShooterInterpolation();
+                TrcLookupTable.Entry shootParams =
+                    shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), interpolation);
+                // Do robot motion compensation if enabled (aka SOTM).
+                if (dashboard.getBoolean(
+                        Dashboard.DBKEY_SHOOTER_USE_MOTION_COMPENSATION,
+                        RobotParams.Preferences.useMotionCompensation))
+                {
+                    // Compensate for robot motion.
+                    TargetInfo targetInfo = leftShooter.compensateRobotMotion(
+                        robot.robotBase.driveBase, this::getTargetInfo,
+                        new TargetInfo(targetPose, shootParams.outputs[2]), 0.1, 5);
+                    targetPose = targetInfo.targetPose;
+                    shootParams = shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), interpolation);
+                }
+
+                double targetPanAngle = leftShooter.adjustPanAngleToAvoidCrossover(
+                    Math.toDegrees(Math.atan2(targetPose.x, targetPose.y)),
+                    Params.TURRET_MIN_POS, Params.TURRET_MAX_POS);
                 double absPanAngle = Math.abs(targetPanAngle);
                 boolean inConflictZone =
                     absPanAngle >= Params.TURRET_CONFLICT_ZONE_LOW && absPanAngle <= Params.TURRET_CONFLICT_ZONE_HIGH;
@@ -994,57 +982,38 @@ public class Shooter extends TrcSubsystem
                     rightFlywheelRPM = shootParams.outputs[0] - Params.SHOOTER_RPM_CONFLICT_ZONE_ADJ;
                 }
 
-                aimInfo = new AimInfo(
-                    targetPose, leftFlywheelRPM, null, targetPanAngle, shootParams.outputs[1],
-                    shootParams.outputs[2]);
-                // Do robot motion compensation if enabled (aka SOTM).
-                if (dashboard.getBoolean(
-                        Dashboard.DBKEY_SHOOTER_USE_MOTION_COMPENSATION,
-                        RobotParams.Preferences.useMotionCompensation))
-                {
-                    // Compensate for robot motion.
-                    aimInfo = leftShooter.compensateRobotMotion(
-                        robot.robotBase.driveBase, this::getLeftShooterAimInfo, aimInfo, 0.1, 20);
-                }
-
-                adjustPanAngleToAvoidCrossover(aimInfo);
+                aimInfo = new AimInfo(leftFlywheelRPM, null, targetPanAngle, shootParams.outputs[1]);
                 goalTrackingState.rightShooterAimInfo = aimInfo.clone();
                 goalTrackingState.rightShooterAimInfo.flywheel1RPM = rightFlywheelRPM;
                 // Shooter aim only controls flywheel RPM and tilt angle, we control the turret position here.
                 if (turret != null && goalTrackingState.goalTrackingParams.trackPanPos)
                 {
                     turret.setPosition(
-                        0.0, aimInfo.panAngle, true, Params.TURRET_POWER_LIMIT, goalTrackingState.turretReadyEvent,
-                        goalTrackingState.turretReadyTimeout);
+                        0.0, aimInfo.panAngle, true, Params.TURRET_POWER_LIMIT,
+                        goalTrackingState.turretReadyEvent, goalTrackingState.turretReadyTimeout);
+                    // turretReadyEvent is a one-shot event, so consume it.
                     goalTrackingState.turretReadyEvent = null;
                     goalTrackingState.turretReadyTimeout = 0.0;
                 }
+                tracer.traceDebug(
+                    instanceName, "aimInfo=%s, distance=%f, bearing=%f",
+                    aimInfo, Math.hypot(targetPose.x, targetPose.y), targetPanAngle);
             }
             else
             {
-                // Called by compensateRobotMotion.
-                shootParams = shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), interpolation);
-                aimInfo = new AimInfo(
-                    targetPose, shootParams.outputs[0], null, targetPose.angle % 360.0, shootParams.outputs[1],
-                    shootParams.outputs[2]);
+                goalTrackingState.rightShooterAimInfo = null;
             }
-
-            tracer.traceDebug(
-                instanceName, "aimInfo=%s, distance=%f, bearing=%f",
-                aimInfo, Math.hypot(aimInfo.targetPose.x, aimInfo.targetPose.y), aimInfo.targetPose.angle % 360.0);
 
             return aimInfo;
         }
     }   //getLeftShooterAimInfo
 
-    /**
+     /**
      * This method is called by right shooter GoalTracking to get AimInfo for aiming at the target.
      *
-     * @param targetPose specifies the targetPose for looking up AimInfo in the shooting table. This is used by
-     *        compensateRobotMotion, other callers set this to null.
      * @return AimInfo containing information to aim at the target.
      */
-    private AimInfo getRightShooterAimInfo(TrcPose2D targetPose)
+    private AimInfo getRightShooterAimInfo()
     {
         synchronized (goalTrackingState)
         {
@@ -1052,6 +1021,25 @@ public class Shooter extends TrcSubsystem
             return goalTrackingState.rightShooterAimInfo;
         }
     }   //getRightShooterAimInfo
+
+    /**
+     * This method is called by compensateRobotMotion to get the TargetInfo of a given target distance.
+     *
+     * @param targetPose specifies the targetPose for looking up TOF in the shooting table. This is used by
+     *        compensateRobotMotion. This assumes the caller has acquired the goalTrackingState lock.
+     * @return targetInfo with the specified targetPose.
+     */
+    private TargetInfo getTargetInfo(TrcPose2D targetPose)
+    {
+        // Called by compensateRobotMotion.
+        TrcLookupTable shootParamsTable = goalTrackingState.trackingMode == TrackingMode.Passback?
+            passbackShootParamsTable: hubShootParamsTable;
+        TrcLookupTable.Entry shootParams =
+            shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), Dashboard.getShooterInterpolation());
+
+        tracer.traceDebug(instanceName, "targetPose=" + targetPose + ", shootParams=" + shootParams + "");
+        return new TargetInfo(targetPose, shootParams.outputs[2]);
+    }   //getTargetInfo
 
     /**
      * This method checks if the turret is zero calibrated.
@@ -1186,7 +1174,8 @@ public class Shooter extends TrcSubsystem
      */
     public void shootAt(String entryName, boolean autoStop)
     {
-        TrcLookupTable.Entry shootParams = shootParamsTable.get(entryName);
+        TrcLookupTable.Entry shootParams = goalTrackingState.trackingMode == TrackingMode.Passback?
+            passbackShootParamsTable.get(entryName): hubShootParamsTable.get(entryName);
 
         if (shootParams != null)
         {
