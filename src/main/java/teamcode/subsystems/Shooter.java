@@ -923,47 +923,6 @@ public class Shooter extends TrcSubsystem
     }   //disableGoalTracking
 
     /**
-     * This method checks if the target pan angle crosses the hardstop. If so, it will adjust the pan angle so the
-     * turret will turn the other way avoid crossing over the hard stop.
-     *
-     * @param aimInfo specifies the AimInfo.
-     */
-    private void adjustPanAngleToAvoidCrossover(AimInfo aimInfo)
-    {
-        // Check for crossing over hardstop.
-        if (aimInfo.panAngle < Params.TURRET_MIN_POS)
-        {
-            if (aimInfo.panAngle + 360.0 > Params.TURRET_MAX_POS)
-            {
-                tracer.traceDebug(instanceName, "Crossing hardstop CCW to dead zone at %f", aimInfo.panAngle);
-                // We landed inside the dead zone, just stay at the edge of it.
-                aimInfo.panAngle = Params.TURRET_MIN_POS;
-            }
-            else
-            {
-                aimInfo.panAngle += 360.0;
-                tracer.traceDebug(
-                    instanceName, "Crossing hardstop CCW, spin it the other way to %f", aimInfo.panAngle);
-            }
-        }
-        else if (aimInfo.panAngle > Params.TURRET_MAX_POS)
-        {
-            if (aimInfo.panAngle - 360.0 < Params.TURRET_MIN_POS)
-            {
-                tracer.traceDebug(instanceName, "Crossing hardstop CW to dead zone at %f", aimInfo.panAngle);
-                // We landed inside the dead zone, just stay at the edge of it.
-                aimInfo.panAngle = Params.TURRET_MAX_POS;
-            }
-            else
-            {
-                aimInfo.panAngle -= 360.0;
-                tracer.traceDebug(
-                    instanceName, "Crossing hardstop CW, spin it the other way to %f", aimInfo.panAngle);
-            }
-        }
-    }   //adjustPanAngleToAvoidCrossover
-
-    /**
      * This method is called by left shooter GoalTracking to get AimInfo for aiming at the target.
      *
      * @param targetPose specifies the targetPose for looking up AimInfo in the shooting table. This is used by
@@ -1018,7 +977,8 @@ public class Shooter extends TrcSubsystem
                 }
 
                 aimInfo = new AimInfo(leftFlywheelRPM, null, targetPanAngle, shootParams.outputs[1]);
-                adjustPanAngleToAvoidCrossover(aimInfo);
+                aimInfo.panAngle = leftShooter.adjustPanAngleToAvoidCrossover(
+                    aimInfo.panAngle, Params.TURRET_MIN_POS, Params.TURRET_MAX_POS);
 
                 goalTrackingState.rightShooterAimInfo = aimInfo.clone();
                 goalTrackingState.rightShooterAimInfo.flywheel1RPM = rightFlywheelRPM;
