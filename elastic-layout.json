@@ -118,9 +118,9 @@
         "containers": [
           {
             "title": "CommStatusMonitor",
-            "x": 128.0,
+            "x": 0.0,
             "y": 0.0,
-            "width": 128.0,
+            "width": 256.0,
             "height": 128.0,
             "type": "Toggle Switch",
             "properties": {
@@ -131,9 +131,9 @@
           },
           {
             "title": "UpdateDashboard",
-            "x": 0.0,
+            "x": 256.0,
             "y": 0.0,
-            "width": 128.0,
+            "width": 256.0,
             "height": 128.0,
             "type": "Toggle Switch",
             "properties": {
@@ -144,9 +144,9 @@
           },
           {
             "title": "Relocalize",
-            "x": 256.0,
-            "y": 0.0,
-            "width": 128.0,
+            "x": 0.0,
+            "y": 128.0,
+            "width": 256.0,
             "height": 128.0,
             "type": "Toggle Switch",
             "properties": {
@@ -157,9 +157,9 @@
           },
           {
             "title": "SubsystemZeroCal",
-            "x": 384.0,
-            "y": 0.0,
-            "width": 128.0,
+            "x": 256.0,
+            "y": 128.0,
+            "width": 256.0,
             "height": 128.0,
             "type": "Toggle Switch",
             "properties": {
@@ -2028,7 +2028,7 @@
               "topic": "/SmartDashboard/Auto/NeutralZoneCycles",
               "period": 0.06,
               "data_type": "double",
-              "show_submit_button": false
+              "show_submit_button": true
             }
           }
         ]
@@ -2429,6 +2429,20 @@
                   "data_type": "double",
                   "show_submit_button": true
                 }
+              },
+              {
+                "title": "RobotVelocity",
+                "x": 256.0,
+                "y": 256.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Test/RobotVelocity",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
               }
             ]
           },
@@ -2570,6 +2584,66 @@
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": true
+            }
+          },
+          {
+            "title": "RobotVelocity",
+            "x": 512.0,
+            "y": 0.0,
+            "width": 896.0,
+            "height": 256.0,
+            "type": "Graph",
+            "properties": {
+              "topic": "/SmartDashboard/Test/RobotVelocity",
+              "period": 0.033,
+              "data_type": "double",
+              "time_displayed": 5.0,
+              "color": 4278238420,
+              "line_width": 2.0
+            }
+          },
+          {
+            "title": "TargetVelocity",
+            "x": 512.0,
+            "y": 256.0,
+            "width": 896.0,
+            "height": 256.0,
+            "type": "Graph",
+            "properties": {
+              "topic": "/SmartDashboard/Test/TargetVelocity",
+              "period": 0.033,
+              "data_type": "double",
+              "time_displayed": 5.0,
+              "color": 4278238420,
+              "line_width": 2.0
+            }
+          },
+          {
+            "title": "RobotPosition",
+            "x": 640.0,
+            "y": 512.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Test/RobotPosition",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "TargetPosition",
+            "x": 512.0,
+            "y": 512.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Test/TargetPosition",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
             }
           }
         ]
