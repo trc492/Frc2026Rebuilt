@@ -174,34 +174,37 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                     {
                         boolean showDriveBaseStatus = robot.dashboard.getBoolean(
                             Dashboard.DBKEY_TELEOP_SHOW_DRIVE_POWER, RobotParams.Preferences.showDrivePower);
-                        double[] driveInputs;
-
-                        driveInputs = robot.driverController.getDriveInputs(
+                        double[] driveInputs = robot.driverController.getDriveInputs(
                             driveModeMenu.getCurrentChoiceObject(), true, driveSpeedScale, turnSpeedScale);
-                        if (robot.robotBase.driveBase.supportsHolonomicDrive())
+
+                        if (driveInputs != null)
                         {
-                            double gyroAngle = robot.robotBase.driveBase.getDriveGyroAngle();
-                            robot.robotBase.driveBase.holonomicDrive(
-                                null, driveInputs[0], driveInputs[1], driveInputs[2], gyroAngle);
-                            if (showDriveBaseStatus)
+                            // driveInputs have changed.
+                            if (robot.robotBase.driveBase.supportsHolonomicDrive())
                             {
-                                robot.dashboard.putString(
-                                    Dashboard.DBKEY_TELEOP_DRIVE_POWER,
-                                    String.format(
-                                        "Holonomic: x=%.2f, y=%.2f, rot=%.2f, gyroAngle=%.2f",
-                                        driveInputs[0], driveInputs[1], driveInputs[2], gyroAngle));
+                                double gyroAngle = robot.robotBase.driveBase.getDriveGyroAngle();
+                                robot.robotBase.driveBase.holonomicDrive(
+                                    null, driveInputs[0], driveInputs[1], driveInputs[2], gyroAngle);
+                                if (showDriveBaseStatus)
+                                {
+                                    robot.dashboard.putString(
+                                        Dashboard.DBKEY_TELEOP_DRIVE_POWER,
+                                        String.format(
+                                            "Holonomic: x=%.2f, y=%.2f, rot=%.2f, gyroAngle=%.2f",
+                                            driveInputs[0], driveInputs[1], driveInputs[2], gyroAngle));
+                                }
                             }
-                        }
-                        else
-                        {
-                            robot.robotBase.driveBase.arcadeDrive(driveInputs[1], driveInputs[2]);
-                            if (showDriveBaseStatus)
+                            else
                             {
-                                robot.dashboard.putString(
-                                    Dashboard.DBKEY_TELEOP_DRIVE_POWER,
-                                    String.format(
-                                        "Arcade: x=%.2f, y=%.2f, rot=%.2f",
-                                        driveInputs[0], driveInputs[1], driveInputs[2]));
+                                robot.robotBase.driveBase.arcadeDrive(driveInputs[1], driveInputs[2]);
+                                if (showDriveBaseStatus)
+                                {
+                                    robot.dashboard.putString(
+                                        Dashboard.DBKEY_TELEOP_DRIVE_POWER,
+                                        String.format(
+                                            "Arcade: x=%.2f, y=%.2f, rot=%.2f",
+                                            driveInputs[0], driveInputs[1], driveInputs[2]));
+                                }
                             }
                         }
                     }
