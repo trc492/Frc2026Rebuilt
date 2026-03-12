@@ -179,6 +179,7 @@ public class Shooter extends TrcSubsystem
         public static final double TILT_STALL_TOLERANCE         = 0.1;
         public static final double TILT_STALL_TIMEOUT           = 0.1;
         public static final double TILT_STALL_RESET_TIMEOUT     = 0.0;
+        public static final double TILT_CURRENT_LIMIT           = 20.0;
         // Left Tilt Motor Characteristics
         public static final String LTILT_MOTOR_NAME             = SUBSYSTEM_NAME + ".LeftTiltMotor";
         public static final boolean LTILT_MOTOR_INVERTED        = true;
@@ -229,6 +230,7 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_STALL_TOLERANCE       = 2.0;          // in degrees
         public static final double TURRET_STALL_TIMEOUT         = 0.1;
         public static final double TURRET_STALL_RESET_TIMEOUT   = 0.5;
+        public static final double TURRET_CURRENT_LIMIT         = 20.0;
 
         public static final double CAM_ROTATE_RADIUS            = 5.800896;     // inches from turret center
         public static final double LTURRET_X_OFFSET             = -7.375;       // inches from robot center
@@ -385,6 +387,7 @@ public class Shooter extends TrcSubsystem
                 motor.setStallProtection(
                     Params.TILT_STALL_MIN_POWER, Params.TILT_STALL_TOLERANCE, Params.TILT_STALL_TIMEOUT,
                     Params.TILT_STALL_RESET_TIMEOUT);
+                motor.setCurrentLimit(Params.TILT_CURRENT_LIMIT, 0.0, 0.0);
             }
             if (Params.SHOOTER_HAS_TRANSFER)
             {
@@ -465,6 +468,7 @@ public class Shooter extends TrcSubsystem
                 motor.setStallProtection(
                     Params.TILT_STALL_MIN_POWER, Params.TILT_STALL_TOLERANCE, Params.TILT_STALL_TIMEOUT,
                     Params.TILT_STALL_RESET_TIMEOUT);
+                motor.setCurrentLimit(Params.TILT_CURRENT_LIMIT, 0.0, 0.0);
             }
             if (Params.SHOOTER_HAS_TRANSFER)
             {
@@ -521,6 +525,7 @@ public class Shooter extends TrcSubsystem
             turret.setStallProtection(
                 Params.TURRET_STALL_MIN_POWER, Params.TURRET_STALL_TOLERANCE, Params.TURRET_STALL_TIMEOUT,
                 Params.TURRET_STALL_RESET_TIMEOUT);
+            turret.setCurrentLimit(Params.TURRET_CURRENT_LIMIT, 0.0, 0.0);
         }
         else
         {
