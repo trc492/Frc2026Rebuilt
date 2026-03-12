@@ -253,6 +253,7 @@ public class Shooter extends TrcSubsystem
     private static class GoalTrackingState
     {
         TrackingMode trackingMode = TrackingMode.Disabled;
+        TrcLookupTable shootParamsTable = null;
         TrcPose2D goalFieldPose = null;
         AimInfo rightShooterAimInfo = null;
         TrcTriggerThresholdZones fieldLengthTrigger = null;
@@ -831,6 +832,7 @@ public class Shooter extends TrcSubsystem
             // Alliance Hub tracking mode.
             goalTrackingState.goalFieldPose =
                 robot.adjustPoseByAlliance(alliance, RobotParams.Game.BLUE_HUB_POSE);
+            goalTrackingState.shootParamsTable = hubShootParamsTable;
         }
         else
         {
@@ -841,6 +843,7 @@ public class Shooter extends TrcSubsystem
                     alliance,
                     fieldWidthZone <= 1? RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
                                          RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE);
+            goalTrackingState.shootParamsTable = passbackShootParamsTable;
             // Check for hub shadow zone.
             if ((fieldWidthZone == 1 || fieldWidthZone == 2) && (fieldLengthZone == 2 || fieldLengthZone == 5))
             {
@@ -909,6 +912,7 @@ public class Shooter extends TrcSubsystem
         synchronized (goalTrackingState)
         {
             goalTrackingState.trackingMode = TrackingMode.Disabled;
+            goalTrackingState.shootParamsTable = null;
             goalTrackingState.goalFieldPose = null;
             goalTrackingState.rightShooterAimInfo = null;
 
@@ -937,14 +941,12 @@ public class Shooter extends TrcSubsystem
         {   
             AimInfo aimInfo = null;
             TrcPose2D targetPose = robot.getShooterToTargetPose();
-            TrcLookupTable shootParamsTable = goalTrackingState.trackingMode == TrackingMode.Passback?
-                passbackShootParamsTable: hubShootParamsTable;
             // Get AimInfo by Oodometry.
             if (targetPose != null)
             {
                 Interpolation interpolation = Dashboard.getShooterInterpolation();
                 TrcLookupTable.Entry shootParams =
-                    shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), interpolation);
+                    goalTrackingState.shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), interpolation);
                 // Do robot motion compensation if enabled (aka SOTM).
                 if (dashboard.getBoolean(
                         Dashboard.DBKEY_SHOOTER_USE_MOTION_COMPENSATION,
@@ -955,7 +957,8 @@ public class Shooter extends TrcSubsystem
                         robot.robotBase.driveBase, this::getTargetInfo,
                         new TargetInfo(targetPose, shootParams.outputs[2]), 0.1, 5);
                     targetPose = targetInfo.targetPose;
-                    shootParams = shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), interpolation);
+                    shootParams = goalTrackingState.shootParamsTable.get(
+                        Math.hypot(targetPose.x, targetPose.y), interpolation);
                 }
 
                 double targetPanAngle = leftShooter.adjustPanAngleToAvoidCrossover(
@@ -1032,10 +1035,9 @@ public class Shooter extends TrcSubsystem
     private TargetInfo getTargetInfo(TrcPose2D targetPose)
     {
         // Called by compensateRobotMotion.
-        TrcLookupTable shootParamsTable = goalTrackingState.trackingMode == TrackingMode.Passback?
-            passbackShootParamsTable: hubShootParamsTable;
         TrcLookupTable.Entry shootParams =
-            shootParamsTable.get(Math.hypot(targetPose.x, targetPose.y), Dashboard.getShooterInterpolation());
+            goalTrackingState.shootParamsTable.get(
+                Math.hypot(targetPose.x, targetPose.y), Dashboard.getShooterInterpolation());
 
         tracer.traceDebug(instanceName, "targetPose=" + targetPose + ", shootParams=" + shootParams + "");
         return new TargetInfo(targetPose, shootParams.outputs[2]);
@@ -1174,8 +1176,7 @@ public class Shooter extends TrcSubsystem
      */
     public void shootAt(String entryName, boolean autoStop)
     {
-        TrcLookupTable.Entry shootParams = goalTrackingState.trackingMode == TrackingMode.Passback?
-            passbackShootParamsTable.get(entryName): hubShootParamsTable.get(entryName);
+        TrcLookupTable.Entry shootParams = goalTrackingState.shootParamsTable.get(entryName);
 
         if (shootParams != null)
         {
