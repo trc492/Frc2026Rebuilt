@@ -99,7 +99,8 @@ public class Shooter extends TrcSubsystem
         .addEntry(null,                 220.0,      shootRegions[0],    5850.0,     32.0,       (5.935-4.68));
 
     public static final TrcLookupTable passbackShootParamsTable = new TrcLookupTable()
-        .addEntry(null,     190.0,       shootRegions[0],    4300.0,     18.0,       (0.95-0.11))
+        //        name,                 distance,   region,             ShooterVel, HoodAngle,  Tof
+        .addEntry(null,                 190.0,      shootRegions[0],    4300.0,     45.0,       (0.95-0.11))
         .addEntry(null,                 230.0,      shootRegions[0],    4800.0,     45.0,       (4.17-2.94))
         .addEntry(null,                 283.0,      shootRegions[0],    5500.0,     45.0,       (14.58-13.415))
         .addEntry(null,                 352.0,      shootRegions[0],    7000.0,     45.0,       (12.09-10.845))
