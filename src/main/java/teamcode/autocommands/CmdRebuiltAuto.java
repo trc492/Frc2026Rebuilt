@@ -248,9 +248,6 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
-                        robot.robotInfo.baseParams.profiledMaxDriveVelocity,
-                        robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
-                        robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
                         robot.adjustPathByAlliance(alliance, intermediatePose, pickupPose, endPose));
                     sm.waitForSingleEvent(event, State.FINISH_PICKUP);
                     break;
@@ -277,13 +274,10 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.6);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
-                        robot.robotInfo.baseParams.profiledMaxDriveVelocity,
-                        robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
-                        robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
                         robot.adjustPathByAlliance(alliance, intermediatePose, pickupPose));
                     sm.waitForSingleEvent(event, State.OUTPOST_DELAY);
                     break;
-                
+
                 case OUTPOST_DELAY:
                     timer.set(2.0, event);
                     sm.waitForSingleEvent(event, State.FINISH_PICKUP);
@@ -391,9 +385,6 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.7);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
-                        robot.robotInfo.baseParams.profiledMaxDriveVelocity,
-                        robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
-                        robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
                         robot.adjustPathByAlliance(alliance, neutralZonePath));
                     sm.waitForSingleEvent(event, State.RETURN_TO_SCORE_POS);
                     break;
@@ -414,9 +405,6 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     // Going back the same route we came, just in reverse.
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
-                        robot.robotInfo.baseParams.profiledMaxDriveVelocity,
-                        robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
-                        robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
                         robot.adjustPathByAlliance(alliance, neutralZoneReturnPath));
                     sm.waitForSingleEvent(event, State.SHOOT_NEUTRAL_FUEL);
                     break;
@@ -447,9 +435,6 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     // - From Depot
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
-                        robot.robotInfo.baseParams.profiledMaxDriveVelocity,
-                        robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
-                        robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
                         robot.adjustPoseByAlliance(alliance, RobotParams.Game.BLUE_CLIMB_LOOKOUT_POSE));
                     sm.waitForSingleEvent(event, State.CLIMB);
                     break;

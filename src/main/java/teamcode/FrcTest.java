@@ -406,9 +406,6 @@ public class FrcTest extends FrcTeleOp
                     robot.robotBase.purePursuitDrive.setRotOutputLimit(testChoices.getTurnPower());
                     robot.robotBase.purePursuitDrive.start(
                         true,
-                        robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
-                        robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
-                        robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
                         new TrcPose2D(
                             testChoices.getXTarget()*12.0, testChoices.getYTarget()*12.0,
                             testChoices.getTurnTarget()));

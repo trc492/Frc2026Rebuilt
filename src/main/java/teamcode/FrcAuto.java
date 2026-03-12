@@ -386,7 +386,11 @@ public class FrcAuto implements TrcRobot.RobotMode
                         robot.robotInfo.baseParams.yDrivePidCoeffs, robot.robotInfo.baseParams.turnPidCoeffs,
                         robot.robotInfo.baseParams.velPidCoeffs);
                     ((CmdPurePursuitDrive) autoCommand).start(
-                        0.0, false, RobotParams.Robot.teamFolderPath + "/" + autoChoices.getPathFile(), false);
+                        0.0, false,
+                        robot.robotInfo.baseParams.profiledMaxDriveVelocity,
+                        robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
+                        robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
+                        RobotParams.Robot.teamFolderPath + "/" + autoChoices.getPathFile(), false);
                 }
                 break;
 

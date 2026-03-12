@@ -228,8 +228,7 @@ public class TaskAutoPickup extends TrcAutoTask<TaskAutoPickup.State>
 
                 if (fuelPose != null && robot.robotBase != null)
                 {
-                    robot.robotBase.purePursuitDrive.start(owner, driveEvent, 0.0, true, 
-                    fuelPose);
+                    robot.robotBase.purePursuitDrive.start(owner, driveEvent, 0.0, true, fuelPose);
 
                     sm.addEvent(driveEvent);
                     tracer.traceInfo(moduleName, "***** Drive to fuel at at " + fuelPose);
