@@ -83,6 +83,13 @@ import trclib.vision.TrcVisionRelocalize;
  */
 public class Robot extends FrcRobot
 {
+    private enum RelocalizationMode
+    {
+        Disabled,
+        OneShot,
+        Continuous
+    }   //enum RelocalizationMode
+
     // Global objects.
     public static final String moduleName = Robot.class.getSimpleName();
     public final TrcDbgTrace globalTracer = TrcDbgTrace.getGlobalTracer();
@@ -126,7 +133,7 @@ public class Robot extends FrcRobot
     public TaskAutoClimb autoClimbTask;
     // Miscellaneous
     private boolean zeroCalibrated = false;
-    private boolean backgroundRelocalize = true;    //default to ON.
+    private RelocalizationMode relocalizationMode = RelocalizationMode.Continuous;
 
     /**
      * Constructor: Create an instance of the object.
@@ -395,20 +402,20 @@ public class Robot extends FrcRobot
 
     /**
      * This method relocalizes the robot using vision.
+     *
+     * @return true if vision sees AprilTag and relocalize successfully, false otherwise.
      */
-    public void relocalizeRobot()
+    public boolean relocalizeRobot()
     {
+        boolean seenAprilTag = false;
+
         if (vision != null && shooterSubsystem != null && shooterSubsystem.isTurretZeroCalibrated() &&
             dashboard.getBoolean(Dashboard.DBKEY_VISION_RELOCALIZE, RobotParams.Preferences.visionRelocalizeEnabled))
         {
             if (hasVisionPoseEstimator)
             {
                 FrcSwerveDrive swerveDrive = (FrcSwerveDrive) robotBase.driveBase;
-                boolean seenAprilTag = swerveDrive.visionUpdate();
-                if (ledIndicator != null)
-                {
-                    ledIndicator.setStatusPatternState(LEDIndicator.APRILTAG_FOUND, seenAprilTag);
-                }
+                seenAprilTag = swerveDrive.visionUpdate();
             }
             else if (trcVisionRelocalize != null)
             {
@@ -419,6 +426,7 @@ public class Robot extends FrcRobot
                 trcVisionRelocalize.addTimedPose(fpgaTime, robotPose);
                 if (aprilTagObj != null)
                 {
+                    seenAprilTag = true;
                     TrcPose2D robotVel = robotBase.driveBase.getFieldVelocity();
                     TrcPose2D relocalizedPose =
                         Math.hypot(robotVel.x, robotVel.y) > 0.01 || Math.abs(robotVel.angle) > 1.0?
@@ -434,7 +442,14 @@ public class Robot extends FrcRobot
                         aprilTagObj.timestamp, aprilTagObj.robotPose);
                 }
             }
+
+            if (ledIndicator != null)
+            {
+                ledIndicator.setStatusPatternState(LEDIndicator.APRILTAG_FOUND, seenAprilTag);
+            }
         }
+
+        return seenAprilTag;
     }   //relocalizeRobot
 
     /**
@@ -442,10 +457,10 @@ public class Robot extends FrcRobot
      *
      * @param enabled specifies true to enable background relocalization, false to disable.
      */
-    public void setBackgroundRelocalizeEnabled(boolean enabled)
+    public void setRelocalizationMode(RelocalizationMode relocalizationMode)
     {
-        backgroundRelocalize = enabled;
-    }   //setBackgroundRelocalizeEnabled
+        this.relocalizationMode = relocalizationMode;
+    }   //setRelocalizationMode
 
     /**
      * This method is called periodically in the specified run mode. This is typically used to execute periodic tasks
@@ -458,9 +473,12 @@ public class Robot extends FrcRobot
     @Override
     public void robotPeriodic(RunMode runMode, boolean slowPeriodicLoop)
     {
-        if (backgroundRelocalize)
+        if (relocalizationMode != RelocalizationMode.Disabled)
         {
-            relocalizeRobot();
+            if (relocalizeRobot() && relocalizationMode == RelocalizationMode.OneShot)
+            {
+                relocalizationMode = RelocalizationMode.Disabled;
+            }
         }
 
         if (slowPeriodicLoop)
