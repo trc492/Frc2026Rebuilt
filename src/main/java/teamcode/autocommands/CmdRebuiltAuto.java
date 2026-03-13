@@ -330,7 +330,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     returnIntermediatePose.angle = 0.0;
                     TrcPose2D returnPose = startPose.clone();
                     returnPose.angle = 0.0;
-                    returnPose.x += atDepot? 7.0 : -10.0;
+                    returnPose.x += atDepot? 19.0 : -10.0;
                     returnPose.y -= atDepot? 40.0: 50.0;
                     neutralZoneReturnPath = new TrcPose2D[] {pickupPose, returnIntermediatePose, returnPose};
                     robot.globalTracer.traceInfo(
