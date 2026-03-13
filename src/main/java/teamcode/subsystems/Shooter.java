@@ -63,7 +63,7 @@ public class Shooter extends TrcSubsystem
     public static final String HUB_SHOOT_POINT = "HubShootPoint";
     public static final String TOWER_SHOOT_POINT = "TowerShootPoint";
 
-    public static final TrcLookupTable.Region[] shootRegions =
+    public static final TrcLookupTable.Region[] hubRegions =
     {
         new TrcLookupTable.Region(0.0, new double[][] {
             // RPM (Quadratic Regression)
@@ -89,22 +89,22 @@ public class Shooter extends TrcSubsystem
 
     public static final TrcLookupTable hubShootParamsTable = new TrcLookupTable()
         //        name,                 distance,   region,             ShooterVel, HoodAngle,  Tof
-        .addEntry(HUB_SHOOT_POINT,      56.0,       shootRegions[0],    3950.0,     18.0,       (0.95-0.11))
-        .addEntry(null,                 80.0,       shootRegions[0],    4250.0,     20.0,       (2.32-1.29))
-        .addEntry(null,                 104.0,      shootRegions[0],    4600.0,     22.0,       (3.235-2.10))
-        .addEntry(null,                 128.0,      shootRegions[0],    4900.0,     24.0,       (4.45-3.23))
-        .addEntry(null,                 152.0,      shootRegions[0],    5200.0,     26.0,       (4.17-2.94))
-        .addEntry(null,                 176.0,      shootRegions[0],    5400.0,     28.0,       (14.58-13.415))
-        .addEntry(null,                 200.0,      shootRegions[0],    5650.0,     30.0,       (12.09-10.845))
-        .addEntry(null,                 220.0,      shootRegions[0],    5850.0,     32.0,       (5.935-4.68));
+        .addEntry(HUB_SHOOT_POINT,      56.0,       hubRegions[0],      3950.0,     18.0,       (0.95-0.11))
+        .addEntry(null,                 80.0,       hubRegions[0],      4250.0,     20.0,       (2.32-1.29))
+        .addEntry(null,                 104.0,      hubRegions[0],      4600.0,     22.0,       (3.235-2.10))
+        .addEntry(null,                 128.0,      hubRegions[0],      4900.0,     24.0,       (4.45-3.23))
+        .addEntry(null,                 152.0,      hubRegions[0],      5200.0,     26.0,       (4.17-2.94))
+        .addEntry(null,                 176.0,      hubRegions[0],      5400.0,     28.0,       (14.58-13.415))
+        .addEntry(null,                 200.0,      hubRegions[0],      5650.0,     30.0,       (12.09-10.845))
+        .addEntry(null,                 220.0,      hubRegions[0],      5850.0,     32.0,       (5.935-4.68));
 
     public static final TrcLookupTable passbackShootParamsTable = new TrcLookupTable()
         //        name,                 distance,   region,             ShooterVel, HoodAngle,  Tof
-        .addEntry(null,                 190.0,      shootRegions[0],    4300.0,     45.0,       (0.95-0.11))
-        .addEntry(null,                 230.0,      shootRegions[0],    4800.0,     45.0,       (4.17-2.94))
-        .addEntry(null,                 283.0,      shootRegions[0],    5500.0,     45.0,       (14.58-13.415))
-        .addEntry(null,                 352.0,      shootRegions[0],    7000.0,     45.0,       (12.09-10.845))
-        .addEntry(null,                 420.0,      shootRegions[0],    7500.0,     45.0,       (5.935-4.68));
+        .addEntry(null,                 190.0,      passbackRegions[0], 4300.0,     45.0,       (0.95-0.11))
+        .addEntry(null,                 230.0,      passbackRegions[0], 4800.0,     45.0,       (4.17-2.94))
+        .addEntry(null,                 283.0,      passbackRegions[0], 5500.0,     45.0,       (14.58-13.415))
+        .addEntry(null,                 352.0,      passbackRegions[0], 7000.0,     45.0,       (12.09-10.845))
+        .addEntry(null,                 420.0,      passbackRegions[0], 7500.0,     45.0,       (5.935-4.68));
 
 
     public static final class Params
