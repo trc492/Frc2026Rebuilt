@@ -459,6 +459,7 @@ public class Robot extends FrcRobot
      */
     public void setRelocalizationMode(RelocalizationMode relocalizationMode)
     {
+        globalTracer.traceInfo(moduleName, "setRelocalizationMode to " + relocalizationMode);
         this.relocalizationMode = relocalizationMode;
     }   //setRelocalizationMode
 
