@@ -106,7 +106,6 @@ public class Shooter extends TrcSubsystem
         .addEntry(null,                 352.0,      passbackRegions[0], 7000.0,     45.0,       (12.09-10.845))
         .addEntry(null,                 420.0,      passbackRegions[0], 7500.0,     45.0,       (5.935-4.68));
 
-
     public static final class Params
     {
         public static final String CANBUS_NAME                  = RobotParams.HwConfig.CANBUS_CANIVORE;

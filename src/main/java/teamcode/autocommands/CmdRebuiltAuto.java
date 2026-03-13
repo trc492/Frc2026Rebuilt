@@ -27,6 +27,7 @@ import teamcode.FrcAuto;
 import teamcode.FrcAuto.AutoStartPos;
 import teamcode.FrcAuto.MoveTo;
 import teamcode.FrcAuto.PassBack;
+import teamcode.Robot.RelocalizationMode;
 import teamcode.Robot;
 import teamcode.RobotParams;
 import teamcode.autotasks.TaskAutoClimb;
@@ -229,10 +230,13 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     intermediatePose.y += 18.0;
                     endPose.x += 40.0;
 
-                    robot.robotBase.purePursuitDrive.setWaypointEventHandler(
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
+                    robot.robotBase.purePursuitDrive.start(
+                        null, event, 0.0, false,
                         (i, wp) ->
                         {
                             robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
+                            robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
                             if (i == 2)
                             {
                                 // At depotPickupPose.
@@ -243,11 +247,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                                     robot.intakeSubsystem.setIntakeEnabled(true);
                                 }
                             }
-                        });
-
-                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
-                    robot.robotBase.purePursuitDrive.start(
-                        null, event, 0.0, false,
+                        },
                         robot.adjustPathByAlliance(alliance, intermediatePose, pickupPose, endPose));
                     sm.waitForSingleEvent(event, State.FINISH_PICKUP);
                     break;
@@ -262,18 +262,19 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         robot.intakeSubsystem.setIntakeEnabled(true);
                     }
 
-                    robot.robotBase.purePursuitDrive.setWaypointEventHandler(
-                        (i, wp) ->
-                        {
-                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
-                            if (i == 1)
-                            {
-                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.3);
-                            }
-                        });
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.6);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
+                        (i, wp) ->
+                        {
+                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
+                            robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
+                            if (i == 1)
+                            {
+                                // At intermediatePose.
+                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.3);
+                            }
+                        },
                         robot.adjustPathByAlliance(alliance, intermediatePose, pickupPose));
                     sm.waitForSingleEvent(event, State.OUTPOST_DELAY);
                     break;
@@ -288,7 +289,6 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     // {
                     //     robot.intakeSubsystem.setIntakeEnabled(false);
                     // }
-                    robot.robotBase.purePursuitDrive.setWaypointEventHandler(null);
                     sm.setState(State.SHOOT_FUEL);
                     break;
                 
@@ -347,20 +347,6 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         robot.autoShootTask.cancel();
                         neutralZonePath[0].angle = 0.0;
                     }
-                    robot.robotBase.purePursuitDrive.setWaypointEventHandler(
-                        (i, wp) ->
-                        {
-                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
-                            if (i == 2)
-                            {
-                                // At pickupPose.
-                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.4);
-                                if (passBack == PassBack.PASS_BACK && robot.autoShootTask != null)
-                                {
-                                    robot.autoShootTask.autoShoot(null, null, false, false);
-                                }
-                            }
-                        });
 
                     final double increment = 36.0;
                     if (currentNeutralZoneCycles > 0)
@@ -385,12 +371,25 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.7);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
+                        (i, wp) ->
+                        {
+                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
+                            robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
+                            if (i == 2)
+                            {
+                                // At pickupPose.
+                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.4);
+                                if (passBack == PassBack.PASS_BACK && robot.autoShootTask != null)
+                                {
+                                    robot.autoShootTask.autoShoot(null, null, false, false);
+                                }
+                            }
+                        },
                         robot.adjustPathByAlliance(alliance, neutralZonePath));
                     sm.waitForSingleEvent(event, State.RETURN_TO_SCORE_POS);
                     break;
 
                 case RETURN_TO_SCORE_POS:
-                    robot.robotBase.purePursuitDrive.setWaypointEventHandler(null);
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
                     if (robot.intakeSubsystem != null)
                     {
@@ -405,6 +404,11 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     // Going back the same route we came, just in reverse.
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
+                        (i, wp) ->
+                        {
+                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
+                            robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
+                        },
                         robot.adjustPathByAlliance(alliance, neutralZoneReturnPath));
                     sm.waitForSingleEvent(event, State.SHOOT_NEUTRAL_FUEL);
                     break;
@@ -434,7 +438,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     // - From Outpost
                     // - From Depot
                     robot.robotBase.purePursuitDrive.start(
-                        null, event, 0.0, false,
+                        null, event, 0.0, false, null,
                         robot.adjustPoseByAlliance(alliance, RobotParams.Game.BLUE_CLIMB_LOOKOUT_POSE));
                     sm.waitForSingleEvent(event, State.CLIMB);
                     break;

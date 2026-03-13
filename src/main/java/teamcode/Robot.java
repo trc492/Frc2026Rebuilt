@@ -83,7 +83,7 @@ import trclib.vision.TrcVisionRelocalize;
  */
 public class Robot extends FrcRobot
 {
-    private enum RelocalizationMode
+    public enum RelocalizationMode
     {
         Disabled,
         OneShot,
