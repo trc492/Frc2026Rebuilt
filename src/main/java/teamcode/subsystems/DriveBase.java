@@ -435,6 +435,11 @@ public class DriveBase extends TrcSubsystem
                         robotInfo.driveMotorCurrentLimit, robotInfo.driveMotorCurrentTriggerThreshold,
                         robotInfo.driveMotorCurrentTriggerPeriod);
                     swerveBase.driveMotors[i].setStatorCurrentLimit(robotInfo.driveMotorStatorCurrentLimit);
+                    if (swerveBase.driveMotors[i] instanceof FrcCANTalonFX)
+                    {
+                        FrcCANTalonFX driveMotor = (FrcCANTalonFX) swerveBase.driveMotors[i];
+                        driveMotor.setFOCEnabled(true);
+                    }
                 }
 
                 for (int i = 0; i < swerveInfo.steerEncoderNames.length; i++)
@@ -454,6 +459,7 @@ public class DriveBase extends TrcSubsystem
 
                         cancoder.setAbsoluteRange(false);
                         cancoder.setZeroOffset(swerveInfo.steerEncoderZeros[i]);
+                        steerMotor.setFOCEnabled(true);
                         steerMotor.setFeedbackDevice(
                             swerveInfo.steerEncoderMode == SteerEncoderMode.CtreFusedCanCoder?
                                 FeedbackSensorSourceValue.FusedCANcoder: FeedbackSensorSourceValue.SyncCANcoder,
