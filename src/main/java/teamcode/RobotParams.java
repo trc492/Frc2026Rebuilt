@@ -140,6 +140,7 @@ public class RobotParams
         public static final int CANID_RTRANSFER_MOTOR           = 38;   //Gray
         // Common Shooter CAN IDs.
         public static final int CANID_TURRET_MOTOR              = 39;   //White
+        public static final int CANID_TURRET_ENCODER            = 58;
         public static final int CANID_FEEDER_MOTOR              = 47;   //Purple
         // Intake CAN IDs
         public static final int CANID_INTAKE_MOTOR              = 48;   //Gray
@@ -180,8 +181,8 @@ public class RobotParams
         public static final String STEER_ZERO_CAL_FILE_NAME     = "/SteerZeroCalibration.txt";
         public static final String FIELD_ZERO_CAL_FILE_NAME     = "/FieldZeroCalibration.txt";
         public static final String ROBOT_CODEBASE               = "2026Rebuilt";
-        public static final double ROBOT_WIDTH                  = 22.249;
-        public static final double ROBOT_LENGTH                 = 22.249;
+        public static final double ROBOT_WIDTH                  = 34.0;
+        public static final double ROBOT_LENGTH                 = 34.0;
     }   //class Robot
 
     /**

@@ -51,6 +51,8 @@ public class Intake extends TrcSubsystem
         public static final String INTAKE_MOTOR_NAME            = SUBSYSTEM_NAME + ".IntakeMotor";
         public static final boolean INTAKE_MOTOR_INVERTED       = true;
         public static final int INTAKE_MOTOR_CANID              = RobotParams.HwConfig.CANID_INTAKE_MOTOR;
+        public static final double INTAKE_MOTOR_SUPPLY_LIMIT    = 40.0;
+        public static final double INTAKE_MOTOR_STATOR_LIMIT    = 100.0;
         // Intake Parameters
         public static final double INTAKE_POWER                 = 1.0;
 
@@ -78,6 +80,8 @@ public class Intake extends TrcSubsystem
         public static final double DEPLOYER_RETRACT_POS         = DEPLOYER_MAX_POS;
         public static final double DEPLOYER_EXTEND_POS          = DEPLOYER_MIN_POS;
         public static final double[] DEPLOYER_POS_PRESETS       = {DEPLOYER_MIN_POS, DEPLOYER_MAX_POS};
+        // 100 amp stator
+        // 40 amp supply
     }   //class Params
 
     private final FrcDashboard dashboard;
@@ -116,6 +120,8 @@ public class Intake extends TrcSubsystem
                     Params.DEPLOYER_PID_KP, Params.DEPLOYER_PID_KI, Params.DEPLOYER_PID_KD, Params.DEPLOYER_PID_KF,
                     Params.DEPLOYER_PID_IZONE)
                 .setPidControlParams(Params.DEPLOYER_PID_TOLERANCE, Params.DEPLOYER_SOFTWARE_PID), deployerEncoder::getScaledPosition);
+        intake.setStatorCurrentLimit(Params.INTAKE_MOTOR_STATOR_LIMIT);
+        intake.setCurrentLimit(Params.INTAKE_MOTOR_SUPPLY_LIMIT, 0.0, 0.0);
     }   //Intake
 
     public TrcMotor getIntake()
