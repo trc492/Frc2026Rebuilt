@@ -56,6 +56,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
         CREATE_NEUTRAL_ZONE_PATH,
         CYCLE_NEUTRAL_ZONE,
         RETURN_TO_SCORE_POS,
+        SHOOT_DELAY,
         SHOOT_NEUTRAL_FUEL,
         GO_TO_CLIMB_POS,
         CLIMB,
@@ -327,12 +328,25 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         startPose, intermediatePose, pickupPose, endPose);
 
                     TrcPose2D returnIntermediatePose = intermediatePose.clone();
-                    returnIntermediatePose.angle = 0.0;
+                    returnIntermediatePose.angle = -180.0;
                     TrcPose2D returnPose = startPose.clone();
-                    returnPose.angle = 0.0;
+                    returnPose.angle = -180.0;
                     returnPose.x += atDepot? 19.0 : -10.0;
                     returnPose.y -= atDepot? 40.0: 50.0;
-                    neutralZoneReturnPath = new TrcPose2D[] {pickupPose, returnIntermediatePose, returnPose};
+                    if (!atDepot)
+                    {
+                        TrcPose2D outpostPickupPose = RobotParams.Game.BLUE_OUTPOST_PICKUP_POSE;
+                        // TrcPose2D outpostIntermediatePose = outpostPickupPose.clone();
+                        // outpostIntermediatePose.y += 48.0;
+                        neutralZoneReturnPath = new TrcPose2D[] {pickupPose, returnIntermediatePose, returnPose, outpostPickupPose};
+                    }
+                    else
+                    {
+                        TrcPose2D depotPickupPose = RobotParams.Game.BLUE_DEPOT_PICKUP_POSE;
+                        TrcPose2D depotEndPose = depotPickupPose.clone();
+                        depotEndPose.y -= 40.0;
+                        neutralZoneReturnPath = new TrcPose2D[] {pickupPose, returnIntermediatePose, returnPose, depotPickupPose, depotEndPose};
+                    }
                     robot.globalTracer.traceInfo(
                         moduleName,
                         "NeutralZoneReturnPath:\nrobotPose=%s\npickupPose=%s\nintermediatePose=%s\nreturnPose=%s",
@@ -390,7 +404,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     break;
 
                 case RETURN_TO_SCORE_POS:
-                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.7);
                     if (robot.intakeSubsystem != null)
                     {
                         robot.intakeSubsystem.setIntakeEnabled(false);
@@ -408,9 +422,21 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         {
                             robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
                             robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
+                            if (i == 3)
+                            {
+                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.13);
+                                robot.intakeSubsystem.setIntakeEnabled(true);
+                                robot.autoShootTask.autoShoot(null, null, false, true);
+                            }
                         },
                         robot.adjustPathByAlliance(alliance, neutralZoneReturnPath));
-                    sm.waitForSingleEvent(event, State.SHOOT_NEUTRAL_FUEL);
+                    sm.waitForSingleEvent(event, State.SHOOT_DELAY);
+                    break;
+                
+                case SHOOT_DELAY:
+                    nextState = climb ? State.GO_TO_CLIMB_POS: State.DONE;
+                    timer.set(10.0, event);
+                    sm.waitForSingleEvent(event, nextState);
                     break;
 
                 case SHOOT_NEUTRAL_FUEL:

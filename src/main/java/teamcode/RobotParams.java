@@ -267,7 +267,7 @@ public class RobotParams
         public static final TrcPose2D BLUE_OUTPOST_PICKUP_POSE  =           // (-26.22,33.249,-180.0)
             new TrcPose2D(-26.22, Robot.ROBOT_LENGTH/2.0 + 11.0, -180.0);
         public static final TrcPose2D BLUE_DEPOT_PICKUP_POSE    =           // (-277.69,11.1245,90.0)
-            new TrcPose2D(-fieldWidth + 40.0, Robot.ROBOT_WIDTH / 2.0, 90.0);
+            new TrcPose2D(-fieldWidth + 84.0, 60.0, 180.0);
         public static final TrcPose2D BLUE_OUTPOST_NEUTRAL_PICKUP_POSE =    // (-55.89,301.61,-90.0)
             new TrcPose2D(-55.89, fieldLength / 2.0 - 24.0, -90.0);
         public static final TrcPose2D BLUE_DEPOT_NEUTRAL_PICKUP_POSE =      // (-261.8,301.61,90.0)
