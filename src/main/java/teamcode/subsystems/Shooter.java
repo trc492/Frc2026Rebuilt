@@ -231,14 +231,14 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_STALL_TIMEOUT         = 0.1;
         public static final double TURRET_STALL_RESET_TIMEOUT   = 0.5;
         public static final double TURRET_CURRENT_LIMIT         = 20.0;
-        public static final boolean TURRET_HAS_EXTERNAL_ENC     = false;
-        public static final String TURRET_ABS_ENC_NAME          = SUBSYSTEM_NAME + ".turretAbcEnc";
-        public static final boolean TURRET_ABS_ENC_INVERTED     = false;
-        public static final EncoderType TURRET_ABS_ENC_TYPE     = EncoderType.Canandmag; 
-        public static final double TURRET_ZERO_OFFSET           = 0.0;
-        public static final double TURRET_ABS_ENC_POS_OFFSET    = 180.0; 
-        public static final double TURRET_ABS_ENC_SCALE         = 360.0;
 
+        public static final boolean TURRET_HAS_ABS_ENC          = false;
+        public static final String TURRET_ABS_ENC_NAME          = SUBSYSTEM_NAME + ".turretAbsEnc";
+        public static final boolean TURRET_ABS_ENC_INVERTED     = false;
+        public static final EncoderType TURRET_ABS_ENC_TYPE     = EncoderType.Canandmag;
+        public static final double TURRET_ABS_ENC_SCALE         = 360.0;
+        public static final double TURRET_ABS_ENC_POS_OFFSET    = 180.0;
+        public static final double TURRET_ABS_ENC_ZERO_OFFSET   = 0.0;
 
         public static final double CAM_ROTATE_RADIUS            = 5.800896;     // inches from turret center
         public static final double LTURRET_X_OFFSET             = -7.375;       // inches from robot center
@@ -517,15 +517,19 @@ public class Shooter extends TrcSubsystem
                     Params.TURRET_MOTOR_CANID, null, Params.TURRET_SPARKMAX_PARAMS)
                 .setPositionPresets(Params.TURRET_POS_PRESET_TOLERANCE, Params.TURRET_POS_PRESETS);
 
-            if(Params.TURRET_HAS_EXTERNAL_ENC)
+            if (Params.TURRET_HAS_ABS_ENC)
             {
-                turretMotorParams.setPositionScaleAndOffset(Params.TURRET_ABS_ENC_SCALE, Params.TURRET_ABS_ENC_POS_OFFSET);
-                turretMotorParams.setExternalEncoder(Params.TURRET_ABS_ENC_NAME, Params.TURRET_ABS_ENC_INVERTED, 
-                Params.TURRET_ABS_ENC_TYPE, RobotParams.HwConfig.CANID_TURRET_ENCODER);
-            } else
+                turretMotorParams.setExternalEncoder(
+                    Params.TURRET_ABS_ENC_NAME, Params.TURRET_ABS_ENC_TYPE, Params.TURRET_ABS_ENC_INVERTED,
+                    RobotParams.HwConfig.CANID_TURRET_ABS_ENCODER);
+                turretMotorParams.setPositionScaleAndOffset(
+                    Params.TURRET_ABS_ENC_SCALE, Params.TURRET_ABS_ENC_POS_OFFSET, Params.TURRET_ABS_ENC_ZERO_OFFSET);
+            }
+            else
             {
                 turretMotorParams.setPositionScaleAndOffset(Params.TURRET_MOTOR_DEG_PER_COUNT, Params.TURRET_POS_OFFSET);
             }
+
             turret = new FrcMotorActuator(turretMotorParams).getMotor();
             turret.setPositionPidParameters(
                 new PidParams()
@@ -1333,7 +1337,7 @@ public class Shooter extends TrcSubsystem
             rightTiltZeroCalCallbackEvent.signal();
         }
 
-        if (turret != null && !Params.TURRET_HAS_EXTERNAL_ENC)
+        if (turret != null && !Params.TURRET_HAS_ABS_ENC)
         {
             tracer.traceInfo(instanceName, "ZeroCalibrate turret.");
             turretZeroCalCallbackEvent.clear();

@@ -140,7 +140,7 @@ public class RobotParams
         public static final int CANID_RTRANSFER_MOTOR           = 38;   //Gray
         // Common Shooter CAN IDs.
         public static final int CANID_TURRET_MOTOR              = 39;   //White
-        public static final int CANID_TURRET_ENCODER            = 58;
+        public static final int CANID_TURRET_ABS_ENCODER        = 58;   //Gray
         public static final int CANID_FEEDER_MOTOR              = 47;   //Purple
         // Intake CAN IDs
         public static final int CANID_INTAKE_MOTOR              = 48;   //Gray
