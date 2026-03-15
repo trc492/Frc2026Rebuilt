@@ -80,8 +80,6 @@ public class Intake extends TrcSubsystem
         public static final double DEPLOYER_RETRACT_POS         = DEPLOYER_MAX_POS;
         public static final double DEPLOYER_EXTEND_POS          = DEPLOYER_MIN_POS;
         public static final double[] DEPLOYER_POS_PRESETS       = {DEPLOYER_MIN_POS, DEPLOYER_MAX_POS};
-        // 100 amp stator
-        // 40 amp supply
     }   //class Params
 
     private final FrcDashboard dashboard;
