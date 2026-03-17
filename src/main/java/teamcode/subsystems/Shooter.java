@@ -235,6 +235,8 @@ public class Shooter extends TrcSubsystem
         public static final boolean TURRET_HAS_ABS_ENC          = false;
         public static final String TURRET_ABS_ENC_NAME          = SUBSYSTEM_NAME + ".turretAbsEnc";
         public static final boolean TURRET_ABS_ENC_INVERTED     = false;
+        public static final int TURRET_ABS_ENC_CANID            = RobotParams.HwConfig.CANID_TURRET_ABS_ENCODER;
+        public static final String TURRET_ABS_ENC_CANBUS_NAME   = "halcan";
         public static final EncoderType TURRET_ABS_ENC_TYPE     = EncoderType.Canandmag;
         public static final double TURRET_ABS_ENC_SCALE         = 360.0;
         public static final double TURRET_ABS_ENC_POS_OFFSET    = 180.0;
@@ -521,7 +523,7 @@ public class Shooter extends TrcSubsystem
             {
                 turretMotorParams.setExternalEncoder(
                     Params.TURRET_ABS_ENC_NAME, Params.TURRET_ABS_ENC_TYPE, Params.TURRET_ABS_ENC_INVERTED,
-                    RobotParams.HwConfig.CANID_TURRET_ABS_ENCODER);
+                    Params.TURRET_ABS_ENC_CANID, Params.TURRET_ABS_ENC_CANBUS_NAME, true);
                 turretMotorParams.setPositionScaleAndOffset(
                     Params.TURRET_ABS_ENC_SCALE, Params.TURRET_ABS_ENC_POS_OFFSET, Params.TURRET_ABS_ENC_ZERO_OFFSET);
             }
