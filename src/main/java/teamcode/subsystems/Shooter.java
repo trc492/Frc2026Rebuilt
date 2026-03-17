@@ -237,7 +237,7 @@ public class Shooter extends TrcSubsystem
 
         public static final boolean TURRET_ABS_ENC_INVERTED     = true;
         public static final double TURRET_ABS_ENC_SCALE         = 360.0;
-        public static final double TURRET_ABS_ENC_POS_OFFSET    = 180.0;
+        public static final double TURRET_ABS_ENC_POS_OFFSET    = -180.0;
         public static final double TURRET_ABS_ENC_ZERO_OFFSET   = 0.0;
 
         public static final double CAM_ROTATE_RADIUS            = 5.800896;     // inches from turret center
@@ -735,25 +735,6 @@ public class Shooter extends TrcSubsystem
         if (leftShooter != null) leftShooter.panMotor.cancel();
         if (rightShooter != null) rightShooter.panMotor.cancel();
     }   //stopPan
-
-    /**
-     * This method returns the turret angle within the range of 0.0 to 360.0.
-     *
-     * @return turret angle in degrees.
-     */
-    public double getTurretAngle()
-    {
-        double angle = turret != null ? turret.getPosition() : 0.0;
-        if (angle > 180.0)
-        {
-            angle -= 360.0;
-        }
-        else if (angle < -180.0)
-        {
-            angle += 360.0;
-        }
-        return angle;
-    }   //getTurretAngle
 
     /**
      * This method checks if the left or the right shooter is active.
@@ -1494,7 +1475,7 @@ public class Shooter extends TrcSubsystem
                 {
                     dashboard.putNumber(Dashboard.DBKEY_TURRET_POWER, turret.getPower());
                     dashboard.putNumber(Dashboard.DBKEY_TURRET_CURRENT, turret.getCurrent());
-                    dashboard.putNumber(Dashboard.DBKEY_TURRET_POS, getTurretAngle());
+                    dashboard.putNumber(Dashboard.DBKEY_TURRET_POS, turret.getPosition());
                     dashboard.putNumber(Dashboard.DBKEY_TURRET_TARGET, turret.getPidTarget());
                 }
 
@@ -1536,7 +1517,7 @@ public class Shooter extends TrcSubsystem
                 }
                 else if (subsystemName.equalsIgnoreCase(Params.TURRET_MOTOR_NAME))
                 {
-                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, getTurretAngle());
+                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, turret.getPosition());
                     dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET, turret.getPidTarget());
                 }
             }
