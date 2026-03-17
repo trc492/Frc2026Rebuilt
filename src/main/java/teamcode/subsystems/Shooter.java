@@ -28,7 +28,6 @@ import frclib.motor.FrcCANTalonFX;
 import frclib.motor.FrcMotorActuator;
 import frclib.motor.FrcMotorActuator.MotorType;
 import frclib.motor.FrcMotorActuator.SparkMaxMotorParams;
-import frclib.sensor.FrcEncoder.EncoderType;
 import frclib.subsystem.FrcRollerIntake;
 import frclib.subsystem.FrcShooter;
 import teamcode.Dashboard;
@@ -69,10 +68,12 @@ public class Shooter extends TrcSubsystem
         new TrcLookupTable.Region(0.0, new double[][] {
             // RPM (Quadratic Regression)
             {3061.92096, 16.65699, -0.0183275}, 
+            {3061.92096+150.0, 16.65699, -0.0183275},
             // Hood Angle (Linear Regression)
             {13.21594, 0.0844735},
             // Time of Flight (Cubic Regression),
             {-0.127034, 0.0246883, -0.000151413, 0.000000308358}
+            // {-0.127034-0.2, 0.0246883, -0.000151413, 0.000000308358}
         })
     };
 
@@ -200,8 +201,10 @@ public class Shooter extends TrcSubsystem
         public static final double RTILT_MOTOR_PID_IZONE        = 0.0;
 
         // Common Turret Motor Characteristics
+        public static final boolean TURRET_HAS_ABS_ENC          = true;
         public static final MotorType TURRET_MOTOR_TYPE         = MotorType.CanSparkMax;
-        public static final SparkMaxMotorParams TURRET_SPARKMAX_PARAMS = new SparkMaxMotorParams(true, false);
+        public static final SparkMaxMotorParams TURRET_SPARKMAX_PARAMS =
+            new SparkMaxMotorParams(true, TURRET_HAS_ABS_ENC);
         public static final String TURRET_MOTOR_NAME            = SUBSYSTEM_NAME + ".TurretMotor";
         public static final boolean TURRET_MOTOR_INVERTED       = false;
         public static final int TURRET_MOTOR_CANID              = RobotParams.HwConfig.CANID_TURRET_MOTOR;
@@ -232,11 +235,7 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_STALL_RESET_TIMEOUT   = 0.5;
         public static final double TURRET_CURRENT_LIMIT         = 20.0;
 
-        public static final boolean TURRET_HAS_ABS_ENC          = false;
-        public static final String TURRET_ABS_ENC_NAME          = SUBSYSTEM_NAME + ".turretAbsEnc";
-        public static final boolean TURRET_ABS_ENC_INVERTED     = false;
-        public static final int TURRET_ABS_ENC_CANID            = RobotParams.HwConfig.CANID_TURRET_ABS_ENCODER;
-        public static final EncoderType TURRET_ABS_ENC_TYPE     = EncoderType.Canandmag;
+        public static final boolean TURRET_ABS_ENC_INVERTED     = true;
         public static final double TURRET_ABS_ENC_SCALE         = 360.0;
         public static final double TURRET_ABS_ENC_POS_OFFSET    = 180.0;
         public static final double TURRET_ABS_ENC_ZERO_OFFSET   = 0.0;
@@ -337,7 +336,7 @@ public class Shooter extends TrcSubsystem
     private final TrcEvent rightTiltZeroCalCallbackEvent;
     private final TrcEvent turretZeroCalCallbackEvent;
     private final TrcDbgTrace tracer;
-    private boolean turretZeroCalibrated = false;
+    private boolean turretZeroCalibrated = Params.TURRET_HAS_ABS_ENC;
 
     /**
      * Constructor: Creates an instance of the object.
@@ -520,9 +519,6 @@ public class Shooter extends TrcSubsystem
 
             if (Params.TURRET_HAS_ABS_ENC)
             {
-                turretMotorParams.setExternalEncoder(
-                    Params.TURRET_ABS_ENC_NAME, Params.TURRET_ABS_ENC_TYPE, Params.TURRET_ABS_ENC_INVERTED,
-                    Params.TURRET_ABS_ENC_CANID);
                 turretMotorParams.setPositionScaleAndOffset(
                     Params.TURRET_ABS_ENC_SCALE, Params.TURRET_ABS_ENC_POS_OFFSET, Params.TURRET_ABS_ENC_ZERO_OFFSET);
             }
@@ -540,6 +536,11 @@ public class Shooter extends TrcSubsystem
                     .setPidControlParams(
                         Params.TURRET_PID_TOLERANCE, Params.TURRET_PID_SETTLING, Params.TURRET_SOFTWARE_PID_ENABLED),
                 null);
+
+            if (Params.TURRET_HAS_ABS_ENC)
+            {
+                turret.setPositionSensorInverted(Params.TURRET_ABS_ENC_INVERTED);
+            }
             // turret.enableMotionProfile(
             //     Params.TURRET_SOFTWARE_PID_ENABLED, Params.TURRET_MAX_VELOCITY, Params.TURRET_MAX_ACCELERATION,
             //     0.0, 0.0, Params.TURRET_PID_TOLERANCE);
@@ -734,6 +735,25 @@ public class Shooter extends TrcSubsystem
         if (leftShooter != null) leftShooter.panMotor.cancel();
         if (rightShooter != null) rightShooter.panMotor.cancel();
     }   //stopPan
+
+    /**
+     * This method returns the turret angle within the range of 0.0 to 360.0.
+     *
+     * @return turret angle in degrees.
+     */
+    public double getTurretAngle()
+    {
+        double angle = turret != null ? turret.getPosition() : 0.0;
+        if (angle > 180.0)
+        {
+            angle -= 360.0;
+        }
+        else if (angle < -180.0)
+        {
+            angle += 360.0;
+        }
+        return angle;
+    }   //getTurretAngle
 
     /**
      * This method checks if the left or the right shooter is active.
@@ -1474,7 +1494,7 @@ public class Shooter extends TrcSubsystem
                 {
                     dashboard.putNumber(Dashboard.DBKEY_TURRET_POWER, turret.getPower());
                     dashboard.putNumber(Dashboard.DBKEY_TURRET_CURRENT, turret.getCurrent());
-                    dashboard.putNumber(Dashboard.DBKEY_TURRET_POS, turret.getPosition());
+                    dashboard.putNumber(Dashboard.DBKEY_TURRET_POS, getTurretAngle());
                     dashboard.putNumber(Dashboard.DBKEY_TURRET_TARGET, turret.getPidTarget());
                 }
 
@@ -1516,7 +1536,7 @@ public class Shooter extends TrcSubsystem
                 }
                 else if (subsystemName.equalsIgnoreCase(Params.TURRET_MOTOR_NAME))
                 {
-                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, turret.getPosition());
+                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, getTurretAngle());
                     dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET, turret.getPidTarget());
                 }
             }
