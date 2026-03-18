@@ -29,6 +29,7 @@ import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcOwnershipMgr;
 import trclib.robotcore.TrcRobot;
 import trclib.robotcore.TrcTaskMgr;
+import trclib.timer.TrcTimer;
 
 /**
  * This class implements auto-assist task.
@@ -68,6 +69,8 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
     private final TrcEvent leftShooterDone;
     private final TrcEvent rightShooterDone;
 
+    private double shootReadyTimeout = 0.0;
+    private boolean turretReady = false;
     private boolean leftShooterShooting = false;
     private boolean rightShooterShooting = false;
 
@@ -196,8 +199,7 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
                     leftShooterReadyEvent.clear();
                     leftShooterShooting = false;
                     sm.addEvent(leftShooterReadyEvent);
-                    robot.leftShooter.waitForShooterReady(
-                        leftShooterReadyEvent, Shooter.Params.SHOOTER_READY_TIMEOUT);
+                    robot.leftShooter.waitForShooterReady(leftShooterReadyEvent, 0.0);
                 }
 
                 if (robot.rightShooter != null)
@@ -206,37 +208,51 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
                     rightShooterReadyEvent.clear();
                     rightShooterShooting = false;
                     sm.addEvent(rightShooterReadyEvent);
-                    robot.rightShooter.waitForShooterReady(
-                        rightShooterReadyEvent, Shooter.Params.SHOOTER_READY_TIMEOUT);
+                    robot.rightShooter.waitForShooterReady(rightShooterReadyEvent, 0.0);
                 }
 
                 if (robot.turret != null)
                 {
                     tracer.traceInfo(moduleName, "***** Wait for Turret ready.");
                     turretReadyEvent.clear();
+                    turretReady = false;
                     sm.addEvent(turretReadyEvent);
-                    robot.shooterSubsystem.waitForTurretReady(
-                        turretReadyEvent, Shooter.Params.SHOOTER_READY_TIMEOUT);
+                    robot.shooterSubsystem.waitForTurretReady(turretReadyEvent, 0.0);
+                }
+                else
+                {
+                    turretReady = true;
                 }
 
+                shootReadyTimeout = TrcTimer.getCurrentTime() + Shooter.Params.SHOOTER_READY_TIMEOUT;
                 sm.waitForEvents(State.SHOOT, false, false);
                 break;
 
             case SHOOT:
-                if (robot.leftShooter != null &&  !leftShooterShooting && leftShooterReadyEvent.isSignaled() &&
-                    (robot.turret == null || turretReadyEvent.isSignaled()))
+                boolean timedOut = TrcTimer.getCurrentTime() > shootReadyTimeout;
+                if (!turretReady && (robot.turret == null || turretReadyEvent.isSignaled()))
                 {
-                    tracer.traceInfo(moduleName, "***** Start left shooter shooting.");
+                    turretReady = true;
+                }
+
+                if (robot.leftShooter != null && !leftShooterShooting &&
+                    (timedOut || turretReady && leftShooterReadyEvent.isSignaled()))
+                {
+                    tracer.traceInfo(
+                        moduleName,
+                        "***** Start left shooter shooting (timedout=%s, turretReady=%s).", timedOut, turretReady);
                     leftShooterDone.clear();
                     sm.addEvent(leftShooterDone);
                     robot.shooterSubsystem.leftShoot(owner, leftShooterDone, taskParams.autoStop);
                     leftShooterShooting = true;
                 }
 
-                if (robot.rightShooter != null && !rightShooterShooting && rightShooterReadyEvent.isSignaled() &&
-                    (robot.turret == null || turretReadyEvent.isSignaled()))
+                if (robot.rightShooter != null && !rightShooterShooting &&
+                    (timedOut || turretReady && rightShooterReadyEvent.isSignaled()))
                 {
-                    tracer.traceInfo(moduleName, "***** Start right shooter shooting.");
+                    tracer.traceInfo(
+                        moduleName,
+                        "***** Start right shooter shooting (timedout=%s, turretReady=%s).", timedOut, turretReady);
                     rightShooterDone.clear();
                     sm.addEvent(rightShooterDone);
                     robot.shooterSubsystem.rightShoot(owner, rightShooterDone, taskParams.autoStop);
@@ -246,7 +262,7 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
                 // In this case, TaskAutoShoot will "hang" forever in SHOOT state. This is intentional.
                 // This is intended to allow Operator in TeleOp to control when the shooter will stop becasue
                 // we don't want the shooter to stop just because the feeder didn't deliver balls fast enough
-                // that triggers the velTrigger timeout. In TeleOp, the operator can press AutoShoot button again
+                // that triggers the velTrigger timeout. In TeleOp, the operator can press AutoShoot cancel button
                 // to cacnel the AutoTask.
                 if ((robot.leftShooter == null || leftShooterShooting) &&
                     (robot.rightShooter == null || rightShooterShooting))
