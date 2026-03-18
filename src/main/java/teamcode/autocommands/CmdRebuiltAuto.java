@@ -344,7 +344,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     {
                         TrcPose2D depotPickupPose = RobotParams.Game.BLUE_DEPOT_PICKUP_POSE;
                         TrcPose2D depotEndPose = depotPickupPose.clone();
-                        depotEndPose.y -= 40.0;
+                        depotEndPose.y -= 45.0;
                         neutralZoneReturnPath = new TrcPose2D[] {pickupPose, returnIntermediatePose, returnPose, depotPickupPose, depotEndPose};
                     }
                     robot.globalTracer.traceInfo(
@@ -424,7 +424,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                             robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
                             if (i == 3)
                             {
-                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.13);
+                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.1);
                                 robot.intakeSubsystem.setIntakeEnabled(true);
                                 robot.autoShootTask.autoShoot(null, null, false, true);
                             }
