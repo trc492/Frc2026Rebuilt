@@ -23,9 +23,9 @@
  package teamcode.subsystems;
 
 import frclib.driverio.FrcDashboard;
+import frclib.motor.FrcCANSparkMax.SparkMaxMotorParams;
 import frclib.motor.FrcMotorActuator;
 import frclib.motor.FrcMotorActuator.MotorType;
-import frclib.motor.FrcMotorActuator.SparkMaxMotorParams;
 import teamcode.Dashboard;
 import teamcode.FrcTest;
 import teamcode.RobotParams;
@@ -46,7 +46,7 @@ public class Climber extends TrcSubsystem
 
         // Motor Characteristics
         public static final MotorType CLIMBER_MOTOR_TYPE        = MotorType.CanSparkMax;
-        public static final SparkMaxMotorParams CLIMBER_SPARKMAX_PARAMS = new SparkMaxMotorParams(true, null);
+        public static final SparkMaxMotorParams CLIMBER_SPARKMAX_PARAMS = new SparkMaxMotorParams(true);
         public static final String CLIMBER_MOTOR_NAME           = SUBSYSTEM_NAME + ".Motor";
         public static final boolean CLIMBER_MOTOR_INVERTED      = false;
         public static final int CLIMBER_MOTOR_CANID             = RobotParams.HwConfig.CANID_CLIMBER_MOTOR;

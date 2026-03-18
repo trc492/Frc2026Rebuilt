@@ -24,10 +24,11 @@ package teamcode.subsystems;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frclib.driverio.FrcDashboard;
+import frclib.motor.FrcCANSparkMax.SparkMaxMotorParams;
+import frclib.motor.FrcCANSparkMax;
 import frclib.motor.FrcCANTalonFX;
 import frclib.motor.FrcMotorActuator;
 import frclib.motor.FrcMotorActuator.MotorType;
-import frclib.motor.FrcMotorActuator.SparkMaxMotorParams;
 import frclib.subsystem.FrcRollerIntake;
 import frclib.subsystem.FrcShooter;
 import teamcode.Dashboard;
@@ -163,7 +164,7 @@ public class Shooter extends TrcSubsystem
 
         // Common Tilt Motor Characteristics
         public static final MotorType TILT_MOTOR_TYPE           = MotorType.CanSparkMax;
-        public static final SparkMaxMotorParams TILT_SPARKMAX_PARAMS = new SparkMaxMotorParams(true, null);
+        public static final SparkMaxMotorParams TILT_SPARKMAX_PARAMS = new SparkMaxMotorParams(true);
         public static final double TILT_MOTOR_GEAR_RATIO        = 216.84782608695652173913043478261;    // Load/Motor
         public static final double TILT_MOTOR_DEG_PER_COUNT     = 360.0/TILT_MOTOR_GEAR_RATIO;
         public static final double TILT_PID_TOLERANCE           = 1.0;
@@ -205,8 +206,7 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_MOTOR_GEAR_RATIO      = 0.9571438827*(20.0*130.0/40.0);   // Load/Motor
         public static final double TURRET_MOTOR_DEG_PER_COUNT   = 360.0/TURRET_MOTOR_GEAR_RATIO;
         public static final MotorType TURRET_MOTOR_TYPE         = MotorType.CanSparkMax;
-        public static final SparkMaxMotorParams TURRET_SPARKMAX_PARAMS =
-            new SparkMaxMotorParams(true, TURRET_HAS_ABS_ENC? TURRET_MOTOR_GEAR_RATIO: null);
+        public static final SparkMaxMotorParams TURRET_SPARKMAX_PARAMS = new SparkMaxMotorParams(true);
         public static final String TURRET_MOTOR_NAME            = SUBSYSTEM_NAME + ".TurretMotor";
         public static final boolean TURRET_MOTOR_INVERTED       = false;
         public static final int TURRET_MOTOR_CANID              = RobotParams.HwConfig.CANID_TURRET_MOTOR;
@@ -236,7 +236,7 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_CURRENT_LIMIT         = 20.0;
 
         public static final boolean TURRET_ABS_ENC_INVERTED     = true;
-        public static final double TURRET_ABS_ENC_SCALE         = 360.0/TURRET_MOTOR_GEAR_RATIO;
+        public static final double TURRET_ABS_ENC_SCALE         = TURRET_MOTOR_GEAR_RATIO;
         public static final double TURRET_ABS_ENC_POS_OFFSET    = -180.0;
         public static final double TURRET_ABS_ENC_ZERO_OFFSET   = 0.0;
 
@@ -248,7 +248,7 @@ public class Shooter extends TrcSubsystem
 
         // Common Transfer Motor Characteristics
         public static final MotorType TRANSFER_MOTOR_TYPE       = MotorType.CanSparkMax;
-        public static final SparkMaxMotorParams TRANSFER_SPARKMAX_PARAMS = new SparkMaxMotorParams(true, null);
+        public static final SparkMaxMotorParams TRANSFER_SPARKMAX_PARAMS = new SparkMaxMotorParams(true);
         public static final double TRANSFER_INTAKE_POWER        = 1.0;
         public static final double TRANSFER_EJECT_POWER         = 0.5;
         public static final double TRANSFER_RETAIN_POWER        = 0.0;
@@ -270,7 +270,7 @@ public class Shooter extends TrcSubsystem
         public static final boolean RTRANSFER_BACK_SENSOR_INVERTED = false;
         // Feeder Motor Characteristics
         public static final MotorType FEEDER_MOTOR_TYPE         = MotorType.CanSparkMax;
-        public static final SparkMaxMotorParams FEEDER_SPARKMAX_PARAMS = new SparkMaxMotorParams(true, null);
+        public static final SparkMaxMotorParams FEEDER_SPARKMAX_PARAMS = new SparkMaxMotorParams(true);
         public static final String FEEDER_MOTOR_NAME            = SUBSYSTEM_NAME + ".FeederMotor";
         public static final boolean FEEDER_MOTOR_INVERTED       = false;
         public static final int FEEDER_MOTOR_CANID              = RobotParams.HwConfig.CANID_FEEDER_MOTOR;
@@ -513,17 +513,8 @@ public class Shooter extends TrcSubsystem
                 .setPrimaryMotor(
                     Params.TURRET_MOTOR_NAME, Params.TURRET_MOTOR_TYPE, Params.TURRET_MOTOR_INVERTED, true, true,
                     Params.TURRET_MOTOR_CANID, null, Params.TURRET_SPARKMAX_PARAMS)
-                .setPositionPresets(Params.TURRET_POS_PRESET_TOLERANCE, Params.TURRET_POS_PRESETS);
-
-            if (Params.TURRET_HAS_ABS_ENC)
-            {
-                turretMotorParams.setPositionScaleAndOffset(
-                    Params.TURRET_ABS_ENC_SCALE, Params.TURRET_ABS_ENC_POS_OFFSET, Params.TURRET_ABS_ENC_ZERO_OFFSET);
-            }
-            else
-            {
-                turretMotorParams.setPositionScaleAndOffset(Params.TURRET_MOTOR_DEG_PER_COUNT, Params.TURRET_POS_OFFSET);
-            }
+                .setPositionPresets(Params.TURRET_POS_PRESET_TOLERANCE, Params.TURRET_POS_PRESETS)
+                .setPositionScaleAndOffset(Params.TURRET_MOTOR_DEG_PER_COUNT, Params.TURRET_POS_OFFSET);
 
             turret = new FrcMotorActuator(turretMotorParams).getMotor();
             turret.setPositionPidParameters(
@@ -537,7 +528,8 @@ public class Shooter extends TrcSubsystem
 
             if (Params.TURRET_HAS_ABS_ENC)
             {
-                turret.setPositionSensorInverted(Params.TURRET_ABS_ENC_INVERTED);
+                FrcCANSparkMax turretMotor = (FrcCANSparkMax) turret;
+                turretMotor.enableAbsoluteEncoder(Params.TURRET_ABS_ENC_INVERTED, Params.TURRET_ABS_ENC_SCALE, null);
             }
             // turret.enableMotionProfile(
             //     Params.TURRET_SOFTWARE_PID_ENABLED, Params.TURRET_MAX_VELOCITY, Params.TURRET_MAX_ACCELERATION,
