@@ -201,7 +201,7 @@ public class Shooter extends TrcSubsystem
         public static final double RTILT_MOTOR_PID_IZONE        = 0.0;
 
         // Common Turret Motor Characteristics
-        public static final boolean TURRET_HAS_ABS_ENC          = false;
+        public static final boolean TURRET_HAS_ABS_ENC          = true;
         public static final double TURRET_MOTOR_GEAR_RATIO      = 0.9571438827*(20.0*130.0/40.0);   // Load/Motor
         public static final double TURRET_MOTOR_DEG_PER_COUNT   = 360.0/TURRET_MOTOR_GEAR_RATIO;
         public static final MotorType TURRET_MOTOR_TYPE         = MotorType.CanSparkMax;
@@ -210,7 +210,7 @@ public class Shooter extends TrcSubsystem
         public static final String TURRET_MOTOR_NAME            = SUBSYSTEM_NAME + ".TurretMotor";
         public static final boolean TURRET_MOTOR_INVERTED       = false;
         public static final int TURRET_MOTOR_CANID              = RobotParams.HwConfig.CANID_TURRET_MOTOR;
-        public static final double TURRET_MOTOR_PID_KP          = 0.5;  
+        public static final double TURRET_MOTOR_PID_KP          = 0.15;
         public static final double TURRET_MOTOR_PID_KI          = 0.0;  
         public static final double TURRET_MOTOR_PID_KD          = 0.0;  
         public static final double TURRET_MOTOR_PID_KF          = 0.0;  
