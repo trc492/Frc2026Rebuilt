@@ -514,7 +514,9 @@ public class Shooter extends TrcSubsystem
                     Params.TURRET_MOTOR_NAME, Params.TURRET_MOTOR_TYPE, Params.TURRET_MOTOR_INVERTED, true, true,
                     Params.TURRET_MOTOR_CANID, null, Params.TURRET_SPARKMAX_PARAMS)
                 .setPositionPresets(Params.TURRET_POS_PRESET_TOLERANCE, Params.TURRET_POS_PRESETS)
-                .setPositionScaleAndOffset(Params.TURRET_MOTOR_DEG_PER_COUNT, Params.TURRET_POS_OFFSET);
+                .setPositionScaleAndOffset(
+                    Params.TURRET_MOTOR_DEG_PER_COUNT,
+                    Params.TURRET_HAS_ABS_ENC? Params.TURRET_ABS_ENC_POS_OFFSET: Params.TURRET_POS_OFFSET);
 
             turret = new FrcMotorActuator(turretMotorParams).getMotor();
             turret.setPositionPidParameters(
