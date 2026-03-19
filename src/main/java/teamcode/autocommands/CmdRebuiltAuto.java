@@ -31,6 +31,7 @@ import teamcode.Robot.RelocalizationMode;
 import teamcode.Robot;
 import teamcode.RobotParams;
 import teamcode.autotasks.TaskAutoClimb;
+import teamcode.subsystems.Shooter;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcRobot;
@@ -47,7 +48,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
     private enum State
     {
         START,
-        ZERO_CAL_DONE,
+        DELAY_DONE,
         PICKUP_DEPOT,
         PICKUP_OUTPOST,
         OUTPOST_DELAY,
@@ -173,29 +174,48 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     climbSide = autoChoices.getClimbSide();
                     neutralZoneCycles = autoChoices.getNeutralZoneCycles();
                     robot.robotBase.purePursuitDrive.getTurnPidCtrl().setNoOscillation(true);
-                    // Do zero calibration (fire and forget).
-                    robot.zeroCalibrate(null, null);
+
+                    if (robot.shooterSubsystem != null)
+                    {
+                        if (Shooter.Params.TURRET_HAS_ABS_ENC)
+                        {
+                            robot.shooterSubsystem.enableGoalTracking(true, false, true, true);
+                        }
+                        else
+                        {
+                            TrcEvent callbackEvent = new TrcEvent(moduleName + ".goalTrackingCallbackEvent");
+                            // Turn on AutoGoalTracking once the turret is zero calibrated.
+                            callbackEvent.setCallback(
+                                (ctxt, canceled) ->
+                                {
+                                    robot.globalTracer.traceInfo(
+                                        moduleName, "***** Enable GoalTracking on turret only (canceled=%s).", canceled);
+                                    if (!canceled)
+                                    {
+                                        robot.shooterSubsystem.enableGoalTracking(true, false, true, true);
+                                    }
+                                }, null);
+                            robot.globalTracer.traceInfo(
+                                moduleName, "Set callback event to turn on auto tracking (event=%s)", callbackEvent);
+                            // Do zero calibration.
+                            robot.zeroCalibrate(null, callbackEvent);
+                        }
+                    }
                     // Do delay if necessary.
                     double startDelay = autoChoices.getStartDelay();
                     if (startDelay > 0.0)
                     {
                         robot.globalTracer.traceInfo(moduleName, "***** Do delay " + startDelay + "s.");
                         timer.set(startDelay, event);
-                        sm.waitForSingleEvent(event, State.ZERO_CAL_DONE);
+                        sm.waitForSingleEvent(event, State.DELAY_DONE);
                     }
                     else
                     {
-                        sm.setState(State.ZERO_CAL_DONE);
+                        sm.setState(State.DELAY_DONE);
                     }
                     break;
 
-                case ZERO_CAL_DONE:
-                    if (robot.shooterSubsystem != null)
-                    {
-                        robot.globalTracer.traceInfo(moduleName, "***** Enabling GoalTracking on turret only.");
-                        robot.shooterSubsystem.enableGoalTracking(true, false, true, true);
-                    }
-
+                case DELAY_DONE:
                     if (depotPickup &&
                         (startPos == AutoStartPos.START_POS_DEPOT ||
                          startPos == AutoStartPos.START_POS_CENTER && moveTo == MoveTo.DEPOT))
