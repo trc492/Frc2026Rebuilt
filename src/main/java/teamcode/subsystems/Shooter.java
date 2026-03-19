@@ -1211,12 +1211,13 @@ public class Shooter extends TrcSubsystem
     /**
      * This method starts manual shooting at the specified location.
      *
+     * @param shootParamsTable specifies the shooting table to use.
      * @param entryName specifies the shoot table entry by name.
      * @param autoStop specifies true to detect hopper empty and auto stop, false otherwise.
      */
-    public void shootAt(String entryName, boolean autoStop)
+    public void shootAt(TrcLookupTable shootParamsTable, String entryName, boolean autoStop)
     {
-        TrcLookupTable.Entry shootParams = goalTrackingState.shootParamsTable.get(entryName);
+        TrcLookupTable.Entry shootParams = shootParamsTable.get(entryName);
 
         if (shootParams != null)
         {
