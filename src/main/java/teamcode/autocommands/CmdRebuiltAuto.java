@@ -424,7 +424,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                             robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
                             if (i == 3)
                             {
-                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.1);
+                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.13);
                                 robot.intakeSubsystem.setIntakeEnabled(true);
                                 robot.autoShootTask.autoShoot(null, null, false, true);
                             }

@@ -202,7 +202,7 @@ public class Shooter extends TrcSubsystem
         public static final double RTILT_MOTOR_PID_IZONE        = 0.0;
 
         // Common Turret Motor Characteristics
-        public static final boolean TURRET_HAS_ABS_ENC          = true;
+        public static final boolean TURRET_HAS_ABS_ENC          = false;
         public static final double TURRET_MOTOR_GEAR_RATIO      = 0.9571438827*(20.0*130.0/40.0);   // Load/Motor
         public static final double TURRET_MOTOR_DEG_PER_COUNT   = 360.0/TURRET_MOTOR_GEAR_RATIO;
         public static final MotorType TURRET_MOTOR_TYPE         = MotorType.CanSparkMax;
@@ -514,7 +514,9 @@ public class Shooter extends TrcSubsystem
                     Params.TURRET_MOTOR_NAME, Params.TURRET_MOTOR_TYPE, Params.TURRET_MOTOR_INVERTED, true, true,
                     Params.TURRET_MOTOR_CANID, null, Params.TURRET_SPARKMAX_PARAMS)
                 .setPositionPresets(Params.TURRET_POS_PRESET_TOLERANCE, Params.TURRET_POS_PRESETS)
-                .setPositionScaleAndOffset(Params.TURRET_MOTOR_DEG_PER_COUNT, Params.TURRET_POS_OFFSET);
+                .setPositionScaleAndOffset(
+                    Params.TURRET_MOTOR_DEG_PER_COUNT,
+                    Params.TURRET_HAS_ABS_ENC? Params.TURRET_ABS_ENC_POS_OFFSET: Params.TURRET_POS_OFFSET);
 
             turret = new FrcMotorActuator(turretMotorParams).getMotor();
             turret.setPositionPidParameters(
