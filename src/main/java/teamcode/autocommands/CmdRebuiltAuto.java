@@ -382,7 +382,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         robot.intakeSubsystem.setIntakeEnabled(true);
                     }
 
-                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.7);
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.65);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
                         (i, wp) ->
@@ -427,6 +427,10 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.13);
                                 robot.intakeSubsystem.setIntakeEnabled(true);
                                 robot.autoShootTask.autoShoot(null, null, false, true);
+                            }
+                            if (i == 4 && atDepot)
+                            {
+                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.85);
                             }
                         },
                         robot.adjustPathByAlliance(alliance, neutralZoneReturnPath));
