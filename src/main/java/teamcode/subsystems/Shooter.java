@@ -1295,7 +1295,6 @@ public class Shooter extends TrcSubsystem
      * @param completionEvent specifies the event to signal when the zero calibration is done,
      *        can be null if not provided.
      */
-    @SuppressWarnings("unused")
     @Override
     public void zeroCalibrate(String owner, TrcEvent completionEvent)
     {
