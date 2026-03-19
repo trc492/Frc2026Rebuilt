@@ -131,6 +131,7 @@ public class Shooter extends TrcSubsystem
         public static final double SHOOTER_VEL_TRIGGER_TIMEOUT  = 2.0;
         public static final double SHOOTER_RPM_CONFLICT_ZONE_ADJ= 0.0;
         public static final double SHOOTER_READY_TIMEOUT        = 2.0;          // in sec
+        public static final double SHOOTER_EXIT_DELAY           = 0.0;          // TODO: Need to tune it by looking at timestamp in the log
         // Left Shooter Motor Characteristics
         public static final String LSHOOTER_PRIMARY_MOTOR_NAME  = SUBSYSTEM_NAME + ".LeftPrimaryMotor";
         public static final boolean LSHOOTER_PRIMARY_MOTOR_INVERTED = false;
@@ -971,8 +972,6 @@ public class Shooter extends TrcSubsystem
     /**
      * This method is called by left shooter GoalTracking to get AimInfo for aiming at the target.
      *
-     * @param targetPose specifies the targetPose for looking up AimInfo in the shooting table. This is used by
-     *        compensateRobotMotion.
      * @return AimInfo containing information to aim at the target.
      */
     private AimInfo getLeftShooterAimInfo()
@@ -995,7 +994,7 @@ public class Shooter extends TrcSubsystem
                     // Compensate for robot motion.
                     TargetInfo targetInfo = leftShooter.compensateRobotMotion(
                         robot.robotBase.driveBase, this::getTargetInfo,
-                        new TargetInfo(targetPose, shootParams.outputs[2]), 0.01, 5);
+                        new TargetInfo(targetPose, shootParams.outputs[2]), 0.01, 5, Params.SHOOTER_EXIT_DELAY);
                     targetPose = targetInfo.targetPose;
                     shootParams = goalTrackingState.shootParamsTable.get(
                         Math.hypot(targetPose.x, targetPose.y), interpolation);
