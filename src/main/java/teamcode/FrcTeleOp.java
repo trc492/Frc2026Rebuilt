@@ -709,7 +709,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             if (pressed)
             {
                 robot.globalTracer.traceInfo(moduleName, ">>>>> Start Manual Shoot.");
-                robot.shooterSubsystem.shootAt(Shooter.HUB_SHOOT_POINT, false);
+                robot.shooterSubsystem.shootAt(Shooter.hubShootParamsTable, Shooter.HUB_SHOOT_POINT, false);
             }
             else
             {
