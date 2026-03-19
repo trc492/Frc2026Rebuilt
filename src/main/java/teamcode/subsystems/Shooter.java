@@ -203,7 +203,7 @@ public class Shooter extends TrcSubsystem
         public static final double RTILT_MOTOR_PID_IZONE        = 0.0;
 
         // Common Turret Motor Characteristics
-        public static final boolean TURRET_HAS_ABS_ENC          = false;
+        public static final boolean TURRET_HAS_ABS_ENC          = true;
         public static final double TURRET_MOTOR_GEAR_RATIO      = 0.9571438827*(20.0*130.0/40.0);   // Load/Motor
         public static final double TURRET_MOTOR_DEG_PER_COUNT   = 360.0/TURRET_MOTOR_GEAR_RATIO;
         public static final MotorType TURRET_MOTOR_TYPE         = MotorType.CanSparkMax;
@@ -1295,6 +1295,7 @@ public class Shooter extends TrcSubsystem
      * @param completionEvent specifies the event to signal when the zero calibration is done,
      *        can be null if not provided.
      */
+    @SuppressWarnings("unused")
     @Override
     public void zeroCalibrate(String owner, TrcEvent completionEvent)
     {
@@ -1474,42 +1475,6 @@ public class Shooter extends TrcSubsystem
                 {
                     dashboard.putNumber(Dashboard.DBKEY_FEEDER_POWER, feeder.getPower());
                     dashboard.putNumber(Dashboard.DBKEY_FEEDER_CURRENT, feeder.getCurrent());
-                }
-            }
-        }
-
-        if (dashboard.getBoolean(Dashboard.DBKEY_SHOOTER_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs))
-        {
-            String subsystemName = FrcTest.testChoices.getSubsystemName();
-
-            if (!subsystemName.isEmpty())
-            {
-                if (subsystemName.equalsIgnoreCase(Params.LSHOOTER_PRIMARY_MOTOR_NAME))
-                {
-                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, leftShooter.getShooterMotor1RPM());
-                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET, leftShooter.getShooterMotor1TargetRPM());
-                    dashboard.putNumber(Dashboard.DBKEY_LSHOOTER_CURRENT, leftShooter.getShooterMotor1Current());
-                }
-                else if (subsystemName.equalsIgnoreCase(Params.RSHOOTER_PRIMARY_MOTOR_NAME))
-                {
-                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, rightShooter.getShooterMotor1RPM());
-                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET, rightShooter.getShooterMotor1TargetRPM());
-                    dashboard.putNumber(Dashboard.DBKEY_RSHOOTER_CURRENT, rightShooter.getShooterMotor1Current());
-                }
-                else if (subsystemName.equalsIgnoreCase(Params.LTILT_MOTOR_NAME))
-                {
-                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, leftShooter.getTiltAngle());
-                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET, leftShooter.getTiltAngleTarget());
-                }
-                else if (subsystemName.equalsIgnoreCase(Params.RTILT_MOTOR_NAME))
-                {
-                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, rightShooter.getTiltAngle());
-                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET, rightShooter.getTiltAngleTarget());
-                }
-                else if (subsystemName.equalsIgnoreCase(Params.TURRET_MOTOR_NAME))
-                {
-                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, turret.getPosition());
-                    dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET, turret.getPidTarget());
                 }
             }
         }

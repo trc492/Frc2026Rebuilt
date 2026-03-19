@@ -72,9 +72,8 @@ public class RobotParams
         public static final boolean useWpiLibPoseEstimator      = true;
         // Master switches for Subsystems
         public static final boolean useSubsystems               = robotType == RobotType.RebuiltRobot;
-        public static final boolean showSubsystems              = true;
+        public static final boolean showSubsystemStatus         = true;
         public static final boolean zeroCalSubsystems           = true;
-        public static final boolean showSubsystemGraphs         = false;
         public static final String testSubsystemName            = Shooter.Params.TURRET_MOTOR_NAME;
         // Drive Base Subsystem
         public static final boolean useDriveBase                = true;

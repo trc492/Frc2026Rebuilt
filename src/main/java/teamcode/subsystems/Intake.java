@@ -212,12 +212,6 @@ public class Intake extends TrcSubsystem
             }
         }
 
-        if (dashboard.getBoolean(Dashboard.DBKEY_INTAKE_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs))
-        {
-            dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, deployerEncoder.getScaledPosition());
-            dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET, intake.getPidTarget());
-        }
-
         return lineNum;
     }   //updateStatus
 
@@ -228,14 +222,22 @@ public class Intake extends TrcSubsystem
     @Override
     public void updateParamsToDashboard()
     {
-        dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KP, Params.DEPLOYER_PID_KP);
-        dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KI, Params.DEPLOYER_PID_KI);
-        dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KD, Params.DEPLOYER_PID_KD);
-        dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KF, Params.DEPLOYER_PID_KF);
-        dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_IZONE, Params.DEPLOYER_PID_IZONE);
-        dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.DEPLOYER_PID_TOLERANCE);
-        dashboard.putBoolean(Dashboard.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.DEPLOYER_SOFTWARE_PID);
-        dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
+        String subsystemName = FrcTest.testChoices.getSubsystemName();
+
+        if (!subsystemName.isEmpty())
+        {
+            if (subsystemName.equalsIgnoreCase(Params.INTAKE_MOTOR_NAME))
+            {
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KP, Params.DEPLOYER_PID_KP);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KI, Params.DEPLOYER_PID_KI);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KD, Params.DEPLOYER_PID_KD);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KF, Params.DEPLOYER_PID_KF);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_IZONE, Params.DEPLOYER_PID_IZONE);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.DEPLOYER_PID_TOLERANCE);
+                dashboard.putBoolean(Dashboard.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.DEPLOYER_SOFTWARE_PID);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
+            }
+        }
     }   //updateParamsToDashboard
 
     /**
@@ -245,9 +247,24 @@ public class Intake extends TrcSubsystem
     @Override
     public void updateParamsFromDashboard()
     {
-        TrcMotor.PidParams pidParams = FrcTest.testChoices.getSubsystemPidParameters();
-        intake.setPositionPidParameters(pidParams, null);
-        robot.globalTracer.traceInfo(instanceName, "Tune %s: PidParams=%s", Params.INTAKE_MOTOR_NAME, pidParams);
+        String subsystemName = FrcTest.testChoices.getSubsystemName();
+
+        if (!subsystemName.isEmpty())
+        {
+            TrcMotor.PidParams pidParams = FrcTest.testChoices.getSubsystemPidParameters();
+            boolean foundMatch = false;
+
+            if (subsystemName.equalsIgnoreCase(Params.INTAKE_MOTOR_NAME))
+            {
+                intake.setPositionPidParameters(pidParams, null);
+                foundMatch = true;
+            }
+
+            if (foundMatch)
+            {
+                intake.tracer.traceInfo(instanceName, "Tune %s: PidParams=%s", subsystemName, pidParams);
+            }
+        }
     }   //updateParamsFromDashboard
 
 } // class Intake
