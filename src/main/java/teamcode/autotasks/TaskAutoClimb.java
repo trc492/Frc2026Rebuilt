@@ -214,10 +214,7 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
                 robot.robotBase.purePursuitDrive.getTurnPidCtrl().setNoOscillation(true);
                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.35);
                 robot.robotBase.purePursuitDrive.start(
-                    owner, event, 0.0, false,
-                    robot.robotInfo.baseParams.profiledMaxDriveVelocity,
-                    robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
-                    robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
+                    owner, event, 0.0, false, null,
                     robot.adjustPathByAlliance(taskParams.alliance, intermediatePose, climbSidePose));
 
                 sm.waitForEvents(State.ALIGN_CLIMBER, true);
@@ -226,10 +223,7 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
             case ALIGN_CLIMBER:
                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.15);
                 robot.robotBase.purePursuitDrive.start(
-                    owner, event, 0.0, true,
-                    robot.robotInfo.baseParams.profiledMaxDriveVelocity,
-                    robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
-                    robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
+                    owner, event, 0.0, true, null,
                     new TrcPose2D(0.0, -21.0, 0.0)); // TODO: Tune this
                 sm.waitForSingleEvent(event, State.CLIMB_DELAY, 1.5);
                 break;

@@ -406,9 +406,7 @@ public class FrcTest extends FrcTeleOp
                     robot.robotBase.purePursuitDrive.setRotOutputLimit(testChoices.getTurnPower());
                     robot.robotBase.purePursuitDrive.start(
                         true,
-                        robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
-                        robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
-                        robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
+                        null,
                         new TrcPose2D(
                             testChoices.getXTarget()*12.0, testChoices.getYTarget()*12.0,
                             testChoices.getTurnTarget()));
@@ -510,6 +508,43 @@ public class FrcTest extends FrcTeleOp
         //
         switch (test)
         {
+            case TUNE_SUBSYSTEM:
+                String subsystemName = testChoices.getSubsystemName();
+
+                if (robot.leftShooter.tiltMotor != null &&
+                    subsystemName.equalsIgnoreCase(Shooter.Params.LTILT_MOTOR_NAME))
+                {
+                    robot.dashboard.putNumber(
+                        Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, robot.leftShooter.tiltMotor.getPosition());
+                    robot.dashboard.putNumber(
+                        Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET, robot.leftShooter.tiltMotor.getPidTarget());
+                }
+                else if (robot.rightShooter != null && robot.rightShooter.tiltMotor != null &&
+                         subsystemName.equalsIgnoreCase(Shooter.Params.RTILT_MOTOR_NAME))
+                {
+                    robot.dashboard.putNumber(
+                        Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, robot.rightShooter.tiltMotor.getPosition());
+                    robot.dashboard.putNumber(
+                        Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET, robot.rightShooter.tiltMotor.getPidTarget());
+                }
+                else if (robot.turret != null &&
+                         subsystemName.equalsIgnoreCase(Shooter.Params.TURRET_MOTOR_NAME))
+                {
+                    robot.dashboard.putNumber(
+                        Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, robot.turret.getPosition());
+                    robot.dashboard.putNumber(
+                        Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET, robot.turret.getPidTarget());
+                }
+                else if (robot.intake != null &&
+                         subsystemName.equalsIgnoreCase(Intake.Params.INTAKE_MOTOR_NAME))
+                {
+                    robot.dashboard.putNumber(
+                        Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, robot.intake.getPosition());
+                    robot.dashboard.putNumber(
+                        Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET, robot.intake.getPidTarget());
+                }
+                break;
+
             case DRIVE_SPEED_TEST:
                 if (robot.robotBase != null)
                 {
@@ -770,6 +805,7 @@ public class FrcTest extends FrcTeleOp
                                 testChoices.getMaxVelocity(),
                                 testChoices.getMaxAcceleration(),
                                 testChoices.getMaxDeceleration(),
+                                null,
                                 tuneDriveAtEndPoint? tuneDriveStartPoint: tuneDriveEndPoint);
                             tuneDriveAtEndPoint = !tuneDriveAtEndPoint;
                         }

@@ -25,7 +25,7 @@ package teamcode;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import frclib.robotcore.FrcField;
 import teamcode.subsystems.DriveBase.RobotType;
-import teamcode.subsystems.Intake;
+import teamcode.subsystems.Shooter;
 import trclib.dataprocessor.TrcLookupTable.Interpolation;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
@@ -72,10 +72,9 @@ public class RobotParams
         public static final boolean useWpiLibPoseEstimator      = true;
         // Master switches for Subsystems
         public static final boolean useSubsystems               = robotType == RobotType.RebuiltRobot;
-        public static final boolean showSubsystems              = true;
-        public static final boolean zeroCalSubsystems           = !inCompetition;
-        public static final boolean showSubsystemGraphs         = false;
-        public static final String testSubsystemName            = Intake.Params.INTAKE_MOTOR_NAME;//Shooter.Params.LSHOOTER_PRIMARY_MOTOR_NAME;
+        public static final boolean showSubsystemStatus         = true;
+        public static final boolean zeroCalSubsystems           = true;
+        public static final String testSubsystemName            = Shooter.Params.TURRET_MOTOR_NAME;
         // Drive Base Subsystem
         public static final boolean useDriveBase                = true;
         public static final boolean showDriveBaseStatus         = true;
@@ -140,6 +139,7 @@ public class RobotParams
         public static final int CANID_RTRANSFER_MOTOR           = 38;   //Gray
         // Common Shooter CAN IDs.
         public static final int CANID_TURRET_MOTOR              = 39;   //White
+        public static final int CANID_TURRET_ABS_ENCODER        = 58;   //Gray
         public static final int CANID_FEEDER_MOTOR              = 47;   //Purple
         // Intake CAN IDs
         public static final int CANID_INTAKE_MOTOR              = 48;   //Gray
@@ -180,8 +180,8 @@ public class RobotParams
         public static final String STEER_ZERO_CAL_FILE_NAME     = "/SteerZeroCalibration.txt";
         public static final String FIELD_ZERO_CAL_FILE_NAME     = "/FieldZeroCalibration.txt";
         public static final String ROBOT_CODEBASE               = "2026Rebuilt";
-        public static final double ROBOT_WIDTH                  = 22.249;
-        public static final double ROBOT_LENGTH                 = 22.249;
+        public static final double ROBOT_WIDTH                  = 34.0;
+        public static final double ROBOT_LENGTH                 = 34.0;
     }   //class Robot
 
     /**
@@ -264,9 +264,9 @@ public class RobotParams
         public static final TrcPose2D BLUE_HUB_DEAD_ZONE_CENTER_POSE =      // (-158.845, 299.373465, 0.0)
             new TrcPose2D(-fieldWidth/2.0, BLUE_HUB_BACK_CENTER_POSE.y + deadZoneLength, 0.0);
         public static final TrcPose2D BLUE_OUTPOST_PICKUP_POSE  =           // (-26.22,33.249,-180.0)
-            new TrcPose2D(-26.22, Robot.ROBOT_LENGTH/2.0 + 11.0, -180.0);
+            new TrcPose2D(-26.22, Robot.ROBOT_LENGTH/2.0 + 6.0, -180.0);
         public static final TrcPose2D BLUE_DEPOT_PICKUP_POSE    =           // (-277.69,11.1245,90.0)
-            new TrcPose2D(-fieldWidth + 40.0, Robot.ROBOT_WIDTH / 2.0, 90.0);
+            new TrcPose2D(-fieldWidth + 84.0, 60.0, 180.0);
         public static final TrcPose2D BLUE_OUTPOST_NEUTRAL_PICKUP_POSE =    // (-55.89,301.61,-90.0)
             new TrcPose2D(-55.89, fieldLength / 2.0 - 24.0, -90.0);
         public static final TrcPose2D BLUE_DEPOT_NEUTRAL_PICKUP_POSE =      // (-261.8,301.61,90.0)

@@ -23,15 +23,14 @@
  package teamcode.subsystems;
 
 import frclib.driverio.FrcDashboard;
+import frclib.motor.FrcCANSparkMax.SparkMaxMotorParams;
 import frclib.motor.FrcMotorActuator;
 import frclib.motor.FrcMotorActuator.MotorType;
-import frclib.motor.FrcMotorActuator.SparkMaxMotorParams;
 import teamcode.Dashboard;
 import teamcode.FrcTest;
 import teamcode.RobotParams;
 import trclib.motor.TrcMotor;
 import trclib.motor.TrcMotor.PidParams;
-import trclib.robotcore.TrcDbgTrace;
 import trclib.robotcore.TrcEvent;
 import trclib.subsystem.TrcSubsystem;
 
@@ -46,7 +45,7 @@ public class Climber extends TrcSubsystem
 
         // Motor Characteristics
         public static final MotorType CLIMBER_MOTOR_TYPE        = MotorType.CanSparkMax;
-        public static final SparkMaxMotorParams CLIMBER_SPARKMAX_PARAMS = new SparkMaxMotorParams(true, false);
+        public static final SparkMaxMotorParams CLIMBER_SPARKMAX_PARAMS = new SparkMaxMotorParams(true);
         public static final String CLIMBER_MOTOR_NAME           = SUBSYSTEM_NAME + ".Motor";
         public static final boolean CLIMBER_MOTOR_INVERTED      = false;
         public static final int CLIMBER_MOTOR_CANID             = RobotParams.HwConfig.CANID_CLIMBER_MOTOR;
@@ -67,7 +66,7 @@ public class Climber extends TrcSubsystem
         public static final double CLIMBER_MIN_POS              = CLIMBER_POS_OFFSET;
         public static final double CLIMBER_MAX_POS              = 26.5;
         public static final double CLIMBER_POS_PRESET_TOLERANCE = 5.0;
-        public static final double CLIMBER_RETRACT_POS          = 20.7;
+        public static final double CLIMBER_RETRACT_POS          = CLIMBER_MIN_POS;
         public static final double CLIMBER_EXTEND_POS           = 25.4;
         public static final double[] CLIMBER_POS_PRESETS        = {CLIMBER_RETRACT_POS, CLIMBER_EXTEND_POS};
         // Zero calibration
@@ -177,12 +176,6 @@ public class Climber extends TrcSubsystem
             }
         }
 
-        if (dashboard.getBoolean(Dashboard.DBKEY_CLIMBER_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs))
-        {
-            dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, climber.getPosition());
-            dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET, climber.getPidTarget());
-        }
-
         return lineNum;
     }   //updateStatus
 
@@ -193,14 +186,22 @@ public class Climber extends TrcSubsystem
     @Override
     public void updateParamsToDashboard()
     {
-        dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KP, Params.CLIMBER_MOTOR_PID_KP);
-        dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KI, Params.CLIMBER_MOTOR_PID_KI);
-        dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KD, Params.CLIMBER_MOTOR_PID_KD);
-        dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KF, Params.CLIMBER_MOTOR_PID_KF);
-        dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_IZONE, Params.CLIMBER_MOTOR_PID_IZONE);
-        dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.CLIMBER_PID_TOLERANCE);
-        dashboard.putBoolean(Dashboard.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.CLIMBER_SOFTWARE_PID_ENABLED);
-        dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
+        String subsystemName = FrcTest.testChoices.getSubsystemName();
+
+        if (!subsystemName.isEmpty())
+        {
+            if (subsystemName.equalsIgnoreCase(Params.CLIMBER_MOTOR_NAME))
+            {
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KP, Params.CLIMBER_MOTOR_PID_KP);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KI, Params.CLIMBER_MOTOR_PID_KI);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KD, Params.CLIMBER_MOTOR_PID_KD);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_KF, Params.CLIMBER_MOTOR_PID_KF);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_IZONE, Params.CLIMBER_MOTOR_PID_IZONE);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TOLERANCE, Params.CLIMBER_PID_TOLERANCE);
+                dashboard.putBoolean(Dashboard.DBKEY_TEST_SUBSYSTEM_SOFTWARE_PID, Params.CLIMBER_SOFTWARE_PID_ENABLED);
+                dashboard.putNumber(Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET_PARAM, 0.0);
+            }
+        }
     }   //updateParamsToDashboard
 
     /**
@@ -210,9 +211,24 @@ public class Climber extends TrcSubsystem
     @Override
     public void updateParamsFromDashboard()
     {
-        TrcMotor.PidParams pidParams = FrcTest.testChoices.getSubsystemPidParameters();
-        climber.setPositionPidParameters(pidParams, null);
-        TrcDbgTrace.globalTraceInfo(instanceName, "Tune %s: PidParams=%s", Params.CLIMBER_MOTOR_NAME, pidParams);
+        String subsystemName = FrcTest.testChoices.getSubsystemName();
+
+        if (!subsystemName.isEmpty())
+        {
+            TrcMotor.PidParams pidParams = FrcTest.testChoices.getSubsystemPidParameters();
+            boolean foundMatch = false;
+
+            if (subsystemName.equalsIgnoreCase(Params.CLIMBER_MOTOR_NAME))
+            {
+                climber.setPositionPidParameters(pidParams, null);
+                foundMatch = true;
+            }
+
+            if (foundMatch)
+            {
+                climber.tracer.traceInfo(instanceName, "Tune %s: PidParams=%s", subsystemName, pidParams);
+            }
+        }
     }   //updateParamsFromDashboard
 
 }   //class Climber

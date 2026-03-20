@@ -56,7 +56,6 @@ public class Dashboard
 
     // Shooter.
     public static final String DBKEY_SHOOTER_SHOW_STATUS            = "Shooter/ShowStatus";
-    public static final String DBKEY_SHOOTER_SHOW_GRAPHS            = "Shooter/ShowGraphs";
     public static final String DBKEY_SHOOTER_INTERPOLATION          = "Shooter/Interpolation";
     public static final String DBKEY_SHOOTER_USE_MOTION_COMPENSATION= "Shooter/UseMotionCompensation";
 
@@ -96,7 +95,6 @@ public class Dashboard
 
     // Intake.
     public static final String DBKEY_INTAKE_SHOW_STATUS             = "Intake/ShowStatus";
-    public static final String DBKEY_INTAKE_SHOW_GRAPHS             = "Intake/ShowGraphs";
 
     public static final String DBKEY_INTAKE_POWER                   = "Intake/IntakePower";
     public static final String DBKEY_INTAKE_CURRENT                 = "Intake/IntakeCurrent";
@@ -105,7 +103,6 @@ public class Dashboard
 
     // Climber.
     public static final String DBKEY_CLIMBER_SHOW_STATUS            = "Climber/ShowStatus";
-    public static final String DBKEY_CLIMBER_SHOW_GRAPHS            = "Climber/ShowGraphs";
 
     public static final String DBKEY_CLIMBER_POWER                  = "Climber/ClimberPower";
     public static final String DBKEY_CLIMBER_CURRENT                = "Climber/ClimberCurrent";
@@ -214,7 +211,7 @@ public class Dashboard
         dashboard.refreshKey(DBKEY_PREFERENCE_DEBUG_DRIVEBASE, RobotParams.Preferences.debugDriveBase);
         dashboard.refreshKey(DBKEY_PREFERENCE_DEBUG_PIDDRIVE, RobotParams.Preferences.debugPidDrive);
         dashboard.refreshKey(DBKEY_PREFERENCE_VISION_STATUS, RobotParams.Preferences.showVisionStatus);
-        dashboard.refreshKey(DBKEY_PREFERENCE_SUBSYSTEM_STATUS, RobotParams.Preferences.showSubsystems);
+        dashboard.refreshKey(DBKEY_PREFERENCE_SUBSYSTEM_STATUS, RobotParams.Preferences.showSubsystemStatus);
         dashboard.refreshKey(DBKEY_PREFERENCE_SUBSYSTEM_ZEROCAL, RobotParams.Preferences.zeroCalSubsystems);
         // Drive Base.
         dashboard.refreshKey(DBKEY_ROBOT_POSE, "");
@@ -239,7 +236,6 @@ public class Dashboard
             RobotParams.Preferences.shooterInterpolation == Interpolation.CustomInterpolation, true);
 
         dashboard.refreshKey(DBKEY_SHOOTER_SHOW_STATUS, RobotParams.Preferences.showShooterStatus);
-        dashboard.refreshKey(DBKEY_SHOOTER_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs);
         dashboard.refreshKey(DBKEY_LSHOOTER_RPM, 0.0);
         dashboard.refreshKey(DBKEY_LSHOOTER_TARGET_RPM, 0.0);
         dashboard.refreshKey(DBKEY_RSHOOTER_RPM, 0.0);
@@ -250,10 +246,8 @@ public class Dashboard
         dashboard.refreshKey(DBKEY_RTILT_TARGET, 0.0);
         // Intake.
         dashboard.refreshKey(DBKEY_INTAKE_SHOW_STATUS, RobotParams.Preferences.showIntakeStatus);
-        dashboard.refreshKey(DBKEY_INTAKE_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs);
         // Climber.
         dashboard.refreshKey(DBKEY_CLIMBER_SHOW_STATUS, RobotParams.Preferences.showClimberStatus);
-        dashboard.refreshKey(DBKEY_CLIMBER_SHOW_GRAPHS, RobotParams.Preferences.showSubsystemGraphs);
         // TeleOp.
         dashboard.refreshKey(DBKEY_TELEOP_DRIVE_NORMAL_SCALE, FrcTeleOp.DEF_DRIVE_NORMAL_SCALE);
         dashboard.refreshKey(DBKEY_TELEOP_DRIVE_SLOW_SCALE, FrcTeleOp.DEF_DRIVE_SLOW_SCALE);
