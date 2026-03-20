@@ -444,13 +444,15 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                             robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
                             if (i == 4 && !atDepot)
                             {
-                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
+                                // robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
                                 robot.intakeSubsystem.setIntakeEnabled(true);
                                 robot.autoShootTask.autoShoot(null, null, false, true);
                             }
                             if (i == 4 && atDepot)
                             {
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.85);
+                                robot.intakeSubsystem.setIntakeEnabled(true);
+                                robot.autoShootTask.autoShoot(null, null, false, true);
                             }
                         },
                         robot.adjustPathByAlliance(alliance, neutralZoneReturnPath));
