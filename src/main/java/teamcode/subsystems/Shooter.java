@@ -994,7 +994,14 @@ public class Shooter extends TrcSubsystem
                     // Compensate for robot motion.
                     TargetInfo targetInfo = leftShooter.compensateRobotMotion(
                         robot.robotBase.driveBase, this::getTargetInfo,
-                        new TargetInfo(targetPose, shootParams.outputs[2]), 0.0001, 5, Params.SHOOTER_EXIT_DELAY);
+                        new TargetInfo(
+                            targetPose,
+                            new AimInfo(shootParams.outputs[0],
+                                        null,
+                                        null,
+                                        shootParams.outputs[1]),
+                            shootParams.outputs[2]),
+                        0.0001, 5, Params.SHOOTER_EXIT_DELAY);
                     targetPose = targetInfo.targetPose;
                     shootParams = goalTrackingState.shootParamsTable.get(
                         Math.hypot(targetPose.x, targetPose.y), interpolation);
@@ -1079,7 +1086,13 @@ public class Shooter extends TrcSubsystem
                 Math.hypot(targetPose.x, targetPose.y), Dashboard.getShooterInterpolation());
 
         tracer.traceDebug(instanceName, "targetPose=" + targetPose + ", shootParams=" + shootParams + "");
-        return new TargetInfo(targetPose, shootParams.outputs[2]);
+        return new TargetInfo(
+            targetPose,
+            new AimInfo(shootParams.outputs[0],
+                        null,
+                        Math.toDegrees(Math.atan2(targetPose.x, targetPose.y)),
+                        shootParams.outputs[1]),
+            shootParams.outputs[2]);
     }   //getTargetInfo
 
     /**

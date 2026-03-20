@@ -43,6 +43,7 @@ public class Dashboard
 
     // Drive Base.
     public static final String DBKEY_ROBOT_POSE                     = "DriveBase/RobotPose";
+    public static final String DBKEY_ROBOT_VEL                      = "DriveBase/RobotVel";
     public static final String DBKEY_DRIVE_ENC                      = "DriveBase/DriveEnc";
     public static final String DBKEY_STEER_FRONT                    = "DriveBase/SteerFront";
     public static final String DBKEY_STEER_BACK                     = "DriveBase/SteerBack";
@@ -215,6 +216,7 @@ public class Dashboard
         dashboard.refreshKey(DBKEY_PREFERENCE_SUBSYSTEM_ZEROCAL, RobotParams.Preferences.zeroCalSubsystems);
         // Drive Base.
         dashboard.refreshKey(DBKEY_ROBOT_POSE, "");
+        dashboard.refreshKey(DBKEY_ROBOT_VEL, "");
         dashboard.refreshKey(DBKEY_DRIVE_ENC, "");
         dashboard.refreshKey(DBKEY_STEER_FRONT, "");
         dashboard.refreshKey(DBKEY_STEER_BACK, "");
