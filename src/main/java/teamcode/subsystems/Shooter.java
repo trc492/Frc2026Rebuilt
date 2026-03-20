@@ -203,7 +203,7 @@ public class Shooter extends TrcSubsystem
         public static final double RTILT_MOTOR_PID_IZONE        = 0.0;
 
         // Common Turret Motor Characteristics
-        public static final boolean TURRET_HAS_ABS_ENC          = true;
+        public static final boolean TURRET_HAS_ABS_ENC          = false;
         public static final double TURRET_MOTOR_GEAR_RATIO      = 0.9571438827*(20.0*130.0/40.0);   // Load/Motor
         public static final double TURRET_MOTOR_DEG_PER_COUNT   = 360.0/TURRET_MOTOR_GEAR_RATIO;
         public static final MotorType TURRET_MOTOR_TYPE         = MotorType.CanSparkMax;
@@ -994,7 +994,7 @@ public class Shooter extends TrcSubsystem
                     // Compensate for robot motion.
                     TargetInfo targetInfo = leftShooter.compensateRobotMotion(
                         robot.robotBase.driveBase, this::getTargetInfo,
-                        new TargetInfo(targetPose, shootParams.outputs[2]), 0.01, 5, Params.SHOOTER_EXIT_DELAY);
+                        new TargetInfo(targetPose, shootParams.outputs[2]), 0.0001, 5, Params.SHOOTER_EXIT_DELAY);
                     targetPose = targetInfo.targetPose;
                     shootParams = goalTrackingState.shootParamsTable.get(
                         Math.hypot(targetPose.x, targetPose.y), interpolation);
