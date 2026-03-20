@@ -566,6 +566,7 @@ public class DriveBase extends TrcSubsystem
         if (slowLoop)
         {
             dashboard.putString(Dashboard.DBKEY_ROBOT_POSE, robotBase.driveBase.getFieldPosition().toString());
+            dashboard.putString(Dashboard.DBKEY_ROBOT_VEL, robotBase.driveBase.getRobotVelocity().toString());
             if (dashboard.getBoolean(
                     Dashboard.DBKEY_PREFERENCE_DEBUG_DRIVEBASE, RobotParams.Preferences.debugDriveBase))
             {

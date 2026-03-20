@@ -549,7 +549,7 @@ public class FrcTest extends FrcTeleOp
                 if (robot.robotBase != null)
                 {
                     double currTime = TrcTimer.getCurrentTime();
-                    TrcPose2D velPose = robot.robotBase.driveBase.getFieldVelocity();
+                    TrcPose2D velPose = robot.robotBase.driveBase.getRobotVelocity();
                     double velocity = TrcUtil.magnitude(velPose.x, velPose.y);
                     double acceleration = 0.0;
                     double deceleration = 0.0;
