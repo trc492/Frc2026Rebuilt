@@ -442,15 +442,14 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         {
                             robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
                             robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
-                            if (i == 4 && !atDepot)
+                            if (i == 4)
                             {
                                 // robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
-                                robot.intakeSubsystem.setIntakeEnabled(true);
-                                robot.autoShootTask.autoShoot(null, null, false, true);
-                            }
-                            if (i == 4 && atDepot)
-                            {
-                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.85);
+                                if (atDepot)
+                                {
+                                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.85);
+                                    robot.intakeSubsystem.setIntakeEnabled(true);
+                                }
                                 robot.intakeSubsystem.setIntakeEnabled(true);
                                 robot.autoShootTask.autoShoot(null, null, false, true);
                             }
