@@ -427,7 +427,7 @@ public class Robot extends FrcRobot
                 if (aprilTagObj != null)
                 {
                     seenAprilTag = true;
-                    TrcPose2D robotVel = robotBase.driveBase.getFieldVelocity();
+                    TrcPose2D robotVel = robotBase.driveBase.getRobotVelocity();
                     TrcPose2D relocalizedPose =
                         Math.hypot(robotVel.x, robotVel.y) > 0.01 || Math.abs(robotVel.angle) > 1.0?
                             trcVisionRelocalize.getRelocalizedPose(
