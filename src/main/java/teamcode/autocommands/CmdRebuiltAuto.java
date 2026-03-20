@@ -352,7 +352,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     TrcPose2D returnPose = startPose.clone();
                     returnPose.angle = -180.0;
                     returnPose.x += atDepot? 19.0 : -10.0;
-                    returnPose.y -= atDepot? 40.0: 50.0;
+                    returnPose.y -= atDepot? 40.0: 24.0;
                     if (!atDepot)
                     {
                         TrcPose2D outpostPickupPose = RobotParams.Game.BLUE_OUTPOST_PICKUP_POSE;
@@ -442,16 +442,16 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         {
                             robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
                             robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
-                            if (i == 4)
+                            if (i == 3)
                             {
-                                // robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
-                                if (atDepot)
-                                {
-                                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.85);
-                                    robot.intakeSubsystem.setIntakeEnabled(true);
-                                }
+                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.2);
                                 robot.intakeSubsystem.setIntakeEnabled(true);
                                 robot.autoShootTask.autoShoot(null, null, false, true);
+                            } 
+                            if(i == 4 && atDepot)
+                            {
+                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.85);
+
                             }
                         },
                         robot.adjustPathByAlliance(alliance, neutralZoneReturnPath));
