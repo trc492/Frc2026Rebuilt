@@ -162,6 +162,7 @@ public class Robot extends FrcRobot
         dashboard = new Dashboard().getDashboard();
         traceLogOpened = false;
         createTeamFolderPath();
+        DataLogManager.start();
         // Create and initialize inputs.
         if (RobotParams.Preferences.hasDriverGameController)
         {
@@ -310,7 +311,6 @@ public class Robot extends FrcRobot
             // Start trace logging.
             if (RobotParams.Preferences.useTraceLog)
             {
-                DataLogManager.start();
                 openTraceLog(matchInfo);
                 setTraceLogEnabled(true);
             }
