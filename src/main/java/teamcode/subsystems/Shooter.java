@@ -84,7 +84,7 @@ public class Shooter extends TrcSubsystem
             // RPM (Linear)
             {1455.43247, 14.79514}, 
             // Hood Angle (Constant)
-            {45.0},
+            {40.0},
             // Time of Flight (Constant),
             {2.5}
         })
@@ -92,7 +92,7 @@ public class Shooter extends TrcSubsystem
 
     public static final TrcLookupTable hubShootParamsTable = new TrcLookupTable()
         //        name,                 distance,   region,             ShooterVel, HoodAngle,  Tof
-        .addEntry(HUB_SHOOT_POINT,      56.0,       hubRegions[0],      3950.0,     18.0,       (0.95-0.11))
+        .addEntry(HUB_SHOOT_POINT,      56.0,       hubRegions[0],      4100.0,     18.0,       (0.95-0.11)) // Changed for manual shoot, original was 3950
         .addEntry(null,                 80.0,       hubRegions[0],      4250.0,     20.0,       (2.32-1.29))
         .addEntry(null,                 104.0,      hubRegions[0],      4600.0,     22.0,       (3.235-2.10))
         .addEntry(null,                 128.0,      hubRegions[0],      4900.0,     24.0,       (4.45-3.23))
@@ -130,7 +130,7 @@ public class Shooter extends TrcSubsystem
         public static final double SHOOTER_VEL_TRIGGER_SETTLING = 0.0;
         public static final double SHOOTER_VEL_TRIGGER_TIMEOUT  = 2.0;
         public static final double SHOOTER_RPM_CONFLICT_ZONE_ADJ= 0.0;
-        public static final double SHOOTER_READY_TIMEOUT        = 2.0;          // in sec
+        public static final double SHOOTER_READY_TIMEOUT        = 1.0;          // in sec
         public static final double SHOOTER_EXIT_DELAY           = 0.0;          // TODO: Need to tune it by looking at timestamp in the log
         // Left Shooter Motor Characteristics
         public static final String LSHOOTER_PRIMARY_MOTOR_NAME  = SUBSYSTEM_NAME + ".LeftPrimaryMotor";
@@ -882,11 +882,21 @@ public class Shooter extends TrcSubsystem
         {
             // Passback tracking mode.
             // Check if we should point to the audience side or the scoretable side.
-            goalTrackingState.goalFieldPose =
-                robot.adjustPoseByAlliance(
-                    alliance,
-                    fieldWidthZone <= 1? RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
-                                         RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE);
+            if(alliance == Alliance.Red)
+            {
+                goalTrackingState.goalFieldPose =
+                    robot.adjustPoseByAlliance(
+                        alliance,
+                        fieldWidthZone <= 1? RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE:
+                                            RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE);
+            } else 
+            {
+                goalTrackingState.goalFieldPose =
+                    robot.adjustPoseByAlliance(
+                        alliance,
+                        fieldWidthZone <= 1? RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
+                                            RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE);             
+            }
             goalTrackingState.shootParamsTable = passbackShootParamsTable;
             // Check for hub shadow zone.
             if ((fieldWidthZone == 1 || fieldWidthZone == 2) && (fieldLengthZone == 2 || fieldLengthZone == 5))

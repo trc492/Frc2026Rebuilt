@@ -178,12 +178,15 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     climbSide = autoChoices.getClimbSide();
                     neutralZoneCycles = autoChoices.getNeutralZoneCycles();
                     robot.robotBase.purePursuitDrive.getTurnPidCtrl().setNoOscillation(true);
+                    robot.globalTracer.traceInfo(moduleName, "******* Done getting info");
 
                     if (robot.shooterSubsystem != null)
                     {
                         if (Shooter.Params.TURRET_HAS_ABS_ENC)
                         {
+                            robot.globalTracer.traceInfo(moduleName, "******* Before enabling goal tracking");
                             robot.shooterSubsystem.enableGoalTracking(true, false, true, true);
+                            robot.globalTracer.traceInfo(moduleName, "******* After enabling goal tracking");
                         }
                         else
                         {
@@ -265,7 +268,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                             if (i == 2)
                             {
                                 // At depotPickupPose.
-                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
+                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.3);
                                 if (robot.intakeSubsystem != null)
                                 {
                                     // Turning on Intake will deploy hopper too.
@@ -276,7 +279,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         robot.adjustPathByAlliance(alliance, intermediatePose, pickupPose, endPose));
                     sm.waitForSingleEvent(event, State.FINISH_PICKUP);
                     break;
-
+ 
                 case PICKUP_OUTPOST:
                     pickupPose = RobotParams.Game.BLUE_OUTPOST_PICKUP_POSE;
                     intermediatePose = pickupPose.clone();
@@ -446,9 +449,9 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         {
                             robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
                             robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
-                            if (i == 3)
+                            if (i == 4)
                             {
-                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.2);
+                                //robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
                                 robot.intakeSubsystem.setIntakeEnabled(true);
                                 robot.autoShootTask.autoShoot(null, null, false, true, false);
                             } 
