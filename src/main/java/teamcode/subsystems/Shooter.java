@@ -882,21 +882,12 @@ public class Shooter extends TrcSubsystem
         {
             // Passback tracking mode.
             // Check if we should point to the audience side or the scoretable side.
-            if(alliance == Alliance.Red)
-            {
-                goalTrackingState.goalFieldPose =
-                    robot.adjustPoseByAlliance(
-                        alliance,
-                        fieldWidthZone <= 1? RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE:
-                                            RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE);
-            } else 
-            {
-                goalTrackingState.goalFieldPose =
-                    robot.adjustPoseByAlliance(
-                        alliance,
-                        fieldWidthZone <= 1? RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
-                                            RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE);             
-            }
+            goalTrackingState.goalFieldPose =
+                robot.adjustPoseByAlliance(
+                    alliance,
+                    fieldWidthZone <= 1 && alliance == Alliance.Blue?
+                        RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
+                        RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE);
             goalTrackingState.shootParamsTable = passbackShootParamsTable;
             // Check for hub shadow zone.
             if ((fieldWidthZone == 1 || fieldWidthZone == 2) && (fieldLengthZone == 2 || fieldLengthZone == 5))

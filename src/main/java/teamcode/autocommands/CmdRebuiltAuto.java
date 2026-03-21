@@ -279,7 +279,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         robot.adjustPathByAlliance(alliance, intermediatePose, pickupPose, endPose));
                     sm.waitForSingleEvent(event, State.FINISH_PICKUP);
                     break;
- 
+
                 case PICKUP_OUTPOST:
                     pickupPose = RobotParams.Game.BLUE_OUTPOST_PICKUP_POSE;
                     intermediatePose = pickupPose.clone();
