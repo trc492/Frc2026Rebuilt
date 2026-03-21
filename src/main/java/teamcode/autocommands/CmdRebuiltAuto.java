@@ -133,6 +133,10 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
         {
             robot.shooterSubsystem.disableGoalTracking();
         }
+        if (robot.robotBase != null && robot.robotBase.purePursuitDrive != null)
+        {
+            robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
+        }
         sm.stop();
     }   //cancel
 
@@ -448,10 +452,9 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                                 robot.intakeSubsystem.setIntakeEnabled(true);
                                 robot.autoShootTask.autoShoot(null, null, false, true);
                             } 
-                            if(i == 4 && atDepot)
+                            else if (i == 4 && atDepot)
                             {
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.85);
-
                             }
                         },
                         robot.adjustPathByAlliance(alliance, neutralZoneReturnPath));
