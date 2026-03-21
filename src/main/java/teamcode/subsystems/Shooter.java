@@ -874,6 +874,9 @@ public class Shooter extends TrcSubsystem
             goalTrackingState.goalFieldPose =
                 robot.adjustPoseByAlliance(alliance, RobotParams.Game.BLUE_HUB_POSE);
             goalTrackingState.shootParamsTable = hubShootParamsTable;
+            tracer.traceInfo(
+                instanceName, "AlliancHub: alliance=%s, fieldLengthZone=%d, fieldWidthZone=%d.",
+                alliance, fieldLengthZone, fieldWidthZone);
         }
         else
         {
@@ -894,6 +897,9 @@ public class Shooter extends TrcSubsystem
                     robot.autoShootTask.cancel();
                 }
             }
+            tracer.traceInfo(
+                instanceName, "PassingBack: alliance=%s, fieldLengthZone=%d, fieldWidthZone=%d.",
+                alliance, fieldLengthZone, fieldWidthZone);
         }
         goalTrackingState.rightShooterAimInfo = null;
 
