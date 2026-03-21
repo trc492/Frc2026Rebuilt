@@ -693,7 +693,8 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 {
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Start Auto Shoot.");
                     robot.intakeSubsystem.setIntakeEnabled(true);
-                    robot.autoShootTask.autoShoot(null, null, false, false);
+                    robot.autoShootTask.autoShoot(
+                        null, null, false, false, robot.shooterSubsystem.isGoalTrackingEnabled());
                 }
                 else
                 {

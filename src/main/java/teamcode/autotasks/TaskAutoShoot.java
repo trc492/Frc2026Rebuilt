@@ -49,16 +49,18 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
     {
         public boolean autoStop = false;
         public boolean noPassback = false;
+        public boolean noWait = false;
 
-        public TaskParams(boolean autoStop, boolean noPassback)
+        public TaskParams(boolean autoStop, boolean noPassback, boolean noWait)
         {
             this.autoStop = autoStop;
             this.noPassback = noPassback;
+            this.noWait = noWait;
         }   //TaskParams
 
         public String toString()
         {
-            return "(autoStop=" + autoStop + ", noPassback=" + noPassback + ")";
+            return "(autoStop=" + autoStop + ", noPassback=" + noPassback + ", noWait=" + noWait + ")";
         }   //toString
     }   //class TaskParams
 
@@ -97,10 +99,11 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      * @param autoStop specifies true to detect hopper empty and auto stop, false otherwise.
      * @param noPassback specifies true to force shooters to tracking AllianceHub only.
+     * @param noWait specifies true to not wait for the shooter ready, false otherwise.
      */
-    public void autoShoot(String owner, TrcEvent completionEvent, boolean autoStop, boolean noPassback)
+    public void autoShoot(String owner, TrcEvent completionEvent, boolean autoStop, boolean noPassback, boolean noWait)
     {
-        TaskParams taskParams = new TaskParams(autoStop, noPassback);
+        TaskParams taskParams = new TaskParams(autoStop, noPassback, noWait);
         tracer.traceInfo(
             moduleName,
             "autoShoot(owner=" + owner + ", event=" + completionEvent + ", taskParams=" + taskParams + ")");
@@ -230,13 +233,13 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
 
             case SHOOT:
                 boolean timedOut = TrcTimer.getCurrentTime() > shootReadyTimeout;
-                if (!turretReady && (robot.turret == null || turretReadyEvent.isSignaled()))
+                if (taskParams.noWait || !turretReady && (robot.turret == null || turretReadyEvent.isSignaled()))
                 {
                     turretReady = true;
                 }
 
                 if (robot.leftShooter != null && !leftShooterShooting &&
-                    (timedOut || turretReady && leftShooterReadyEvent.isSignaled()))
+                    (taskParams.noWait || timedOut || turretReady && leftShooterReadyEvent.isSignaled()))
                 {
                     tracer.traceInfo(
                         moduleName,
@@ -248,7 +251,7 @@ public class TaskAutoShoot extends TrcAutoTask<TaskAutoShoot.State>
                 }
 
                 if (robot.rightShooter != null && !rightShooterShooting &&
-                    (timedOut || turretReady && rightShooterReadyEvent.isSignaled()))
+                    (taskParams.noWait || timedOut || turretReady && rightShooterReadyEvent.isSignaled()))
                 {
                     tracer.traceInfo(
                         moduleName,

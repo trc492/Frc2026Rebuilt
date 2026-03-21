@@ -321,7 +321,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     nextState = climb? State.GO_TO_CLIMB_POS: State.DONE;
                     if (robot.shooterSubsystem != null)
                     {
-                        robot.autoShootTask.autoShoot(null, event, true, true);
+                        robot.autoShootTask.autoShoot(null, event, true, true, false);
                         sm.waitForSingleEvent(event, nextState);
                     }
                     else
@@ -419,7 +419,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.4);
                                 if (passBack == PassBack.PASS_BACK && robot.autoShootTask != null)
                                 {
-                                    robot.autoShootTask.autoShoot(null, null, false, false);
+                                    robot.autoShootTask.autoShoot(null, null, false, false, false);
                                 }
                             }
                         },
@@ -450,7 +450,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                             {
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.2);
                                 robot.intakeSubsystem.setIntakeEnabled(true);
-                                robot.autoShootTask.autoShoot(null, null, false, true);
+                                robot.autoShootTask.autoShoot(null, null, false, true, false);
                             } 
                             else if (i == 4 && atDepot)
                             {
@@ -477,7 +477,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     }
                     if (robot.autoShootTask != null)
                     {
-                        robot.autoShootTask.autoShoot(null, event, true, true);
+                        robot.autoShootTask.autoShoot(null, event, true, true, false);
                         sm.waitForSingleEvent(event, nextState, 8.0);
                     }
                     else
