@@ -56,7 +56,7 @@ public class RobotParams
         // Status Update: Dashboard Update may affect robot loop time, don't do it when in competition.
         public static final boolean updateDashboard             = !inCompetition;   // Start up default value.
         public static final boolean useLED                      = true;
-        public static final boolean useRumble                   = false;
+        public static final boolean useRumble                   = true;
         public static final boolean hasDriverGameController     = true;
         public static final boolean hasOperatorGameController   = robotType == RobotType.RebuiltRobot;
         // Vision
@@ -195,6 +195,15 @@ public class RobotParams
         public static final double AUTONOMOUS_PERIOD            = 20.0;     // in seconds
         public static final double TELEOP_PERIOD                = 140.0;    // in seconds
         public static final double ENDGAME_THRESHOLD            = 30.0;     // in seconds
+        public static final double SHIFT_THRESHOLD              = 2.0;
+        public static final double[] SHIFTS                     = new double[]
+        {
+            10 - SHIFT_THRESHOLD,       //Transition Shift ends
+            35 - SHIFT_THRESHOLD,       //Shift 1 ends
+            60 - SHIFT_THRESHOLD,       //Shift 2 ends
+            85 - SHIFT_THRESHOLD,       //Shift 3 ends
+            110 - SHIFT_THRESHOLD       //Shift 4 ends
+        };
         //
         // Field configuration and dimensions in inches.
         //
