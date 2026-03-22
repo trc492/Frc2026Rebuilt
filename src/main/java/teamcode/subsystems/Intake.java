@@ -85,7 +85,7 @@ public class Intake extends TrcSubsystem
     private final FrcDashboard dashboard;
     private final Robot robot;
     private final TrcMotor intake;
-    private final FrcCANCoder deployerEncoder;
+    //private final FrcCANCoder deployerEncoder;
     private boolean intakeOn = false;
 
     /**
@@ -98,11 +98,11 @@ public class Intake extends TrcSubsystem
         this.dashboard = FrcDashboard.getInstance();
         this.robot = robot;
 
-        deployerEncoder = new FrcCANCoder(
-            Params.DEPLOYER_ENCODER_NAME, Params.DEPLOYER_ENCODER_CANID, Params.CANBUS_NAME);
-        deployerEncoder.setAbsoluteRange(true);
-        deployerEncoder.setZeroOffset(Params.DEPLOYER_ENCODER_ZERO_OFFSET);
-        deployerEncoder.setInverted(Params.DEPLOYER_ENCODER_INVERTED);
+        // deployerEncoder = new FrcCANCoder(
+        //     Params.DEPLOYER_ENCODER_NAME, Params.DEPLOYER_ENCODER_CANID, Params.CANBUS_NAME);
+        // deployerEncoder.setAbsoluteRange(true);
+        // deployerEncoder.setZeroOffset(Params.DEPLOYER_ENCODER_ZERO_OFFSET);
+        // deployerEncoder.setInverted(Params.DEPLOYER_ENCODER_INVERTED);
 
         FrcMotorActuator.Params intakeParams = new FrcMotorActuator.Params()
             .setPrimaryMotor(
@@ -112,12 +112,12 @@ public class Intake extends TrcSubsystem
             .setPositionPresets(Params.DEPLOYER_PRESET_TOLERANCE, Params.DEPLOYER_POS_PRESETS);
 
         intake = new FrcMotorActuator(intakeParams).getMotor();
-        intake.setPositionPidParameters(
-            new PidParams()
-                .setPidCoefficients(
-                    Params.DEPLOYER_PID_KP, Params.DEPLOYER_PID_KI, Params.DEPLOYER_PID_KD, Params.DEPLOYER_PID_KF,
-                    Params.DEPLOYER_PID_IZONE)
-                .setPidControlParams(Params.DEPLOYER_PID_TOLERANCE, Params.DEPLOYER_SOFTWARE_PID), deployerEncoder::getScaledPosition);
+        // intake.setPositionPidParameters(
+        //     new PidParams()
+        //         .setPidCoefficients(
+        //             Params.DEPLOYER_PID_KP, Params.DEPLOYER_PID_KI, Params.DEPLOYER_PID_KD, Params.DEPLOYER_PID_KF,
+        //             Params.DEPLOYER_PID_IZONE)
+        //         .setPidControlParams(Params.DEPLOYER_PID_TOLERANCE, Params.DEPLOYER_SOFTWARE_PID), null);
         intake.setStatorCurrentLimit(Params.INTAKE_MOTOR_STATOR_LIMIT);
         intake.setCurrentLimit(Params.INTAKE_MOTOR_SUPPLY_LIMIT, 0.0, 0.0);
     }   //Intake
@@ -205,9 +205,9 @@ public class Intake extends TrcSubsystem
             {
                 dashboard.putNumber(Dashboard.DBKEY_INTAKE_POWER, intake.getPower());
                 dashboard.putNumber(Dashboard.DBKEY_INTAKE_CURRENT, intake.getCurrent());
-                dashboard.putString(
-                    Dashboard.DBKEY_DEPLOYER_POS, String.format("%8.6f/%8.6f",
-                    deployerEncoder.getScaledPosition(), deployerEncoder.getRawPosition()));
+                // dashboard.putString(
+                //     Dashboard.DBKEY_DEPLOYER_POS, String.format("%8.6f/%8.6f",
+                //     deployerEncoder.getScaledPosition(), deployerEncoder.getRawPosition()));
                 dashboard.putNumber(Dashboard.DBKEY_DEPLOYER_TARGET, intake.getPidTarget());
             }
         }

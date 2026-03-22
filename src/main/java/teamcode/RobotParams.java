@@ -56,7 +56,7 @@ public class RobotParams
         // Status Update: Dashboard Update may affect robot loop time, don't do it when in competition.
         public static final boolean updateDashboard             = !inCompetition;   // Start up default value.
         public static final boolean useLED                      = true;
-        public static final boolean useRumble                   = true;
+        public static final boolean useRumble                   = false;
         public static final boolean hasDriverGameController     = true;
         public static final boolean hasOperatorGameController   = robotType == RobotType.RebuiltRobot;
         // Vision
