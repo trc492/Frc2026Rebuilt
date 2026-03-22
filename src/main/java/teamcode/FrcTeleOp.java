@@ -134,6 +134,10 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 {
                     if (!canceled)
                     {
+                        TrcTriggerThresholdZones.CallbackContext context =
+                            (TrcTriggerThresholdZones.CallbackContext) ctxt;
+
+                        robot.globalTracer.traceInfo(moduleName, "End of shift " + context.prevZone);
                         if (robot.driverController != null)
                         {
                             robot.driverController.setRumble(RumbleType.kBothRumble, 1.0, 0.5);
@@ -170,6 +174,10 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     @Override
     public void stopMode(RunMode prevMode, RunMode nextMode)
     {
+        if (shiftsTrigger != null)
+        {
+            shiftsTrigger.disableTrigger();
+        }
         //
         // Disabling joysticks.
         //
