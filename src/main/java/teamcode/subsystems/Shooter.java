@@ -889,10 +889,11 @@ public class Shooter extends TrcSubsystem
                         RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
                         RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE);
             goalTrackingState.shootParamsTable = passbackShootParamsTable;
-            // Check for hub shadow zone.
-            if ((fieldWidthZone == 1 || fieldWidthZone == 2) && (fieldLengthZone == 2 || fieldLengthZone == 5))
+            // Check for hub shadow zone and trench zone.
+            if (fieldLengthZone == 1 || fieldLengthZone == 6 ||
+                (fieldWidthZone == 1 || fieldWidthZone == 2) && (fieldLengthZone == 2 || fieldLengthZone == 5))
             {
-                // We are in hub shadown zone, don't passback there.
+                // We are in hub shadown zone or trench zone, don't passback there.
                 if (robot.autoShootTask != null && robot.autoShootTask.isActive())
                 {
                     robot.autoShootTask.cancel();
