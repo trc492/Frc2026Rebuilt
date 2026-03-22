@@ -92,7 +92,8 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         turnSpeedScale = robot.dashboard.getNumber(
             Dashboard.DBKEY_TELEOP_TURN_NORMAL_SCALE, DEF_TURN_NORMAL_SCALE);
 
-        if (RobotParams.Preferences.useRumble && (robot.driverController != null || robot.operatorController != null))
+        if ((robot.driverController != null || robot.operatorController != null) &&
+             robot.dashboard.getBoolean(Dashboard.DBKEY_PREFERENCE_USE_RUMBLE, RobotParams.Preferences.useRumble))
         {
             shiftsTrigger = new TrcTriggerThresholdZones(
                 "ShiftsTrigger", TrcTimer::getModeElapsedTime, RobotParams.Game.SHIFTS);
