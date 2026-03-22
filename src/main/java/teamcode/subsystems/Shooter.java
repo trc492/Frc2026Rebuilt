@@ -1014,9 +1014,15 @@ public class Shooter extends TrcSubsystem
                         Math.hypot(targetPose.x, targetPose.y), interpolation);
                 }
 
+                double panAngle = Math.toDegrees(Math.atan2(targetPose.x, targetPose.y));
                 double targetPanAngle = leftShooter.adjustPanAngleToAvoidCrossover(
-                    Math.toDegrees(Math.atan2(targetPose.x, targetPose.y)),
-                    Params.TURRET_MIN_POS, Params.TURRET_MAX_POS);
+                    panAngle, Params.TURRET_MIN_POS, Params.TURRET_MAX_POS);
+                if (robot.autoShootTask != null && robot.autoShootTask.isActive() &&
+                    Math.abs(panAngle - targetPanAngle) > 180.0)
+                {
+                    tracer.traceInfo(instanceName, "Wrapping around hard stop, stop AutoShoot.");
+                    robot.autoShootTask.cancel();
+                }
                 double absPanAngle = Math.abs(targetPanAngle);
                 boolean inConflictZone =
                     absPanAngle >= Params.TURRET_CONFLICT_ZONE_LOW && absPanAngle <= Params.TURRET_CONFLICT_ZONE_HIGH;
