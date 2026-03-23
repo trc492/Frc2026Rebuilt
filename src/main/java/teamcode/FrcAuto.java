@@ -22,6 +22,8 @@
 
 package teamcode;
 
+import java.util.Arrays;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcMatchInfo;
@@ -34,6 +36,7 @@ import trclib.command.CmdTimedDrive;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcRobot;
 import trclib.robotcore.TrcRobot.RunMode;
+import trclib.timer.TrcTimer;
 
 /**
  * This class implements the code to run in Autonomous Mode.
@@ -361,11 +364,14 @@ public class FrcAuto implements TrcRobot.RobotMode
     @Override
     public void startMode(RunMode prevMode, RunMode nextMode)
     {
+double[] timestamps = new double[3];
+timestamps[0] = TrcTimer.getModeElapsedTime();
         //
         // Retrieve Auto choices.
         //
         robot.globalTracer.logInfo(moduleName, "MatchInfo", FrcMatchInfo.getMatchInfo().toString());
         robot.globalTracer.logInfo(moduleName, "AutoChoices", autoChoices.toString());
+timestamps[1] = TrcTimer.getModeElapsedTime();
         //
         // Create autonomous command.
         //
@@ -376,6 +382,7 @@ public class FrcAuto implements TrcRobot.RobotMode
                 {
                     autoCommand = new CmdRebuiltAuto(robot, autoChoices);
                 }
+timestamps[2] = TrcTimer.getModeElapsedTime();
                 break;
 
             case PP_DRIVE:
@@ -421,6 +428,7 @@ public class FrcAuto implements TrcRobot.RobotMode
                 autoCommand = null;
                 break;
         }
+        robot.globalTracer.traceInfo(moduleName, "AutoTimestamps=" + Arrays.toString(timestamps));
     }   //startMode
 
     /**

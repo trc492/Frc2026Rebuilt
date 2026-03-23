@@ -178,15 +178,12 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     climbSide = autoChoices.getClimbSide();
                     neutralZoneCycles = autoChoices.getNeutralZoneCycles();
                     robot.robotBase.purePursuitDrive.getTurnPidCtrl().setNoOscillation(true);
-                    robot.globalTracer.traceInfo(moduleName, "******* Done getting info");
 
                     if (robot.shooterSubsystem != null)
                     {
                         if (Shooter.Params.TURRET_HAS_ABS_ENC)
                         {
-                            robot.globalTracer.traceInfo(moduleName, "******* Before enabling goal tracking");
                             robot.shooterSubsystem.enableGoalTracking(true, false, true, true);
-                            robot.globalTracer.traceInfo(moduleName, "******* After enabling goal tracking");
                         }
                         else
                         {

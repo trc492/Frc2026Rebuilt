@@ -27,6 +27,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.PrintStream;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.stream.Stream;
@@ -73,6 +74,7 @@ import trclib.sensor.TrcRobotBattery;
 import trclib.subsystem.TrcRollerIntake;
 import trclib.subsystem.TrcShooter;
 import trclib.subsystem.TrcSubsystem;
+import trclib.timer.TrcTimer;
 import trclib.vision.TrcVisionRelocalize;
 
 /**
@@ -296,6 +298,8 @@ public class Robot extends FrcRobot
     @Override
     public void robotStartMode(RunMode runMode, RunMode prevMode)
     {
+double[] timestamps = new double[5];
+timestamps[0] = TrcTimer.getModeElapsedTime();
         // Enable LostComm detection.
         if (dashboard.getBoolean(
                 Dashboard.DBKEY_PREFERENCE_COMMSTATUS_MONITOR, RobotParams.Preferences.useCommStatusMonitor))
@@ -306,6 +310,7 @@ public class Robot extends FrcRobot
         // Read FMS Match info.
         FrcMatchInfo matchInfo = FrcMatchInfo.getMatchInfo();
         TrcBuildInfo buildInfo = TrcBuildInfo.getBuildInfo();
+timestamps[1] = TrcTimer.getModeElapsedTime();
         if (runMode != RunMode.DISABLED_MODE)
         {
             // Start trace logging.
@@ -314,6 +319,7 @@ public class Robot extends FrcRobot
                 openTraceLog(matchInfo);
                 setTraceLogEnabled(true);
             }
+timestamps[2] = TrcTimer.getModeElapsedTime();
             // Start RobotDrive.
             if (robotBase != null)
             {
@@ -339,6 +345,7 @@ public class Robot extends FrcRobot
                     }
                 }
             }
+timestamps[3] = TrcTimer.getModeElapsedTime();
             // Zero calibrate it only once. Don't do it again just because we are enabling/disabling robot.
             if (!zeroCalibrated &&
                 dashboard.getBoolean(
@@ -346,13 +353,15 @@ public class Robot extends FrcRobot
             {
                 zeroCalibrate(null, null);
             }
+timestamps[4] = TrcTimer.getModeElapsedTime();
             // Start subsystems.
             if (ledIndicator != null)
             {
                 ledIndicator.reset();
             }
         }
-        globalTracer.traceInfo(moduleName, "%s: ***** %s *****", matchInfo.eventDate, runMode);
+globalTracer.traceInfo(moduleName, "RobotTimestamps=" + Arrays.toString(timestamps));
+        globalTracer.traceInfo(moduleName, matchInfo.eventDate + ": ***** " + runMode + " *****");
         globalTracer.traceInfo(moduleName, "<BuildInfo " + buildInfo + " />");
     }   //robotStartMode
 
@@ -473,6 +482,8 @@ public class Robot extends FrcRobot
     @Override
     public void robotPeriodic(RunMode runMode, boolean slowPeriodicLoop)
     {
+double[] timestamps = new double[3];
+timestamps[0] = TrcTimer.getModeElapsedTime();
         if (relocalizationMode != RelocalizationMode.Disabled)
         {
             if (relocalizeRobot() && relocalizationMode == RelocalizationMode.OneShot)
@@ -480,6 +491,7 @@ public class Robot extends FrcRobot
                 relocalizationMode = RelocalizationMode.Disabled;
             }
         }
+timestamps[1] = TrcTimer.getModeElapsedTime();
 
         if (slowPeriodicLoop)
         {
@@ -494,6 +506,8 @@ public class Robot extends FrcRobot
             // in the Command-based framework to work.
             CommandScheduler.getInstance().run();
         }
+timestamps[1] = TrcTimer.getModeElapsedTime();
+globalTracer.traceInfo(moduleName, "RobotPeriodicTimestamps=" + Arrays.toString(timestamps));
     }   //robotPeriodic
 
     /**
