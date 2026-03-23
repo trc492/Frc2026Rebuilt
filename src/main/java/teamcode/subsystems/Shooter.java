@@ -84,15 +84,15 @@ public class Shooter extends TrcSubsystem
             // RPM (Linear)
             {1455.43247, 14.79514}, 
             // Hood Angle (Constant)
-            {45.0},
+            {40.0},
             // Time of Flight (Constant),
-            {2.5}
+            {1.5}
         })
     };
 
     public static final TrcLookupTable hubShootParamsTable = new TrcLookupTable()
         //        name,                 distance,   region,             ShooterVel, HoodAngle,  Tof
-        .addEntry(HUB_SHOOT_POINT,      56.0,       hubRegions[0],      3950.0,     18.0,       (0.95-0.11))
+        .addEntry(HUB_SHOOT_POINT,      56.0,       hubRegions[0],      4100.0,     18.0,       (0.95-0.11)) // Changed for manual shoot, original was 3950
         .addEntry(null,                 80.0,       hubRegions[0],      4250.0,     20.0,       (2.32-1.29))
         .addEntry(null,                 104.0,      hubRegions[0],      4600.0,     22.0,       (3.235-2.10))
         .addEntry(null,                 128.0,      hubRegions[0],      4900.0,     24.0,       (4.45-3.23))
@@ -130,7 +130,7 @@ public class Shooter extends TrcSubsystem
         public static final double SHOOTER_VEL_TRIGGER_SETTLING = 0.0;
         public static final double SHOOTER_VEL_TRIGGER_TIMEOUT  = 2.0;
         public static final double SHOOTER_RPM_CONFLICT_ZONE_ADJ= 0.0;
-        public static final double SHOOTER_READY_TIMEOUT        = 2.0;          // in sec
+        public static final double SHOOTER_READY_TIMEOUT        = 1.0;          // in sec
         public static final double SHOOTER_EXIT_DELAY           = 0.0;          // TODO: Need to tune it by looking at timestamp in the log
         // Left Shooter Motor Characteristics
         public static final String LSHOOTER_PRIMARY_MOTOR_NAME  = SUBSYSTEM_NAME + ".LeftPrimaryMotor";
@@ -203,7 +203,7 @@ public class Shooter extends TrcSubsystem
         public static final double RTILT_MOTOR_PID_IZONE        = 0.0;
 
         // Common Turret Motor Characteristics
-        public static final boolean TURRET_HAS_ABS_ENC          = false;
+        public static final boolean TURRET_HAS_ABS_ENC          = true;
         public static final double TURRET_MOTOR_GEAR_RATIO      = 0.9571438827*(20.0*130.0/40.0);   // Load/Motor
         public static final double TURRET_MOTOR_DEG_PER_COUNT   = 360.0/TURRET_MOTOR_GEAR_RATIO;
         public static final MotorType TURRET_MOTOR_TYPE         = MotorType.CanSparkMax;
@@ -874,26 +874,46 @@ public class Shooter extends TrcSubsystem
             goalTrackingState.goalFieldPose =
                 robot.adjustPoseByAlliance(alliance, RobotParams.Game.BLUE_HUB_POSE);
             goalTrackingState.shootParamsTable = hubShootParamsTable;
+            tracer.traceInfo(
+                instanceName, "AlliancHub: alliance=%s, fieldLengthZone=%d, fieldWidthZone=%d.",
+                alliance, fieldLengthZone, fieldWidthZone);
         }
         else
         {
             // Passback tracking mode.
             // Check if we should point to the audience side or the scoretable side.
-            goalTrackingState.goalFieldPose =
-                robot.adjustPoseByAlliance(
-                    alliance,
-                    fieldWidthZone <= 1? RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
-                                         RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE);
-            goalTrackingState.shootParamsTable = passbackShootParamsTable;
-            // Check for hub shadow zone.
-            if ((fieldWidthZone == 1 || fieldWidthZone == 2) && (fieldLengthZone == 2 || fieldLengthZone == 5))
+            if(alliance == Alliance.Red)
             {
-                // We are in hub shadown zone, don't passback there.
+                goalTrackingState.goalFieldPose =
+                    robot.adjustPoseByAlliance(
+                        alliance,
+                        fieldWidthZone <= 1 && alliance == Alliance.Blue?
+                            RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE:
+                            RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE);
+            } else 
+            {
+                goalTrackingState.goalFieldPose =
+                    robot.adjustPoseByAlliance(
+                        alliance,
+                        fieldWidthZone <= 1 && alliance == Alliance.Blue?
+                            RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
+                            RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE);        
+            }
+            
+            goalTrackingState.shootParamsTable = passbackShootParamsTable;
+            // Check for hub shadow zone and trench zone.
+            if (fieldLengthZone == 1 || fieldLengthZone == 6 ||
+                (fieldWidthZone == 1 || fieldWidthZone == 2) && (fieldLengthZone == 2 || fieldLengthZone == 5))
+            {
+                // We are in hub shadown zone or trench zone, don't passback there.
                 if (robot.autoShootTask != null && robot.autoShootTask.isActive())
                 {
                     robot.autoShootTask.cancel();
                 }
             }
+            tracer.traceInfo(
+                instanceName, "PassingBack: alliance=%s, fieldLengthZone=%d, fieldWidthZone=%d.",
+                alliance, fieldLengthZone, fieldWidthZone);
         }
         goalTrackingState.rightShooterAimInfo = null;
 
@@ -1007,9 +1027,15 @@ public class Shooter extends TrcSubsystem
                         Math.hypot(targetPose.x, targetPose.y), interpolation);
                 }
 
+                double panAngle = Math.toDegrees(Math.atan2(targetPose.x, targetPose.y));
                 double targetPanAngle = leftShooter.adjustPanAngleToAvoidCrossover(
-                    Math.toDegrees(Math.atan2(targetPose.x, targetPose.y)),
-                    Params.TURRET_MIN_POS, Params.TURRET_MAX_POS);
+                    panAngle, Params.TURRET_MIN_POS, Params.TURRET_MAX_POS);
+                if (robot.autoShootTask != null && robot.autoShootTask.isActive() &&
+                    Math.abs(panAngle - targetPanAngle) > 180.0)
+                {
+                    tracer.traceInfo(instanceName, "Wrapping around hard stop, stop AutoShoot.");
+                    robot.autoShootTask.cancel();
+                }
                 double absPanAngle = Math.abs(targetPanAngle);
                 boolean inConflictZone =
                     absPanAngle >= Params.TURRET_CONFLICT_ZONE_LOW && absPanAngle <= Params.TURRET_CONFLICT_ZONE_HIGH;

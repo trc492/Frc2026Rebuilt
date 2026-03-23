@@ -40,6 +40,7 @@ public class Dashboard
     public static final String DBKEY_PREFERENCE_VISION_STATUS       = "Preferences/VisionStatus";
     public static final String DBKEY_PREFERENCE_SUBSYSTEM_STATUS    = "Preferences/SubsystemStatus";
     public static final String DBKEY_PREFERENCE_SUBSYSTEM_ZEROCAL   = "Preferences/SubsystemZeroCal";
+    public static final String DBKEY_PREFERENCE_USE_RUMBLE          = "Preferences/UseRumble";
 
     // Drive Base.
     public static final String DBKEY_ROBOT_POSE                     = "DriveBase/RobotPose";
@@ -214,6 +215,7 @@ public class Dashboard
         dashboard.refreshKey(DBKEY_PREFERENCE_VISION_STATUS, RobotParams.Preferences.showVisionStatus);
         dashboard.refreshKey(DBKEY_PREFERENCE_SUBSYSTEM_STATUS, RobotParams.Preferences.showSubsystemStatus);
         dashboard.refreshKey(DBKEY_PREFERENCE_SUBSYSTEM_ZEROCAL, RobotParams.Preferences.zeroCalSubsystems);
+        dashboard.refreshKey(DBKEY_PREFERENCE_USE_RUMBLE, RobotParams.Preferences.useRumble);
         // Drive Base.
         dashboard.refreshKey(DBKEY_ROBOT_POSE, "");
         dashboard.refreshKey(DBKEY_ROBOT_VEL, "");

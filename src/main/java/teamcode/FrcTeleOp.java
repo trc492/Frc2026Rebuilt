@@ -32,6 +32,9 @@ import trclib.drivebase.TrcSwerveDrive;
 import trclib.driverio.TrcGameController.DriveMode;
 import trclib.robotcore.TrcRobot;
 import trclib.robotcore.TrcRobot.RunMode;
+import trclib.sensor.TrcTriggerThresholdZones;
+import trclib.sensor.TrcTrigger.TriggerMode;
+import trclib.timer.TrcTimer;
 
 /**
  * This class implements the code to run in TeleOp Mode.
@@ -43,7 +46,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
 
     public static final double DEF_DRIVE_NORMAL_SCALE = 1.0;
     public static final double DEF_DRIVE_SLOW_SCALE = 0.15;
-    public static final double DEF_TURN_NORMAL_SCALE = 0.5;
+    public static final double DEF_TURN_NORMAL_SCALE = 0.75;
     public static final double DEF_TURN_SLOW_SCALE = 0.2;
     //
     // Global objects.
@@ -53,10 +56,11 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     private final FrcChoiceMenu<DriveOrientation> driveOrientationMenu;
     private double driveSpeedScale;
     private double turnSpeedScale;
+    private TrcTriggerThresholdZones shiftsTrigger;
     private boolean controlsEnabled = false;
     protected boolean driverAltFunc = false;
     protected boolean operatorAltFunc = false;
-    private boolean rumbling = false;
+    // private boolean rumbling = false;
     private double prevPanPower = 0.0;
     private Double prevTiltPower = 0.0;
     private double prevClimbPower = 0.0;
@@ -87,6 +91,13 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             Dashboard.DBKEY_TELEOP_DRIVE_NORMAL_SCALE, DEF_DRIVE_NORMAL_SCALE);
         turnSpeedScale = robot.dashboard.getNumber(
             Dashboard.DBKEY_TELEOP_TURN_NORMAL_SCALE, DEF_TURN_NORMAL_SCALE);
+
+        if ((robot.driverController != null || robot.operatorController != null) &&
+             robot.dashboard.getBoolean(Dashboard.DBKEY_PREFERENCE_USE_RUMBLE, RobotParams.Preferences.useRumble))
+        {
+            shiftsTrigger = new TrcTriggerThresholdZones(
+                "ShiftsTrigger", TrcTimer::getModeElapsedTime, RobotParams.Game.SHIFTS);
+        }
     }   //FrcTeleOp
 
     //
@@ -116,6 +127,31 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             robot.setDriveOrientation(driveOrientationMenu.getCurrentChoiceObject(), false);
         }
 
+        if (shiftsTrigger != null)
+        {
+            shiftsTrigger.enableTrigger(
+                TriggerMode.OnActive,
+                (ctxt, canceled) ->
+                {
+                    if (!canceled)
+                    {
+                        TrcTriggerThresholdZones.CallbackContext context =
+                            (TrcTriggerThresholdZones.CallbackContext) ctxt;
+
+                        robot.globalTracer.traceInfo(moduleName, "End of shift " + context.prevZone);
+                        if (robot.driverController != null)
+                        {
+                            robot.driverController.setRumble(RumbleType.kBothRumble, 1.0, 0.5);
+                        }
+
+                        if (robot.operatorController != null)
+                        {
+                            robot.operatorController.setRumble(RumbleType.kBothRumble, 1.0, 0.5);
+                        }
+                    }
+                });
+        }
+
         if (RobotParams.Preferences.hybridMode)
         {
             // This makes sure that the autonomous stops running when
@@ -139,6 +175,10 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     @Override
     public void stopMode(RunMode prevMode, RunMode nextMode)
     {
+        if (shiftsTrigger != null)
+        {
+            shiftsTrigger.disableTrigger();
+        }
         //
         // Disabling joysticks.
         //
@@ -297,14 +337,14 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                     }
                 }
 
-                if (RobotParams.Preferences.useRumble && robot.driverController != null)
-                {
-                    if (!rumbling && elapsedTime > RobotParams.Game.TELEOP_PERIOD - RobotParams.Game.ENDGAME_THRESHOLD)
-                    {
-                        robot.driverController.setRumble(RumbleType.kBothRumble, 1.0, 0.5);
-                        rumbling = true;
-                    }
-                }
+                // if (RobotParams.Preferences.useRumble && robot.driverController != null)
+                // {
+                //     if (!rumbling && elapsedTime > RobotParams.Game.TELEOP_PERIOD - RobotParams.Game.ENDGAME_THRESHOLD)
+                //     {
+                //         robot.driverController.setRumble(RumbleType.kBothRumble, 1.0, 0.5);
+                //         rumbling = true;
+                //     }
+                // }
             }
         }
     }   //periodic
@@ -692,13 +732,14 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 if (pressed && !robot.autoShootTask.isActive())
                 {
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Start Auto Shoot.");
-                    robot.intakeSubsystem.setIntakeEnabled(true);
-                    robot.autoShootTask.autoShoot(null, null, false, false);
+                    //robot.intakeSubsystem.setIntakeEnabled(true);
+                    robot.autoShootTask.autoShoot(
+                        null, null, false, false, robot.shooterSubsystem.isGoalTrackingEnabled());
                 }
                 else
                 {
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Stop Auto Shoot.");
-                    robot.intakeSubsystem.setIntakeEnabled(false);
+                    //.robot.intakeSubsystem.setIntakeEnabled(false);
                     robot.autoShootTask.cancel();
                     robot.shooterSubsystem.resetState();
                 }

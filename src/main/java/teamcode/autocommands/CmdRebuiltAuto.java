@@ -133,6 +133,10 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
         {
             robot.shooterSubsystem.disableGoalTracking();
         }
+        if (robot.robotBase != null && robot.robotBase.purePursuitDrive != null)
+        {
+            robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
+        }
         sm.stop();
     }   //cancel
 
@@ -174,12 +178,15 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     climbSide = autoChoices.getClimbSide();
                     neutralZoneCycles = autoChoices.getNeutralZoneCycles();
                     robot.robotBase.purePursuitDrive.getTurnPidCtrl().setNoOscillation(true);
+                    robot.globalTracer.traceInfo(moduleName, "******* Done getting info");
 
                     if (robot.shooterSubsystem != null)
                     {
                         if (Shooter.Params.TURRET_HAS_ABS_ENC)
                         {
+                            robot.globalTracer.traceInfo(moduleName, "******* Before enabling goal tracking");
                             robot.shooterSubsystem.enableGoalTracking(true, false, true, true);
+                            robot.globalTracer.traceInfo(moduleName, "******* After enabling goal tracking");
                         }
                         else
                         {
@@ -261,7 +268,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                             if (i == 2)
                             {
                                 // At depotPickupPose.
-                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
+                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.3);
                                 if (robot.intakeSubsystem != null)
                                 {
                                     // Turning on Intake will deploy hopper too.
@@ -317,7 +324,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     nextState = climb? State.GO_TO_CLIMB_POS: State.DONE;
                     if (robot.shooterSubsystem != null)
                     {
-                        robot.autoShootTask.autoShoot(null, event, true, true);
+                        robot.autoShootTask.autoShoot(null, event, true, true, false);
                         sm.waitForSingleEvent(event, nextState);
                     }
                     else
@@ -338,7 +345,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         RobotParams.Game.BLUE_OUTPOST_NEUTRAL_PICKUP_POSE.clone();
                     endPose = pickupPose.clone();
                     // (-111.8,281.61,90.0) or (-205.89,281.61,-90.0)
-                    endPose.x += atDepot? 102.0: -102.0;    // Plow distance
+                    endPose.x += atDepot? 95.0: -95.0;    // Plow distance
                     intermediatePose = pickupPose.clone();
                     // (-279.8,281.61,90.0) or (-37.89,281.61,-90.0)
                     intermediatePose.x += atDepot? -18.0: 18.0;
@@ -352,7 +359,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     TrcPose2D returnPose = startPose.clone();
                     returnPose.angle = -180.0;
                     returnPose.x += atDepot? 19.0 : -10.0;
-                    returnPose.y -= atDepot? 40.0: 50.0;
+                    returnPose.y -= atDepot? 40.0: 24.0;
                     if (!atDepot)
                     {
                         TrcPose2D outpostPickupPose = RobotParams.Game.BLUE_OUTPOST_PICKUP_POSE;
@@ -415,7 +422,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.4);
                                 if (passBack == PassBack.PASS_BACK && robot.autoShootTask != null)
                                 {
-                                    robot.autoShootTask.autoShoot(null, null, false, false);
+                                    robot.autoShootTask.autoShoot(null, null, false, false, false);
                                 }
                             }
                         },
@@ -442,16 +449,15 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         {
                             robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
                             robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
-                            if (i == 4)
+                            if (i == 4 || i == -1)
                             {
-                                // robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
-                                if (atDepot)
-                                {
-                                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.85);
-                                    robot.intakeSubsystem.setIntakeEnabled(true);
-                                }
+                                //robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
                                 robot.intakeSubsystem.setIntakeEnabled(true);
-                                robot.autoShootTask.autoShoot(null, null, false, true);
+                                robot.autoShootTask.autoShoot(null, null, false, true, false);
+                            } 
+                            else if (i == 4 && atDepot)
+                            {
+                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.85);
                             }
                         },
                         robot.adjustPathByAlliance(alliance, neutralZoneReturnPath));
@@ -474,7 +480,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     }
                     if (robot.autoShootTask != null)
                     {
-                        robot.autoShootTask.autoShoot(null, event, true, true);
+                        robot.autoShootTask.autoShoot(null, event, true, true, false);
                         sm.waitForSingleEvent(event, nextState, 8.0);
                     }
                     else

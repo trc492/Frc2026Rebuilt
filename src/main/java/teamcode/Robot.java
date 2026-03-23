@@ -162,6 +162,7 @@ public class Robot extends FrcRobot
         dashboard = new Dashboard().getDashboard();
         traceLogOpened = false;
         createTeamFolderPath();
+        DataLogManager.start();
         // Create and initialize inputs.
         if (RobotParams.Preferences.hasDriverGameController)
         {
@@ -310,7 +311,6 @@ public class Robot extends FrcRobot
             // Start trace logging.
             if (RobotParams.Preferences.useTraceLog)
             {
-                DataLogManager.start();
                 openTraceLog(matchInfo);
                 setTraceLogEnabled(true);
             }
@@ -341,7 +341,6 @@ public class Robot extends FrcRobot
             }
             // Zero calibrate it only once. Don't do it again just because we are enabling/disabling robot.
             if (!zeroCalibrated &&
-                runMode != RunMode.AUTO_MODE &&
                 dashboard.getBoolean(
                     Dashboard.DBKEY_PREFERENCE_SUBSYSTEM_ZEROCAL, RobotParams.Preferences.zeroCalSubsystems))
             {

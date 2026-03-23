@@ -195,6 +195,15 @@ public class RobotParams
         public static final double AUTONOMOUS_PERIOD            = 20.0;     // in seconds
         public static final double TELEOP_PERIOD                = 140.0;    // in seconds
         public static final double ENDGAME_THRESHOLD            = 30.0;     // in seconds
+        public static final double SHIFT_THRESHOLD              = 2.0;
+        public static final double[] SHIFTS                     = new double[]
+        {
+            10 - SHIFT_THRESHOLD,       //Transition Shift ends
+            35 - SHIFT_THRESHOLD,       //Shift 1 ends
+            60 - SHIFT_THRESHOLD,       //Shift 2 ends
+            85 - SHIFT_THRESHOLD,       //Shift 3 ends
+            110 - SHIFT_THRESHOLD       //Shift 4 ends
+        };
         //
         // Field configuration and dimensions in inches.
         //
@@ -264,7 +273,7 @@ public class RobotParams
         public static final TrcPose2D BLUE_HUB_DEAD_ZONE_CENTER_POSE =      // (-158.845, 299.373465, 0.0)
             new TrcPose2D(-fieldWidth/2.0, BLUE_HUB_BACK_CENTER_POSE.y + deadZoneLength, 0.0);
         public static final TrcPose2D BLUE_OUTPOST_PICKUP_POSE  =           // (-26.22,33.249,-180.0)
-            new TrcPose2D(-26.22, Robot.ROBOT_LENGTH/2.0 + 6.0, -180.0);
+            new TrcPose2D(-26.22, Robot.ROBOT_LENGTH/2.0 - 3.0, -180.0);
         public static final TrcPose2D BLUE_DEPOT_PICKUP_POSE    =           // (-277.69,11.1245,90.0)
             new TrcPose2D(-fieldWidth + 84.0, 60.0, 180.0);
         public static final TrcPose2D BLUE_OUTPOST_NEUTRAL_PICKUP_POSE =    // (-55.89,301.61,-90.0)

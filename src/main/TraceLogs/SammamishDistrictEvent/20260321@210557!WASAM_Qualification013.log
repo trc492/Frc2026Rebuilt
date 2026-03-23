@@ -1,0 +1,1540 @@
+Robot.zeroCalibrate_INFO [0.04552769] Zero calibrate all subsystems.
+TrcSubsystem.zeroCalibrateAll_INFO [0.046392461] ZeroCalibrate(Subsystem=Shooter, owner=null, event=null)
+Shooter.zeroCalibrate_INFO [0.048158284] ZeroCalibrate left shooter.
+Shooter.zeroCalibrate_INFO [0.065290232] ZeroCalibrate right shooter.
+TrcSubsystem.zeroCalibrateAll_INFO [0.069675262] ZeroCalibrate(Subsystem=Climber, owner=null, event=null)
+Robot.robotStartMode_INFO [0.07063991] Sat Mar 21 21:05:32 UTC 2026: ***** TELEOP_MODE *****
+Robot.robotStartMode_INFO [0.075871956] <BuildInfo Host="TRC492-DS2024" User="User" Timestamp="2026-03-21 13:49:24" Branch="dev" />
+Climber.Motor.isMotorStalled_INFO [0.174449348] Stall detection triggered.
+Climber.Motor.zeroCalibratingMotor_WARN [0.188147918] Stalled, lower limit switch may not exist or might have failed!
+Climber.Motor.pidCtrlTask_INFO [0.208008733] Zero calibration done, event=null
+Shooter.RightTiltMotor.isMotorStalled_INFO [0.593047001] Stall detection triggered.
+Shooter.RightTiltMotor.zeroCalibratingMotor_WARN [0.605544327] Stalled, lower limit switch may not exist or might have failed!
+Shooter.RightTiltMotor.pidCtrlTask_INFO [0.610344741] Zero calibration done, event=(Shooter.rightTiltZeroCalCallback=CLEARED)
+Shooter.RightTiltMotor.pidCtrlTask_INFO [0.612473728] controlMode: Power,onTarget=false(-0.07853877544403076/null), stalled=false, expired=false, event=(Shooter.rightTiltZeroCalCallback=SIGNALED)
+Shooter.RightTiltMotor.isMotorStalled_INFO [0.617878811] Stall detection triggered.
+Shooter.RightTiltMotor.checkStallReset_INFO [0.6201537] Resetting stall.
+Shooter.LeftTiltMotor.isMotorStalled_INFO [0.803038806] Stall detection triggered.
+Shooter.LeftTiltMotor.zeroCalibratingMotor_WARN [0.813043416] Stalled, lower limit switch may not exist or might have failed!
+Shooter.LeftTiltMotor.pidCtrlTask_INFO [0.818783565] Zero calibration done, event=(Shooter.leftTiltZeroCalCallback=CLEARED)
+Shooter.LeftTiltMotor.pidCtrlTask_INFO [0.822027433] controlMode: Power,onTarget=false(-0.07517898827791214/null), stalled=false, expired=false, event=(Shooter.leftTiltZeroCalCallback=SIGNALED)
+Shooter.LeftTiltMotor.isMotorStalled_INFO [0.829618642] Stall detection triggered.
+Shooter.LeftTiltMotor.checkStallReset_INFO [0.832890846] Resetting stall.
+FrcTeleOp.driverControllerButtonEvent_INFO [3.497931896] ##### button=X, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [3.507297347] >>>>> Reset field forward heading (heading=175.56841662159465)
+FrcTeleOp.driverControllerButtonEvent_INFO [3.597975268] ##### button=X, pressed=false
+FrcTeleOp.driverControllerButtonEvent_INFO [3.75155092] ##### button=A, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [3.854816552] ##### button=A, pressed=false
+FrcTeleOp.driverControllerButtonEvent_INFO [6.271546592] ##### button=A, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [6.322053] ##### button=A, pressed=false
+FrcTeleOp.driverControllerButtonEvent_INFO [10.852059688] ##### button=A, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [10.90269221] ##### button=A, pressed=false
+FrcTeleOp.operatorControllerButtonEvent_INFO [11.003910562] ##### button=Y, pressed=true
+FrcTeleOp.shoot_INFO [11.00520436] >>>>> Start Auto Shoot.
+TaskAutoShoot.autoShoot_INFO [11.005965054] autoShoot(owner=null, event=null, taskParams=(autoStop=false, noPassback=false, noWait=false))
+Shooter.setupGoalTrackingMode_INFO [11.007080863] PassingBack: alliance=Red, fieldLengthZone=2, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [11.007681297] GoalTracking(trackingMode=Passback, goalPose=(x=-238.257874,y=572.915472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [11.008181837] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [11.008728539] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [11.009679779] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [11.010593653] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [11.011223362] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [11.01198623] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [11.131803306] <Event name="StateInfo" time="11.131202498" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [11.133100796] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [11.135878425] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [11.13911536] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [11.141315863] <Event name="StateInfo" time="11.14103171" tag="^^^^^" TaskAutoShoot.state="START" />
+Shooter.TurretMotor.pidCtrlTask_INFO [11.191116136] controlMode: Position,onTarget=true(118.86670785082936/115.9010767145539), stalled=false, expired=false, event=(TaskAutoShoot.turretReady=SIGNALED)
+TaskAutoShoot.autoTask_INFO [11.248747192] <Event name="StateInfo" time="11.248406599" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [11.249632076] <Event name="StateInfo" time="11.249202873" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [11.360422607] <Event name="StateInfo" time="11.358192566" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [11.363861971] <Event name="StateInfo" time="11.36345191" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [11.46256143] <Event name="StateInfo" time="11.462355967" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [11.472253466] <Event name="StateInfo" time="11.472032823" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [11.565943818] <Event name="StateInfo" time="11.565727728" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [11.568890524] <Event name="StateInfo" time="11.568274082" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [11.664641974] <Event name="StateInfo" time="11.664420525" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [11.668453026] <Event name="StateInfo" time="11.668219575" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [11.762794173] <Event name="StateInfo" time="11.762298338" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [11.77023802] <Event name="StateInfo" time="11.76994603" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [11.871313143] <Event name="StateInfo" time="11.870991741" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [11.881123092] <Event name="StateInfo" time="11.880904644" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [11.973802901] <Event name="StateInfo" time="11.971700437" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [11.975699102] <Event name="StateInfo" time="11.975493826" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [12.061927206] <Event name="StateInfo" time="12.061732068" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [12.07083041] <Event name="StateInfo" time="12.069521921" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [12.165464994] <Event name="StateInfo" time="12.16527649" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [12.16987604] ***** Start left shooter shooting (timedout=true, turretReady=true).
+Shooter.shoot_INFO [12.171214409] shoot(owner=null, event=(TaskAutoShoot.leftShooterDone=CLEARED), shooter=leftShooter, autoStop=false)
+Shooter.LeftTransferMotor.cancel_INFO [12.173443843] Cancel: stopping motor.
+TaskAutoShoot.runTaskState_INFO [12.176283467] ***** Start right shooter shooting (timedout=true, turretReady=true).
+Shooter.shoot_INFO [12.178377832] shoot(owner=null, event=(TaskAutoShoot.rightShooterDone=CLEARED), shooter=rightShooter, autoStop=false)
+Shooter.RightTransferMotor.cancel_INFO [12.182920914] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [12.184431276] <Event name="StateInfo" time="12.184237986" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcTeleOp.operatorControllerButtonEvent_INFO [12.188038525] ##### button=Y, pressed=false
+FrcTeleOp.shoot_INFO [12.192569923] >>>>> Stop Auto Shoot.
+TaskAutoShoot.cancel_INFO [12.193770295] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [12.195802296] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [12.197615805] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [12.202400109] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [12.20377487] Cancel: stopping motor.
+Shooter.LeftShooter.disableGoalTracking_INFO [12.205324961] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [12.207192685] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [12.20843733] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [12.213161478] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [12.214857717] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [12.2162414] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [12.217979208] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [12.219595447] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [12.224191202] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [12.225618833] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [12.227782089] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [12.229078061] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [12.232799594] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [12.23503194] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [12.237168323] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [12.238659494] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [12.239931676] Cancel: stopping motor.
+FrcTeleOp.driverControllerButtonEvent_INFO [12.402278627] ##### button=RightBumper, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [12.404973125] >>>>> Slow Drive
+FrcTeleOp.operatorControllerButtonEvent_INFO [12.60737823] ##### button=Y, pressed=true
+FrcTeleOp.shoot_INFO [12.609147805] >>>>> Start Auto Shoot.
+TaskAutoShoot.autoShoot_INFO [12.610416413] autoShoot(owner=null, event=null, taskParams=(autoStop=false, noPassback=false, noWait=false))
+Shooter.setupGoalTrackingMode_INFO [12.612003891] PassingBack: alliance=Red, fieldLengthZone=2, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [12.613216601] GoalTracking(trackingMode=Passback, goalPose=(x=-238.257874,y=572.915472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [12.614839671] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [12.617085127] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [12.618907678] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [12.620654538] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [12.621891233] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [12.623337512] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [12.725198866] <Event name="StateInfo" time="12.72492605" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [12.727277254] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [12.728331754] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [12.729760993] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [12.732365111] <Event name="StateInfo" time="12.732110764" tag="^^^^^" TaskAutoShoot.state="START" />
+Shooter.TurretMotor.pidCtrlTask_INFO [12.815590146] controlMode: Position,onTarget=true(30.126065071958408/28.829078161773108), stalled=false, expired=false, event=(TaskAutoShoot.turretReady=SIGNALED)
+TaskAutoShoot.autoTask_INFO [12.840710074] <Event name="StateInfo" time="12.840387689" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [12.846287173] <Event name="StateInfo" time="12.846074095" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [12.952753792] <Event name="StateInfo" time="12.952565295" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [12.955211404] <Event name="StateInfo" time="12.954825334" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [13.048886994] <Event name="StateInfo" time="13.048688371" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [13.052947849] <Event name="StateInfo" time="13.051834595" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [13.154184259] <Event name="StateInfo" time="13.152592888" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [13.155775096] <Event name="StateInfo" time="13.154940104" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [13.255519834] <Event name="StateInfo" time="13.255024973" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [13.259497174] <Event name="StateInfo" time="13.259183958" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.LeftShooter.goalTrackingTask_INFO [13.337611584] Shooter.LeftShooter is Ready: rpm1=6391.433293/6346.518483, rpm2=3950.390625/0.000000, tilt=45.013045/45.000000, pan=null/null
+Shooter.RightShooter.goalTrackingTask_INFO [13.379920264] Shooter.RightShooter is Ready: rpm1=6249.834736/6346.518483, rpm2=3858.515625/0.000000, tilt=45.013057/45.000000, pan=null/null
+TaskAutoShoot.autoTask_INFO [13.38420549] <Event name="StateInfo" time="13.383750318" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [13.385998666] ***** Start left shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [13.389469394] shoot(owner=null, event=(TaskAutoShoot.leftShooterDone=CLEARED), shooter=leftShooter, autoStop=false)
+Shooter.LeftTransferMotor.cancel_INFO [13.394021058] Cancel: stopping motor.
+TaskAutoShoot.runTaskState_INFO [13.397135802] ***** Start right shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [13.400141832] shoot(owner=null, event=(TaskAutoShoot.rightShooterDone=CLEARED), shooter=rightShooter, autoStop=false)
+Shooter.RightTransferMotor.cancel_INFO [13.405274502] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [13.409403886] <Event name="StateInfo" time="13.408249177" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcTeleOp.operatorControllerButtonEvent_INFO [13.881719621] ##### button=Y, pressed=false
+FrcTeleOp.shoot_INFO [13.888717472] >>>>> Stop Auto Shoot.
+TaskAutoShoot.cancel_INFO [13.890781003] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [13.892311712] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [13.893660193] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [13.896055534] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [13.898817918] Cancel: stopping motor.
+Shooter.LeftShooter.disableGoalTracking_INFO [13.900159163] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [13.902461504] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [13.904318543] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [13.909316421] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [13.91183463] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [13.913412482] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [13.915206766] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [13.917681083] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [13.919898815] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [13.922630587] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [13.924748186] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [13.926580103] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [13.928849682] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [13.930824803] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [13.932077426] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [13.934005738] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [13.936620476] Cancel: stopping motor.
+FrcTeleOp.driverControllerButtonEvent_INFO [14.915246856] ##### button=RightBumper, pressed=false
+FrcTeleOp.driverControllerButtonEvent_INFO [14.918570111] >>>>> Normal Drive
+FrcTeleOp.driverControllerButtonEvent_INFO [17.986607969] ##### button=A, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [18.0893959] ##### button=A, pressed=false
+FrcTeleOp.driverControllerButtonEvent_INFO [22.127519284] ##### button=A, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [22.228805228] ##### button=A, pressed=false
+FrcTeleOp.driverControllerButtonEvent_INFO [26.883782337] ##### button=A, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [26.986071585] ##### button=A, pressed=false
+FrcTeleOp.operatorControllerButtonEvent_INFO [30.869536229] ##### button=B, pressed=true
+FrcTeleOp.operatorControllerButtonEvent_INFO [30.872635891] >>>>> Enable GoalTracking.
+Shooter.setupGoalTrackingMode_INFO [30.874268235] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [30.880034394] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [30.882195705] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=false,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [30.884779776] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [30.896216831] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [30.898339898] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=false,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [30.902825635] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [30.904461775] Cancel: stopping motor.
+Shooter.setupGoalTrackingMode_INFO [31.00233058] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=2.
+Shooter.setupGoalTrackingMode_INFO [31.003757863] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+FrcTeleOp.operatorControllerButtonEvent_INFO [31.086282503] ##### button=B, pressed=false
+Shooter.setupGoalTrackingMode_INFO [31.693699084] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [31.695969934] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+FrcTeleOp.operatorControllerButtonEvent_INFO [31.741651145] ##### button=Y, pressed=true
+FrcTeleOp.shoot_INFO [31.749828972] >>>>> Start Auto Shoot.
+TaskAutoShoot.autoShoot_INFO [31.752900354] autoShoot(owner=null, event=null, taskParams=(autoStop=false, noPassback=false, noWait=true))
+Shooter.setupGoalTrackingMode_INFO [31.755441326] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [31.758865466] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [31.760579689] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [31.763234805] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [31.76613199] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [31.77072319] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [31.774392809] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [31.778013606] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [31.880148215] <Event name="StateInfo" time="31.879831616" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [31.882293732] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [31.884676872] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [31.885989328] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [31.890474185] <Event name="StateInfo" time="31.890209835" tag="^^^^^" TaskAutoShoot.state="START" />
+Shooter.LeftShooter.goalTrackingTask_INFO [32.0456596] Shooter.LeftShooter is Ready: rpm1=5273.031851/5344.849875, rpm2=3301.992188/0.000000, tilt=26.632868/27.422216, pan=null/null
+Shooter.RightShooter.goalTrackingTask_INFO [32.074747705] Shooter.RightShooter is Ready: rpm1=5298.398438/5344.849875, rpm2=3270.937500/0.000000, tilt=26.751442/27.422216, pan=null/null
+TaskAutoShoot.autoTask_INFO [32.078200527] <Event name="StateInfo" time="32.077970522" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [32.079083187] ***** Start left shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [32.083862388] shoot(owner=null, event=(TaskAutoShoot.leftShooterDone=CLEARED), shooter=leftShooter, autoStop=false)
+Shooter.LeftTransferMotor.cancel_INFO [32.08516148] Cancel: stopping motor.
+TaskAutoShoot.runTaskState_INFO [32.08694757] ***** Start right shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [32.088273514] shoot(owner=null, event=(TaskAutoShoot.rightShooterDone=CLEARED), shooter=rightShooter, autoStop=false)
+Shooter.RightTransferMotor.cancel_INFO [32.089558779] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [32.090925309] <Event name="StateInfo" time="32.090712969" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.setupGoalTrackingMode_INFO [32.095839404] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=2.
+Shooter.setupGoalTrackingMode_INFO [32.097398965] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+FrcTeleOp.operatorControllerButtonEvent_INFO [32.493217052] ##### button=Y, pressed=false
+FrcTeleOp.shoot_INFO [32.498713758] >>>>> Stop Auto Shoot.
+TaskAutoShoot.cancel_INFO [32.499251545] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [32.499808313] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [32.500710226] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [32.507468144] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [32.508899744] Cancel: stopping motor.
+Shooter.LeftShooter.disableGoalTracking_INFO [32.509858823] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [32.510230851] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [32.511683806] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [32.514735739] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [32.516426232] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [32.51758611] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [32.519065048] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [32.519981654] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [32.521027909] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [32.522167644] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [32.52929389] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [32.530668326] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [32.53195339] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [32.533325361] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [32.539826632] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [32.54094112] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [32.542113042] Cancel: stopping motor.
+FrcTeleOp.driverControllerButtonEvent_INFO [32.69498252] ##### button=RightBumper, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [32.696945] >>>>> Slow Drive
+FrcTeleOp.operatorControllerButtonEvent_INFO [34.132045649] ##### button=Y, pressed=true
+FrcTeleOp.shoot_INFO [34.132805136] >>>>> Start Auto Shoot.
+TaskAutoShoot.autoShoot_INFO [34.133816858] autoShoot(owner=null, event=null, taskParams=(autoStop=false, noPassback=false, noWait=false))
+Shooter.setupGoalTrackingMode_INFO [34.134606209] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [34.135132001] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [34.136238352] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [34.148292408] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [34.150934323] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [34.151517087] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [34.154559263] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [34.155271629] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [34.237995603] <Event name="StateInfo" time="34.237701477" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [34.239551235] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [34.241945104] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [34.245551443] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [34.248031111] <Event name="StateInfo" time="34.24744826" tag="^^^^^" TaskAutoShoot.state="START" />
+FrcTeleOp.driverControllerButtonEvent_INFO [34.2533879] ##### button=A, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [34.343251805] ##### button=A, pressed=false
+TaskAutoShoot.autoTask_INFO [34.439233957] <Event name="StateInfo" time="34.438581616" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [34.442041022] <Event name="StateInfo" time="34.441849442" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [34.539155593] <Event name="StateInfo" time="34.538953873" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [34.548755935] <Event name="StateInfo" time="34.548573101" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.LeftShooter.goalTrackingTask_INFO [34.61936224] Shooter.LeftShooter is Ready: rpm1=5174.405048/5151.723325, rpm2=3146.250000/0.000000, tilt=25.881839/25.914403, pan=null/null
+TaskAutoShoot.autoTask_INFO [34.647781045] <Event name="StateInfo" time="34.647591828" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [34.651178062] <Event name="StateInfo" time="34.650824879" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.RightShooter.goalTrackingTask_INFO [34.754545866] Shooter.RightShooter is Ready: rpm1=5079.185697/5168.747842, rpm2=3138.164063/0.000000, tilt=25.921363/26.043745, pan=null/null
+TaskAutoShoot.autoTask_INFO [34.761001547] <Event name="StateInfo" time="34.760806605" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [34.76223728] <Event name="StateInfo" time="34.761958231" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [34.860586286] <Event name="StateInfo" time="34.860305846" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [34.862226938] <Event name="StateInfo" time="34.862042943" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [34.965856336] <Event name="StateInfo" time="34.965577533" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [34.968149571] <Event name="StateInfo" time="34.967943289" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [35.049725372] <Event name="StateInfo" time="35.049514809" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [35.050499552] <Event name="StateInfo" time="35.05032143" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [35.144194517] <Event name="StateInfo" time="35.143999088" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [35.149891028] <Event name="StateInfo" time="35.149667025" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [35.24296642] <Event name="StateInfo" time="35.24260243" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [35.252196799] ***** Start left shooter shooting (timedout=true, turretReady=false).
+Shooter.shoot_INFO [35.256346265] shoot(owner=null, event=(TaskAutoShoot.leftShooterDone=CLEARED), shooter=leftShooter, autoStop=false)
+Shooter.LeftTransferMotor.cancel_INFO [35.259680429] Cancel: stopping motor.
+TaskAutoShoot.runTaskState_INFO [35.261399523] ***** Start right shooter shooting (timedout=true, turretReady=false).
+Shooter.shoot_INFO [35.263799521] shoot(owner=null, event=(TaskAutoShoot.rightShooterDone=CLEARED), shooter=rightShooter, autoStop=false)
+Shooter.RightTransferMotor.cancel_INFO [35.269542347] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [35.272850747] <Event name="StateInfo" time="35.271313296" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcTeleOp.operatorControllerButtonEvent_INFO [35.468564158] ##### button=Y, pressed=false
+FrcTeleOp.shoot_INFO [35.469689239] >>>>> Stop Auto Shoot.
+TaskAutoShoot.cancel_INFO [35.47151058] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [35.473024389] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [35.473766813] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [35.474755191] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [35.478532821] Cancel: stopping motor.
+Shooter.LeftShooter.disableGoalTracking_INFO [35.479374106] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [35.480034404] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [35.480577893] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [35.48161468] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [35.48276434] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [35.494840967] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [35.495836145] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [35.497529592] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [35.501916439] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [35.507963696] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [35.515067304] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [35.528486676] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [35.538688928] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [35.544432128] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [35.549433645] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [35.551678571] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [35.556870835] Cancel: stopping motor.
+FrcTeleOp.operatorControllerButtonEvent_INFO [35.683108289] ##### button=Y, pressed=true
+FrcTeleOp.shoot_INFO [35.687805429] >>>>> Start Auto Shoot.
+TaskAutoShoot.autoShoot_INFO [35.690142122] autoShoot(owner=null, event=null, taskParams=(autoStop=false, noPassback=false, noWait=false))
+Shooter.setupGoalTrackingMode_INFO [35.690812606] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [35.693970657] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [35.696186884] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [35.697732807] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [35.701511683] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [35.703632379] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [35.705637277] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [35.707669133] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [35.786004652] <Event name="StateInfo" time="35.78580176" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [35.788695975] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [35.790805213] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [35.795206536] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [35.797375684] <Event name="StateInfo" time="35.797066714" tag="^^^^^" TaskAutoShoot.state="START" />
+Shooter.TurretMotor.pidCtrlTask_INFO [35.832455349] controlMode: Position,onTarget=true(-12.36011409963777/-11.566980023360205), stalled=false, expired=false, event=(TaskAutoShoot.turretReady=SIGNALED)
+TaskAutoShoot.autoTask_INFO [35.881421396] <Event name="StateInfo" time="35.880048162" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [35.882115181] <Event name="StateInfo" time="35.881936946" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.LeftShooter.goalTrackingTask_INFO [35.967950582] Shooter.LeftShooter is Ready: rpm1=5114.396034/5180.137855, rpm2=3232.734375/0.000000, tilt=26.079478/26.130646, pan=null/null
+TaskAutoShoot.autoTask_INFO [35.997263433] <Event name="StateInfo" time="35.996303439" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [36.00131112] ***** Start left shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [36.005314722] shoot(owner=null, event=(TaskAutoShoot.leftShooterDone=CLEARED), shooter=leftShooter, autoStop=false)
+Shooter.LeftTransferMotor.cancel_INFO [36.007249187] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [36.011257625] <Event name="StateInfo" time="36.011047" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.RightShooter.goalTrackingTask_INFO [36.112696712] Shooter.RightShooter is Ready: rpm1=5170.808293/5180.138492, rpm2=3178.593750/0.000000, tilt=26.158527/26.130651, pan=null/null
+TaskAutoShoot.autoTask_INFO [36.114265999] <Event name="StateInfo" time="36.113790589" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [36.11501214] ***** Start right shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [36.115913248] shoot(owner=null, event=(TaskAutoShoot.rightShooterDone=CLEARED), shooter=rightShooter, autoStop=false)
+Shooter.RightTransferMotor.cancel_INFO [36.116906518] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [36.118409486] <Event name="StateInfo" time="36.118014946" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Climber.Motor.isMotorStalled_INFO [36.17909584] Stall detection triggered.
+Climber.Motor.checkStallReset_INFO [36.179602896] Resetting stall.
+Climber.Motor.isMotorStalled_INFO [37.000276548] Stall detection triggered.
+Climber.Motor.checkStallReset_INFO [37.001714903] Resetting stall.
+FrcTeleOp.driverControllerButtonEvent_INFO [39.187781063] ##### button=A, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [39.281227956] ##### button=A, pressed=false
+FrcTeleOp.operatorControllerButtonEvent_INFO [40.248052599] ##### button=Y, pressed=false
+FrcTeleOp.shoot_INFO [40.253666379] >>>>> Stop Auto Shoot.
+TaskAutoShoot.cancel_INFO [40.254612598] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [40.255566517] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [40.257480446] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [40.258574056] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [40.261673177] Cancel: stopping motor.
+Shooter.LeftShooter.disableGoalTracking_INFO [40.26361431] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [40.26483213] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [40.266178064] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [40.26811596] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [40.269903379] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [40.270858233] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [40.271815581] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [40.272972557] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [40.274744521] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [40.276159688] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [40.278525241] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [40.279566645] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [40.2836809] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [40.284952215] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [40.286325195] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [40.289412197] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [40.290927202] Cancel: stopping motor.
+FrcTeleOp.operatorControllerButtonEvent_INFO [40.625071015] ##### button=Y, pressed=true
+FrcTeleOp.shoot_INFO [40.63096152] >>>>> Start Auto Shoot.
+TaskAutoShoot.autoShoot_INFO [40.631856307] autoShoot(owner=null, event=null, taskParams=(autoStop=false, noPassback=false, noWait=false))
+Shooter.setupGoalTrackingMode_INFO [40.639469416] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [40.641111593] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [40.644244627] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [40.646287743] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [40.649268607] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [40.651668704] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [40.652784746] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [40.655831174] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [40.749995148] <Event name="StateInfo" time="40.749358269" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [40.751494258] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [40.752770868] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [40.754774061] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [40.759546475] <Event name="StateInfo" time="40.759162925" tag="^^^^^" TaskAutoShoot.state="START" />
+Shooter.TurretMotor.pidCtrlTask_INFO [40.857492256] controlMode: Position,onTarget=true(25.20578464053463/23.564774489182458), stalled=false, expired=false, event=(TaskAutoShoot.turretReady=SIGNALED)
+Shooter.LeftShooter.goalTrackingTask_INFO [40.942540201] Shooter.LeftShooter is Ready: rpm1=5067.259615/5004.820474, rpm2=3098.203125/0.000000, tilt=24.854124/24.824268, pan=null/null
+Shooter.RightShooter.goalTrackingTask_INFO [40.971965828] Shooter.RightShooter is Ready: rpm1=4929.825721/5004.820474, rpm2=3065.273438/0.000000, tilt=24.814598/24.824268, pan=null/null
+TaskAutoShoot.autoTask_INFO [40.976591085] <Event name="StateInfo" time="40.974830028" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [40.980387966] ***** Start left shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [40.981755209] shoot(owner=null, event=(TaskAutoShoot.leftShooterDone=CLEARED), shooter=leftShooter, autoStop=false)
+Shooter.LeftTransferMotor.cancel_INFO [40.985498593] Cancel: stopping motor.
+TaskAutoShoot.runTaskState_INFO [40.988821352] ***** Start right shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [40.991825273] shoot(owner=null, event=(TaskAutoShoot.rightShooterDone=CLEARED), shooter=rightShooter, autoStop=false)
+Shooter.RightTransferMotor.cancel_INFO [40.99280369] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [40.995070013] <Event name="StateInfo" time="40.994862493" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcTeleOp.operatorControllerButtonEvent_INFO [42.015291212] ##### button=Y, pressed=false
+FrcTeleOp.shoot_INFO [42.0173744] >>>>> Stop Auto Shoot.
+TaskAutoShoot.cancel_INFO [42.018175091] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [42.019351954] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [42.021575176] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [42.030567166] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [42.032847168] Cancel: stopping motor.
+Shooter.LeftShooter.disableGoalTracking_INFO [42.033997971] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [42.034813375] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [42.035599101] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [42.039097975] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [42.040427924] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [42.041481159] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [42.043184423] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [42.044196226] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [42.045298327] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [42.046653083] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [42.051959179] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [42.053723308] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [42.054659691] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [42.055675537] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [42.059584588] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [42.060934055] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [42.062206454] Cancel: stopping motor.
+FrcTeleOp.operatorControllerButtonEvent_INFO [42.607552547] ##### button=Y, pressed=true
+FrcTeleOp.shoot_INFO [42.609282548] >>>>> Start Auto Shoot.
+TaskAutoShoot.autoShoot_INFO [42.610266993] autoShoot(owner=null, event=null, taskParams=(autoStop=false, noPassback=false, noWait=false))
+Shooter.setupGoalTrackingMode_INFO [42.611367259] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [42.61244833] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [42.613744277] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [42.614985832] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [42.616309849] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [42.617574832] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [42.619903582] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [42.620847024] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [42.727943864] <Event name="StateInfo" time="42.7276759" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [42.728439418] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [42.728871409] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [42.731829843] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [42.734749718] <Event name="StateInfo" time="42.734484896" tag="^^^^^" TaskAutoShoot.state="START" />
+Shooter.TurretMotor.pidCtrlTask_INFO [42.840550999] controlMode: Position,onTarget=true(-62.79290022757003/-65.45972449824758), stalled=false, expired=false, event=(TaskAutoShoot.turretReady=SIGNALED)
+TaskAutoShoot.autoTask_INFO [42.846508293] <Event name="StateInfo" time="42.846313547" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [42.847583952] <Event name="StateInfo" time="42.847403412" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.LeftShooter.goalTrackingTask_INFO [42.931907054] Shooter.LeftShooter is Ready: rpm1=4838.771034/4798.748208, rpm2=2954.414063/0.000000, tilt=23.273032/23.365887, pan=null/null
+Shooter.RightShooter.goalTrackingTask_INFO [42.958853026] Shooter.RightShooter is Ready: rpm1=4754.152644/4798.748208, rpm2=2912.343750/0.000000, tilt=23.352088/23.365887, pan=null/null
+TaskAutoShoot.autoTask_INFO [42.962906622] <Event name="StateInfo" time="42.962696474" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [42.965378765] ***** Start left shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [42.97033593] shoot(owner=null, event=(TaskAutoShoot.leftShooterDone=CLEARED), shooter=leftShooter, autoStop=false)
+Shooter.LeftTransferMotor.cancel_INFO [42.974861454] Cancel: stopping motor.
+TaskAutoShoot.runTaskState_INFO [42.975835348] ***** Start right shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [42.9779701] shoot(owner=null, event=(TaskAutoShoot.rightShooterDone=CLEARED), shooter=rightShooter, autoStop=false)
+Shooter.RightTransferMotor.cancel_INFO [42.981768739] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [42.984300358] <Event name="StateInfo" time="42.984075716" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.setupGoalTrackingMode_INFO [42.991020358] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=2.
+Shooter.setupGoalTrackingMode_INFO [42.991558785] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+FrcTeleOp.driverControllerButtonEvent_INFO [43.982438751] ##### button=RightBumper, pressed=false
+FrcTeleOp.driverControllerButtonEvent_INFO [43.984831844] >>>>> Normal Drive
+Shooter.setupGoalTrackingMode_INFO [44.377193174] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=1.
+Shooter.setupGoalTrackingMode_INFO [44.377783357] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+FrcTeleOp.operatorControllerButtonEvent_INFO [44.566809001] ##### button=Y, pressed=false
+FrcTeleOp.shoot_INFO [44.56746484] >>>>> Stop Auto Shoot.
+TaskAutoShoot.cancel_INFO [44.571039761] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [44.571674078] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [44.581212359] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [44.593461756] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [44.594071636] Cancel: stopping motor.
+Shooter.LeftShooter.disableGoalTracking_INFO [44.595699966] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [44.596127575] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [44.59691384] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [44.603558005] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [44.605371641] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [44.606168557] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [44.607438364] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [44.608375573] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [44.609903349] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [44.61098217] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [44.614079012] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [44.615525995] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [44.616579741] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [44.618220884] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [44.619326958] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [44.624776241] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [44.625796011] Cancel: stopping motor.
+FrcTeleOp.operatorControllerButtonEvent_INFO [47.769280978] ##### button=B, pressed=true
+FrcTeleOp.operatorControllerButtonEvent_INFO [47.770931608] >>>>> Enable GoalTracking.
+Shooter.setupGoalTrackingMode_INFO [47.771953295] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=0.
+Shooter.setupGoalTrackingMode_INFO [47.772694441] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [47.773667551] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=false,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [47.774956466] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [47.776160858] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [47.778124923] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=false,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [47.780223049] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [47.781649432] Cancel: stopping motor.
+FrcTeleOp.operatorControllerButtonEvent_INFO [47.983065381] ##### button=B, pressed=false
+FrcTeleOp.operatorControllerButtonEvent_INFO [48.900035896] ##### button=Y, pressed=true
+FrcTeleOp.shoot_INFO [48.900697043] >>>>> Start Auto Shoot.
+TaskAutoShoot.autoShoot_INFO [48.90105513] autoShoot(owner=null, event=null, taskParams=(autoStop=false, noPassback=false, noWait=true))
+Shooter.setupGoalTrackingMode_INFO [48.901716783] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=0.
+Shooter.setupGoalTrackingMode_INFO [48.90262371] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [48.905287] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [48.905987361] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [48.90956613] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [48.918213924] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [48.91889968] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [48.920912795] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [49.008665843] <Event name="StateInfo" time="49.008378173" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [49.009089191] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [49.00941801] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [49.00975173] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [49.010232542] <Event name="StateInfo" time="49.010016016" tag="^^^^^" TaskAutoShoot.state="START" />
+Shooter.setupGoalTrackingMode_INFO [49.018200042] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=1.
+Shooter.setupGoalTrackingMode_INFO [49.018748063] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.goalTrackingTask_INFO [49.183003406] Shooter.LeftShooter is Ready: rpm1=4944.591346/5029.437543, rpm2=3009.257813/0.000000, tilt=24.419324/25.003830, pan=null/null
+Shooter.RightShooter.goalTrackingTask_INFO [49.211608067] Shooter.RightShooter is Ready: rpm1=4939.101563/5029.437543, rpm2=3025.898438/0.000000, tilt=24.498380/25.003830, pan=null/null
+TaskAutoShoot.autoTask_INFO [49.216025512] <Event name="StateInfo" time="49.21583678" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [49.223607271] ***** Start left shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [49.225827101] shoot(owner=null, event=(TaskAutoShoot.leftShooterDone=CLEARED), shooter=leftShooter, autoStop=false)
+Shooter.LeftTransferMotor.cancel_INFO [49.22898368] Cancel: stopping motor.
+TaskAutoShoot.runTaskState_INFO [49.232245222] ***** Start right shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [49.235020746] shoot(owner=null, event=(TaskAutoShoot.rightShooterDone=CLEARED), shooter=rightShooter, autoStop=false)
+Shooter.RightTransferMotor.cancel_INFO [49.236710192] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [49.238842246] <Event name="StateInfo" time="49.238645314" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.RightTiltMotor.isMotorStalled_INFO [49.361374901] Stall detection triggered.
+Shooter.RightTiltMotor.checkStallReset_INFO [49.361815259] Resetting stall.
+FrcTeleOp.operatorControllerButtonEvent_INFO [50.109156587] ##### button=Y, pressed=false
+FrcTeleOp.shoot_INFO [50.110569603] >>>>> Stop Auto Shoot.
+TaskAutoShoot.cancel_INFO [50.111279394] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [50.112172979] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [50.112945105] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [50.114003877] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [50.115389198] Cancel: stopping motor.
+Shooter.LeftShooter.disableGoalTracking_INFO [50.120775493] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [50.121957691] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [50.122693827] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [50.123893884] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [50.125120753] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [50.125826833] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [50.130499351] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [50.131724443] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [50.132902409] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [50.134177709] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [50.135550627] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [50.1367307] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [50.141686126] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [50.145831719] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [50.148058135] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [50.1515937] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [50.155606225] Cancel: stopping motor.
+FrcTeleOp.operatorControllerButtonEvent_INFO [50.945132183] ##### button=Y, pressed=true
+FrcTeleOp.shoot_INFO [50.951116352] >>>>> Start Auto Shoot.
+TaskAutoShoot.autoShoot_INFO [50.952155709] autoShoot(owner=null, event=null, taskParams=(autoStop=false, noPassback=false, noWait=false))
+Shooter.setupGoalTrackingMode_INFO [50.953354922] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=0.
+Shooter.setupGoalTrackingMode_INFO [50.954743412] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [50.956168161] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [50.957509657] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [50.9586438] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [50.959809607] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [50.961282062] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [50.962515533] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [51.057460213] <Event name="StateInfo" time="51.057182757" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [51.065035271] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [51.066317554] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [51.068007097] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [51.070165504] <Event name="StateInfo" time="51.069921556" tag="^^^^^" TaskAutoShoot.state="START" />
+Shooter.LeftShooter.goalTrackingTask_INFO [51.145214417] Shooter.LeftShooter is Ready: rpm1=4310.994591/4410.491088, rpm2=2680.546875/0.000000, tilt=20.940921/20.805239, pan=null/null
+Shooter.TurretMotor.pidCtrlTask_INFO [51.173959917] controlMode: Position,onTarget=true(83.448542510224/84.90324859097645), stalled=false, expired=false, event=(TaskAutoShoot.turretReady=SIGNALED)
+TaskAutoShoot.autoTask_INFO [51.177046012] <Event name="StateInfo" time="51.172608952" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [51.179195667] ***** Start left shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [51.185153393] shoot(owner=null, event=(TaskAutoShoot.leftShooterDone=CLEARED), shooter=leftShooter, autoStop=false)
+Shooter.LeftTransferMotor.cancel_INFO [51.191032091] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [51.195163389] <Event name="StateInfo" time="51.193560604" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.RightShooter.goalTrackingTask_INFO [51.296869892] Shooter.RightShooter is Ready: rpm1=4383.118990/4417.531953, rpm2=2647.734375/0.000000, tilt=20.822340/20.849776, pan=null/null
+TaskAutoShoot.autoTask_INFO [51.298474188] <Event name="StateInfo" time="51.297928735" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [51.29993762] ***** Start right shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [51.300877783] shoot(owner=null, event=(TaskAutoShoot.rightShooterDone=CLEARED), shooter=rightShooter, autoStop=false)
+Shooter.RightTransferMotor.cancel_INFO [51.30178427] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [51.303265347] <Event name="StateInfo" time="51.302767024" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcTeleOp.driverControllerButtonEvent_INFO [51.703794616] ##### button=RightBumper, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [51.70539236] >>>>> Slow Drive
+Shooter.setupGoalTrackingMode_INFO [52.073268304] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=1.
+Shooter.setupGoalTrackingMode_INFO [52.079922491] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+FrcTeleOp.operatorControllerButtonEvent_INFO [52.183306388] ##### button=Y, pressed=false
+FrcTeleOp.shoot_INFO [52.184171777] >>>>> Stop Auto Shoot.
+TaskAutoShoot.cancel_INFO [52.184692612] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [52.186608322] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [52.191579442] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [52.192291691] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [52.19278085] Cancel: stopping motor.
+Shooter.LeftShooter.disableGoalTracking_INFO [52.193328645] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [52.193832931] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [52.194155039] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [52.194705622] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [52.19544179] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [52.195737378] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [52.196044661] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [52.196439668] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [52.197346746] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [52.197903641] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [52.198413512] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [52.198849735] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [52.203788129] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [52.204329519] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [52.204879072] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [52.205438199] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [52.205837609] Cancel: stopping motor.
+FrcTeleOp.operatorControllerButtonEvent_INFO [53.707058498] ##### button=Y, pressed=true
+FrcTeleOp.shoot_INFO [53.708852281] >>>>> Start Auto Shoot.
+TaskAutoShoot.autoShoot_INFO [53.710195129] autoShoot(owner=null, event=null, taskParams=(autoStop=false, noPassback=false, noWait=false))
+Shooter.setupGoalTrackingMode_INFO [53.712309642] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=2.
+Shooter.setupGoalTrackingMode_INFO [53.714086861] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [53.715570534] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [53.71734706] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [53.718650567] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [53.719981695] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [53.721238005] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [53.723211038] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [53.811848038] <Event name="StateInfo" time="53.811513942" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [53.812380727] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [53.812769617] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [53.817539324] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [53.818726348] <Event name="StateInfo" time="53.81848818" tag="^^^^^" TaskAutoShoot.state="START" />
+Shooter.TurretMotor.pidCtrlTask_INFO [53.871227065] controlMode: Position,onTarget=true(107.9718264081514/108.37227930147975), stalled=false, expired=false, event=(TaskAutoShoot.turretReady=SIGNALED)
+TaskAutoShoot.autoTask_INFO [53.920987666] <Event name="StateInfo" time="53.920798818" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [53.922227518] <Event name="StateInfo" time="53.921804795" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [54.021575459] <Event name="StateInfo" time="54.021370135" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [54.023208726] <Event name="StateInfo" time="54.023008264" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.LeftShooter.goalTrackingTask_INFO [54.094075074] Shooter.LeftShooter is Ready: rpm1=4723.674880/4778.617036, rpm2=2905.312500/0.000000, tilt=23.273032/23.227436, pan=null/null
+TaskAutoShoot.autoTask_INFO [54.12150797] <Event name="StateInfo" time="54.121307205" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [54.124365094] ***** Start left shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [54.127570068] shoot(owner=null, event=(TaskAutoShoot.leftShooterDone=CLEARED), shooter=leftShooter, autoStop=false)
+Shooter.LeftTransferMotor.cancel_INFO [54.130105555] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [54.131533744] <Event name="StateInfo" time="54.131348307" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.RightShooter.goalTrackingTask_INFO [54.227818245] Shooter.RightShooter is Ready: rpm1=4739.954928/4787.085569, rpm2=2920.546875/0.000000, tilt=23.233506/23.285595, pan=null/null
+TaskAutoShoot.autoTask_INFO [54.228605175] <Event name="StateInfo" time="54.228433575" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [54.233073608] ***** Start right shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [54.234047678] shoot(owner=null, event=(TaskAutoShoot.rightShooterDone=CLEARED), shooter=rightShooter, autoStop=false)
+Shooter.RightTransferMotor.cancel_INFO [54.238177374] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [54.240524265] <Event name="StateInfo" time="54.24032794" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcTeleOp.driverControllerButtonEvent_INFO [54.351698493] ##### button=RightBumper, pressed=false
+FrcTeleOp.driverControllerButtonEvent_INFO [54.359053771] >>>>> Normal Drive
+Shooter.setupGoalTrackingMode_INFO [54.558604313] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [54.560800841] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+FrcTeleOp.operatorControllerButtonEvent_INFO [55.02101081] ##### button=Y, pressed=false
+FrcTeleOp.shoot_INFO [55.024384492] >>>>> Stop Auto Shoot.
+TaskAutoShoot.cancel_INFO [55.024720702] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [55.025770543] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [55.026383367] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [55.027064591] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [55.027498714] Cancel: stopping motor.
+Shooter.LeftShooter.disableGoalTracking_INFO [55.027891628] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [55.028159494] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [55.030508731] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [55.031092614] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [55.031824266] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [55.032129114] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [55.032468733] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [55.032925102] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [55.033680936] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [55.034179578] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [55.034830845] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [55.03523228] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [55.035897068] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [55.036617721] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [55.039190755] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [55.041464568] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [55.041900724] Cancel: stopping motor.
+FrcTeleOp.driverControllerButtonEvent_INFO [55.944341824] ##### button=RightBumper, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [55.945179366] >>>>> Slow Drive
+FrcTeleOp.driverControllerButtonEvent_INFO [56.301666419] ##### button=RightBumper, pressed=false
+FrcTeleOp.driverControllerButtonEvent_INFO [56.302362947] >>>>> Normal Drive
+FrcTeleOp.driverControllerButtonEvent_INFO [56.557889959] ##### button=RightBumper, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [56.558663643] >>>>> Slow Drive
+FrcTeleOp.operatorControllerButtonEvent_INFO [57.221430892] ##### button=Y, pressed=true
+FrcTeleOp.shoot_INFO [57.222541573] >>>>> Start Auto Shoot.
+TaskAutoShoot.autoShoot_INFO [57.223142378] autoShoot(owner=null, event=null, taskParams=(autoStop=false, noPassback=false, noWait=false))
+Shooter.setupGoalTrackingMode_INFO [57.223783785] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [57.224410081] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [57.224755049] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [57.22532246] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [57.225946684] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [57.227051729] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [57.227497499] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [57.228130538] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [57.325229602] <Event name="StateInfo" time="57.324437472" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [57.325645792] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [57.326155697] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [57.326592437] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [57.327187353] <Event name="StateInfo" time="57.326750052" tag="^^^^^" TaskAutoShoot.state="START" />
+FrcTeleOp.driverControllerButtonEvent_INFO [57.328780593] ##### button=RightBumper, pressed=false
+FrcTeleOp.driverControllerButtonEvent_INFO [57.329394589] >>>>> Normal Drive
+Shooter.TurretMotor.pidCtrlTask_INFO [57.434477523] controlMode: Position,onTarget=true(100.53284465854756/99.0752812851662), stalled=false, expired=false, event=(TaskAutoShoot.turretReady=SIGNALED)
+TaskAutoShoot.autoTask_INFO [57.531839538] <Event name="StateInfo" time="57.531665326" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [57.532270897] <Event name="StateInfo" time="57.532110395" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [57.629228501] <Event name="StateInfo" time="57.629050444" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [57.635856941] <Event name="StateInfo" time="57.634493536" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.LeftShooter.goalTrackingTask_INFO [57.714934866] Shooter.LeftShooter is Ready: rpm1=5022.205529/5019.230305, rpm2=3082.031250/0.000000, tilt=25.565615/24.929229, pan=null/null
+TaskAutoShoot.autoTask_INFO [57.748430171] <Event name="StateInfo" time="57.748202738" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [57.748869352] ***** Start left shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [57.75160319] shoot(owner=null, event=(TaskAutoShoot.leftShooterDone=CLEARED), shooter=leftShooter, autoStop=false)
+Shooter.LeftTransferMotor.cancel_INFO [57.752153944] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [57.754214466] <Event name="StateInfo" time="57.754020484" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.RightShooter.goalTrackingTask_INFO [57.872375374] Shooter.RightShooter is Ready: rpm1=4958.599760/5005.234095, rpm2=3054.375000/0.000000, tilt=24.933180/24.827275, pan=null/null
+TaskAutoShoot.autoTask_INFO [57.878357173] <Event name="StateInfo" time="57.873058453" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [57.881603875] ***** Start right shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [57.882184698] shoot(owner=null, event=(TaskAutoShoot.rightShooterDone=CLEARED), shooter=rightShooter, autoStop=false)
+Shooter.RightTransferMotor.cancel_INFO [57.882625234] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [57.883499829] <Event name="StateInfo" time="57.883187554" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcTeleOp.driverControllerButtonEvent_INFO [58.361984401] ##### button=RightBumper, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [58.363749943] >>>>> Slow Drive
+FrcTeleOp.operatorControllerButtonEvent_INFO [58.553058323] ##### button=Y, pressed=false
+FrcTeleOp.shoot_INFO [58.557528826] >>>>> Stop Auto Shoot.
+TaskAutoShoot.cancel_INFO [58.562746608] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [58.565384977] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [58.56701286] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [58.567872369] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [58.568835764] Cancel: stopping motor.
+Shooter.LeftShooter.disableGoalTracking_INFO [58.569650266] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [58.570665826] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [58.571456845] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [58.577652014] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [58.578765065] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [58.580003206] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [58.581569615] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [58.58538471] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [58.587650717] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [58.58871535] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [58.59015475] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [58.590986225] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [58.591951837] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [58.599996878] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [58.600918187] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [58.601768618] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [58.608698168] Cancel: stopping motor.
+FrcTeleOp.driverControllerButtonEvent_INFO [59.144264648] ##### button=RightBumper, pressed=false
+FrcTeleOp.driverControllerButtonEvent_INFO [59.14529666] >>>>> Normal Drive
+FrcTeleOp.driverControllerButtonEvent_INFO [59.65603735] ##### button=A, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [59.760100831] ##### button=A, pressed=false
+FrcTeleOp.driverControllerButtonEvent_INFO [62.218461483] ##### button=A, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [62.270863938] ##### button=A, pressed=false
+FrcTeleOp.operatorControllerButtonEvent_INFO [79.954924222] ##### button=B, pressed=true
+FrcTeleOp.operatorControllerButtonEvent_INFO [79.960166049] >>>>> Enable GoalTracking.
+Shooter.setupGoalTrackingMode_INFO [79.961289272] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [79.962357484] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [79.9635407] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=false,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [79.964608183] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [79.970433533] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [79.971484361] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=false,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [79.972565418] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [79.973595614] Cancel: stopping motor.
+FrcTeleOp.operatorControllerButtonEvent_INFO [80.305346304] ##### button=B, pressed=false
+FrcTeleOp.operatorControllerButtonEvent_INFO [81.64830482] ##### button=Y, pressed=true
+FrcTeleOp.shoot_INFO [81.654356432] >>>>> Start Auto Shoot.
+TaskAutoShoot.autoShoot_INFO [81.655275796] autoShoot(owner=null, event=null, taskParams=(autoStop=false, noPassback=false, noWait=true))
+Shooter.setupGoalTrackingMode_INFO [81.657260024] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [81.658118508] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [81.658808799] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [81.659662359] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [81.66091203] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [81.665121482] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [81.667533782] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [81.668649395] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [81.770251802] <Event name="StateInfo" time="81.765309597" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [81.770656391] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [81.771195032] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [81.77545095] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [81.779208071] <Event name="StateInfo" time="81.777425884" tag="^^^^^" TaskAutoShoot.state="START" />
+Shooter.TurretMotor.pidCtrlTask_INFO [81.82470277] controlMode: Position,onTarget=true(12.787961357038881/15.45686199861968), stalled=false, expired=false, event=(TaskAutoShoot.turretReady=SIGNALED)
+TaskAutoShoot.autoTask_INFO [81.882084775] <Event name="StateInfo" time="81.881751685" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [81.890774014] ***** Start left shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [81.893819736] shoot(owner=null, event=(TaskAutoShoot.leftShooterDone=CLEARED), shooter=leftShooter, autoStop=false)
+Shooter.LeftTransferMotor.cancel_INFO [81.894812503] Cancel: stopping motor.
+TaskAutoShoot.runTaskState_INFO [81.899707486] ***** Start right shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [81.901062842] shoot(owner=null, event=(TaskAutoShoot.rightShooterDone=CLEARED), shooter=rightShooter, autoStop=false)
+Shooter.RightTransferMotor.cancel_INFO [81.903642747] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [81.90508749] <Event name="StateInfo" time="81.904920613" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.LeftShooter.goalTrackingTask_INFO [82.088259211] Shooter.LeftShooter is Ready: rpm1=5022.394832/5064.504775, rpm2=3130.664063/0.000000, tilt=24.340269/25.261731, pan=null/null
+FrcTeleOp.driverControllerButtonEvent_INFO [82.117399349] ##### button=A, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [82.223981438] ##### button=A, pressed=false
+Shooter.RightShooter.goalTrackingTask_INFO [82.304644502] Shooter.RightShooter is Ready: rpm1=5138.816106/5157.390302, rpm2=3166.757813/0.000000, tilt=25.881835/25.957385, pan=null/null
+Climber.Motor.isMotorStalled_INFO [85.691669317] Stall detection triggered.
+Climber.Motor.checkStallReset_INFO [85.69316275] Resetting stall.
+FrcTeleOp.driverControllerButtonEvent_INFO [86.213897887] ##### button=A, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [86.304678182] ##### button=A, pressed=false
+FrcTeleOp.driverControllerButtonEvent_INFO [86.749435376] ##### button=A, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [86.832793184] ##### button=A, pressed=false
+FrcTeleOp.operatorControllerButtonEvent_INFO [89.070491032] ##### button=Y, pressed=false
+FrcTeleOp.shoot_INFO [89.072283806] >>>>> Stop Auto Shoot.
+TaskAutoShoot.cancel_INFO [89.073261019] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [89.074720755] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [89.075860672] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [89.07970321] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [89.081081593] Cancel: stopping motor.
+Shooter.LeftShooter.disableGoalTracking_INFO [89.082775282] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [89.084246196] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [89.085796785] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [89.099600849] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [89.102003431] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [89.104090954] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [89.105779169] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [89.109917316] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [89.113436944] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [89.115599222] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [89.117187539] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [89.118740122] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [89.120955983] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [89.122164803] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [89.123324037] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [89.12517699] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [89.127484564] Cancel: stopping motor.
+FrcTeleOp.operatorControllerButtonEvent_INFO [90.301771216] ##### button=Y, pressed=true
+FrcTeleOp.shoot_INFO [90.303275755] >>>>> Start Auto Shoot.
+TaskAutoShoot.autoShoot_INFO [90.304149694] autoShoot(owner=null, event=null, taskParams=(autoStop=false, noPassback=false, noWait=false))
+Shooter.setupGoalTrackingMode_INFO [90.321922613] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [90.323937245] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [90.325487989] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [90.328494418] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [90.331249819] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [90.333597111] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [90.335322831] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [90.337657057] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [90.430552458] <Event name="StateInfo" time="90.430305604" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [90.430932304] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [90.431186621] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [90.431490699] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [90.431900102] <Event name="StateInfo" time="90.431679969" tag="^^^^^" TaskAutoShoot.state="START" />
+TaskAutoShoot.autoTask_INFO [90.635539252] <Event name="StateInfo" time="90.635342556" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [90.638643899] <Event name="StateInfo" time="90.638413056" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.setupGoalTrackingMode_INFO [90.651773711] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=2.
+Shooter.setupGoalTrackingMode_INFO [90.655042105] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+TaskAutoShoot.autoTask_INFO [90.754101361] <Event name="StateInfo" time="90.752071639" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [90.756912054] <Event name="StateInfo" time="90.756123001" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [90.851378989] <Event name="StateInfo" time="90.851179159" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [90.856713319] <Event name="StateInfo" time="90.856332534" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.LeftShooter.goalTrackingTask_INFO [90.938797405] Shooter.LeftShooter is Ready: rpm1=5611.126803/5604.932639, rpm2=3468.164063/0.000000, tilt=29.478875/29.615566, pan=null/null
+TaskAutoShoot.autoTask_INFO [90.961525278] <Event name="StateInfo" time="90.961251632" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [90.962043752] <Event name="StateInfo" time="90.961880282" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcTeleOp.operatorControllerButtonEvent_INFO [90.96711579] ##### button=Y, pressed=false
+FrcTeleOp.shoot_INFO [90.969042538] >>>>> Stop Auto Shoot.
+TaskAutoShoot.cancel_INFO [90.970691363] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [90.972108526] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [90.973251579] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [90.976163144] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [90.977926685] Cancel: stopping motor.
+Shooter.LeftShooter.disableGoalTracking_INFO [90.988320649] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [90.988756805] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [90.989151337] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [90.993218664] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [90.996881814] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [90.997262622] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [90.998988098] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [90.999435931] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [91.006527301] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [91.009546459] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [91.013474886] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [91.018996095] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [91.024265415] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [91.025704457] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [91.029421146] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [91.029994411] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [91.0330064] Cancel: stopping motor.
+Shooter.RightTiltMotor.isMotorStalled_INFO [91.088742344] Stall detection triggered.
+Shooter.RightTiltMotor.checkStallReset_INFO [91.090666876] Resetting stall.
+Shooter.TurretMotor.isMotorStalled_INFO [91.092120928] Stall detection triggered.
+Climber.Motor.isMotorStalled_INFO [91.094330107] Stall detection triggered.
+Climber.Motor.checkStallReset_INFO [91.097703086] Resetting stall.
+FrcTeleOp.operatorControllerButtonEvent_INFO [91.259011875] ##### button=Y, pressed=true
+FrcTeleOp.shoot_INFO [91.259635586] >>>>> Start Auto Shoot.
+TaskAutoShoot.autoShoot_INFO [91.269178425] autoShoot(owner=null, event=null, taskParams=(autoStop=false, noPassback=false, noWait=false))
+Shooter.setupGoalTrackingMode_INFO [91.269778554] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=2.
+Shooter.setupGoalTrackingMode_INFO [91.27016275] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [91.270594365] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [91.272044249] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [91.27295461] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [91.274082781] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [91.274785464] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [91.275579169] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [91.367833625] <Event name="StateInfo" time="91.367562533" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [91.372459002] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [91.37458918] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [91.374918446] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [91.376278969] <Event name="StateInfo" time="91.375080224" tag="^^^^^" TaskAutoShoot.state="START" />
+Shooter.TurretMotor.pidCtrlTask_INFO [91.472182218] controlMode: Position,onTarget=true(-113.38191183711501/-115.26076105241823), stalled=false, expired=false, event=(TaskAutoShoot.turretReady=SIGNALED)
+TaskAutoShoot.autoTask_INFO [91.565196752] <Event name="StateInfo" time="91.564807679" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [91.574205749] <Event name="StateInfo" time="91.573612654" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [91.674367737] <Event name="StateInfo" time="91.673785174" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [91.67522603] <Event name="StateInfo" time="91.67481274" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcTeleOp.operatorControllerButtonEvent_INFO [91.688092806] ##### button=Y, pressed=false
+FrcTeleOp.shoot_INFO [91.689877158] >>>>> Stop Auto Shoot.
+TaskAutoShoot.cancel_INFO [91.690128322] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [91.693670332] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [91.694582452] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [91.696118122] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [91.697593922] Cancel: stopping motor.
+Shooter.LeftShooter.disableGoalTracking_INFO [91.702391081] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [91.70298542] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [91.706128846] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [91.707038591] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [91.707591893] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [91.707855159] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [91.708165414] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [91.708581837] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [91.712334122] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [91.71290111] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [91.717747474] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [91.718238967] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [91.720489154] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [91.722362887] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [91.722788312] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [91.724961346] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [91.727085048] Cancel: stopping motor.
+FrcTeleOp.driverControllerButtonEvent_INFO [94.608090204] ##### button=A, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [94.712599789] ##### button=A, pressed=false
+FrcTeleOp.operatorControllerButtonEvent_INFO [96.613234204] ##### button=Y, pressed=true
+FrcTeleOp.shoot_INFO [96.61440497] >>>>> Start Auto Shoot.
+TaskAutoShoot.autoShoot_INFO [96.617129224] autoShoot(owner=null, event=null, taskParams=(autoStop=false, noPassback=false, noWait=false))
+Shooter.setupGoalTrackingMode_INFO [96.618059183] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=0.
+Shooter.setupGoalTrackingMode_INFO [96.618853156] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [96.619689907] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [96.621003944] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [96.623005908] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [96.623976561] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [96.625765239] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [96.62738649] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [96.738862578] <Event name="StateInfo" time="96.733301709" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [96.739918675] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [96.741813034] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [96.742478829] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [96.743660268] <Event name="StateInfo" time="96.742991063" tag="^^^^^" TaskAutoShoot.state="START" />
+Shooter.TurretMotor.pidCtrlTask_INFO [96.794946603] controlMode: Position,onTarget=true(-143.7040692918114/-145.44584178810015), stalled=false, expired=false, event=(TaskAutoShoot.turretReady=SIGNALED)
+TaskAutoShoot.autoTask_INFO [96.839585242] <Event name="StateInfo" time="96.83938796" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [96.844483012] <Event name="StateInfo" time="96.842681992" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [96.9449062] <Event name="StateInfo" time="96.944721534" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [96.955470758] <Event name="StateInfo" time="96.955069743" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [97.047335435] <Event name="StateInfo" time="97.045830635" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [97.048115543] <Event name="StateInfo" time="97.047920158" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [97.148359888] <Event name="StateInfo" time="97.148171418" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [97.149593421] <Event name="StateInfo" time="97.149244403" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [97.264321853] <Event name="StateInfo" time="97.26414041" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [97.26682902] <Event name="StateInfo" time="97.266637961" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [97.365686032] <Event name="StateInfo" time="97.365104" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [97.36776686] <Event name="StateInfo" time="97.367510976" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [97.464022584] <Event name="StateInfo" time="97.463746561" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [97.470857281] <Event name="StateInfo" time="97.470641565" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [97.572739007] <Event name="StateInfo" time="97.572442286" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [97.576201521] <Event name="StateInfo" time="97.575973173" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [97.675965942] <Event name="StateInfo" time="97.67580162" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [97.678195632] <Event name="StateInfo" time="97.677633547" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [97.781014534] <Event name="StateInfo" time="97.780846006" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [97.78383407] ***** Start left shooter shooting (timedout=true, turretReady=true).
+Shooter.shoot_INFO [97.786747984] shoot(owner=null, event=(TaskAutoShoot.leftShooterDone=CLEARED), shooter=leftShooter, autoStop=false)
+Shooter.LeftTransferMotor.cancel_INFO [97.787797373] Cancel: stopping motor.
+TaskAutoShoot.runTaskState_INFO [97.801058799] ***** Start right shooter shooting (timedout=true, turretReady=true).
+Shooter.shoot_INFO [97.803198575] shoot(owner=null, event=(TaskAutoShoot.rightShooterDone=CLEARED), shooter=rightShooter, autoStop=false)
+Shooter.RightTransferMotor.cancel_INFO [97.804421515] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [97.805324707] <Event name="StateInfo" time="97.805161759" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.LeftShooter.goalTrackingTask_INFO [98.181686513] Shooter.LeftShooter is Ready: rpm1=6146.475361/6114.028064, rpm2=3782.460938/0.000000, tilt=34.064109/34.714214, pan=null/null
+Shooter.RightShooter.goalTrackingTask_INFO [99.047845894] Shooter.RightShooter is Ready: rpm1=5742.503005/5832.515857, rpm2=3582.304688/0.000000, tilt=31.573843/31.732474, pan=null/null
+FrcTeleOp.operatorControllerButtonEvent_INFO [101.879580327] ##### button=Y, pressed=false
+FrcTeleOp.shoot_INFO [101.882807588] >>>>> Stop Auto Shoot.
+TaskAutoShoot.cancel_INFO [101.883993433] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [101.885033323] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [101.886238352] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [101.895302863] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [101.896675033] Cancel: stopping motor.
+Shooter.LeftShooter.disableGoalTracking_INFO [101.897546683] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [101.89850186] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [101.899168751] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [101.900022359] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [101.900918688] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [101.901900703] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [101.904018223] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [101.914213027] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [101.916555837] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [101.917822013] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [101.918604323] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [101.91930567] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [101.92022403] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [101.921037579] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [101.922058373] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [101.923094035] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [101.923812145] Cancel: stopping motor.
+FrcTeleOp.driverControllerButtonEvent_INFO [102.048573542] ##### button=RightBumper, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [102.051163052] >>>>> Slow Drive
+FrcTeleOp.driverControllerButtonEvent_INFO [102.254179864] ##### button=RightBumper, pressed=false
+FrcTeleOp.driverControllerButtonEvent_INFO [102.255208344] >>>>> Normal Drive
+FrcTeleOp.operatorControllerButtonEvent_INFO [102.256257283] ##### button=Y, pressed=true
+FrcTeleOp.shoot_INFO [102.257618496] >>>>> Start Auto Shoot.
+TaskAutoShoot.autoShoot_INFO [102.258433868] autoShoot(owner=null, event=null, taskParams=(autoStop=false, noPassback=false, noWait=false))
+Shooter.setupGoalTrackingMode_INFO [102.259927921] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=0.
+Shooter.setupGoalTrackingMode_INFO [102.261122254] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [102.261958755] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [102.26274542] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [102.2637932] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [102.264581353] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [102.266121978] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [102.267266178] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [102.363261419] <Event name="StateInfo" time="102.362986863" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [102.364661512] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [102.365406257] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [102.367536589] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [102.36902842] <Event name="StateInfo" time="102.368786842" tag="^^^^^" TaskAutoShoot.state="START" />
+Shooter.LeftShooter.goalTrackingTask_INFO [102.538250132] Shooter.LeftShooter is Ready: rpm1=5770.330529/5801.214755, rpm2=3524.414063/0.000000, tilt=31.297158/31.428142, pan=null/null
+TaskAutoShoot.autoTask_INFO [102.570112087] <Event name="StateInfo" time="102.569618169" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [102.572314112] <Event name="StateInfo" time="102.572130683" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcTeleOp.operatorControllerButtonEvent_INFO [102.57457302] ##### button=Y, pressed=false
+FrcTeleOp.shoot_INFO [102.576929702] >>>>> Stop Auto Shoot.
+TaskAutoShoot.cancel_INFO [102.577580195] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [102.578414342] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [102.579834533] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [102.583653958] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [102.584718469] Cancel: stopping motor.
+Shooter.LeftShooter.disableGoalTracking_INFO [102.58559592] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [102.587380251] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [102.588305269] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [102.58904526] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [102.589854808] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [102.590472859] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [102.593184469] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [102.604749294] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [102.609439881] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [102.611454799] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [102.614958351] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [102.615755334] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [102.618471137] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [102.625230342] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [102.626297362] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [102.627949896] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [102.628761043] Cancel: stopping motor.
+FrcTeleOp.operatorControllerButtonEvent_INFO [108.049533322] ##### button=Y, pressed=true
+FrcTeleOp.shoot_INFO [108.050133368] >>>>> Start Auto Shoot.
+TaskAutoShoot.autoShoot_INFO [108.050486733] autoShoot(owner=null, event=null, taskParams=(autoStop=false, noPassback=false, noWait=false))
+Shooter.setupGoalTrackingMode_INFO [108.050937536] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [108.051325487] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [108.051621959] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [108.052055553] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [108.052482779] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [108.052919133] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [108.053289629] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [108.053829354] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [108.16399351] <Event name="StateInfo" time="108.163734315" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [108.165004498] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [108.16638223] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [108.168317002] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [108.169655267] <Event name="StateInfo" time="108.169436057" tag="^^^^^" TaskAutoShoot.state="START" />
+Shooter.TurretMotor.pidCtrlTask_INFO [108.221966219] controlMode: Position,onTarget=true(68.53153091819084/66.3816831631299), stalled=false, expired=false, event=(TaskAutoShoot.turretReady=SIGNALED)
+TaskAutoShoot.autoTask_INFO [108.286519674] <Event name="StateInfo" time="108.286351484" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [108.287392318] <Event name="StateInfo" time="108.287153973" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [108.40517121] <Event name="StateInfo" time="108.401879993" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [108.405639141] <Event name="StateInfo" time="108.405430768" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [108.502754155] <Event name="StateInfo" time="108.500187856" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [108.504194335] <Event name="StateInfo" time="108.504001158" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [108.598143717] <Event name="StateInfo" time="108.596774526" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [108.602071144] <Event name="StateInfo" time="108.601877995" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [108.73038179] <Event name="StateInfo" time="108.730214833" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [108.736778416] <Event name="StateInfo" time="108.736587295" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [108.835201081] <Event name="StateInfo" time="108.835023507" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [108.835548093] <Event name="StateInfo" time="108.835406572" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [108.934442922] <Event name="StateInfo" time="108.933305168" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [108.934830481] <Event name="StateInfo" time="108.934672824" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [109.046509588] <Event name="StateInfo" time="109.043195804" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [109.051899114] <Event name="StateInfo" time="109.04978133" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.RightShooter.goalTrackingTask_INFO [109.163663795] Shooter.RightShooter is Ready: rpm1=4974.501202/5032.076387, rpm2=3019.218750/0.000000, tilt=25.012234/25.023150, pan=null/null
+TaskAutoShoot.autoTask_INFO [109.165242596] <Event name="StateInfo" time="109.1650629" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [109.172638941] ***** Start left shooter shooting (timedout=true, turretReady=true).
+Shooter.shoot_INFO [109.174848709] shoot(owner=null, event=(TaskAutoShoot.leftShooterDone=CLEARED), shooter=leftShooter, autoStop=false)
+Shooter.LeftTransferMotor.cancel_INFO [109.177049149] Cancel: stopping motor.
+TaskAutoShoot.runTaskState_INFO [109.178594006] ***** Start right shooter shooting (timedout=true, turretReady=true).
+Shooter.shoot_INFO [109.180979984] shoot(owner=null, event=(TaskAutoShoot.rightShooterDone=CLEARED), shooter=rightShooter, autoStop=false)
+Shooter.RightTransferMotor.cancel_INFO [109.182756693] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [109.186060741] <Event name="StateInfo" time="109.184815104" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcTeleOp.operatorControllerButtonEvent_INFO [110.846125346] ##### button=Y, pressed=false
+FrcTeleOp.shoot_INFO [110.848802287] >>>>> Stop Auto Shoot.
+TaskAutoShoot.cancel_INFO [110.85301384] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [110.856322311] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [110.857414397] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [110.858088005] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [110.858691686] Cancel: stopping motor.
+Shooter.LeftShooter.disableGoalTracking_INFO [110.85981207] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [110.860395954] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [110.860932499] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [110.862007473] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [110.862852755] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [110.863692859] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [110.867190021] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [110.868335971] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [110.869872797] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [110.870685848] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [110.871391122] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [110.872258962] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [110.873071088] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [110.87401222] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [110.877761011] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [110.878482349] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [110.879205721] Cancel: stopping motor.
+FrcTeleOp.driverControllerButtonEvent_INFO [120.389821149] ##### button=RightBumper, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [120.397350972] >>>>> Slow Drive
+FrcTeleOp.operatorControllerButtonEvent_INFO [120.851554744] ##### button=Y, pressed=true
+FrcTeleOp.shoot_INFO [120.85270334] >>>>> Start Auto Shoot.
+TaskAutoShoot.autoShoot_INFO [120.853022482] autoShoot(owner=null, event=null, taskParams=(autoStop=false, noPassback=false, noWait=false))
+Shooter.setupGoalTrackingMode_INFO [120.857731178] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=0.
+Shooter.setupGoalTrackingMode_INFO [120.858314332] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [120.858593796] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [120.859234068] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [120.859710611] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [120.861862504] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [120.862234843] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [120.86294876] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [120.965584028] <Event name="StateInfo" time="120.965351978" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [120.96643336] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [120.966907367] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [120.967117554] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [120.967518714] <Event name="StateInfo" time="120.967239793" tag="^^^^^" TaskAutoShoot.state="START" />
+TaskAutoShoot.autoTask_INFO [121.143322606] <Event name="StateInfo" time="121.14315374" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [121.147179357] <Event name="StateInfo" time="121.147009779" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [121.227772245] <Event name="StateInfo" time="121.227143747" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [121.229587933] <Event name="StateInfo" time="121.229321037" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [121.335109122] <Event name="StateInfo" time="121.334808575" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [121.335914525] <Event name="StateInfo" time="121.335331344" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [121.445475197] <Event name="StateInfo" time="121.442074018" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [121.446432693] <Event name="StateInfo" time="121.446240395" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [121.537331308] <Event name="StateInfo" time="121.537156684" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [121.545822346] <Event name="StateInfo" time="121.539348639" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [121.66156125] <Event name="StateInfo" time="121.661196921" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [121.665961675] <Event name="StateInfo" time="121.665208659" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [121.761585343] <Event name="StateInfo" time="121.761388305" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [121.765963772] <Event name="StateInfo" time="121.765778637" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.RightShooter.goalTrackingTask_INFO [121.887422171] Shooter.RightShooter is Ready: rpm1=5041.325120/5034.556366, rpm2=3120.703125/0.000000, tilt=25.526090/25.041320, pan=null/null
+TaskAutoShoot.autoTask_INFO [121.888839712] <Event name="StateInfo" time="121.887860937" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [121.88987993] <Event name="StateInfo" time="121.889476335" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [121.990998303] <Event name="StateInfo" time="121.990792148" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [121.993350883] ***** Start left shooter shooting (timedout=true, turretReady=false).
+Shooter.shoot_INFO [121.994124056] shoot(owner=null, event=(TaskAutoShoot.leftShooterDone=CLEARED), shooter=leftShooter, autoStop=false)
+Shooter.LeftTransferMotor.cancel_INFO [121.997208913] Cancel: stopping motor.
+TaskAutoShoot.runTaskState_INFO [121.99871144] ***** Start right shooter shooting (timedout=true, turretReady=false).
+Shooter.shoot_INFO [122.00049512] shoot(owner=null, event=(TaskAutoShoot.rightShooterDone=CLEARED), shooter=rightShooter, autoStop=false)
+Shooter.RightTransferMotor.cancel_INFO [122.001102338] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [122.00231753] <Event name="StateInfo" time="122.002140673" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.setupGoalTrackingMode_INFO [124.366221304] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=1.
+Shooter.setupGoalTrackingMode_INFO [124.367870785] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+FrcTeleOp.driverControllerButtonEvent_INFO [124.897799875] ##### button=RightBumper, pressed=false
+FrcTeleOp.driverControllerButtonEvent_INFO [124.898964415] >>>>> Normal Drive
+FrcTeleOp.operatorControllerButtonEvent_INFO [125.019853978] ##### button=Y, pressed=false
+FrcTeleOp.shoot_INFO [125.020333348] >>>>> Stop Auto Shoot.
+TaskAutoShoot.cancel_INFO [125.020575378] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [125.020909228] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [125.021253171] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [125.031636134] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [125.032004105] Cancel: stopping motor.
+Shooter.LeftShooter.disableGoalTracking_INFO [125.034588812] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [125.034923285] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [125.035212935] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [125.040430154] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [125.041045004] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [125.041260074] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [125.041576819] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [125.041972934] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [125.042434175] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [125.042861829] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [125.043285263] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [125.043600042] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [125.044021609] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [125.055158034] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [125.057167854] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [125.05751526] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [125.058694621] Cancel: stopping motor.
+FrcTeleOp.operatorControllerButtonEvent_INFO [128.355365178] ##### button=Y, pressed=true
+FrcTeleOp.shoot_INFO [128.355905695] >>>>> Start Auto Shoot.
+TaskAutoShoot.autoShoot_INFO [128.356891629] autoShoot(owner=null, event=null, taskParams=(autoStop=false, noPassback=false, noWait=false))
+Shooter.setupGoalTrackingMode_INFO [128.358110063] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [128.358516422] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [128.35927958] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [128.37021422] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [128.370707317] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [128.371146648] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [128.374479083] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [128.375014924] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [128.484501258] <Event name="StateInfo" time="128.483131756" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [128.487325742] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [128.488145312] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [128.489800548] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [128.491150793] <Event name="StateInfo" time="128.490906" tag="^^^^^" TaskAutoShoot.state="START" />
+TaskAutoShoot.autoTask_INFO [128.666537333] <Event name="StateInfo" time="128.666364187" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [128.66898865] <Event name="StateInfo" time="128.668804907" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcTeleOp.operatorControllerButtonEvent_INFO [128.674471724] ##### button=Y, pressed=false
+FrcTeleOp.shoot_INFO [128.67546967] >>>>> Stop Auto Shoot.
+TaskAutoShoot.cancel_INFO [128.678594324] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [128.682934191] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [128.683953162] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [128.685300428] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [128.686448968] Cancel: stopping motor.
+Shooter.LeftShooter.disableGoalTracking_INFO [128.687555479] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [128.691217328] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [128.692911019] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [128.693858544] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [128.694892831] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [128.695889459] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [128.697213079] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [128.698113093] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [128.70483071] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [128.705998081] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [128.708841036] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [128.714808022] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [128.715899339] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [128.718478522] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [128.719544242] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [128.720405295] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [128.726893612] Cancel: stopping motor.
+FrcTeleOp.operatorControllerButtonEvent_INFO [128.957179095] ##### button=B, pressed=true
+FrcTeleOp.operatorControllerButtonEvent_INFO [128.958386309] >>>>> Enable GoalTracking.
+Shooter.setupGoalTrackingMode_INFO [128.959955754] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [128.962517692] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [128.963786136] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=false,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [128.964946183] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [128.967188219] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [128.968805295] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=false,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [128.970496767] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [128.97239294] Cancel: stopping motor.
+FrcTeleOp.operatorControllerButtonEvent_INFO [129.111045364] ##### button=B, pressed=false
+FrcTeleOp.operatorControllerButtonEvent_INFO [129.844622145] ##### button=Y, pressed=true
+FrcTeleOp.shoot_INFO [129.852255135] >>>>> Start Auto Shoot.
+TaskAutoShoot.autoShoot_INFO [129.852995939] autoShoot(owner=null, event=null, taskParams=(autoStop=false, noPassback=false, noWait=true))
+Shooter.setupGoalTrackingMode_INFO [129.853789109] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [129.854141941] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [129.855237204] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [129.858451679] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [129.859574154] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [129.859968661] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [129.861683456] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [129.863430315] Cancel: stopping motor.
+Shooter.LeftShooter.goalTrackingTask_INFO [129.953583706] Shooter.LeftShooter is Ready: rpm1=5688.551683/5756.530311, rpm2=3552.304688/0.000000, tilt=31.494797/31.001477, pan=null/null
+TaskAutoShoot.autoTask_INFO [129.983032002] <Event name="StateInfo" time="129.980510825" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [129.985782832] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [129.987477483] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [129.988131338] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [129.989045659] <Event name="StateInfo" time="129.988500024" tag="^^^^^" TaskAutoShoot.state="START" />
+Shooter.TurretMotor.pidCtrlTask_INFO [130.037098047] controlMode: Position,onTarget=true(-138.76427585074504/-137.74366422088022), stalled=false, expired=false, event=(TaskAutoShoot.turretReady=SIGNALED)
+Shooter.LeftShooter.goalTrackingTask_INFO [130.075954535] Shooter.LeftShooter is Ready: rpm1=5762.001202/5694.662280, rpm2=3510.468750/0.000000, tilt=31.336685/30.424921, pan=null/null
+TaskAutoShoot.autoTask_INFO [130.099221843] <Event name="StateInfo" time="130.099029834" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [130.099546272] ***** Start left shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [130.100561507] shoot(owner=null, event=(TaskAutoShoot.leftShooterDone=CLEARED), shooter=leftShooter, autoStop=false)
+Shooter.LeftTransferMotor.cancel_INFO [130.1019124] Cancel: stopping motor.
+TaskAutoShoot.runTaskState_INFO [130.103797291] ***** Start right shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [130.105181078] shoot(owner=null, event=(TaskAutoShoot.rightShooterDone=CLEARED), shooter=rightShooter, autoStop=false)
+Shooter.RightTransferMotor.cancel_INFO [130.106174966] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [130.108773049] <Event name="StateInfo" time="130.108342743" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.RightShooter.goalTrackingTask_INFO [130.203060125] Shooter.RightShooter is Ready: rpm1=5673.028846/5693.571764, rpm2=3455.742188/0.000000, tilt=30.506590/30.414899, pan=null/null
+FrcTeleOp.operatorControllerButtonEvent_INFO [131.108685386] ##### button=Y, pressed=false
+FrcTeleOp.shoot_INFO [131.10990144] >>>>> Stop Auto Shoot.
+TaskAutoShoot.cancel_INFO [131.11117732] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [131.112051769] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [131.112952085] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [131.114307453] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [131.115593317] Cancel: stopping motor.
+Shooter.LeftShooter.disableGoalTracking_INFO [131.116558867] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [131.117683865] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [131.118775205] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [131.121384903] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [131.122692187] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [131.123618103] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [131.124960194] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [131.127629283] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [131.128761478] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [131.129717673] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [131.131059079] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [131.131877996] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [131.132837862] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [131.133870797] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [131.134828614] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [131.135732966] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [131.136562731] Cancel: stopping motor.
+FrcTeleOp.driverControllerButtonEvent_INFO [131.352618187] ##### button=RightBumper, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [131.356630516] >>>>> Slow Drive
+FrcTeleOp.operatorControllerButtonEvent_INFO [131.661822832] ##### button=Y, pressed=true
+FrcTeleOp.shoot_INFO [131.662866407] >>>>> Start Auto Shoot.
+TaskAutoShoot.autoShoot_INFO [131.663478809] autoShoot(owner=null, event=null, taskParams=(autoStop=false, noPassback=false, noWait=false))
+Shooter.setupGoalTrackingMode_INFO [131.664228195] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [131.665512114] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [131.666340779] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [131.667631464] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [131.668340803] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [131.66929324] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [131.670080745] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [131.671683373] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [131.766341777] <Event name="StateInfo" time="131.766074497" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [131.770164997] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [131.771151748] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [131.771346287] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [131.771633366] <Event name="StateInfo" time="131.771463192" tag="^^^^^" TaskAutoShoot.state="START" />
+Shooter.LeftShooter.goalTrackingTask_INFO [131.932304609] Shooter.LeftShooter is Ready: rpm1=5739.852764/5762.089462, rpm2=3505.312500/0.000000, tilt=31.850547/31.054075, pan=null/null
+TaskAutoShoot.autoTask_INFO [131.956095703] <Event name="StateInfo" time="131.955512713" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [131.956816319] <Event name="StateInfo" time="131.956619672" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [132.060622485] <Event name="StateInfo" time="132.060306313" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [132.065130479] <Event name="StateInfo" time="132.064882155" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.RightShooter.goalTrackingTask_INFO [132.164738761] Shooter.RightShooter is Ready: rpm1=5615.859375/5610.266003, rpm2=3486.562500/0.000000, tilt=30.032256/29.662838, pan=null/null
+TaskAutoShoot.autoTask_INFO [132.166181853] <Event name="StateInfo" time="132.165996261" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [132.167339075] <Event name="StateInfo" time="132.167166414" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcTeleOp.driverControllerButtonEvent_INFO [132.169251668] ##### button=RightBumper, pressed=false
+FrcTeleOp.driverControllerButtonEvent_INFO [132.170458097] >>>>> Normal Drive
+TaskAutoShoot.autoTask_INFO [132.262087622] <Event name="StateInfo" time="132.261913754" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [132.26240979] <Event name="StateInfo" time="132.262268917" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [132.353104984] <Event name="StateInfo" time="132.352898242" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [132.353700671] <Event name="StateInfo" time="132.353308894" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [132.446819053] <Event name="StateInfo" time="132.446626946" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [132.45329303] <Event name="StateInfo" time="132.453117008" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [132.548657472] <Event name="StateInfo" time="132.548380468" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [132.552175358] <Event name="StateInfo" time="132.551950602" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [132.652308801] <Event name="StateInfo" time="132.652134619" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [132.653108638] <Event name="StateInfo" time="132.652868227" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [132.753245732] <Event name="StateInfo" time="132.75296211" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [132.754463284] <Event name="StateInfo" time="132.754279788" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Climber.Motor.isMotorStalled_INFO [132.791560768] Stall detection triggered.
+Climber.Motor.checkStallReset_INFO [132.791896983] Resetting stall.
+TaskAutoShoot.autoTask_INFO [132.843910529] <Event name="StateInfo" time="132.843740634" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [132.848112597] ***** Start left shooter shooting (timedout=true, turretReady=false).
+Shooter.shoot_INFO [132.849165744] shoot(owner=null, event=(TaskAutoShoot.leftShooterDone=CLEARED), shooter=leftShooter, autoStop=false)
+Shooter.LeftTransferMotor.cancel_INFO [132.849568264] Cancel: stopping motor.
+TaskAutoShoot.runTaskState_INFO [132.850076415] ***** Start right shooter shooting (timedout=true, turretReady=false).
+Shooter.shoot_INFO [132.851049389] shoot(owner=null, event=(TaskAutoShoot.rightShooterDone=CLEARED), shooter=rightShooter, autoStop=false)
+Shooter.RightTransferMotor.cancel_INFO [132.851635868] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [132.852180869] <Event name="StateInfo" time="132.852031001" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.setupGoalTrackingMode_INFO [133.469360124] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=2.
+Shooter.setupGoalTrackingMode_INFO [133.474932421] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+FrcTeleOp.operatorControllerButtonEvent_INFO [133.650526382] ##### button=Y, pressed=false
+FrcTeleOp.shoot_INFO [133.657871065] >>>>> Stop Auto Shoot.
+TaskAutoShoot.cancel_INFO [133.659196278] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [133.660129647] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [133.661229895] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [133.662627637] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [133.665636321] Cancel: stopping motor.
+Shooter.LeftShooter.disableGoalTracking_INFO [133.667375107] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [133.668752476] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [133.67755368] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [133.678725918] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [133.681464295] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [133.682265762] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [133.683255988] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [133.684623605] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [133.686116631] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [133.688256148] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [133.690065524] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [133.690861523] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [133.692141658] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [133.693288288] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [133.694734533] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [133.695832343] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [133.697451557] Cancel: stopping motor.
+FrcTeleOp.operatorControllerButtonEvent_INFO [134.075009906] ##### button=Y, pressed=true
+FrcTeleOp.shoot_INFO [134.075799522] >>>>> Start Auto Shoot.
+TaskAutoShoot.autoShoot_INFO [134.077126168] autoShoot(owner=null, event=null, taskParams=(autoStop=false, noPassback=false, noWait=false))
+Shooter.setupGoalTrackingMode_INFO [134.077788074] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [134.078663105] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [134.079259842] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [134.080246888] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [134.08109256] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [134.081797069] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [134.085765503] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [134.086877507] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [134.176357149] <Event name="StateInfo" time="134.175946754" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [134.176881609] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [134.177385254] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [134.181550103] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [134.183424568] <Event name="StateInfo" time="134.181783872" tag="^^^^^" TaskAutoShoot.state="START" />
+FrcTeleOp.driverControllerButtonEvent_INFO [134.280157439] ##### button=RightBumper, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [134.280685721] >>>>> Slow Drive
+TaskAutoShoot.autoTask_INFO [134.38228135] <Event name="StateInfo" time="134.38195637" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [134.391619028] <Event name="StateInfo" time="134.390111452" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [134.495827565] <Event name="StateInfo" time="134.495647152" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [134.499066642] <Event name="StateInfo" time="134.498878254" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.RightShooter.goalTrackingTask_INFO [134.58406452] Shooter.RightShooter is Ready: rpm1=5133.326322/5213.600674, rpm2=3184.687500/0.000000, tilt=26.356164/26.387685, pan=null/null
+TaskAutoShoot.autoTask_INFO [134.584414269] <Event name="StateInfo" time="134.584274121" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [134.588689498] <Event name="StateInfo" time="134.588487309" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [134.679614284] <Event name="StateInfo" time="134.679307968" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [134.682199474] <Event name="StateInfo" time="134.681756065" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [134.77237505] <Event name="StateInfo" time="134.772178337" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [134.772738283] <Event name="StateInfo" time="134.772590106" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [134.858269187] <Event name="StateInfo" time="134.857989485" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [134.858597751] <Event name="StateInfo" time="134.858468756" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [134.945694699] <Event name="StateInfo" time="134.945201917" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [134.949699076] <Event name="StateInfo" time="134.949523719" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [135.036182593] <Event name="StateInfo" time="135.035998524" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [135.036528493] <Event name="StateInfo" time="135.036381197" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [135.122667711] <Event name="StateInfo" time="135.122479849" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [135.123153024] <Event name="StateInfo" time="135.122995438" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [135.21576075] <Event name="StateInfo" time="135.215594887" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [135.216108964] ***** Start left shooter shooting (timedout=true, turretReady=false).
+Shooter.shoot_INFO [135.216926836] shoot(owner=null, event=(TaskAutoShoot.leftShooterDone=CLEARED), shooter=leftShooter, autoStop=false)
+Shooter.LeftTransferMotor.cancel_INFO [135.217330754] Cancel: stopping motor.
+TaskAutoShoot.runTaskState_INFO [135.219950033] ***** Start right shooter shooting (timedout=true, turretReady=false).
+Shooter.shoot_INFO [135.220347249] shoot(owner=null, event=(TaskAutoShoot.rightShooterDone=CLEARED), shooter=rightShooter, autoStop=false)
+Shooter.RightTransferMotor.cancel_INFO [135.22088481] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [135.221628711] <Event name="StateInfo" time="135.221463678" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcTeleOp.driverControllerButtonEvent_INFO [135.225738252] ##### button=RightBumper, pressed=false
+FrcTeleOp.driverControllerButtonEvent_INFO [135.226841354] >>>>> Normal Drive
+FrcTeleOp.operatorControllerButtonEvent_INFO [136.286039908] ##### button=Y, pressed=false
+FrcTeleOp.shoot_INFO [136.292392159] >>>>> Stop Auto Shoot.
+TaskAutoShoot.cancel_INFO [136.295021841] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [136.297240161] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [136.297865345] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [136.300191945] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [136.301257462] Cancel: stopping motor.
+Shooter.LeftShooter.disableGoalTracking_INFO [136.302245874] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [136.302735656] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [136.303793959] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [136.307321253] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [136.308197235] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [136.308656108] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [136.312567753] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [136.313633839] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [136.316089796] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [136.31829977] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [136.319103225] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [136.320237963] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [136.321266188] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [136.32206258] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [136.322805128] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [136.323348467] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [136.32406115] Cancel: stopping motor.
+FrcTeleOp.operatorControllerButtonEvent_INFO [137.250482602] ##### button=Y, pressed=true
+FrcTeleOp.shoot_INFO [137.251464768] >>>>> Start Auto Shoot.
+TaskAutoShoot.autoShoot_INFO [137.252130634] autoShoot(owner=null, event=null, taskParams=(autoStop=false, noPassback=false, noWait=false))
+Shooter.setupGoalTrackingMode_INFO [137.252918969] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [137.254125272] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=false).
+Shooter.LeftShooter.enableGoalTracking_INFO [137.254706773] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [137.255535657] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [137.256205368] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [137.257185996] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [137.257963993] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [137.258598422] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [137.367713771] <Event name="StateInfo" time="137.367452337" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [137.368109196] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [137.368525499] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [137.368731015] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [137.374132211] <Event name="StateInfo" time="137.368853118" tag="^^^^^" TaskAutoShoot.state="START" />
+Shooter.TurretMotor.pidCtrlTask_INFO [137.427683432] controlMode: Position,onTarget=true(-4.9406563964467125/-4.1663333995293), stalled=false, expired=false, event=(TaskAutoShoot.turretReady=SIGNALED)
+TaskAutoShoot.autoTask_INFO [137.486858766] <Event name="StateInfo" time="137.486158937" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [137.487543458] <Event name="StateInfo" time="137.48719973" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [137.578560792] <Event name="StateInfo" time="137.578370334" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [137.57889673] <Event name="StateInfo" time="137.578755169" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+Shooter.RightShooter.goalTrackingTask_INFO [137.683990583] Shooter.RightShooter is Ready: rpm1=5132.001202/5215.024920, rpm2=3139.218750/0.000000, tilt=26.356164/26.398684, pan=null/null
+TaskAutoShoot.autoTask_INFO [137.685466777] <Event name="StateInfo" time="137.685132122" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [137.687638962] ***** Start right shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [137.688755643] shoot(owner=null, event=(TaskAutoShoot.rightShooterDone=CLEARED), shooter=rightShooter, autoStop=false)
+Shooter.RightTransferMotor.cancel_INFO [137.690330652] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [137.691925909] <Event name="StateInfo" time="137.691577357" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [137.791120421] <Event name="StateInfo" time="137.79094319" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [137.7932385] <Event name="StateInfo" time="137.791789142" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [137.890938855] <Event name="StateInfo" time="137.890621538" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [137.892010065] <Event name="StateInfo" time="137.891825992" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [137.972738214] <Event name="StateInfo" time="137.970596126" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [137.974535468] <Event name="StateInfo" time="137.973192017" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [138.072374827] <Event name="StateInfo" time="138.072192012" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [138.083059069] <Event name="StateInfo" time="138.082408803" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [138.178291403] <Event name="StateInfo" time="138.178110699" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [138.180592394] <Event name="StateInfo" time="138.180420113" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcTeleOp.operatorControllerButtonEvent_INFO [138.188280496] ##### button=Y, pressed=false
+FrcTeleOp.shoot_INFO [138.191069677] >>>>> Stop Auto Shoot.
+TaskAutoShoot.cancel_INFO [138.193136977] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [138.194565914] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [138.195511426] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [138.196141987] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [138.198123842] Cancel: stopping motor.
+Shooter.LeftShooter.disableGoalTracking_INFO [138.199081955] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [138.199808945] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [138.20690562] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [138.207860793] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [138.21015718] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [138.2107939] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [138.21355288] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [138.21537052] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [138.2165329] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [138.217530462] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [138.218396677] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [138.219727143] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [138.220490322] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [138.221732947] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [138.224501883] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [138.230076875] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [138.231722389] Cancel: stopping motor.
+FrcTeleOp.driverControllerButtonEvent_INFO [138.471745373] ##### button=A, pressed=true
+FrcTeleOp.driverControllerButtonEvent_INFO [138.572346011] ##### button=A, pressed=false
+FrcRobot.startCompetition_INFO [139.919281612] *** Transitioning from TELEOP_MODE to DISABLED_MODE ***
+Robot.cancelAll_INFO [139.932563244] Cancel all operations.
+Shooter.LeftShooter.cancel_INFO [139.934967876] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [139.936840383] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [139.937817017] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [139.938508963] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [139.939476308] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [139.94193026] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [139.943065065] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [139.944736684] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [139.945749075] Cancel: stopping motor.
+Intake.IntakeMotor.cancel_INFO [139.996133661] Cancel: stopping motor.
+Climber.Motor.isMotorStalled_INFO [139.996165638] Stall detection triggered.
+Climber.Motor.checkStallReset_INFO [139.997596355] Resetting stall.
+Climber.Motor.cancel_INFO [139.999058744] Cancel: stopping motor.
+TaskAutoShoot.cancel_INFO [140.000509998] Canceling auto task operation.
+TaskAutoClimb.cancel_INFO [140.000723229] Canceling auto task operation.
+FrcRobot.printPerformanceMetrics_INFO [140.004187493] [FrcRobot] Loop Performance Metrics:
+Average Loop Interval = 0.001755s (freq=569.736Hz, min=0.000772s, max=0.736188s)
+[03]                StartTask=0.000000s
+[04]          PrePeriodicTask=0.000162s
+[07]               UpdateTask=0.000881s
+[02]                StartMode=0.000000s
+[06]         PostPeriodicTask=0.000370s
+[08]                 StopTask=0.000000s
+[09]                 StopMode=0.000000s
+[00]                RobotInit=17.721481s
+[01]           RobotStartMode=0.000003s
+[05]                 Periodic=0.000275s
+[10]            RobotStopMode=0.000002s
+
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.006260902] FrcDashboard.task: STANDALONE_TASK=4.425753174513354E-4/0.010552596176380715
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.006705045] TrcWatchdogMgr: STANDALONE_TASK=2.775526782841823E-4/0.9977188787774799
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.006958967] DriverController.buttonEventTask: PRE_PERIODIC_TASK=1.0944987146476182E-5/0.002903154999730055
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.007964858] OperatorController.buttonEventTask: PRE_PERIODIC_TASK=9.89027016072096E-5/0.00290315112629262
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.008615606] flDriveMotor.pidCtrlTask: OUTPUT_TASK=5.549711279725178E-5/0.012439445354467532
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.008975826] flDriveMotor.odometryCleanupTask: STOP_TASK=2.85175E-5/41.09375998475
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.009257417] frDriveMotor.pidCtrlTask: OUTPUT_TASK=3.677775472767902E-5/0.012439427722943
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.009889517] blDriveMotor.pidCtrlTask: OUTPUT_TASK=2.9301556181836375E-5/0.012439427321115299
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.010185234] brDriveMotor.pidCtrlTask: OUTPUT_TASK=3.05805971518143E-5/0.012439306696137941
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.010421295] flSteerMotor.pidCtrlTask: OUTPUT_TASK=3.843507680763074E-5/0.01243930644196905
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.010950384] frSteerMotor.pidCtrlTask: OUTPUT_TASK=3.197291522145144E-5/0.012439308983024281
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.011263877] blSteerMotor.pidCtrlTask: OUTPUT_TASK=3.3169446204642476E-5/0.012439310073539222
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.011689127] brSteerMotor.pidCtrlTask: OUTPUT_TASK=3.0984094617129134E-5/0.012439310912886872
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.025078494] FrcSwerveDrive.odometryTask: INPUT_TASK=0.001745200893315956/0.015272084431018433
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.026422963] FrcSwerveDrive.stopTask: STOP_TASK=0.00472231875/41.0937274825
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.027838857] purePursuitDrive.driveTask: POST_PERIODIC_TASK=0.008933478202380952/0.05867333558333333
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.029394329] LED: OUTPUT_TASK=5.261028007337002E-5/0.012439253208437553
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.030580534] Shooter.LeftPrimaryMotor.pidCtrlTask: OUTPUT_TASK=2.6736681107220276E-5/0.012439239772819742
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.031567296] Shooter.LeftFollowerMotor.pidCtrlTask: OUTPUT_TASK=5.5882287400787035E-6/0.012439187154171947
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.032461014] Shooter.LeftTiltMotor.pidCtrlTask: OUTPUT_TASK=5.870113206496364E-4/0.01243918697005269
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.033322656] Shooter.LeftShooter.goalTracking: POST_PERIODIC_TASK=0.05227418155284553/0.1881614370209059
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.034675797] Shooter.LeftTransferMotor.pidCtrlTask: OUTPUT_TASK=7.130434369372374E-6/0.012439163458780763
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.037014232] Shooter.RightPrimaryMotor.pidCtrlTask: OUTPUT_TASK=2.375183128793437E-5/0.012439162945007671
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.039406197] Shooter.RightFollowerMotor.pidCtrlTask: OUTPUT_TASK=5.698530781031148E-6/0.012439162698359233
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.040719955] Shooter.RightTiltMotor.pidCtrlTask: OUTPUT_TASK=5.761347972387114E-4/0.012439162445541253
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.041619041] Shooter.RightShooter.goalTracking: POST_PERIODIC_TASK=0.018264244924506387/0.18801067145412312
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.042665579] Shooter.RightTransferMotor.pidCtrlTask: OUTPUT_TASK=6.569183085439872E-6/0.012439153255786033
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.044163172] Shooter.TurretMotor.pidCtrlTask: OUTPUT_TASK=7.973676596191683E-4/0.012439106676026277
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.04502396] Shooter.TurretMotor.converterTask: INPUT_TASK=9.075021719411745E-5/0.012439168250075032
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.046742192] Shooter.FeederMotor.pidCtrlTask: OUTPUT_TASK=7.183867442558442E-6/0.012439097977323506
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.048099322] ShooterfieldLengthTrigger.triggerTask: PRE_PERIODIC_TASK=4.220602069484982E-5/0.0017539906311646737
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.050123062] ShooterfieldWidthTrigger.triggerTask: PRE_PERIODIC_TASK=6.6467281376518225E-6/0.0017539899584784859
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.051316402] Intake.IntakeMotor.pidCtrlTask: OUTPUT_TASK=6.235360923066663E-6/0.012439097518824823
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.052257124] Climber.Motor.pidCtrlTask: OUTPUT_TASK=6.9256830759996E-5/0.012439097273351787
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [140.053263589] TaskAutoShoot: POST_PERIODIC_TASK=0.0019860901952861955/0.2590297027878788
