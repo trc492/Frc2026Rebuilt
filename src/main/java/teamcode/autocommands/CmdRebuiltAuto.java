@@ -455,7 +455,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                                 robot.intakeSubsystem.setIntakeEnabled(true);
                                 robot.autoShootTask.autoShoot(null, null, false, true, false);
                             } 
-                            else if (i == 4 && atDepot)
+                            else if ((i == 5 || i == -1) && atDepot)
                             {
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.85);
                             }
