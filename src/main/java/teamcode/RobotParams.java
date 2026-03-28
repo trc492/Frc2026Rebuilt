@@ -304,7 +304,7 @@ public class RobotParams
             -halfFieldWidth - HUB_WIDTH/2.0, -halfFieldWidth, -halfFieldWidth + HUB_WIDTH/2.0
         };
 
-        public static final TrcPose2D[] blueDoubleSweepDepotPath = new TrcPose2D[] {
+        public static final TrcPose2D[] blueDoubleSweepDepotTrenchPath = new TrcPose2D[] {
             new TrcPose2D(-295.80, 281.61, 90.00),
             new TrcPose2D(-261.80, 301.61, 90.00),
             new TrcPose2D(-166.80, 301.61, 90.00),
@@ -319,7 +319,7 @@ public class RobotParams
             new TrcPose2D(-289.01, 123.46, 0.00)
         };
 
-        public static final TrcPose2D[] blueDoubleSweepOutpostPath = new TrcPose2D[] {
+        public static final TrcPose2D[] blueDoubleSweepOutpostTrenchPath = new TrcPose2D[] {
             new TrcPose2D(-21.89, 281.61, -90.00),
             new TrcPose2D(-55.89, 301.61, -90.00),
             new TrcPose2D(-150.89, 301.61, -90.00),
@@ -333,6 +333,37 @@ public class RobotParams
             new TrcPose2D(-29.49, 250.01, 0.00),
             new TrcPose2D(-28.68, 123.46, 0.00)
         };
+
+        public static final TrcPose2D[] blueDoubleSweepDepotBumpPath = new TrcPose2D[] {
+            new TrcPose2D(-295.80, 281.61, 90.00),
+            new TrcPose2D(-261.80, 301.61, 90.00),
+            new TrcPose2D(-166.80, 301.61, 90.00),
+            new TrcPose2D(-218.09, 225.17, 145.00),
+            new TrcPose2D(-222.44, 117.10, 145.00),
+            new TrcPose2D(-294.12, 139.91, 0.00),
+            new TrcPose2D(-291.95, 242.00, 0.00),
+            new TrcPose2D(-206.15, 268.07, 90.00),
+            new TrcPose2D(-147.50, 247.98, 180.00),
+            new TrcPose2D(-185.51, 229.51, -145.00),
+            new TrcPose2D(-228.95, 226.26, -145.00),
+            new TrcPose2D(-232.76, 133.94, -145.00)
+        };
+
+        public static final TrcPose2D[] blueDoubleSweepOutpostBumpPath = new TrcPose2D[] {
+            new TrcPose2D(-21.89, 281.61, -90.00),
+            new TrcPose2D(-55.89, 301.61, -90.00),
+            new TrcPose2D(-150.89, 301.61, -90.00),
+            new TrcPose2D(-99.60, 225.17, -145.00),
+            new TrcPose2D(-95.25, 117.10, -145.00),
+            new TrcPose2D(-23.57, 139.91, 0.00),
+            new TrcPose2D(-25.74, 242.00, 0.00),
+            new TrcPose2D(-111.54, 268.07, -90.00),
+            new TrcPose2D(-170.19, 247.98, -180.00),
+            new TrcPose2D(-132.18, 229.51, 145.00),
+            new TrcPose2D(-88.74, 226.26, 145.00),
+            new TrcPose2D(-84.93, 133.94, 145.00)
+        };
+        
     }   //class Game
 
 }   //class RobotParams
