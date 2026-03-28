@@ -482,8 +482,8 @@ globalTracer.traceInfo(moduleName, "RobotTimestamps=" + Arrays.toString(timestam
     @Override
     public void robotPeriodic(RunMode runMode, boolean slowPeriodicLoop)
     {
-double[] timestamps = new double[3];
-timestamps[0] = TrcTimer.getModeElapsedTime();
+        double[] timestamps = new double[3];
+        timestamps[0] = TrcTimer.getModeElapsedTime();
         if (relocalizationMode != RelocalizationMode.Disabled)
         {
             if (relocalizeRobot() && relocalizationMode == RelocalizationMode.OneShot)
@@ -491,7 +491,7 @@ timestamps[0] = TrcTimer.getModeElapsedTime();
                 relocalizationMode = RelocalizationMode.Disabled;
             }
         }
-timestamps[1] = TrcTimer.getModeElapsedTime();
+        timestamps[1] = TrcTimer.getModeElapsedTime();
 
         if (slowPeriodicLoop)
         {
@@ -506,8 +506,8 @@ timestamps[1] = TrcTimer.getModeElapsedTime();
             // in the Command-based framework to work.
             CommandScheduler.getInstance().run();
         }
-timestamps[1] = TrcTimer.getModeElapsedTime();
-globalTracer.traceInfo(moduleName, "RobotPeriodicTimestamps=" + Arrays.toString(timestamps));
+        //timestamps[1] = TrcTimer.getModeElapsedTime();
+        //globalTracer.traceInfo(moduleName, "RobotPeriodicTimestamps=" + Arrays.toString(timestamps));
     }   //robotPeriodic
 
     /**

@@ -76,7 +76,7 @@ public class DriveBase extends TrcSubsystem
     public static class RebuiltRobotInfo extends FrcSwerveBase.SwerveInfo
     {
         public final static double DRIVE_WHEEL_DIAMETER         = 3.885547663;  // inches
-        public final static double DRIVE_MOTOR_GEAR_RATIO       = 4.59;
+        public final static double DRIVE_MOTOR_GEAR_RATIO       = 5.51;
         public final static double STEER_MOTOR_GEAR_RATIO       = 468.0/35.1;
         public final static double ROBOT_WIDTH                  = RobotParams.Robot.ROBOT_WIDTH;
         public final static double ROBOT_LENGTH                 = RobotParams.Robot.ROBOT_LENGTH;
@@ -84,7 +84,7 @@ public class DriveBase extends TrcSubsystem
         public final static double WHEEL_BASE_LENGTH            = 22.249;
         //0.368615
         private static final TrcPidController.PidCoefficients driveMotorVelPidCoeffs =
-            new TrcPidController.PidCoefficients(0.15, 0.0, 0.0, 0.0, 0.0);
+            new TrcPidController.PidCoefficients(0.18, 0.0, 0.0, 0.0, 0.0);
         private static final TrcPidController.FFCoefficients driveMotorVelFFCoeffs =
             new TrcPidController.FFCoefficients(0.25, 0.11, 0.0);
         private static final TrcPidController.PidCoefficients drivePidCoeffs =
