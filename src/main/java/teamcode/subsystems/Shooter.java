@@ -206,7 +206,7 @@ public class Shooter extends TrcSubsystem
 
         // Common Turret Motor Characteristics
         public static final boolean TURRET_HAS_ABS_ENC          = true;
-        public static final double TURRET_MOTOR_GEAR_RATIO      = 0.9571438827*(20.0*130.0/40.0);   // Load/Motor
+        public static final double TURRET_MOTOR_GEAR_RATIO      = 0.9571438827*(60.0*130.0/40.0);   // Load/Motor
         public static final double TURRET_MOTOR_DEG_PER_COUNT   = 360.0/TURRET_MOTOR_GEAR_RATIO;
         public static final MotorType TURRET_MOTOR_TYPE         = MotorType.CanSparkMax;
         public static final SparkMaxMotorParams TURRET_SPARKMAX_PARAMS = new SparkMaxMotorParams(true);
