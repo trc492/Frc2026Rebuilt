@@ -25,6 +25,7 @@ package teamcode;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcXboxController;
+import teamcode.autotasks.TaskAutoClimb.ClimbSide;
 import teamcode.subsystems.Climber;
 import teamcode.subsystems.Shooter;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
@@ -400,26 +401,6 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 break;
 
             case B:
-                // Turtle mode.
-                if (pressed)
-                {
-                    if (driverAltFunc)
-                    {
-                        if (robot.robotBase != null)
-                        {
-                            ((TrcSwerveDrive) (robot.robotBase.driveBase)).setXMode(null);
-                            robot.globalTracer.traceInfo(moduleName, ">>>>> X Mode");
-                        }
-                    }
-                    else
-                    {
-                        robot.turtle();
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> Turtle Mode.");
-                    }
-                }
-                break;
-
-            case X:
                 // Toggle between field or robot oriented driving.
                 if (robot.robotBase != null && pressed)
                 {
@@ -443,6 +424,26 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                             moduleName,
                             ">>>>> Reset field forward heading (heading=" + robot.robotBase.driveBase.getHeading() +
                             ")");
+                    }
+                }
+                break;
+
+            case X:
+                // X-Mode, alt func = Turtle mode.
+                if (pressed)
+                {
+                    if (driverAltFunc)
+                    {
+                        if (robot.robotBase != null)
+                        {
+                            ((TrcSwerveDrive) (robot.robotBase.driveBase)).setXMode(null);
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> X Mode");
+                        }
+                    }
+                    else
+                    {
+                        robot.turtle();
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Turtle Mode.");
                     }
                 }
                 break;
@@ -537,6 +538,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 break;
 
             case B:
+                // Pre-Spin Turrets and Shooter
                 if (robot.shooterSubsystem != null && pressed)
                 {
                     if (robot.shooterSubsystem.isGoalTrackingEnabled())
@@ -553,6 +555,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 break;
 
             case X:
+                // Reverse all
                 if (pressed)
                 {
                     if (robot.leftShooter != null)
@@ -613,16 +616,32 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             case DpadUp:
                 if (robot.climber != null && pressed)
                 {
-                    robot.climber.setPosition(Climber.Params.CLIMBER_EXTEND_POS, true, Climber.Params.CLIMBER_POWER_LIMIT);
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> Extend climber.");
+                    if (operatorAltFunc)
+                    {
+                        robot.autoClimbTask.autoClimb(null, null, FrcAuto.autoChoices.getAlliance(), ClimbSide.DEPOT, 0.0);
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Auto climbing on depot side.");
+                    }
+                    else
+                    {
+                        robot.climber.setPosition(Climber.Params.CLIMBER_EXTEND_POS, true, Climber.Params.CLIMBER_POWER_LIMIT);
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Extend climber.");
+                    }
                 }
                 break;
 
             case DpadDown:
                 if (robot.climber != null && pressed)
                 {
-                    robot.climber.setPosition(Climber.Params.CLIMBER_RETRACT_POS, true, Climber.Params.CLIMBER_POWER_LIMIT);
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> Retract climber.");
+                    if (operatorAltFunc)
+                    {
+                        robot.autoClimbTask.autoClimb(null, null, FrcAuto.autoChoices.getAlliance(), ClimbSide.OUTPOST, 0.0);
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Auto climbing on outpost side.");
+                    }
+                    else
+                    {
+                        robot.climber.setPosition(Climber.Params.CLIMBER_RETRACT_POS, true, Climber.Params.CLIMBER_POWER_LIMIT);
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Retract climber.");
+                    }
                 }
                 break;
 
@@ -632,12 +651,14 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 //     robot.autoClimbTask.autoClimb(null, null, FrcAuto.autoChoices.getAlliance(), ClimbSide.OUTPOST, 0.0);
                 //     robot.globalTracer.traceInfo(moduleName, ">>>>> Auto climbing on outpost side.");
                 // }
+
+                // Reverse Feeder, alt func = forward Feeder
                 if (robot.feeder != null)
                 {
                     if (pressed)
                     {
                         double feederPower =
-                            operatorAltFunc? Shooter.Params.FEEDER_REVERSE_POWER: Shooter.Params.FEEDER_FORWARD_POWER;
+                            operatorAltFunc? Shooter.Params.FEEDER_FORWARD_POWER: Shooter.Params.FEEDER_REVERSE_POWER;
                         robot.feeder.setPower(feederPower);
                         robot.globalTracer.traceInfo(moduleName, ">>>>> Set feeder power to " + feederPower);
                     }
@@ -650,11 +671,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 break;
 
             case DpadRight:
-                // if (robot.climber != null && pressed)
-                // {
-                //     robot.autoClimbTask.autoClimb(null, null, FrcAuto.autoChoices.getAlliance(), ClimbSide.DEPOT, 0.0);
-                //     robot.globalTracer.traceInfo(moduleName, ">>>>> Auto climbing on depot side.");
-                // }
+                // Reverse Transfers, alt func = forward Transfers
                 if (pressed)
                 {
                     if (robot.leftTransfer != null)
@@ -732,14 +749,14 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 if (pressed && !robot.autoShootTask.isActive())
                 {
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Start Auto Shoot.");
-                    //robot.intakeSubsystem.setIntakeEnabled(true);
+                    robot.intakeSubsystem.setIntakeEnabled(true);
                     robot.autoShootTask.autoShoot(
                         null, null, false, false, robot.shooterSubsystem.isGoalTrackingEnabled());
                 }
                 else
                 {
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Stop Auto Shoot.");
-                    //.robot.intakeSubsystem.setIntakeEnabled(false);
+                    robot.intakeSubsystem.setIntakeEnabled(false);
                     robot.autoShootTask.cancel();
                     robot.shooterSubsystem.resetState();
                 }
