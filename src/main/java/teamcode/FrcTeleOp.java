@@ -22,6 +22,7 @@
 
 package teamcode;
 
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcXboxController;
@@ -477,9 +478,39 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 break;
 
             case DpadUp:
+                if (robot.robotBase != null && pressed)
+                {
+                    robot.robotBase.driveBase.enableGyroAssist(
+                        robot.robotBase.purePursuitDrive.getTurnPidCtrl(),
+                        FrcAuto.autoChoices.getAlliance() == Alliance.Blue? 0.0: 180.0);
+                }
+                break;
+
             case DpadDown:
+                if (robot.robotBase != null && pressed)
+                {
+                    robot.robotBase.driveBase.enableGyroAssist(
+                        robot.robotBase.purePursuitDrive.getTurnPidCtrl(),
+                        FrcAuto.autoChoices.getAlliance() == Alliance.Blue? 180.0: 0.0);
+                }
+                break;
+
             case DpadLeft:
+                if (robot.robotBase != null && pressed)
+                {
+                    robot.robotBase.driveBase.enableGyroAssist(
+                        robot.robotBase.purePursuitDrive.getTurnPidCtrl(),
+                        FrcAuto.autoChoices.getAlliance() == Alliance.Blue? 180.0: 0.0);
+                }
+                break;
+
             case DpadRight:
+                if (robot.robotBase != null && pressed)
+                {
+                    robot.robotBase.driveBase.enableGyroAssist(
+                        robot.robotBase.purePursuitDrive.getTurnPidCtrl(),
+                        FrcAuto.autoChoices.getAlliance() == Alliance.Blue? 90.0: -90.0);
+                }
                 break;
 
             case Back:

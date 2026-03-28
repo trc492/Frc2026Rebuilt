@@ -339,10 +339,10 @@ timestamps[2] = TrcTimer.getModeElapsedTime();
                         endOfAutoRobotPose = null;
                     }
 
-                    if (RobotParams.Preferences.useGyroAssist)
-                    {
-                        robotBase.driveBase.setGyroAssistEnabled(robotBase.pidDrive.getTurnPidCtrl());
-                    }
+                    // if (RobotParams.Preferences.useGyroAssist)
+                    // {
+                    //     robotBase.driveBase.setGyroAssistEnabled(robotBase.pidDrive.getTurnPidCtrl());
+                    // }
                 }
             }
 timestamps[3] = TrcTimer.getModeElapsedTime();
