@@ -23,6 +23,7 @@
  package teamcode.subsystems;
 
 import frclib.driverio.FrcDashboard;
+import frclib.motor.FrcCANTalonFX;
 import frclib.motor.FrcMotorActuator;
 import frclib.motor.FrcMotorActuator.MotorType;
 import frclib.sensor.FrcCANCoder;
@@ -54,6 +55,7 @@ public class Intake extends TrcSubsystem
         public static final int INTAKE_MOTOR_CANID              = RobotParams.HwConfig.CANID_INTAKE_MOTOR;
         public static final double INTAKE_MOTOR_SUPPLY_LIMIT    = 40.0;
         public static final double INTAKE_MOTOR_STATOR_LIMIT    = 100.0;
+        public static final boolean INTAKE_FOC_ENABLED          = true;
         // Intake Parameters
         public static final double INTAKE_POWER                 = 1.0;
 
@@ -128,6 +130,7 @@ public class Intake extends TrcSubsystem
         intake = new FrcMotorActuator(intakeParams).getMotor();
         intake.setStatorCurrentLimit(Params.INTAKE_MOTOR_STATOR_LIMIT);
         intake.setCurrentLimit(Params.INTAKE_MOTOR_SUPPLY_LIMIT, 0.0, 0.0);
+        ((FrcCANTalonFX) intake).setFOCEnabled(Params.INTAKE_FOC_ENABLED);
 
         if (deployerEncoder != null)
         {
