@@ -52,7 +52,7 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
         RETURN_TO_SCORE_NEUTRAL,
         SHOOT_NEUTRAL_FUEL,
         HUB_PICKUP,
-        RETURN_TO_SCORE_HUB,
+        // RETURN_TO_SCORE_HUB,
         SHOOT_HUB_FUEL,
         DONE
     }   //enum State
@@ -78,7 +78,7 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
     private TrcPose2D[] neutralZonePath = null;
     private TrcPose2D[] neutralZoneReturnPath = null;
     private TrcPose2D[] hubPath = null;
-    private TrcPose2D[] hubReturnPath = null;
+    // private TrcPose2D[] hubReturnPath = null;
 
     private TrcPose2D[] depotDoubleSweep = RobotParams.Game.blueDoubleSweepDepotTrenchPath;
     private TrcPose2D[] outpostDoubleSweep = RobotParams.Game.blueDoubleSweepOutpostTrenchPath;
@@ -178,7 +178,7 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
                     {
                         if (Shooter.Params.TURRET_HAS_ABS_ENC)
                         {
-                            robot.shooterSubsystem.enableGoalTracking(true, false, true, true);
+                            robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
                         }
                         else
                         {
@@ -293,13 +293,18 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
                     break;
                 
                 case HUB_PICKUP:
+                    if (robot.shooterSubsystem != null)
+                    {
+                        robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
+                    }
+
                     if (atDepot)
                     {
-                        hubPath = new TrcPose2D[] {depotDoubleSweep[5], depotDoubleSweep[6], depotDoubleSweep[7], depotDoubleSweep[8], depotDoubleSweep[9], depotDoubleSweep[10]};
+                        hubPath = new TrcPose2D[] {depotDoubleSweep[5], depotDoubleSweep[6], depotDoubleSweep[7], depotDoubleSweep[8], depotDoubleSweep[9], depotDoubleSweep[10], depotDoubleSweep[11], depotDoubleSweep[12]};
                     }
                     else
                     {
-                        hubPath = new TrcPose2D[] {outpostDoubleSweep[5], outpostDoubleSweep[6], outpostDoubleSweep[7], outpostDoubleSweep[8], outpostDoubleSweep[9], outpostDoubleSweep[10]};
+                        hubPath = new TrcPose2D[] {outpostDoubleSweep[5], outpostDoubleSweep[6], outpostDoubleSweep[7], outpostDoubleSweep[8], outpostDoubleSweep[9], outpostDoubleSweep[10], outpostDoubleSweep[11], outpostDoubleSweep[12]};
                     }
 
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.50);
@@ -311,35 +316,35 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
                             robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
                         },
                         robot.adjustPathByAlliance(alliance, hubPath));
-                    sm.waitForSingleEvent(event, State.RETURN_TO_SCORE_HUB);
-                    break;
-                
-                case RETURN_TO_SCORE_HUB:
-                    if (atDepot)
-                    {
-                        hubReturnPath = new TrcPose2D[] {depotDoubleSweep[11], depotDoubleSweep[12]};
-                    }
-                    else
-                    {
-                        hubReturnPath = new TrcPose2D[] {outpostDoubleSweep[11], outpostDoubleSweep[12]};
-                    }
-
-                    if (robot.intakeSubsystem != null)
-                    {
-                        robot.intakeSubsystem.setIntakeEnabled(false);
-                    }
-
-                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.50);
-                    robot.robotBase.purePursuitDrive.start(
-                        null, event, 0.0, false,
-                        (i, wp) ->
-                        {
-                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
-                            robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
-                        },
-                        robot.adjustPathByAlliance(alliance, hubReturnPath));
                     sm.waitForSingleEvent(event, State.SHOOT_HUB_FUEL);
                     break;
+                
+                // case RETURN_TO_SCORE_HUB:
+                //     if (atDepot)
+                //     {
+                //         hubReturnPath = new TrcPose2D[] {depotDoubleSweep[11], depotDoubleSweep[12]};
+                //     }
+                //     else
+                //     {
+                //         hubReturnPath = new TrcPose2D[] {outpostDoubleSweep[11], outpostDoubleSweep[12]};
+                //     }
+
+                //     if (robot.intakeSubsystem != null)
+                //     {
+                //         robot.intakeSubsystem.setIntakeEnabled(false);
+                //     }
+
+                //     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.50);
+                //     robot.robotBase.purePursuitDrive.start(
+                //         null, event, 0.0, false,
+                //         (i, wp) ->
+                //         {
+                //             robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
+                //             robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
+                //         },
+                //         robot.adjustPathByAlliance(alliance, hubReturnPath));
+                //     sm.waitForSingleEvent(event, State.SHOOT_HUB_FUEL);
+                //     break;
                 
                 case SHOOT_HUB_FUEL:
                     if (robot.intakeSubsystem != null)
