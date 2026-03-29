@@ -90,7 +90,7 @@ public class DriveBase extends TrcSubsystem
         private static final TrcPidController.PidCoefficients drivePidCoeffs =
             new TrcPidController.PidCoefficients(0.01, 0.0, 0.0, 0.0, 0.0);
         private static final TrcPidController.PidCoefficients turnPidCoeffs =
-            new TrcPidController.PidCoefficients(0.02, 0.0, 0.0, 0.0, 0.0);
+            new TrcPidController.PidCoefficients(0.018, 0.0, 0.0, 0.0, 0.0);
         private static final TrcPidController.PidCoefficients velPidCoeffs =
             new TrcPidController.PidCoefficients(0.0, 0.0, 0.0, 0.00909090909090909090909090909091, 0.0);
         private static final TrcPidController.PidCoefficients steerPidCoeffs =
