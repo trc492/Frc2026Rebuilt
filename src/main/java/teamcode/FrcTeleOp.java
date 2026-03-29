@@ -31,6 +31,7 @@ import teamcode.subsystems.Climber;
 import teamcode.subsystems.Shooter;
 import trclib.controller.TrcPidController;
 import trclib.dataprocessor.TrcUtil;
+import trclib.dataprocessor.TrcWarpSpace;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
 import trclib.drivebase.TrcSwerveDrive;
 import trclib.driverio.TrcGameController.DriveMode;
@@ -242,9 +243,12 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                                 if (turnPower == 0.0)
                                 {
                                     double currHeading = robot.robotBase.driveBase.getHeading();
-                                    if (Math.abs(lockedHeading - currHeading) >
+                                    double targetHeading = TrcWarpSpace.getOptimizedTarget(lockedHeading, currHeading, 360.0);
+
+                                    if (Math.abs(targetHeading - currHeading) >
                                         robot.robotInfo.baseParams.turnPidTolerance)
                                     {
+    robot.globalTracer.traceErr(moduleName, "currHeading=%f, lockedHeading=%f, targetHeading=%f", currHeading, lockedHeading, targetHeading);
                                         turnPower = TrcUtil.clipRange(
                                             turnPidCtrl.calculate(currHeading, lockedHeading),
                                             robot.robotInfo.baseParams.turnPowerLimit);
