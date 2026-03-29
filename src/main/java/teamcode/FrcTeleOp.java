@@ -29,6 +29,8 @@ import frclib.driverio.FrcXboxController;
 import teamcode.autotasks.TaskAutoClimb.ClimbSide;
 import teamcode.subsystems.Climber;
 import teamcode.subsystems.Shooter;
+import trclib.controller.TrcPidController;
+import trclib.dataprocessor.TrcUtil;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
 import trclib.drivebase.TrcSwerveDrive;
 import trclib.driverio.TrcGameController.DriveMode;
@@ -66,6 +68,9 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     private double prevPanPower = 0.0;
     private Double prevTiltPower = 0.0;
     private double prevClimbPower = 0.0;
+    // Locked heading
+    private final TrcPidController turnPidCtrl;
+    private Double lockedHeading;
 
     /**
      * Constructor: Create an instance of the object.
@@ -100,6 +105,10 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             shiftsTrigger = new TrcTriggerThresholdZones(
                 "ShiftsTrigger", TrcTimer::getModeElapsedTime, RobotParams.Game.SHIFTS);
         }
+
+        turnPidCtrl = robot.robotBase != null && robot.robotBase.purePursuitDrive != null?
+            robot.robotBase.purePursuitDrive.getTurnPidCtrl(): null;
+        lockedHeading = null;
     }   //FrcTeleOp
 
     //
@@ -218,34 +227,66 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                             Dashboard.DBKEY_TELEOP_SHOW_DRIVE_POWER, RobotParams.Preferences.showDrivePower);
                         double[] driveInputs = robot.driverController.getDriveInputs(
                             driveModeMenu.getCurrentChoiceObject(), true, driveSpeedScale, turnSpeedScale);
-
+                        // driveInputs have not changed but lockedHeading is in progress, create a stationary driveInputs.
+                        if (driveInputs == null && lockedHeading != null)
+                        {
+                            driveInputs = new double[] {0.0, 0.0, 0.0};
+                        }
+                        // driveInputs have changed or rotating to lockedHeading.
                         if (driveInputs != null)
                         {
-                            // driveInputs have changed.
+                            double turnPower = driveInputs[2];
+
+                            if (turnPidCtrl != null && lockedHeading != null)
+                            {
+                                if (turnPower == 0.0)
+                                {
+                                    double currHeading = robot.robotBase.driveBase.getHeading();
+                                    if (Math.abs(lockedHeading - currHeading) >
+                                        robot.robotInfo.baseParams.turnPidTolerance)
+                                    {
+                                        turnPower = TrcUtil.clipRange(
+                                            turnPidCtrl.calculate(currHeading, lockedHeading),
+                                            robot.robotInfo.baseParams.turnPowerLimit);
+                                    }
+                                    else
+                                    {
+                                        // lockedHeading target reached, cancel.
+                                        lockedHeading = null;
+                                    }
+                                }
+                                else
+                                {
+                                    // Driver is rotating the robot, cancel lockedHeading.
+                                    lockedHeading = null;
+                                }
+                            }
+
                             if (robot.robotBase.driveBase.supportsHolonomicDrive())
                             {
-                                double gyroAngle = robot.robotBase.driveBase.getDriveGyroAngle();
+                                Double gyroAngle = robot.robotBase.driveBase.getDriveGyroAngle();
+
                                 robot.robotBase.driveBase.holonomicDrive(
-                                    null, driveInputs[0], driveInputs[1], driveInputs[2], gyroAngle);
+                                    null, driveInputs[0], driveInputs[1], turnPower, gyroAngle);
                                 if (showDriveBaseStatus)
                                 {
                                     robot.dashboard.putString(
                                         Dashboard.DBKEY_TELEOP_DRIVE_POWER,
                                         String.format(
                                             "Holonomic: x=%.2f, y=%.2f, rot=%.2f, gyroAngle=%.2f",
-                                            driveInputs[0], driveInputs[1], driveInputs[2], gyroAngle));
+                                            driveInputs[0], driveInputs[1], turnPower, gyroAngle));
                                 }
                             }
                             else
                             {
-                                robot.robotBase.driveBase.arcadeDrive(driveInputs[1], driveInputs[2]);
+                                robot.robotBase.driveBase.arcadeDrive(driveInputs[1], turnPower);
                                 if (showDriveBaseStatus)
                                 {
                                     robot.dashboard.putString(
                                         Dashboard.DBKEY_TELEOP_DRIVE_POWER,
                                         String.format(
                                             "Arcade: x=%.2f, y=%.2f, rot=%.2f",
-                                            driveInputs[0], driveInputs[1], driveInputs[2]));
+                                            driveInputs[0], driveInputs[1], turnPower));
                                 }
                             }
                         }
@@ -480,40 +521,32 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             case DpadUp:
                 if (robot.robotBase != null && pressed)
                 {
-                    double heading = FrcAuto.autoChoices.getAlliance() == Alliance.Blue? 0.0: 180.0;
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> Lock heading to " + heading);
-                    robot.robotBase.driveBase.enableGyroAssist(
-                        robot.robotBase.purePursuitDrive.getTurnPidCtrl(), heading);
+                    lockedHeading = FrcAuto.autoChoices.getAlliance() == Alliance.Blue? 0.0: 180.0;
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> Lock heading to " + lockedHeading);
                 }
                 break;
 
             case DpadDown:
                 if (robot.robotBase != null && pressed)
                 {
-                    double heading = FrcAuto.autoChoices.getAlliance() == Alliance.Blue? 180.0: 0.0;
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> Lock heading to " + heading);
-                    robot.robotBase.driveBase.enableGyroAssist(
-                        robot.robotBase.purePursuitDrive.getTurnPidCtrl(), heading);
+                    lockedHeading = FrcAuto.autoChoices.getAlliance() == Alliance.Blue? 180.0: 0.0;
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> Lock heading to " + lockedHeading);
                 }
                 break;
 
             case DpadLeft:
                 if (robot.robotBase != null && pressed)
                 {
-                    double heading = FrcAuto.autoChoices.getAlliance() == Alliance.Blue? -90.0: 90.0;
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> Lock heading to " + heading);
-                    robot.robotBase.driveBase.enableGyroAssist(
-                        robot.robotBase.purePursuitDrive.getTurnPidCtrl(), heading);
+                    lockedHeading = FrcAuto.autoChoices.getAlliance() == Alliance.Blue? -90.0: 90.0;
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> Lock heading to " + lockedHeading);
                 }
                 break;
 
             case DpadRight:
                 if (robot.robotBase != null && pressed)
                 {
-                    double heading = FrcAuto.autoChoices.getAlliance() == Alliance.Blue? 90.0: -90.0;
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> Lock heading to " + heading);
-                    robot.robotBase.driveBase.enableGyroAssist(
-                        robot.robotBase.purePursuitDrive.getTurnPidCtrl(), heading);
+                    lockedHeading = FrcAuto.autoChoices.getAlliance() == Alliance.Blue? 90.0: -90.0;
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> Lock heading to " + lockedHeading);
                 }
                 break;
 

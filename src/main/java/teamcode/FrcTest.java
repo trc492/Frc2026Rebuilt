@@ -458,7 +458,7 @@ public class FrcTest extends FrcTeleOp
             case X_TIMED_DRIVE:
             case Y_TIMED_DRIVE:
                 // Cancel GyroAssist in case we turned it on for timed drive.
-                robot.robotBase.driveBase.disableGyroAssist();
+                robot.robotBase.driveBase.setGyroAssistEnabled(null);
                 break;
 
             case SWERVE_CALIBRATION:

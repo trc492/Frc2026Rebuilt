@@ -100,7 +100,7 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
         event = new TrcEvent(moduleName);
         sm = new TrcStateMachine<>(moduleName);
         sm.start(State.START);
-    }   //CmdRebuiltAuto
+    }   //CmdDcmpAuto
 
     //
     // Implements the TrcRobot.RobotCommand interface.
@@ -372,4 +372,4 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
         return !sm.isEnabled();
     }   //cmdPeriodic
 
-}   //class CmdRebuiltAuto
+}   //class CmdDcmpAuto
