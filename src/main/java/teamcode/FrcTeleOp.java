@@ -227,12 +227,8 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                         boolean showDriveBaseStatus = robot.dashboard.getBoolean(
                             Dashboard.DBKEY_TELEOP_SHOW_DRIVE_POWER, RobotParams.Preferences.showDrivePower);
                         double[] driveInputs = robot.driverController.getDriveInputs(
-                            driveModeMenu.getCurrentChoiceObject(), true, driveSpeedScale, turnSpeedScale);
-                        // driveInputs have not changed but lockedHeading is in progress, create a stationary driveInputs.
-                        if (driveInputs == null && lockedHeading != null)
-                        {
-                            driveInputs = new double[] {0.0, 0.0, 0.0};
-                        }
+                            driveModeMenu.getCurrentChoiceObject(), true, driveSpeedScale, turnSpeedScale,
+                            lockedHeading != null);
                         // driveInputs have changed or rotating to lockedHeading.
                         if (driveInputs != null)
                         {
@@ -265,7 +261,6 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                                 {
                                     // Driver is rotating the robot, cancel lockedHeading.
                                     lockedHeading = null;
-                                    robot.driverController.clearDriveInputsHistory();
                                 }
                             }
 
