@@ -169,6 +169,7 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
         timer.cancel();
         robot.robotBase.cancel(owner);
         robot.climber.cancel();
+        robot.shooterSubsystem.disableGoalTracking();
     }   //stopSubsystems
 
     /**

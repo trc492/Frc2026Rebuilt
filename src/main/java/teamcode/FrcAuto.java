@@ -29,6 +29,7 @@ import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcMatchInfo;
 import frclib.driverio.FrcUserChoices;
 import teamcode.autocommands.CmdRebuiltAuto;
+import teamcode.autocommands.CmdDcmpAuto;
 import teamcode.autotasks.TaskAutoClimb;
 import trclib.command.CmdPidDrive;
 import trclib.command.CmdPurePursuitDrive;
@@ -54,6 +55,7 @@ public class FrcAuto implements TrcRobot.RobotMode
     public enum AutoStrategy
     {
         REBUILT_AUTO,
+        DCMP_AUTO,
         PP_DRIVE,
         PID_DRIVE,
         TIMED_DRIVE,
@@ -138,6 +140,7 @@ public class FrcAuto implements TrcRobot.RobotMode
             else
             {
                 autoStrategyMenu.addChoice("Rebuilt Auto", AutoStrategy.REBUILT_AUTO, true, false);
+                autoStrategyMenu.addChoice("DCMP Auto", AutoStrategy.DCMP_AUTO);
                 autoStrategyMenu.addChoice("Pure Pursuit Drive", AutoStrategy.PP_DRIVE);
                 autoStrategyMenu.addChoice("PID Drive", AutoStrategy.PID_DRIVE);
                 autoStrategyMenu.addChoice("Timed Drive", AutoStrategy.TIMED_DRIVE);
@@ -383,6 +386,13 @@ timestamps[1] = TrcTimer.getModeElapsedTime();
                     autoCommand = new CmdRebuiltAuto(robot, autoChoices);
                 }
 timestamps[2] = TrcTimer.getModeElapsedTime();
+                break;
+            
+            case DCMP_AUTO:
+                if (robot.robotBase != null)
+                {
+                    autoCommand = new CmdDcmpAuto(robot, autoChoices);
+                }
                 break;
 
             case PP_DRIVE:
