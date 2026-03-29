@@ -516,10 +516,10 @@ public class Shooter extends TrcSubsystem
                 .setPrimaryMotor(
                     Params.TURRET_MOTOR_NAME, Params.TURRET_MOTOR_TYPE, Params.TURRET_MOTOR_INVERTED, true, true,
                     Params.TURRET_MOTOR_CANID, null, Params.TURRET_SPARKMAX_PARAMS)
-                .setPositionPresets(Params.TURRET_POS_PRESET_TOLERANCE, Params.TURRET_POS_PRESETS)
                 .setPositionScaleAndOffset(
                     Params.TURRET_MOTOR_DEG_PER_COUNT,
-                    Params.TURRET_HAS_ABS_ENC? Params.TURRET_ABS_ENC_POS_OFFSET: Params.TURRET_POS_OFFSET);
+                    Params.TURRET_HAS_ABS_ENC? Params.TURRET_ABS_ENC_POS_OFFSET: Params.TURRET_POS_OFFSET)
+                .setPositionPresets(Params.TURRET_POS_PRESET_TOLERANCE, Params.TURRET_POS_PRESETS);
 
             turret = new FrcMotorActuator(turretMotorParams).getMotor();
             turret.setPositionPidParameters(
@@ -529,7 +529,7 @@ public class Shooter extends TrcSubsystem
                         Params.TURRET_MOTOR_PID_KF, Params.TURRET_MOTOR_PID_IZONE)
                     .setPidControlParams(
                         Params.TURRET_PID_TOLERANCE, Params.TURRET_PID_SETTLING, Params.TURRET_SOFTWARE_PID_ENABLED),
-                null);
+                this::getTurretPosition);
 
             if (Params.TURRET_HAS_ABS_ENC)
             {
@@ -730,6 +730,27 @@ public class Shooter extends TrcSubsystem
         if (leftShooter != null) leftShooter.panMotor.cancel();
         if (rightShooter != null) rightShooter.panMotor.cancel();
     }   //stopPan
+
+    /**
+     * This method returns the turret position adjusted to the range of -180.0 to 180.0.
+     *
+     * @return turret position in -180 to 180 range.
+     */
+    public double getTurretPosition()
+    {
+        double pos = turret != null? turret.getPosition(): 0.0;
+
+        if (pos <= -180.0)
+        {
+            pos += 360.0;
+        }
+        else if (pos > 180.0)
+        {
+            pos -= 360.0;
+        }
+
+        return pos;
+    }   //getTurretPosition
 
     /**
      * This method checks if the left or the right shooter is active.
@@ -1598,7 +1619,7 @@ public class Shooter extends TrcSubsystem
                 {
                     dashboard.putNumber(Dashboard.DBKEY_TURRET_POWER, turret.getPower());
                     dashboard.putNumber(Dashboard.DBKEY_TURRET_CURRENT, turret.getCurrent());
-                    dashboard.putNumber(Dashboard.DBKEY_TURRET_POS, turret.getPosition());
+                    dashboard.putNumber(Dashboard.DBKEY_TURRET_POS, getTurretPosition());
                     dashboard.putNumber(Dashboard.DBKEY_TURRET_TARGET, turret.getPidTarget());
                 }
 
