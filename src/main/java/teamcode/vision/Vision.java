@@ -200,7 +200,7 @@ public class Vision //implements TrcVision.ObjectInfo
         {
             TrcPose3D camPose = camInfo.camPose;
             double turretAngleRad =
-                robot.turret != null? Math.toRadians(robot.shooterSubsystem.getTurretPosition()): 0.0;
+                robot.turret != null? Math.toRadians(robot.turret.getPosition()): 0.0;
             double camXOffset = Shooter.Params.CAM_ROTATE_RADIUS * Math.sin(turretAngleRad);
             double camYOffset = Shooter.Params.CAM_ROTATE_RADIUS * Math.cos(turretAngleRad);
 

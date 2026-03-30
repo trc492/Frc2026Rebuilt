@@ -244,12 +244,13 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                                     if (Math.abs(targetHeading - currHeading) >
                                         robot.robotInfo.baseParams.turnPidTolerance)
                                     {
-                                        robot.globalTracer.traceDebug(
-                                            moduleName, "currHeading=%f, lockedHeading=%f, targetHeading=%f",
-                                            currHeading, lockedHeading, targetHeading);
                                         turnPower = TrcUtil.clipRange(
                                             turnPidCtrl.calculate(currHeading, lockedHeading),
                                             robot.robotInfo.baseParams.turnPowerLimit);
+                                        robot.globalTracer.traceDebug(
+                                            moduleName,
+                                            "currHeading=%f, lockedHeading=%f, targetHeading=%f, turnPower=%f",
+                                            currHeading, lockedHeading, targetHeading, turnPower);
                                     }
                                     else
                                     {

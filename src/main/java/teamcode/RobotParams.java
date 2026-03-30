@@ -61,7 +61,7 @@ public class RobotParams
         public static final boolean hasOperatorGameController   = robotType == RobotType.RebuiltRobot;
         // Vision
         public static final boolean useVision                   = true;
-        public static final boolean showVisionStatus            = true;
+        public static final boolean showVisionStatus            = !inCompetition;
         public static final boolean usePhotonVision             = true;
         public static final boolean useOpenCvVision             = false;
         public static final boolean useWebcamAprilTagVision     = false;
@@ -77,7 +77,7 @@ public class RobotParams
         public static final String testSubsystemName            = Shooter.Params.TURRET_MOTOR_NAME;
         // Drive Base Subsystem
         public static final boolean useDriveBase                = true;
-        public static final boolean showDriveBaseStatus         = true;
+        public static final boolean showDriveBaseStatus         = !inCompetition;
         public static final boolean debugDriveBase              = false;
         public static final boolean debugPidDrive               = false;
         public static final boolean showDrivePower              = false;

@@ -206,14 +206,14 @@ public class Shooter extends TrcSubsystem
 
         // Common Turret Motor Characteristics
         public static final boolean TURRET_HAS_ABS_ENC          = true;
-        public static final double TURRET_MOTOR_GEAR_RATIO      = 0.9571438827*(60.0*130.0/40.0);   // Load/Motor
+        public static final double TURRET_MOTOR_GEAR_RATIO      = 0.92237430460894509389916604972163*(60.0*130.0/40.0)*2.0;   // Load/Motor
         public static final double TURRET_MOTOR_DEG_PER_COUNT   = 360.0/TURRET_MOTOR_GEAR_RATIO;
         public static final MotorType TURRET_MOTOR_TYPE         = MotorType.CanSparkMax;
         public static final SparkMaxMotorParams TURRET_SPARKMAX_PARAMS = new SparkMaxMotorParams(true);
         public static final String TURRET_MOTOR_NAME            = SUBSYSTEM_NAME + ".TurretMotor";
         public static final boolean TURRET_MOTOR_INVERTED       = false;
         public static final int TURRET_MOTOR_CANID              = RobotParams.HwConfig.CANID_TURRET_MOTOR;
-        public static final double TURRET_MOTOR_PID_KP          = 0.18;
+        public static final double TURRET_MOTOR_PID_KP          = 0.06;
         public static final double TURRET_MOTOR_PID_KI          = 0.0;  
         public static final double TURRET_MOTOR_PID_KD          = 0.0;  
         public static final double TURRET_MOTOR_PID_KF          = 0.0;  
@@ -221,10 +221,13 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_PID_TOLERANCE         = 3.0;
         public static final double TURRET_PID_SETTLING          = 0.0;
         public static final boolean TURRET_SOFTWARE_PID_ENABLED = false;
-        public static final double TURRET_POWER_LIMIT           = 0.35; 
-        public static final double TURRET_POS_OFFSET            = 182.25;
-        public static final double TURRET_MIN_POS               = -171.0;   
-        public static final double TURRET_MAX_POS               = TURRET_POS_OFFSET - 2.5;//180.0;
+        public static final double TURRET_POWER_LIMIT           = 1.0;
+        public static final double TURRET_POS_OFFSET            = 180.0;
+        public static final double TURRET_ENC_RANGE_LOWER       = -180.0;
+        public static final double TURRET_ENC_RANGE_UPPER       = 180.0;
+        // Physical Range: -172.0 to 180.0
+        public static final double TURRET_MIN_POS               = -170.0;
+        public static final double TURRET_MAX_POS               = 178.0;
         public static final double TURRET_CONFLICT_ZONE_LOW     = 60.0;         //TODO: tune
         public static final double TURRET_CONFLICT_ZONE_HIGH    = 120.0;        //TODO: tune
         public static final double TURRET_POS_PRESET_TOLERANCE  = 5.0;
@@ -516,10 +519,18 @@ public class Shooter extends TrcSubsystem
                 .setPrimaryMotor(
                     Params.TURRET_MOTOR_NAME, Params.TURRET_MOTOR_TYPE, Params.TURRET_MOTOR_INVERTED, true, true,
                     Params.TURRET_MOTOR_CANID, null, Params.TURRET_SPARKMAX_PARAMS)
-                .setPositionScaleAndOffset(
-                    Params.TURRET_MOTOR_DEG_PER_COUNT,
-                    Params.TURRET_HAS_ABS_ENC? Params.TURRET_ABS_ENC_POS_OFFSET: Params.TURRET_POS_OFFSET)
                 .setPositionPresets(Params.TURRET_POS_PRESET_TOLERANCE, Params.TURRET_POS_PRESETS);
+
+            if (Params.TURRET_HAS_ABS_ENC)
+            {
+                turretMotorParams.setPositionScaleAndOffset(
+                    1.0, Params.TURRET_ABS_ENC_POS_OFFSET);
+            }
+            else
+            {
+                turretMotorParams.setPositionScaleAndOffset(
+                    Params.TURRET_MOTOR_DEG_PER_COUNT, Params.TURRET_POS_OFFSET);
+            }
 
             turret = new FrcMotorActuator(turretMotorParams).getMotor();
             turret.setPositionPidParameters(
@@ -529,7 +540,7 @@ public class Shooter extends TrcSubsystem
                         Params.TURRET_MOTOR_PID_KF, Params.TURRET_MOTOR_PID_IZONE)
                     .setPidControlParams(
                         Params.TURRET_PID_TOLERANCE, Params.TURRET_PID_SETTLING, Params.TURRET_SOFTWARE_PID_ENABLED),
-                this::getTurretPosition);
+                null);
 
             if (Params.TURRET_HAS_ABS_ENC)
             {
@@ -731,26 +742,26 @@ public class Shooter extends TrcSubsystem
         if (rightShooter != null) rightShooter.panMotor.cancel();
     }   //stopPan
 
-    /**
-     * This method returns the turret position adjusted to the range of -180.0 to 180.0.
-     *
-     * @return turret position in -180 to 180 range.
-     */
-    public double getTurretPosition()
-    {
-        double pos = turret != null? turret.getPosition(): 0.0;
+    // /**
+    //  * This method returns the turret position adjusted to the range of -180.0 to 180.0.
+    //  *
+    //  * @return turret position in -180 to 180 range.
+    //  */
+    // public double getTurretPosition()
+    // {
+    //     double pos = turret != null? turret.getPosition(): 0.0;
 
-        if (pos <= -180.0)
-        {
-            pos += 360.0;
-        }
-        else if (pos > 180.0)
-        {
-            pos -= 360.0;
-        }
+    //     if (pos <= -180.0)
+    //     {
+    //         pos += 360.0;
+    //     }
+    //     else if (pos > 180.0)
+    //     {
+    //         pos -= 360.0;
+    //     }
 
-        return pos;
-    }   //getTurretPosition
+    //     return pos;
+    // }   //getTurretPosition
 
     /**
      * This method checks if the left or the right shooter is active.
@@ -1619,7 +1630,7 @@ public class Shooter extends TrcSubsystem
                 {
                     dashboard.putNumber(Dashboard.DBKEY_TURRET_POWER, turret.getPower());
                     dashboard.putNumber(Dashboard.DBKEY_TURRET_CURRENT, turret.getCurrent());
-                    dashboard.putNumber(Dashboard.DBKEY_TURRET_POS, getTurretPosition());
+                    dashboard.putNumber(Dashboard.DBKEY_TURRET_POS, turret.getPosition());
                     dashboard.putNumber(Dashboard.DBKEY_TURRET_TARGET, turret.getPidTarget());
                 }
 
