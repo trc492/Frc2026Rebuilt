@@ -250,11 +250,22 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
                     break;
             
                 case SHOOT_DEPOT:
-                    robot.autoShootTask.autoShoot(null, event, true, true, false);
-                    sm.waitForSingleEvent(event, climb ? State.GO_TO_CLIMB_POS: State.DONE, climb ? 7.0: 15.0);
+                    if (robot.autoShootTask != null)
+                    {
+                        robot.autoShootTask.autoShoot(null, event, true, true, false);
+                        sm.waitForSingleEvent(event, climb ? State.GO_TO_CLIMB_POS: State.DONE, climb ? 7.0: 15.0);
+                    }
+                    else
+                    {
+                        sm.setState(climb ? State.GO_TO_CLIMB_POS: State.DONE);
+                    }
                     break;
                 
                 case GO_TO_CLIMB_POS:
+                    if (robot.autoShootTask != null)
+                    {
+                        robot.autoShootTask.cancel();
+                    }
                     if (robot.intakeSubsystem != null)
                     {
                         robot.intakeSubsystem.setIntakeEnabled(false);
@@ -273,7 +284,7 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
                         double climbDelay =
                             RobotParams.Game.AUTONOMOUS_PERIOD - TrcTimer.getModeElapsedTime() - 3.5;
                         robot.autoClimbTask.autoClimb(
-                            null, event, alliance, ClimbSide.DEPOT, climbDelay > 0.0? climbDelay: 0.0);
+                            null, event, alliance, ClimbSide.DEPOT, climbDelay > 0.0 ? climbDelay: 0.0);
                         sm.waitForSingleEvent(event, State.DONE);
                     }
                     else
