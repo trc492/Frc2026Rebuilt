@@ -39,7 +39,6 @@ import teamcode.Robot;
 import teamcode.RobotParams;
 import trclib.dataprocessor.TrcLookupTable;
 import trclib.dataprocessor.TrcLookupTable.Interpolation;
-import trclib.drivebase.TrcDriveBase;
 import trclib.motor.TrcMotor;
 import trclib.motor.TrcMotor.PidParams;
 import trclib.pathdrive.TrcPose2D;
@@ -54,7 +53,6 @@ import trclib.subsystem.TrcRollerIntake.TriggerAction;
 import trclib.subsystem.TrcShooter;
 import trclib.subsystem.TrcShooter.AimInfo;
 import trclib.subsystem.TrcShooter.TargetInfo;
-import trclib.subsystem.TrcShooter.TargetInfoSource;
 import trclib.subsystem.TrcSubsystem;
 import trclib.timer.TrcTimer;
 
