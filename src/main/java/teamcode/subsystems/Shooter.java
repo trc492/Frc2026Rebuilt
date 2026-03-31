@@ -1035,27 +1035,7 @@ public class Shooter extends TrcSubsystem
                         RobotParams.Preferences.useMotionCompensation))
                 {
                     // Compensate for robot motion.
-                    // TargetInfo targetInfo = leftShooter.compensateRobotMotion(
-                    //     robot.robotBase.driveBase, this::getTargetInfo,
-                    //     new TargetInfo(
-                    //         targetPose,
-                    //         new AimInfo(shootParams.outputs[0],
-                    //                     null,
-                    //                     null,
-                    //                     shootParams.outputs[1]),
-                    //         shootParams.outputs[2]),
-                    //     0.0001, 5, Params.SHOOTER_EXIT_DELAY);
-                    // TargetInfo targetInfo = leftShooter.compensateRobotMotionWithDrag(
-                    //     robot.robotBase.driveBase, this::getTargetInfo,
-                    //     new TargetInfo(
-                    //         targetPose,
-                    //         new AimInfo(shootParams.outputs[0],
-                    //                     null,
-                    //                     null,
-                    //                     shootParams.outputs[1]),
-                    //         shootParams.outputs[2]),
-                    //     0.015, 0.0001, 5, Params.SHOOTER_EXIT_DELAY);
-                   TargetInfo targetInfo = compensateRobotMotion(
+                    TargetInfo targetInfo = leftShooter.compensateRobotMotion(
                         robot.robotBase.driveBase, this::getTargetInfo,
                         new TargetInfo(
                             targetPose,
@@ -1064,7 +1044,17 @@ public class Shooter extends TrcSubsystem
                                         null,
                                         shootParams.outputs[1]),
                             shootParams.outputs[2]),
-                5, Params.SHOOTER_EXIT_DELAY);
+                        0.015, 0.0001, 5, Params.SHOOTER_EXIT_DELAY);
+                    // TargetInfo targetInfo = compensateRobotMotion(
+                    //     robot.robotBase.driveBase, this::getTargetInfo,
+                    //     new TargetInfo(
+                    //         targetPose,
+                    //         new AimInfo(shootParams.outputs[0],
+                    //                     null,
+                    //                     null,
+                    //                     shootParams.outputs[1]),
+                    //         shootParams.outputs[2]),
+                    //     5, Params.SHOOTER_EXIT_DELAY);
                     targetPose = targetInfo.targetPose;
                     shootParams = goalTrackingState.shootParamsTable.get(
                         Math.hypot(targetPose.x, targetPose.y), interpolation);
@@ -1126,87 +1116,86 @@ public class Shooter extends TrcSubsystem
         }
     }   //getLeftShooterAimInfo
 
-    private static final boolean COMPENSATE_ROBOT_ROTATION = false;
-    /**
-     * This method compensates the TargetInfo by the motion of the robot.
-     *
-     * @param driveBase specifies the drive base object.
-     * @param targetInfoSource specifies the method to call to recompute TargetInfo by current target pose.
-     * @param targetInfo specifies the original TargetInfo.
-     * @param tofErrorThreshold specifies the TimeOfFlight error threshold to terminate iterations.
-     * @param maxIterations specifies the maximum number of iterations.
-     * @param shooterExitDelay specifies the delay in seconds between when this method is called and the ball
-     *        exits the shooter. TOF only accounts after the ball exits the shooter.
-     * @return compensated Target Info.
-     */
-    public TargetInfo compensateRobotMotion(
-        TrcDriveBase driveBase,
-        TargetInfoSource targetInfoSource,
-        TargetInfo targetInfo,
-        int maxIterations,
-        double shooterExitDelay)
-    {
-        TargetInfo compensatedInfo = targetInfo;
-        TrcPose2D robotVel = driveBase.getRobotVelocity();
-        double vxRobot = robotVel.x;
-        double vyRobot = robotVel.y;
-        double omegaDeg = COMPENSATE_ROBOT_ROTATION ? driveBase.getTurnRate() : 0.0;
-        double tof = targetInfo.tof;
-        TrcPose2D originalTargetPose = targetInfo.targetPose;
-        tracer.traceInfo(instanceName, "Heading=%f, vxRobot=%f");
+    // private static final boolean COMPENSATE_ROBOT_ROTATION = false;
+    // /**
+    //  * This method compensates the TargetInfo by the motion of the robot.
+    //  *
+    //  * @param driveBase specifies the drive base object.
+    //  * @param targetInfoSource specifies the method to call to recompute TargetInfo by current target pose.
+    //  * @param targetInfo specifies the original TargetInfo.
+    //  * @param tofErrorThreshold specifies the TimeOfFlight error threshold to terminate iterations.
+    //  * @param maxIterations specifies the maximum number of iterations.
+    //  * @param shooterExitDelay specifies the delay in seconds between when this method is called and the ball
+    //  *        exits the shooter. TOF only accounts after the ball exits the shooter.
+    //  * @return compensated Target Info.
+    //  */
+    // public TargetInfo compensateRobotMotion(
+    //     TrcDriveBase driveBase,
+    //     TargetInfoSource targetInfoSource,
+    //     TargetInfo targetInfo,
+    //     int maxIterations,
+    //     double shooterExitDelay)
+    // {
+    //     TargetInfo compensatedInfo = targetInfo;
+    //     TrcPose2D robotVel = driveBase.getRobotVelocity();
+    //     double vxRobot = robotVel.x;
+    //     double vyRobot = robotVel.y;
+    //     double omegaDeg = COMPENSATE_ROBOT_ROTATION ? driveBase.getTurnRate() : 0.0;
+    //     double tof = targetInfo.tof;
+    //     TrcPose2D originalTargetPose = targetInfo.targetPose;
 
-        for (int i = 0; i < maxIterations; i++)
-        {
-            double tofTotal = tof + shooterExitDelay;
-            TrcPose2D compensation = new TrcPose2D(
-                -vxRobot * tofTotal,
-                -vyRobot * tofTotal,
-                -omegaDeg * tofTotal
-            );
-            TrcPose2D adjustedPose = originalTargetPose.addRelativePose(compensation);
-            TargetInfo newInfo = targetInfoSource.getTargetInfo(adjustedPose);
-            double predictedTof = newInfo.tof;
-            double g = predictedTof - tof;
-            // From our original tof error threshold, will need to be tuned
-            /** Small step used to numerically approximate the derivative f'(t) by comparing tof at nearby time values.
-            Epsilon should be small enough for accurate slope estimation while avoiding floating point noise. */
-            // Will need to be tuned
-            double epsilon = 0.0001;
-            double tofPerturbed = tof + epsilon;
-            double tofTotalPerturbed = tofPerturbed + shooterExitDelay;
-            TrcPose2D compensationPerturbed = new TrcPose2D(
-                -vxRobot * tofTotalPerturbed,
-                -vyRobot * tofTotalPerturbed,
-                -omegaDeg * tofTotalPerturbed
-            );
+    //     for (int i = 0; i < maxIterations; i++)
+    //     {
+    //         double tofTotal = tof + shooterExitDelay;
+    //         TrcPose2D compensation = new TrcPose2D(
+    //             -vxRobot * tofTotal,
+    //             -vyRobot * tofTotal,
+    //             -omegaDeg * tofTotal
+    //         );
+    //         TrcPose2D adjustedPose = originalTargetPose.addRelativePose(compensation);
+    //         TargetInfo newInfo = targetInfoSource.getTargetInfo(adjustedPose);
+    //         double predictedTof = newInfo.tof;
+    //         double g = predictedTof - tof;
+    //         // From our original tof error threshold, will need to be tuned
+    //         /** Small step used to numerically approximate the derivative f'(t) by comparing tof at nearby time values.
+    //         Epsilon should be small enough for accurate slope estimation while avoiding floating point noise. */
+    //         // Will need to be tuned
+    //         double epsilon = 0.0001;
+    //         double tofPerturbed = tof + epsilon;
+    //         double tofTotalPerturbed = tofPerturbed + shooterExitDelay;
+    //         TrcPose2D compensationPerturbed = new TrcPose2D(
+    //             -vxRobot * tofTotalPerturbed,
+    //             -vyRobot * tofTotalPerturbed,
+    //             -omegaDeg * tofTotalPerturbed
+    //         );
 
-            TrcPose2D adjustedPosePerturbed =
-                originalTargetPose.addRelativePose(compensationPerturbed);
-            TargetInfo perturbedInfo =
-                targetInfoSource.getTargetInfo(adjustedPosePerturbed);
-            double predictedTofPerturbed = perturbedInfo.tof;
-            double gPrime = (predictedTofPerturbed - predictedTof) / epsilon - 1.0;
-            /** Prevents instability when the derivative is too close to zero, which would cause the Newton 
-            update (g/gPrime) extremely large of undefined. */
-            // Will need to be tuned
-            if (Math.abs(gPrime) < 0.0001)
-            {
-                break;
-            }
+    //         TrcPose2D adjustedPosePerturbed =
+    //             originalTargetPose.addRelativePose(compensationPerturbed);
+    //         TargetInfo perturbedInfo =
+    //             targetInfoSource.getTargetInfo(adjustedPosePerturbed);
+    //         double predictedTofPerturbed = perturbedInfo.tof;
+    //         double gPrime = (predictedTofPerturbed - predictedTof) / epsilon - 1.0;
+    //         /** Prevents instability when the derivative is too close to zero, which would cause the Newton 
+    //         update (g/gPrime) extremely large of undefined. */
+    //         // Will need to be tuned
+    //         if (Math.abs(gPrime) < 0.0001)
+    //         {
+    //             break;
+    //         }
 
-            double delta = g / gPrime;
-            tof = tof - delta;
-            compensatedInfo = newInfo;
-            /** Stops iteration when the Newton update becomes very small, meaning the solution has effectively converged. */
-            // Will need to be tuned
-            if (Math.abs(delta) < 0.0002)
-            {
-                break;
-            }
-        }
+    //         double delta = g / gPrime;
+    //         tof = tof - delta;
+    //         compensatedInfo = newInfo;
+    //         /** Stops iteration when the Newton update becomes very small, meaning the solution has effectively converged. */
+    //         // Will need to be tuned
+    //         if (Math.abs(delta) < 0.0002)
+    //         {
+    //             break;
+    //         }
+    //     }
 
-        return compensatedInfo;
-    }    
+    //     return compensatedInfo;
+    // }
 
     /**
      * This method is called by right shooter GoalTracking to get AimInfo for aiming at the target.
