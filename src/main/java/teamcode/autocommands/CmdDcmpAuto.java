@@ -31,6 +31,7 @@ import teamcode.FrcAuto.Type;
 import teamcode.Robot.RelocalizationMode;
 import teamcode.Robot;
 import teamcode.RobotParams;
+import teamcode.autotasks.TaskAutoClimb.ClimbSide;
 // import teamcode.autotasks.TaskAutoClimb;
 import teamcode.subsystems.Shooter;
 import trclib.pathdrive.TrcPose2D;
@@ -49,6 +50,10 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
     private enum State
     {
         START,
+        PICKUP_DEPOT,
+        SHOOT_DEPOT,
+        GO_TO_CLIMB_POS,
+        AUTO_CLIMB,
         NEUTRAL_ZONE_PICKUP,
         RETURN_TO_SCORE_NEUTRAL,
         SHOOT_NEUTRAL_FUEL,
@@ -72,7 +77,7 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
     // private MoveTo moveTo;
     private Type type;
     // private PassBack passBack;
-    // private boolean climb;
+    private boolean climb;
     // private TaskAutoClimb.ClimbSide climbSide;
     // private double neutralZoneCycles;
     // private int currentNeutralZoneCycles = 0;
@@ -176,7 +181,7 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
                     // moveTo = autoChoices.getMoveTo();
                     type = autoChoices.getType();
                     // passBack = autoChoices.getPassBack();
-                    // climb = autoChoices.getClimb();
+                    climb = autoChoices.getClimb();
                     // climbSide = autoChoices.getClimbSide();
                     // neutralZoneCycles = autoChoices.getNeutralZoneCycles();
                     robot.robotBase.purePursuitDrive.getTurnPidCtrl().setNoOscillation(true);
@@ -213,13 +218,67 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
                     {
                         robot.globalTracer.traceInfo(moduleName, "***** Do delay " + startDelay + "s.");
                         timer.set(startDelay, event);
-                        // TODO: Change after we add center auto
-                        sm.waitForSingleEvent(event, type != Type.CENTER ? State.NEUTRAL_ZONE_PICKUP: State.DONE);
+                        sm.waitForSingleEvent(event, type != Type.CENTER ? State.NEUTRAL_ZONE_PICKUP: State.PICKUP_DEPOT);
                     }
                     else
                     {
-                        // TODO: Change after we add center auto
-                        sm.setState(type != Type.CENTER ? State.NEUTRAL_ZONE_PICKUP: State.DONE);
+                        sm.setState(type != Type.CENTER ? State.NEUTRAL_ZONE_PICKUP: State.PICKUP_DEPOT);
+                    }
+                    break;
+                
+                case PICKUP_DEPOT:
+                    TrcPose2D depotPickupPose = RobotParams.Game.BLUE_DEPOT_PICKUP_POSE;
+                    TrcPose2D depotEndPose = depotPickupPose.clone();
+                    depotEndPose.y -= 45.0;
+                    TrcPose2D[] depotPickupPath = new TrcPose2D[] {depotPickupPose, depotEndPose};
+
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
+                    robot.robotBase.purePursuitDrive.start(
+                        null, event, 0.0, false,
+                        (i, wp) ->
+                        {
+                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
+                            robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
+                            if (i == 1)
+                            {
+                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.8);
+                                robot.intakeSubsystem.setIntakeEnabled(true);
+                            } 
+                        },
+                        robot.adjustPathByAlliance(alliance, depotPickupPath));
+                    sm.waitForSingleEvent(event, State.SHOOT_DEPOT);
+                    break;
+            
+                case SHOOT_DEPOT:
+                    robot.autoShootTask.autoShoot(null, event, true, true, false);
+                    sm.waitForSingleEvent(event, climb ? State.GO_TO_CLIMB_POS: State.DONE, climb ? 7.0: 15.0);
+                    break;
+                
+                case GO_TO_CLIMB_POS:
+                    if (robot.intakeSubsystem != null)
+                    {
+                        robot.intakeSubsystem.setIntakeEnabled(false);
+                    }
+
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.8);
+                    robot.robotBase.purePursuitDrive.start(
+                        null, event, 0.0, true, null,
+                        new TrcPose2D(0.0, -25.0, 0.0));
+                    sm.waitForSingleEvent(event, State.AUTO_CLIMB);
+                    break;
+                
+                case AUTO_CLIMB:
+                    if (robot.climberSubsystem != null)
+                    {
+                        double climbDelay =
+                            RobotParams.Game.AUTONOMOUS_PERIOD - TrcTimer.getModeElapsedTime() - 3.5;
+                        robot.autoClimbTask.autoClimb(
+                            null, event, alliance, ClimbSide.DEPOT, climbDelay > 0.0? climbDelay: 0.0);
+                        sm.waitForSingleEvent(event, State.DONE);
+                    }
+                    else
+                    {
+                        sm.setState(State.DONE);
                     }
                     break;
                 
