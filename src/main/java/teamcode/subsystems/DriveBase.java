@@ -92,7 +92,7 @@ public class DriveBase extends TrcSubsystem
         private static final TrcPidController.PidCoefficients turnPidCoeffs =
             new TrcPidController.PidCoefficients(0.018, 0.0, 0.0, 0.0, 0.0);
         private static final TrcPidController.PidCoefficients velPidCoeffs =
-            new TrcPidController.PidCoefficients(0.0, 0.0, 0.0, 0.00909090909090909090909090909091, 0.0);
+            new TrcPidController.PidCoefficients(0.0005, 0.0, 0.0, 0.09, 0.0);
         private static final TrcPidController.PidCoefficients steerPidCoeffs =
             new TrcPidController.PidCoefficients(52.87825, 0.0, 0.0, 0.0, 0.0);
         private static final TrcPidController.FFCoefficients steerFFCoeffs =
@@ -107,7 +107,7 @@ public class DriveBase extends TrcSubsystem
             .setYPidParams(drivePidCoeffs, 0.5)
             .setTurnPidParams(turnPidCoeffs, 0.5)
             .setVelocityPidParams(velPidCoeffs)
-            .setMotionProfileParams(175.0, 200.0, 90.0);
+            .setMotionProfileParams(175.0, 210.0, 105.0);
         public static TrcSwerveDrive.SwerveParams swerveParams = new TrcSwerveDrive.SwerveParams()
             .setSteerMotorPidParams(
                 new TrcMotor.PidParams()

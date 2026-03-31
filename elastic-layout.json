@@ -3,6 +3,66 @@
   "grid_size": 128,
   "tabs": [
     {
+      "name": "Preferences",
+      "grid_layout": {
+        "layouts": [],
+        "containers": [
+          {
+            "title": "CommStatusMonitor",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Preferences/CommStatusMonitor",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "UpdateDashboard",
+            "x": 256.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Preferences/UpdateDashboard",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Relocalize",
+            "x": 0.0,
+            "y": 128.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Vision/Relocalize",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "SubsystemZeroCal",
+            "x": 256.0,
+            "y": 128.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Preferences/SubsystemZeroCal",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "FMSInfo",
       "grid_layout": {
         "layouts": [],
@@ -106,66 +166,6 @@
               "period": 0.06,
               "data_type": "int",
               "show_submit_button": false
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Preferences",
-      "grid_layout": {
-        "layouts": [],
-        "containers": [
-          {
-            "title": "CommStatusMonitor",
-            "x": 0.0,
-            "y": 0.0,
-            "width": 256.0,
-            "height": 128.0,
-            "type": "Toggle Switch",
-            "properties": {
-              "topic": "/SmartDashboard/Preferences/CommStatusMonitor",
-              "period": 0.06,
-              "data_type": "boolean"
-            }
-          },
-          {
-            "title": "UpdateDashboard",
-            "x": 256.0,
-            "y": 0.0,
-            "width": 256.0,
-            "height": 128.0,
-            "type": "Toggle Switch",
-            "properties": {
-              "topic": "/SmartDashboard/Preferences/UpdateDashboard",
-              "period": 0.06,
-              "data_type": "boolean"
-            }
-          },
-          {
-            "title": "Relocalize",
-            "x": 0.0,
-            "y": 128.0,
-            "width": 256.0,
-            "height": 128.0,
-            "type": "Toggle Switch",
-            "properties": {
-              "topic": "/SmartDashboard/Vision/Relocalize",
-              "period": 0.06,
-              "data_type": "boolean"
-            }
-          },
-          {
-            "title": "SubsystemZeroCal",
-            "x": 256.0,
-            "y": 128.0,
-            "width": 256.0,
-            "height": 128.0,
-            "type": "Toggle Switch",
-            "properties": {
-              "topic": "/SmartDashboard/Preferences/SubsystemZeroCal",
-              "period": 0.06,
-              "data_type": "boolean"
             }
           }
         ]
@@ -853,8 +853,8 @@
               "period": 0.033,
               "data_type": "double",
               "time_displayed": 5.0,
-              "min_value": 0.0,
-              "max_value": 6000.0,
+              "min_value": -180.0,
+              "max_value": 180.0,
               "color": 4278238420,
               "line_width": 2.0
             }
@@ -871,8 +871,8 @@
               "period": 0.033,
               "data_type": "double",
               "time_displayed": 5.0,
-              "min_value": 0.0,
-              "max_value": 6000.0,
+              "min_value": -180.0,
+              "max_value": 180.0,
               "color": 4278238420,
               "line_width": 2.0
             }
@@ -1757,7 +1757,7 @@
           },
           {
             "title": "photonvision_Port_1184_Output_MJPEG_Server",
-            "x": 512.0,
+            "x": 0.0,
             "y": 0.0,
             "width": 512.0,
             "height": 512.0,
@@ -1770,7 +1770,7 @@
           },
           {
             "title": "photonvision_Port_1182_Output_MJPEG_Server",
-            "x": 0.0,
+            "x": 512.0,
             "y": 0.0,
             "width": 512.0,
             "height": 512.0,
@@ -2545,20 +2545,6 @@
             }
           },
           {
-            "title": "MaxVelocity",
-            "x": 128.0,
-            "y": 512.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/Test/MaxVelocity",
-              "period": 0.06,
-              "data_type": "double",
-              "show_submit_button": true
-            }
-          },
-          {
             "title": "MaxAcceleration",
             "x": 256.0,
             "y": 512.0,
@@ -2644,6 +2630,20 @@
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
+            }
+          },
+          {
+            "title": "MaxVelocity",
+            "x": 128.0,
+            "y": 512.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Test/MaxVelocity",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": true
             }
           }
         ]

@@ -1153,6 +1153,7 @@ public class Shooter extends TrcSubsystem
         double omegaDeg = COMPENSATE_ROBOT_ROTATION ? driveBase.getTurnRate() : 0.0;
         double tof = targetInfo.tof;
         TrcPose2D originalTargetPose = targetInfo.targetPose;
+        tracer.traceInfo(instanceName, "Heading=%f, vxRobot=%f");
 
         for (int i = 0; i < maxIterations; i++)
         {
