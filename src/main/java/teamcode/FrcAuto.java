@@ -92,6 +92,14 @@ public class FrcAuto implements TrcRobot.RobotMode
         PASS_BACK
     }   //enum PassBack
 
+    // Specifies what type of auto we want to run
+    public enum Type
+    {
+        TRENCH,
+        BUMP,
+        CENTER
+    }   //enum Type
+
     /**
      * This class encapsulates all user choices for autonomous mode from the smart dashboard.
      *
@@ -114,6 +122,7 @@ public class FrcAuto implements TrcRobot.RobotMode
         private final FrcChoiceMenu<MoveTo> moveToChoiceMenu;
         private final FrcChoiceMenu<PassBack> passBackChoiceMenu;
         private final FrcChoiceMenu<TaskAutoClimb.ClimbSide> climbSideChoiceMenu;
+        private final FrcChoiceMenu<Type> typeChoiceMenu;
 
         public AutoChoices()
         {
@@ -127,6 +136,7 @@ public class FrcAuto implements TrcRobot.RobotMode
             moveToChoiceMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_MOVE_TO);
             passBackChoiceMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_PASS_BACK);
             climbSideChoiceMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_CLIMB_SIDE);
+            typeChoiceMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_TYPE);
             //
             // Populate autonomous mode choice menus.
             //
@@ -161,6 +171,10 @@ public class FrcAuto implements TrcRobot.RobotMode
 
             climbSideChoiceMenu.addChoice("Depot Side", TaskAutoClimb.ClimbSide.DEPOT, true, false);
             climbSideChoiceMenu.addChoice("Outpost Side", TaskAutoClimb.ClimbSide.OUTPOST, false, true);
+
+            typeChoiceMenu.addChoice("Trench Auto", Type.TRENCH, true, false);
+            typeChoiceMenu.addChoice("Bump Auto", Type.BUMP);
+            typeChoiceMenu.addChoice("Center Auto", Type.CENTER, false, true);
             //
             // Initialize dashboard with default choice values.
             //
@@ -176,6 +190,7 @@ public class FrcAuto implements TrcRobot.RobotMode
             userChoices.addChoiceMenu(Dashboard.DBKEY_AUTO_PASS_BACK, passBackChoiceMenu);
             userChoices.addBoolean(Dashboard.DBKEY_AUTO_CLIMB, false);
             userChoices.addNumber(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_CYCLES, 0.0);
+            userChoices.addChoiceMenu(Dashboard.DBKEY_AUTO_TYPE, typeChoiceMenu);
 
             userChoices.addString(Dashboard.DBKEY_AUTO_PATHFILE, "DrivePath.csv");
             userChoices.addNumber(Dashboard.DBKEY_AUTO_X_DRIVE_DISTANCE, 0.0);      // in feet
@@ -251,6 +266,11 @@ public class FrcAuto implements TrcRobot.RobotMode
             return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_CYCLES);
         }   //getNeutralZoneCycles
 
+        public Type getType()
+        {
+            return typeChoiceMenu.getCurrentChoiceObject();
+        }   //getType
+
         public String getPathFile()
         {
             return userChoices.getUserString(Dashboard.DBKEY_AUTO_PATHFILE);
@@ -297,6 +317,8 @@ public class FrcAuto implements TrcRobot.RobotMode
                    "climb=\"" + getClimb() + "\" " +
                    "climbSide=\"" + getClimbSide() + "\" " +
                    "neutralZoneCycles=\"" + getNeutralZoneCycles() + "\" " +
+                   "type=\"" + getType() + "\" " +
+
 
                    "pathFile=\"" + getPathFile() + "\" " +
                    "xDistance=" + getXDriveDistance() + " ft " +
