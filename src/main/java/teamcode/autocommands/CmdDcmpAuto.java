@@ -25,11 +25,13 @@ package teamcode.autocommands;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import teamcode.FrcAuto;
 import teamcode.FrcAuto.AutoStartPos;
-import teamcode.FrcAuto.MoveTo;
+// import teamcode.FrcAuto.MoveTo;
+import teamcode.FrcAuto.Type;
 // import teamcode.FrcAuto.PassBack;
 import teamcode.Robot.RelocalizationMode;
 import teamcode.Robot;
 import teamcode.RobotParams;
+import teamcode.autotasks.TaskAutoClimb.ClimbSide;
 // import teamcode.autotasks.TaskAutoClimb;
 import teamcode.subsystems.Shooter;
 import trclib.pathdrive.TrcPose2D;
@@ -48,6 +50,10 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
     private enum State
     {
         START,
+        PICKUP_DEPOT,
+        SHOOT_DEPOT,
+        GO_TO_CLIMB_POS,
+        AUTO_CLIMB,
         NEUTRAL_ZONE_PICKUP,
         RETURN_TO_SCORE_NEUTRAL,
         SHOOT_NEUTRAL_FUEL,
@@ -68,9 +74,10 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
     // private boolean depotPickup;
     // private boolean outpostPickup;
     // private boolean neutralZonePickup;
-    private MoveTo moveTo;
+    // private MoveTo moveTo;
+    private Type type;
     // private PassBack passBack;
-    // private boolean climb;
+    private boolean climb;
     // private TaskAutoClimb.ClimbSide climbSide;
     // private double neutralZoneCycles;
     // private int currentNeutralZoneCycles = 0;
@@ -80,10 +87,14 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
     private TrcPose2D[] hubPath = null;
     // private TrcPose2D[] hubReturnPath = null;
 
-    private TrcPose2D[] depotDoubleSweep = RobotParams.Game.blueDoubleSweepDepotTrenchPath;
-    private TrcPose2D[] outpostDoubleSweep = RobotParams.Game.blueDoubleSweepOutpostTrenchPath;
+    private TrcPose2D[] depotTrenchSweep = RobotParams.Game.blueDoubleSweepDepotTrenchPath;
+    private TrcPose2D[] outpostTrenchSweep = RobotParams.Game.blueDoubleSweepOutpostTrenchPath;
+    private TrcPose2D[] depotBumpSweep = RobotParams.Game.blueDoubleSweepDepotBumpPath;
+    private TrcPose2D[] outpostBumpSweep = RobotParams.Game.blueDoubleSweepOutpostBumpPath;
+
 
     boolean atDepot = false;
+    boolean isTrench = false;
 
     /**
      * Constructor: Create an instance of the object.
@@ -167,9 +178,10 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
                     // depotPickup = autoChoices.depotPickup();
                     // outpostPickup = autoChoices.outpostPickup();
                     // neutralZonePickup = autoChoices.neutralZonePickup();
-                    moveTo = autoChoices.getMoveTo();
+                    // moveTo = autoChoices.getMoveTo();
+                    type = autoChoices.getType();
                     // passBack = autoChoices.getPassBack();
-                    // climb = autoChoices.getClimb();
+                    climb = autoChoices.getClimb();
                     // climbSide = autoChoices.getClimbSide();
                     // neutralZoneCycles = autoChoices.getNeutralZoneCycles();
                     robot.robotBase.purePursuitDrive.getTurnPidCtrl().setNoOscillation(true);
@@ -206,25 +218,97 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
                     {
                         robot.globalTracer.traceInfo(moduleName, "***** Do delay " + startDelay + "s.");
                         timer.set(startDelay, event);
-                        sm.waitForSingleEvent(event, State.NEUTRAL_ZONE_PICKUP);
+                        sm.waitForSingleEvent(event, type != Type.CENTER ? State.NEUTRAL_ZONE_PICKUP: State.PICKUP_DEPOT);
                     }
                     else
                     {
-                        sm.setState(State.NEUTRAL_ZONE_PICKUP);
+                        sm.setState(type != Type.CENTER ? State.NEUTRAL_ZONE_PICKUP: State.PICKUP_DEPOT);
+                    }
+                    break;
+                
+                case PICKUP_DEPOT:
+                    TrcPose2D depotPickupPose = RobotParams.Game.BLUE_DEPOT_PICKUP_POSE;
+                    TrcPose2D depotEndPose = depotPickupPose.clone();
+                    depotEndPose.y -= 45.0;
+                    TrcPose2D[] depotPickupPath = new TrcPose2D[] {depotPickupPose, depotEndPose};
+
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
+                    robot.robotBase.purePursuitDrive.start(
+                        null, event, 0.0, false,
+                        (i, wp) ->
+                        {
+                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
+                            robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
+                            if (i == 1)
+                            {
+                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.8);
+                                robot.intakeSubsystem.setIntakeEnabled(true);
+                            } 
+                        },
+                        robot.adjustPathByAlliance(alliance, depotPickupPath));
+                    sm.waitForSingleEvent(event, State.SHOOT_DEPOT);
+                    break;
+            
+                case SHOOT_DEPOT:
+                    if (robot.autoShootTask != null)
+                    {
+                        robot.autoShootTask.autoShoot(null, event, true, true, false);
+                        sm.waitForSingleEvent(event, climb ? State.GO_TO_CLIMB_POS: State.DONE, climb ? 7.0: 15.0);
+                    }
+                    else
+                    {
+                        sm.setState(climb ? State.GO_TO_CLIMB_POS: State.DONE);
+                    }
+                    break;
+                
+                case GO_TO_CLIMB_POS:
+                    if (robot.autoShootTask != null)
+                    {
+                        robot.autoShootTask.cancel();
+                    }
+                    if (robot.intakeSubsystem != null)
+                    {
+                        robot.intakeSubsystem.setIntakeEnabled(false);
+                    }
+
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.8);
+                    robot.robotBase.purePursuitDrive.start(
+                        null, event, 0.0, true, null,
+                        new TrcPose2D(0.0, -25.0, 0.0));
+                    sm.waitForSingleEvent(event, State.AUTO_CLIMB);
+                    break;
+                
+                case AUTO_CLIMB:
+                    if (robot.climberSubsystem != null)
+                    {
+                        double climbDelay =
+                            RobotParams.Game.AUTONOMOUS_PERIOD - TrcTimer.getModeElapsedTime() - 3.5;
+                        robot.autoClimbTask.autoClimb(
+                            null, event, alliance, ClimbSide.DEPOT, climbDelay > 0.0 ? climbDelay: 0.0);
+                        sm.waitForSingleEvent(event, State.DONE);
+                    }
+                    else
+                    {
+                        sm.setState(State.DONE);
                     }
                     break;
                 
                 case NEUTRAL_ZONE_PICKUP:
-                    atDepot = startPos == AutoStartPos.START_POS_DEPOT || 
-                              startPos == AutoStartPos.START_POS_CENTER && moveTo == MoveTo.DEPOT;
+                    atDepot = startPos == AutoStartPos.START_POS_DEPOT;
+                    isTrench = type == Type.TRENCH;
 
                     if (atDepot)
                     {
-                        neutralZonePath = new TrcPose2D[] {depotDoubleSweep[0], depotDoubleSweep[1], depotDoubleSweep[2]};
+                        
+                        neutralZonePath = isTrench ? 
+                            new TrcPose2D[] {depotTrenchSweep[0], depotTrenchSweep[1], depotTrenchSweep[2]}:
+                            new TrcPose2D[] {depotBumpSweep[0], depotBumpSweep[1], depotBumpSweep[2]};
                     }
                     else
                     {
-                        neutralZonePath = new TrcPose2D[] {outpostDoubleSweep[0], outpostDoubleSweep[1], outpostDoubleSweep[2]};
+                        neutralZonePath = isTrench ? 
+                            new TrcPose2D[] {outpostTrenchSweep[0], outpostTrenchSweep[1], outpostTrenchSweep[2]}:
+                            new TrcPose2D[] {outpostBumpSweep[0], outpostBumpSweep[1], outpostBumpSweep[2]};
                     }
 
                     if (robot.intakeSubsystem != null)
@@ -251,11 +335,15 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
                 case RETURN_TO_SCORE_NEUTRAL:
                     if (atDepot)
                     {
-                        neutralZoneReturnPath = new TrcPose2D[] {depotDoubleSweep[3], depotDoubleSweep[4]};
+                        neutralZoneReturnPath = isTrench ?
+                            new TrcPose2D[] {depotTrenchSweep[3], depotTrenchSweep[4]}:
+                            new TrcPose2D[] {depotBumpSweep[3], depotBumpSweep[4]};
                     }
                     else
                     {
-                        neutralZoneReturnPath = new TrcPose2D[] {outpostDoubleSweep[3], outpostDoubleSweep[4]};
+                        neutralZoneReturnPath = isTrench ?
+                            new TrcPose2D[] {outpostTrenchSweep[3], outpostTrenchSweep[4]}:
+                            new TrcPose2D[] {outpostBumpSweep[3], outpostBumpSweep[4]};
                     }
 
                     if (robot.intakeSubsystem != null)
@@ -300,11 +388,15 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
 
                     if (atDepot)
                     {
-                        hubPath = new TrcPose2D[] {depotDoubleSweep[5], depotDoubleSweep[6], depotDoubleSweep[7], depotDoubleSweep[8], depotDoubleSweep[9], depotDoubleSweep[10], depotDoubleSweep[11], depotDoubleSweep[12]};
+                        hubPath = isTrench ?
+                            new TrcPose2D[] {depotTrenchSweep[5], depotTrenchSweep[6], depotTrenchSweep[7], depotTrenchSweep[8], depotTrenchSweep[9], depotTrenchSweep[10], depotTrenchSweep[11], depotTrenchSweep[12]}:
+                            new TrcPose2D[] {depotBumpSweep[5], depotBumpSweep[6], depotBumpSweep[7], depotBumpSweep[8], depotBumpSweep[9], depotBumpSweep[10], depotBumpSweep[11]};
                     }
                     else
                     {
-                        hubPath = new TrcPose2D[] {outpostDoubleSweep[5], outpostDoubleSweep[6], outpostDoubleSweep[7], outpostDoubleSweep[8], outpostDoubleSweep[9], outpostDoubleSweep[10], outpostDoubleSweep[11], outpostDoubleSweep[12]};
+                        hubPath = isTrench ?
+                            new TrcPose2D[] {outpostTrenchSweep[5], outpostTrenchSweep[6], outpostTrenchSweep[7], outpostTrenchSweep[8], outpostTrenchSweep[9], outpostTrenchSweep[10], outpostTrenchSweep[11], outpostTrenchSweep[12]}:
+                            new TrcPose2D[] {outpostBumpSweep[5], outpostBumpSweep[6], outpostBumpSweep[7], outpostBumpSweep[8], outpostBumpSweep[9], outpostBumpSweep[10], outpostBumpSweep[11]};
                     }
 
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.50);
@@ -322,11 +414,11 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
                 // case RETURN_TO_SCORE_HUB:
                 //     if (atDepot)
                 //     {
-                //         hubReturnPath = new TrcPose2D[] {depotDoubleSweep[11], depotDoubleSweep[12]};
+                //         hubReturnPath = new TrcPose2D[] {depotTrenchSweep[11], depotTrenchSweep[12]};
                 //     }
                 //     else
                 //     {
-                //         hubReturnPath = new TrcPose2D[] {outpostDoubleSweep[11], outpostDoubleSweep[12]};
+                //         hubReturnPath = new TrcPose2D[] {outpostTrenchSweep[11], outpostTrenchSweep[12]};
                 //     }
 
                 //     if (robot.intakeSubsystem != null)
