@@ -39,6 +39,7 @@ import teamcode.Robot;
 import teamcode.RobotParams;
 import trclib.dataprocessor.TrcLookupTable;
 import trclib.dataprocessor.TrcLookupTable.Interpolation;
+import trclib.drivebase.TrcDriveBase;
 import trclib.motor.TrcMotor;
 import trclib.motor.TrcMotor.PidParams;
 import trclib.pathdrive.TrcPose2D;
@@ -53,6 +54,7 @@ import trclib.subsystem.TrcRollerIntake.TriggerAction;
 import trclib.subsystem.TrcShooter;
 import trclib.subsystem.TrcShooter.AimInfo;
 import trclib.subsystem.TrcShooter.TargetInfo;
+import trclib.subsystem.TrcShooter.TargetInfoSource;
 import trclib.subsystem.TrcSubsystem;
 import trclib.timer.TrcTimer;
 
@@ -1042,7 +1044,7 @@ public class Shooter extends TrcSubsystem
                                         null,
                                         shootParams.outputs[1]),
                             shootParams.outputs[2]),
-                        0.015, 0.0001, 5, Params.SHOOTER_EXIT_DELAY);
+                        0.0, 0.0001, 15, Params.SHOOTER_EXIT_DELAY);
                     // TargetInfo targetInfo = compensateRobotMotion(
                     //     robot.robotBase.driveBase, this::getTargetInfo,
                     //     new TargetInfo(
@@ -1158,7 +1160,7 @@ public class Shooter extends TrcSubsystem
     //         /** Small step used to numerically approximate the derivative f'(t) by comparing tof at nearby time values.
     //         Epsilon should be small enough for accurate slope estimation while avoiding floating point noise. */
     //         // Will need to be tuned
-    //         double epsilon = 0.0001;
+    //         double epsilon = 0.001;
     //         double tofPerturbed = tof + epsilon;
     //         double tofTotalPerturbed = tofPerturbed + shooterExitDelay;
     //         TrcPose2D compensationPerturbed = new TrcPose2D(
@@ -1186,8 +1188,9 @@ public class Shooter extends TrcSubsystem
     //         compensatedInfo = newInfo;
     //         /** Stops iteration when the Newton update becomes very small, meaning the solution has effectively converged. */
     //         // Will need to be tuned
-    //         if (Math.abs(delta) < 0.0002)
+    //         if (Math.abs(delta) < 0.002)
     //         {
+    //             tracer.traceWarn(instanceName, "Stopping iteration because the Newton update is very small");
     //             break;
     //         }
     //     }
