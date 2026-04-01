@@ -39,7 +39,6 @@ import teamcode.Robot;
 import teamcode.RobotParams;
 import trclib.dataprocessor.TrcLookupTable;
 import trclib.dataprocessor.TrcLookupTable.Interpolation;
-import trclib.drivebase.TrcDriveBase;
 import trclib.motor.TrcMotor;
 import trclib.motor.TrcMotor.PidParams;
 import trclib.pathdrive.TrcPose2D;
@@ -54,7 +53,6 @@ import trclib.subsystem.TrcRollerIntake.TriggerAction;
 import trclib.subsystem.TrcShooter;
 import trclib.subsystem.TrcShooter.AimInfo;
 import trclib.subsystem.TrcShooter.TargetInfo;
-import trclib.subsystem.TrcShooter.TargetInfoSource;
 import trclib.subsystem.TrcSubsystem;
 import trclib.timer.TrcTimer;
 
@@ -225,6 +223,8 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_POS_OFFSET            = 180.0;
         public static final double TURRET_ENC_RANGE_LOWER       = -180.0;
         public static final double TURRET_ENC_RANGE_UPPER       = 180.0;
+        public static final double TURRET_X_OFFSET              = 0.0;
+        public static final double TURRET_Y_OFFSET              = -6.0;         // inches from robot center
         // Physical Range: -172.0 to 180.0
         public static final double TURRET_MIN_POS               = -170.0;
         public static final double TURRET_MAX_POS               = 178.0;
@@ -246,11 +246,11 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_ABS_ENC_POS_OFFSET    = -180.0;
         public static final double TURRET_ABS_ENC_ZERO_OFFSET   = 0.0;
 
-        public static final double CAM_ROTATE_RADIUS            = 5.800896;     // inches from turret center
-        public static final double LTURRET_X_OFFSET             = -7.375;       // inches from robot center
-        public static final double LTURRET_Y_OFFSET             = -6.0;         // inches from robot center
-        public static final double RTURRET_X_OFFSET             = 7.376;        // inches from robot center
-        public static final double RTURRET_Y_OFFSET             = -6.0;         // inches from robot center
+        public static final double CAM_ROTATE_RADIUS            = 5.800896;         // inches from turret center
+        public static final double LTURRET_X_OFFSET             = -7.375;           // inches from robot center
+        public static final double LTURRET_Y_OFFSET             = TURRET_Y_OFFSET;  // inches from robot center
+        public static final double RTURRET_X_OFFSET             = 7.376;            // inches from robot center
+        public static final double RTURRET_Y_OFFSET             = TURRET_Y_OFFSET;  // inches from robot center
 
         // Common Transfer Motor Characteristics
         public static final MotorType TRANSFER_MOTOR_TYPE       = MotorType.CanSparkMax;
@@ -546,6 +546,10 @@ public class Shooter extends TrcSubsystem
             {
                 FrcCANSparkMax turretMotor = (FrcCANSparkMax) turret;
                 turretMotor.enableAbsoluteEncoder(Params.TURRET_ABS_ENC_INVERTED, Params.TURRET_ABS_ENC_SCALE, null);
+                // double encPos = turretMotor.getMotorPosition();
+                // turret.tracer.traceErr(instanceName, "absEncPos=%f", encPos);
+                // turretMotor.disableAbsoluteEncoder();
+                // turretMotor.resetMotorPosition(encPos);
             }
             // turret.enableMotionProfile(
             //     Params.TURRET_SOFTWARE_PID_ENABLED, Params.TURRET_MAX_VELOCITY, Params.TURRET_MAX_ACCELERATION,
@@ -1036,7 +1040,9 @@ public class Shooter extends TrcSubsystem
                 {
                     // Compensate for robot motion.
                     TargetInfo targetInfo = leftShooter.compensateRobotMotion(
-                        robot.robotBase.driveBase, this::getTargetInfo,
+                        robot.robotBase.driveBase,
+                        Params.TURRET_X_OFFSET, Params.TURRET_Y_OFFSET,
+                        this::getTargetInfo,
                         new TargetInfo(
                             targetPose,
                             new AimInfo(shootParams.outputs[0],
