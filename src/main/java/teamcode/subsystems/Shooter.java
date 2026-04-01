@@ -88,7 +88,7 @@ public class Shooter extends TrcSubsystem
             // Hood Angle (Constant)
             {40.0},
             // Time of Flight (Constant),
-            {1.5}
+            {1.0}
         })
     };
 
