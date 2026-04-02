@@ -131,7 +131,7 @@ public class Shooter extends TrcSubsystem
         public static final double SHOOTER_VEL_TRIGGER_TIMEOUT  = 2.0;
         public static final double SHOOTER_RPM_CONFLICT_ZONE_ADJ= 0.0;
         public static final double SHOOTER_READY_TIMEOUT        = 1.0;          // in sec
-        public static final double SHOOTER_EXIT_DELAY           = 0.0;          // TODO: Need to tune it by looking at timestamp in the log
+        public static final double SHOOTER_EXIT_DELAY           = 0.0;
         // Left Shooter Motor Characteristics
         public static final String LSHOOTER_PRIMARY_MOTOR_NAME  = SUBSYSTEM_NAME + ".LeftPrimaryMotor";
         public static final boolean LSHOOTER_PRIMARY_MOTOR_INVERTED = false;
@@ -204,7 +204,8 @@ public class Shooter extends TrcSubsystem
 
         // Common Turret Motor Characteristics
         public static final boolean TURRET_HAS_ABS_ENC          = true;
-        public static final double TURRET_MOTOR_GEAR_RATIO      = 0.92237430460894509389916604972163*(60.0*130.0/40.0)*2.0;   // Load/Motor
+        // public static final double TURRET_MOTOR_GEAR_RATIO      = 0.92237430460894509389916604972163*(60.0*130.0/40.0)*2.0;   // Load/Motor
+        public static final double TURRET_MOTOR_GEAR_RATIO      = 60.0*130.0/40.0;  // Load/Motor
         public static final double TURRET_MOTOR_DEG_PER_COUNT   = 360.0/TURRET_MOTOR_GEAR_RATIO;
         public static final MotorType TURRET_MOTOR_TYPE         = MotorType.CanSparkMax;
         public static final SparkMaxMotorParams TURRET_SPARKMAX_PARAMS = new SparkMaxMotorParams(true);
@@ -227,11 +228,11 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_Y_OFFSET              = -6.0;         // inches from robot center
         // Physical Range: -172.0 to 180.0
         public static final double TURRET_FORBIDDEN_ZONE_WIDTH  = 8.0;
-        public static final double TURRET_IMPOSSIBLE_MIN_POS    = -180.0 + TURRET_FORBIDDEN_ZONE_WIDTH/2.0;
+        public static final double TURRET_FORBIDDEN_MIN_POS     = -180.0 + TURRET_FORBIDDEN_ZONE_WIDTH/2.0;
         public static final double TURRET_MIN_POS               = -170.0;
         public static final double TURRET_MAX_POS               = 178.0;
-        public static final double TURRET_CONFLICT_ZONE_LOW     = 60.0;         //TODO: tune
-        public static final double TURRET_CONFLICT_ZONE_HIGH    = 120.0;        //TODO: tune
+        public static final double TURRET_CONFLICT_ZONE_LOW     = 60.0;
+        public static final double TURRET_CONFLICT_ZONE_HIGH    = 120.0;
         public static final double TURRET_POS_PRESET_TOLERANCE  = 5.0;
         public static final double[] TURRET_POS_PRESETS         =
             {TURRET_MIN_POS, -135.0, -90.0, -45.0, 0.0, 45.0, 90.0, 135.0, TURRET_MAX_POS};
@@ -244,7 +245,7 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_CURRENT_LIMIT         = 20.0;
 
         public static final boolean TURRET_ABS_ENC_INVERTED     = true;
-        public static final double TURRET_ABS_ENC_SCALE         = TURRET_MOTOR_GEAR_RATIO;
+        public static final double TURRET_ABS_ENC_SCALE         = 360.0;
         public static final double TURRET_ABS_ENC_POS_OFFSET    = -180.0;
         public static final double TURRET_ABS_ENC_ZERO_OFFSET   = 0.0;
 
@@ -525,11 +526,12 @@ public class Shooter extends TrcSubsystem
 
             if (Params.TURRET_HAS_ABS_ENC)
             {
-                turretMotorParams.setPositionScaleAndOffset(
-                    1.0, Params.TURRET_ABS_ENC_POS_OFFSET);
+                // Absolute encoder is scaled to the unit of degrees by SparkMax already, so we don't scale here.
+                turretMotorParams.setPositionScaleAndOffset(1.0, Params.TURRET_ABS_ENC_POS_OFFSET);
             }
             else
             {
+                // Scale the motor relative encoder to the unit of degrees.
                 turretMotorParams.setPositionScaleAndOffset(
                     Params.TURRET_MOTOR_DEG_PER_COUNT, Params.TURRET_POS_OFFSET);
             }
@@ -543,16 +545,7 @@ public class Shooter extends TrcSubsystem
                     .setPidControlParams(
                         Params.TURRET_PID_TOLERANCE, Params.TURRET_PID_SETTLING, Params.TURRET_SOFTWARE_PID_ENABLED),
                 this::getTurretPosition);
-
-            if (Params.TURRET_HAS_ABS_ENC)
-            {
-                FrcCANSparkMax turretMotor = (FrcCANSparkMax) turret;
-                turretMotor.enableAbsoluteEncoder(Params.TURRET_ABS_ENC_INVERTED, Params.TURRET_ABS_ENC_SCALE, null);
-                // double encPos = turretMotor.getMotorPosition();
-                // turret.tracer.traceErr(instanceName, "absEncPos=%f", encPos);
-                // turretMotor.disableAbsoluteEncoder();
-                // turretMotor.resetMotorPosition(encPos);
-            }
+            scaleTurretEncoder(false);
             // turret.enableMotionProfile(
             //     Params.TURRET_SOFTWARE_PID_ENABLED, Params.TURRET_MAX_VELOCITY, Params.TURRET_MAX_ACCELERATION,
             //     0.0, 0.0, Params.TURRET_PID_TOLERANCE);
@@ -600,6 +593,35 @@ public class Shooter extends TrcSubsystem
             }
         }
     }   //Shooter
+
+    /**
+     * This method scales the turret encoder appropriately. If useMotorEnc is false, it enables the absolute encoder
+     * and scales it to the unit of degrees. If useMotorEnc is true, it enables the absolute encoder, sync it to the
+     * motor's relative encoder and disables the absolute encode so it will use the motor's relative encoder.
+     *
+     * @param useMotorEnc specifies true to sync to motor's relative encoder and use it.
+     */
+    private void scaleTurretEncoder(boolean useMotorEnc)
+    {
+        if (turret != null && Params.TURRET_HAS_ABS_ENC)
+        {
+            // Absolute encoder outputs a range between 0.0 and 1.0, scale it to degrees.
+            // Absolute encoder is Canandmag encoder which has hardware zero calibration switch, so there is no zero
+            // offset.
+            FrcCANSparkMax turretMotor = (FrcCANSparkMax) turret;
+            turretMotor.enableAbsoluteEncoder(Params.TURRET_ABS_ENC_INVERTED, Params.TURRET_ABS_ENC_SCALE, null);
+            // Absolute encoder is scaled to degrees.
+            double absEncPos = turretMotor.getMotorPosition();
+            // Convert degrees to motor revolutions.
+            double motorEncPos = absEncPos / Params.TURRET_MOTOR_DEG_PER_COUNT;
+            turret.tracer.traceErr(instanceName, "absEncPos=%f, motorEncPos=%f", absEncPos, motorEncPos);
+            if (useMotorEnc)
+            {
+                turretMotor.disableAbsoluteEncoder();
+                turretMotor.resetMotorPosition(motorEncPos);
+            }
+        }
+    }   //scaleTurretEncoder
 
     /**
      * This method returns the created left shooter.
@@ -739,23 +761,6 @@ public class Shooter extends TrcSubsystem
         if (rightShooter != null) rightShooter.setTiltAngle(Params.TILT_MIN_POS);
     }   //stopTilt
 
-    public double getTurretPosition()
-    {
-        double pos = 0.0;
-
-        if (turret != null)
-        {
-            pos = turret.getPosition();
-            if (pos < Params.TURRET_IMPOSSIBLE_MIN_POS)
-            {
-                //tracer.traceErr(instanceName, "Hit hard stop too hard, readjust: pos was " + pos);
-                pos = Params.TURRET_MAX_POS;
-            }
-        }
-
-        return pos;
-    }   //getTurretPosition
-
     /**
      * This method stops both the left right pan motors.
      */
@@ -765,26 +770,27 @@ public class Shooter extends TrcSubsystem
         if (rightShooter != null) rightShooter.panMotor.cancel();
     }   //stopPan
 
-    // /**
-    //  * This method returns the turret position adjusted to the range of -180.0 to 180.0.
-    //  *
-    //  * @return turret position in -180 to 180 range.
-    //  */
-    // public double getTurretPosition()
-    // {
-    //     double pos = turret != null? turret.getPosition(): 0.0;
+    /**
+     * This method returns the turret position and make sure it is not in the forbidden zone.
+     *
+     * @return turret position.
+     */
+    public double getTurretPosition()
+    {
+        double pos = 0.0;
 
-    //     if (pos <= -180.0)
-    //     {
-    //         pos += 360.0;
-    //     }
-    //     else if (pos > 180.0)
-    //     {
-    //         pos -= 360.0;
-    //     }
+        if (turret != null)
+        {
+            pos = turret.getPosition();
+            if (pos < Params.TURRET_FORBIDDEN_MIN_POS)
+            {
+                //tracer.traceErr(instanceName, "Hit hard stop too hard, readjust: pos was " + pos);
+                pos = Params.TURRET_MAX_POS;
+            }
+        }
 
-    //     return pos;
-    // }   //getTurretPosition
+        return pos;
+    }   //getTurretPosition
 
     /**
      * This method checks if the left or the right shooter is active.
