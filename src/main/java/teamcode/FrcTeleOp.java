@@ -312,12 +312,12 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                             {
                                 robot.turret.setPower(panPower);
                             }
-                            else
-                            {
-                                robot.turret.setPidPower(
-                                    panPower, Shooter.Params.TURRET_POWER_LIMIT, Shooter.Params.TURRET_MIN_POS,
-                                    Shooter.Params.TURRET_MAX_POS, true);
-                            }
+                            // else
+                            // {
+                            //     robot.turret.setPidPower(
+                            //         panPower, Shooter.Params.TURRET_POWER_LIMIT, Shooter.Params.TURRET_MIN_POS,
+                            //         Shooter.Params.TURRET_MAX_POS, true);
+                            // }
                             prevPanPower = panPower;
                         }
                     }

@@ -532,7 +532,7 @@ public class FrcTest extends FrcTeleOp
                          subsystemName.equalsIgnoreCase(Shooter.Params.TURRET_MOTOR_NAME))
                 {
                     robot.dashboard.putNumber(
-                        Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, robot.turret.getPosition());
+                        Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, robot.shooterSubsystem.getTurretPosition());
                     robot.dashboard.putNumber(
                         Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET, robot.turret.getPidTarget());
                 }

@@ -219,13 +219,15 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_PID_TOLERANCE         = 3.0;
         public static final double TURRET_PID_SETTLING          = 0.0;
         public static final boolean TURRET_SOFTWARE_PID_ENABLED = false;
-        public static final double TURRET_POWER_LIMIT           = 1.0;
+        public static final double TURRET_POWER_LIMIT           = 0.7;
         public static final double TURRET_POS_OFFSET            = 180.0;
         public static final double TURRET_ENC_RANGE_LOWER       = -180.0;
         public static final double TURRET_ENC_RANGE_UPPER       = 180.0;
         public static final double TURRET_X_OFFSET              = 0.0;
         public static final double TURRET_Y_OFFSET              = -6.0;         // inches from robot center
         // Physical Range: -172.0 to 180.0
+        public static final double TURRET_FORBIDDEN_ZONE_WIDTH  = 8.0;
+        public static final double TURRET_IMPOSSIBLE_MIN_POS    = -180.0 + TURRET_FORBIDDEN_ZONE_WIDTH/2.0;
         public static final double TURRET_MIN_POS               = -170.0;
         public static final double TURRET_MAX_POS               = 178.0;
         public static final double TURRET_CONFLICT_ZONE_LOW     = 60.0;         //TODO: tune
@@ -540,7 +542,7 @@ public class Shooter extends TrcSubsystem
                         Params.TURRET_MOTOR_PID_KF, Params.TURRET_MOTOR_PID_IZONE)
                     .setPidControlParams(
                         Params.TURRET_PID_TOLERANCE, Params.TURRET_PID_SETTLING, Params.TURRET_SOFTWARE_PID_ENABLED),
-                null);
+                this::getTurretPosition);
 
             if (Params.TURRET_HAS_ABS_ENC)
             {
@@ -736,6 +738,23 @@ public class Shooter extends TrcSubsystem
         if (leftShooter != null) leftShooter.setTiltAngle(Params.TILT_MIN_POS);
         if (rightShooter != null) rightShooter.setTiltAngle(Params.TILT_MIN_POS);
     }   //stopTilt
+
+    public double getTurretPosition()
+    {
+        double pos = 0.0;
+
+        if (turret != null)
+        {
+            pos = turret.getPosition();
+            if (pos < Params.TURRET_IMPOSSIBLE_MIN_POS)
+            {
+                //tracer.traceErr(instanceName, "Hit hard stop too hard, readjust: pos was " + pos);
+                pos = Params.TURRET_MAX_POS;
+            }
+        }
+
+        return pos;
+    }   //getTurretPosition
 
     /**
      * This method stops both the left right pan motors.
@@ -1627,7 +1646,7 @@ public class Shooter extends TrcSubsystem
                 {
                     dashboard.putNumber(Dashboard.DBKEY_TURRET_POWER, turret.getPower());
                     dashboard.putNumber(Dashboard.DBKEY_TURRET_CURRENT, turret.getCurrent());
-                    dashboard.putNumber(Dashboard.DBKEY_TURRET_POS, turret.getPosition());
+                    dashboard.putNumber(Dashboard.DBKEY_TURRET_POS, getTurretPosition());
                     dashboard.putNumber(Dashboard.DBKEY_TURRET_TARGET, turret.getPidTarget());
                 }
 
