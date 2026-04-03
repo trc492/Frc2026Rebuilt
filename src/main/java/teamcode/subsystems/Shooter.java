@@ -204,15 +204,16 @@ public class Shooter extends TrcSubsystem
 
         // Common Turret Motor Characteristics
         public static final boolean TURRET_HAS_ABS_ENC          = true;
-        // public static final double TURRET_MOTOR_GEAR_RATIO      = 0.92237430460894509389916604972163*(60.0*130.0/40.0)*2.0;   // Load/Motor
-        public static final double TURRET_MOTOR_GEAR_RATIO      = 60.0*130.0/40.0;  // Load/Motor
-        public static final double TURRET_MOTOR_DEG_PER_COUNT   = 360.0/TURRET_MOTOR_GEAR_RATIO;
+        public static final boolean TURRET_SYNC_MOTOR_ENC       = false;
+        // public static final double TURRET_MOTOR_GEAR_RATIO      = 0.92237430460894509389916604972163*(60.0*130.0/40.0)*2.0; // Load/Motor
+        // public static final double TURRET_MOTOR_DEG_PER_COUNT   = 360.0/TURRET_MOTOR_GEAR_RATIO;
+        public static final double TURRET_MOTOR_DEG_PER_COUNT   = 1.9887;
         public static final MotorType TURRET_MOTOR_TYPE         = MotorType.CanSparkMax;
         public static final SparkMaxMotorParams TURRET_SPARKMAX_PARAMS = new SparkMaxMotorParams(true);
         public static final String TURRET_MOTOR_NAME            = SUBSYSTEM_NAME + ".TurretMotor";
         public static final boolean TURRET_MOTOR_INVERTED       = false;
         public static final int TURRET_MOTOR_CANID              = RobotParams.HwConfig.CANID_TURRET_MOTOR;
-        public static final double TURRET_MOTOR_PID_KP          = 0.06;
+        public static final double TURRET_MOTOR_PID_KP          = 0.045;
         public static final double TURRET_MOTOR_PID_KI          = 0.0;  
         public static final double TURRET_MOTOR_PID_KD          = 0.0;  
         public static final double TURRET_MOTOR_PID_KF          = 0.0;  
@@ -236,7 +237,7 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_POS_PRESET_TOLERANCE  = 5.0;
         public static final double[] TURRET_POS_PRESETS         =
             {TURRET_MIN_POS, -135.0, -90.0, -45.0, 0.0, 45.0, 90.0, 135.0, TURRET_MAX_POS};
-        public static final double TURRET_ZERO_CAL_POWER        = 0.2;
+        public static final double TURRET_ZERO_CAL_POWER        = 0.5;
         public static final double TURRET_ZERO_CAL_TIMEOUT      = 6.0;
         public static final double TURRET_STALL_MIN_POWER       = Math.abs(TURRET_ZERO_CAL_POWER) * 0.9;
         public static final double TURRET_STALL_TOLERANCE       = 2.0;          // in degrees
@@ -545,7 +546,7 @@ public class Shooter extends TrcSubsystem
                     .setPidControlParams(
                         Params.TURRET_PID_TOLERANCE, Params.TURRET_PID_SETTLING, Params.TURRET_SOFTWARE_PID_ENABLED),
                 this::getTurretPosition);
-            scaleTurretEncoder(false);
+            scaleTurretEncoder(Params.TURRET_SYNC_MOTOR_ENC);
             // turret.enableMotionProfile(
             //     Params.TURRET_SOFTWARE_PID_ENABLED, Params.TURRET_MAX_VELOCITY, Params.TURRET_MAX_ACCELERATION,
             //     0.0, 0.0, Params.TURRET_PID_TOLERANCE);
@@ -599,9 +600,9 @@ public class Shooter extends TrcSubsystem
      * and scales it to the unit of degrees. If useMotorEnc is true, it enables the absolute encoder, sync it to the
      * motor's relative encoder and disables the absolute encode so it will use the motor's relative encoder.
      *
-     * @param useMotorEnc specifies true to sync to motor's relative encoder and use it.
+     * @param syncMotorEnc specifies true to sync to motor's relative encoder and use it.
      */
-    private void scaleTurretEncoder(boolean useMotorEnc)
+    private void scaleTurretEncoder(boolean syncMotorEnc)
     {
         if (turret != null && Params.TURRET_HAS_ABS_ENC)
         {
@@ -610,15 +611,17 @@ public class Shooter extends TrcSubsystem
             // offset.
             FrcCANSparkMax turretMotor = (FrcCANSparkMax) turret;
             turretMotor.enableAbsoluteEncoder(Params.TURRET_ABS_ENC_INVERTED, Params.TURRET_ABS_ENC_SCALE, null);
-            // Absolute encoder is scaled to degrees.
-            double absEncPos = turretMotor.getMotorPosition();
-            // Convert degrees to motor revolutions.
-            double motorEncPos = absEncPos / Params.TURRET_MOTOR_DEG_PER_COUNT;
-            turret.tracer.traceErr(instanceName, "absEncPos=%f, motorEncPos=%f", absEncPos, motorEncPos);
-            if (useMotorEnc)
+            if (syncMotorEnc)
             {
+                // Absolute encoder is scaled to degrees.
+                double absEncPos = turretMotor.getMotorPosition();
+                // Convert degrees to motor revolutions.
+                double motorEncPos = absEncPos / Params.TURRET_MOTOR_DEG_PER_COUNT;
+                turret.tracer.traceInfo(instanceName, "SyncTurretMotorEnc: absEncPos=%f, motorEncPos=%f", absEncPos, motorEncPos);
                 turretMotor.disableAbsoluteEncoder();
                 turretMotor.resetMotorPosition(motorEncPos);
+                turret.setPositionSensorScaleAndOffset(
+                    Params.TURRET_MOTOR_DEG_PER_COUNT, Params.TURRET_ABS_ENC_POS_OFFSET);
             }
         }
     }   //scaleTurretEncoder
