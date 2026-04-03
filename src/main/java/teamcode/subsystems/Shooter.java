@@ -953,7 +953,7 @@ public class Shooter extends TrcSubsystem
                     alliance,
                     fieldWidthZone <= 1 && alliance == Alliance.Blue ||
                     fieldWidthZone > 1 && alliance == Alliance.Red?
-                        RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
+                        RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:   // TODO: CodeReview - this is wrong!
                         RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE);
             goalTrackingState.shootParamsTable = passbackShootParamsTable;
             // Check for hub shadow zone and trench zone.
@@ -967,8 +967,8 @@ public class Shooter extends TrcSubsystem
                 }
             }
             tracer.traceInfo(
-                instanceName, "PassingBack: alliance=%s, fieldLengthZone=%d, fieldWidthZone=%d.",
-                alliance, fieldLengthZone, fieldWidthZone);
+                instanceName, "PassingBack: alliance=%s, fieldLengthZone=%d, fieldWidthZone=%d, goalFieldPose=%s.",
+                alliance, fieldLengthZone, fieldWidthZone, goalTrackingState.goalFieldPose);
         }
         goalTrackingState.rightShooterAimInfo = null;
 
