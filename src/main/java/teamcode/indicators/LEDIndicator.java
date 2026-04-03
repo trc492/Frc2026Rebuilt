@@ -81,9 +81,9 @@ public class LEDIndicator
         new TrcPriorityIndicator.Pattern(NOT_FOUND, notFoundPattern, 0.5, 0.0),
         new TrcPriorityIndicator.Pattern(INTAKE_ON, intakeOnPattern, 0.25, 0.25),
         new TrcPriorityIndicator.Pattern(APRILTAG_FOUND, aprilTagFoundPattern),
-        new TrcPriorityIndicator.Pattern(DRIVE_FIELD_MODE, driveFieldModePattern),
-        new TrcPriorityIndicator.Pattern(DRIVE_ROBOT_MODE, driveRobotModePattern),
-        new TrcPriorityIndicator.Pattern(DRIVE_INVERTED_MODE, driveInvertedModePattern),
+        new TrcPriorityIndicator.Pattern(DRIVE_FIELD_MODE, driveFieldModePattern, 1.0, 0.0),
+        new TrcPriorityIndicator.Pattern(DRIVE_ROBOT_MODE, driveRobotModePattern, 1.0, 0.0),
+        new TrcPriorityIndicator.Pattern(DRIVE_INVERTED_MODE, driveInvertedModePattern, 1.0, 0.0),
         new TrcPriorityIndicator.Pattern(OFF, offPattern)
         // Lowest priority
     };
