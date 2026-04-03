@@ -154,7 +154,7 @@ public class RobotParams
         // Digital Input/Output ports.
 
         // PWM channels.
-        public static final int NUM_LEDS                        = 150;
+        public static final int NUM_LEDS                        = 209;
         public static final int PWM_CHANNEL_LED                 = 0;
 
         // Relay channels.
