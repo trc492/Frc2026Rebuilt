@@ -221,7 +221,7 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_PID_TOLERANCE         = 3.0;
         public static final double TURRET_PID_SETTLING          = 0.0;
         public static final boolean TURRET_SOFTWARE_PID_ENABLED = false;
-        public static final double TURRET_POWER_LIMIT           = 0.7;
+        public static final double TURRET_POWER_LIMIT           = 1.0;
         public static final double TURRET_POS_OFFSET            = 180.0;
         public static final double TURRET_ENC_RANGE_LOWER       = -180.0;
         public static final double TURRET_ENC_RANGE_UPPER       = 180.0;
@@ -953,8 +953,8 @@ public class Shooter extends TrcSubsystem
                     alliance,
                     fieldWidthZone <= 1 && alliance == Alliance.Blue ||
                     fieldWidthZone > 1 && alliance == Alliance.Red?
-                        RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE:
-                        RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE);
+                        RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
+                        RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE);
             goalTrackingState.shootParamsTable = passbackShootParamsTable;
             // Check for hub shadow zone and trench zone.
             if (fieldLengthZone == 1 || fieldLengthZone == 6 ||

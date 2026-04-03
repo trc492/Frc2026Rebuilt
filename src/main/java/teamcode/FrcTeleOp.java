@@ -50,7 +50,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     protected static final boolean traceButtonEvents = true;
 
     public static final double DEF_DRIVE_NORMAL_SCALE = 1.0;
-    public static final double DEF_DRIVE_SLOW_SCALE = 0.15;
+    public static final double DEF_DRIVE_SLOW_SCALE = 0.25;
     public static final double DEF_TURN_NORMAL_SCALE = 1.00;
     public static final double DEF_TURN_SLOW_SCALE = 0.2;
     //
@@ -820,14 +820,14 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 if (pressed && !robot.autoShootTask.isActive())
                 {
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Start Auto Shoot.");
-                    robot.intakeSubsystem.setIntakeEnabled(true);
+                    //robot.intakeSubsystem.setIntakeEnabled(true);
                     robot.autoShootTask.autoShoot(
                         null, null, false, false, robot.shooterSubsystem.isGoalTrackingEnabled());
                 }
                 else
                 {
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Stop Auto Shoot.");
-                    robot.intakeSubsystem.setIntakeEnabled(false);
+                    //robot.intakeSubsystem.setIntakeEnabled(false);
                     robot.autoShootTask.cancel();
                     robot.shooterSubsystem.resetState();
                 }
