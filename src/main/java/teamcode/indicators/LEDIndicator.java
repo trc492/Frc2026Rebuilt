@@ -38,7 +38,6 @@ import trclib.driverio.TrcPriorityIndicator;
 public class LEDIndicator
 {
     // LED pattern names.
-    public static final String APRILTAG_LOCKED = "AprilTagLocked";
     public static final String APRILTAG_FOUND = "AprilTagFound";
     public static final String YELLOW_BLOB = "YellowBlob";
     public static final String NOT_FOUND = "NotFound";
@@ -48,24 +47,32 @@ public class LEDIndicator
     public static final String DRIVE_INVERTED_MODE = "InvertedMode";
     public static final String OFF = "Off";
 
-    private static final TrcAddressableLED.LedPattern aprilTagLockedPattern =   // Green
-        new TrcAddressableLED.LedPattern(APRILTAG_LOCKED, new FrcColor(0, 32, 0), RobotParams.HwConfig.NUM_LEDS);
-    private static final TrcAddressableLED.LedPattern aprilTagFoundPattern =    // Green
-        new TrcAddressableLED.LedPattern(APRILTAG_FOUND, new FrcColor(0, 32, 0), RobotParams.HwConfig.NUM_LEDS);
-    private static final TrcAddressableLED.LedPattern yellowBlobPattern =       // Yellow
-        new TrcAddressableLED.LedPattern(YELLOW_BLOB, new FrcColor(32, 32, 0), RobotParams.HwConfig.NUM_LEDS);
-    private static final TrcAddressableLED.LedPattern notFoundPattern =         // Red
-        new TrcAddressableLED.LedPattern(NOT_FOUND, new FrcColor(32, 0, 0), RobotParams.HwConfig.NUM_LEDS);
-    private static final TrcAddressableLED.LedPattern intakeOnPattern =         // Magenta
-        new TrcAddressableLED.LedPattern(DRIVE_FIELD_MODE, new FrcColor(32, 0, 32), RobotParams.HwConfig.NUM_LEDS);
-    private static final TrcAddressableLED.LedPattern driveFieldModePattern =   // Cyan
-        new TrcAddressableLED.LedPattern(DRIVE_FIELD_MODE, new FrcColor(0, 32, 32), RobotParams.HwConfig.NUM_LEDS);
-    private static final TrcAddressableLED.LedPattern driveRobotModePattern =   // White
-        new TrcAddressableLED.LedPattern(DRIVE_ROBOT_MODE, new FrcColor(32, 32, 32), RobotParams.HwConfig.NUM_LEDS);
-    private static final TrcAddressableLED.LedPattern driveInvertedModePattern =// Blue
-        new TrcAddressableLED.LedPattern(DRIVE_INVERTED_MODE, new FrcColor(0, 0, 32), RobotParams.HwConfig.NUM_LEDS);
-    private static final TrcAddressableLED.LedPattern offPattern =              // Black
-        new TrcAddressableLED.LedPattern(OFF, new FrcColor(0, 0, 0), RobotParams.HwConfig.NUM_LEDS);
+    private static final int BRIGHTNESS = 128;
+    private static final FrcColor colorBlack = new FrcColor(0, 0, 0);
+    private static final FrcColor colorRed = new FrcColor(BRIGHTNESS, 0, 0);
+    private static final FrcColor colorGreen = new FrcColor(0, BRIGHTNESS, 0);
+    private static final FrcColor colorBlue = new FrcColor(0, 0, BRIGHTNESS);
+    private static final FrcColor colorYellow = new FrcColor(BRIGHTNESS, BRIGHTNESS, 0);
+    private static final FrcColor colorCyan = new FrcColor(0, BRIGHTNESS, BRIGHTNESS);
+    private static final FrcColor colorMagenta = new FrcColor(BRIGHTNESS, 0, BRIGHTNESS);
+    private static final FrcColor colorWhite = new FrcColor(BRIGHTNESS, BRIGHTNESS, BRIGHTNESS);
+
+    private static final TrcAddressableLED.LedPattern aprilTagFoundPattern =
+        new TrcAddressableLED.LedPattern(APRILTAG_FOUND, colorGreen, RobotParams.HwConfig.NUM_LEDS);
+    private static final TrcAddressableLED.LedPattern yellowBlobPattern =
+        new TrcAddressableLED.LedPattern(YELLOW_BLOB, colorYellow, RobotParams.HwConfig.NUM_LEDS);
+    private static final TrcAddressableLED.LedPattern notFoundPattern =
+        new TrcAddressableLED.LedPattern(NOT_FOUND, colorRed, RobotParams.HwConfig.NUM_LEDS);
+    private static final TrcAddressableLED.LedPattern intakeOnPattern =
+        new TrcAddressableLED.LedPattern(DRIVE_FIELD_MODE, colorMagenta, RobotParams.HwConfig.NUM_LEDS);
+    private static final TrcAddressableLED.LedPattern driveFieldModePattern =
+        new TrcAddressableLED.LedPattern(DRIVE_FIELD_MODE, colorCyan, RobotParams.HwConfig.NUM_LEDS);
+    private static final TrcAddressableLED.LedPattern driveRobotModePattern =
+        new TrcAddressableLED.LedPattern(DRIVE_ROBOT_MODE, colorWhite, RobotParams.HwConfig.NUM_LEDS);
+    private static final TrcAddressableLED.LedPattern driveInvertedModePattern =
+        new TrcAddressableLED.LedPattern(DRIVE_INVERTED_MODE, colorBlue, RobotParams.HwConfig.NUM_LEDS);
+    private static final TrcAddressableLED.LedPattern offPattern =
+        new TrcAddressableLED.LedPattern(OFF, colorBlack, RobotParams.HwConfig.NUM_LEDS);
 
     private static final TrcAddressableLED.Pattern[] priorities =
     {
@@ -73,8 +80,7 @@ public class LEDIndicator
         new TrcPriorityIndicator.Pattern(YELLOW_BLOB, yellowBlobPattern, 0.5, 0.0),
         new TrcPriorityIndicator.Pattern(NOT_FOUND, notFoundPattern, 0.5, 0.0),
         new TrcPriorityIndicator.Pattern(INTAKE_ON, intakeOnPattern, 0.25, 0.25),
-        new TrcPriorityIndicator.Pattern(APRILTAG_LOCKED, aprilTagLockedPattern),
-        new TrcPriorityIndicator.Pattern(APRILTAG_FOUND, aprilTagFoundPattern, 0.25, 0.0),
+        new TrcPriorityIndicator.Pattern(APRILTAG_FOUND, aprilTagFoundPattern),
         new TrcPriorityIndicator.Pattern(DRIVE_FIELD_MODE, driveFieldModePattern),
         new TrcPriorityIndicator.Pattern(DRIVE_ROBOT_MODE, driveRobotModePattern),
         new TrcPriorityIndicator.Pattern(DRIVE_INVERTED_MODE, driveInvertedModePattern),
@@ -176,7 +182,6 @@ public class LEDIndicator
     {
         if (pipelineType == null || detectedObj == null)
         {
-            leds[0].setPatternState(APRILTAG_LOCKED, false);
             leds[0].setPatternState(APRILTAG_FOUND, false);
             leds[0].setPatternState(NOT_FOUND, true);
         }
@@ -185,16 +190,16 @@ public class LEDIndicator
             switch (pipelineType)
             {
                 case APRILTAG:
-                    if (Math.abs(Math.toDegrees(Math.atan2(detectedObj.targetPose.x, detectedObj.targetPose.y))) <
-                        Vision.ONTARGET_THRESHOLD)
-                    {
-                        leds[0].setPatternState(APRILTAG_FOUND, false);
-                        leds[0].setPatternState(APRILTAG_LOCKED, true);
-                    }
-                    else
+                    // if (Math.abs(Math.toDegrees(Math.atan2(detectedObj.targetPose.x, detectedObj.targetPose.y))) <
+                    //     Vision.ONTARGET_THRESHOLD)
+                    // {
+                    //     leds[0].setPatternState(APRILTAG_FOUND, false);
+                    //     leds[0].setPatternState(APRILTAG_LOCKED, true);
+                    // }
+                    // else
                     {
                         leds[0].setPatternState(APRILTAG_FOUND, true);
-                        leds[0].setPatternState(APRILTAG_LOCKED, false);
+                        // leds[0].setPatternState(APRILTAG_LOCKED, false);
                     }
                     break;
 
