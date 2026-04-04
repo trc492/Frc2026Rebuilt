@@ -265,6 +265,10 @@ public class RobotParams
             new TrcPose2D(-fieldWidth*3.0/4.0, 78.305, 0.0);
         public static final TrcPose2D BLUE_PASSBACK_SCORETABLE_SIDE =       // (-79.4225,78.305.0,0.0)
             new TrcPose2D(-fieldWidth/4.0, 78.305, 0.0);
+        public static final TrcPose2D RED_PASSBACK_AUDIENCE_SIDE =          // (-238.2675,572.915,0.0)
+            new TrcPose2D(-fieldWidth*3.0/4.0, fieldLength - 78.305, 0.0);
+        public static final TrcPose2D RED_PASSBACK_SCORETABLE_SIDE =        // (-79.4225,572.915,0.0)
+            new TrcPose2D(-fieldWidth/4.0, fieldLength - 78.305, 0.0);
         public static final double HUB_WIDTH                    = 60.0;     // inches
         public static final double deadZoneAngleRad             =           // 19.761664387128421576707179475099 deg
             Math.atan2(fieldWidth/2.0 - Math.abs(BLUE_PASSBACK_SCORETABLE_SIDE.x) - HUB_WIDTH/2.0,  //49.4225

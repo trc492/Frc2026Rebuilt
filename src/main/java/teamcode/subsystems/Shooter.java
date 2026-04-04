@@ -948,13 +948,12 @@ public class Shooter extends TrcSubsystem
         {
             // Passback tracking mode.
             // Check if we should point to the audience side or the scoretable side.
-            goalTrackingState.goalFieldPose =
-                robot.adjustPoseByAlliance(
-                    alliance,
+            TrcPose2D blueGoalPose = 
                     fieldWidthZone <= 1 && alliance == Alliance.Blue ||
                     fieldWidthZone > 1 && alliance == Alliance.Red?
                         RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:   // TODO: CodeReview - this is wrong!
-                        RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE);
+                        RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE;
+            goalTrackingState.goalFieldPose = robot.adjustPoseByAlliance(alliance, blueGoalPose);
             goalTrackingState.shootParamsTable = passbackShootParamsTable;
             // Check for hub shadow zone and trench zone.
             if (fieldLengthZone == 1 || fieldLengthZone == 6 ||
@@ -967,8 +966,9 @@ public class Shooter extends TrcSubsystem
                 }
             }
             tracer.traceInfo(
-                instanceName, "PassingBack: alliance=%s, fieldLengthZone=%d, fieldWidthZone=%d, goalFieldPose=%s.",
-                alliance, fieldLengthZone, fieldWidthZone, goalTrackingState.goalFieldPose);
+                instanceName,
+                "PassingBack: alliance=%s, fieldLengthZone=%d, fieldWidthZone=%d, blueGoalPose= %s, goalFieldPose=%s.",
+                alliance, fieldLengthZone, fieldWidthZone, blueGoalPose, goalTrackingState.goalFieldPose);
         }
         goalTrackingState.rightShooterAimInfo = null;
 
