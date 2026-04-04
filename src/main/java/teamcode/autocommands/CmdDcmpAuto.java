@@ -22,6 +22,8 @@
 
 package teamcode.autocommands;
 
+import java.util.Arrays;
+
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import teamcode.FrcAuto;
 import teamcode.FrcAuto.AutoStartPos;
@@ -163,6 +165,7 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
         }
         else
         {
+            double[] timestamps = new double[5];
             // State nextState;
 
             robot.dashboard.displayPrintf(15, "State: " + state);
@@ -170,8 +173,10 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
             switch (state)
             {
                 case START:
+timestamps[0] = TrcTimer.getModeElapsedTime();
                     // Set robot location according to auto choices.
                     robot.setRobotStartPosition(autoChoices);
+timestamps[1] = TrcTimer.getModeElapsedTime();
                     // Retrieve auto choice options.
                     startPos = autoChoices.getStartPos();
                     alliance = autoChoices.getAlliance();
@@ -182,15 +187,18 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
                     type = autoChoices.getType();
                     // passBack = autoChoices.getPassBack();
                     climb = autoChoices.getClimb();
+timestamps[2] = TrcTimer.getModeElapsedTime();
                     // climbSide = autoChoices.getClimbSide();
                     // neutralZoneCycles = autoChoices.getNeutralZoneCycles();
                     robot.robotBase.purePursuitDrive.getTurnPidCtrl().setNoOscillation(true);
+timestamps[3] = TrcTimer.getModeElapsedTime();
 
                     if (robot.shooterSubsystem != null)
                     {
                         if (Shooter.Params.TURRET_HAS_ABS_ENC)
                         {
                             robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
+timestamps[4] = TrcTimer.getModeElapsedTime();
                         }
                         else
                         {
@@ -224,6 +232,7 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
                     {
                         sm.setState(type != Type.CENTER ? State.NEUTRAL_ZONE_PICKUP: State.PICKUP_DEPOT);
                     }
+robot.globalTracer.traceInfo(moduleName, "DcmpAutoTimestamps=" + Arrays.toString(timestamps));
                     break;
                 
                 case PICKUP_DEPOT:

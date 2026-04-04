@@ -415,6 +415,7 @@ timestamps[2] = TrcTimer.getModeElapsedTime();
                 {
                     autoCommand = new CmdDcmpAuto(robot, autoChoices);
                 }
+timestamps[2] = TrcTimer.getModeElapsedTime();
                 break;
 
             case PP_DRIVE:

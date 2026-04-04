@@ -326,11 +326,13 @@ timestamps[3] = TrcTimer.getModeElapsedTime();
             {
                 robotBase.driveBase.setOdometryEnabled(true, true);
 timestamps[4] = TrcTimer.getModeElapsedTime();
-                // Disable ramp rate control in autonomous.
-                Double rampRate = runMode == RunMode.AUTO_MODE? 0.0: robotInfo.driveOpenLoopRampRate;
-                for (int i = 0; i < robotBase.driveMotors.length; i++)
+                // Set ramp rate control in TeleOp.
+                if (runMode == RunMode.TELEOP_MODE && robotInfo.driveOpenLoopRampRate != null)
                 {
-                    robotBase.driveMotors[i].setOpenLoopRampRate(rampRate);
+                    for (int i = 0; i < robotBase.driveMotors.length; i++)
+                    {
+                        robotBase.driveMotors[i].setOpenLoopRampRate(robotInfo.driveOpenLoopRampRate);
+                    }
                 }
 timestamps[5] = TrcTimer.getModeElapsedTime();
 
