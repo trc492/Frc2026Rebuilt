@@ -284,6 +284,20 @@ public class Robot extends FrcRobot
             pdp.registerEnergyUsedForAllUnregisteredChannels();
         }
         //
+        // Miscellaneous initializations.
+        //
+        // Start trace logging.
+        if (RobotParams.Preferences.useTraceLog)
+        {
+            openTraceLog(FrcMatchInfo.getMatchInfo());
+        }
+        // Enable LostComm detection.
+        if (dashboard.getBoolean(
+                Dashboard.DBKEY_PREFERENCE_COMMSTATUS_MONITOR, RobotParams.Preferences.useCommStatusMonitor))
+        {
+            super.setCommStatusMonitorEnabled(this::commStatusCallback);
+        }
+        //
         // Create Robot Modes.
         //
         setupRobotModes(new FrcTeleOp(this), new FrcAuto(this), new FrcTest(this), new FrcDisabled(this));
@@ -298,15 +312,8 @@ public class Robot extends FrcRobot
     @Override
     public void robotStartMode(RunMode runMode, RunMode prevMode)
     {
-double[] timestamps = new double[9];
+double[] timestamps = new double[8];
 timestamps[0] = TrcTimer.getModeElapsedTime();
-        // Enable LostComm detection.
-        if (dashboard.getBoolean(
-                Dashboard.DBKEY_PREFERENCE_COMMSTATUS_MONITOR, RobotParams.Preferences.useCommStatusMonitor))
-        {
-            super.setCommStatusMonitorEnabled(this::commStatusCallback);
-        }
-
         // Read FMS Match info.
         FrcMatchInfo matchInfo = FrcMatchInfo.getMatchInfo();
         TrcBuildInfo buildInfo = TrcBuildInfo.getBuildInfo();
@@ -316,16 +323,14 @@ timestamps[1] = TrcTimer.getModeElapsedTime();
             // Start trace logging.
             if (RobotParams.Preferences.useTraceLog)
             {
-                openTraceLog(matchInfo);
-timestamps[2] = TrcTimer.getModeElapsedTime();
                 setTraceLogEnabled(true);
-timestamps[3] = TrcTimer.getModeElapsedTime();
+timestamps[2] = TrcTimer.getModeElapsedTime();
             }
             // Start RobotDrive.
             if (robotBase != null)
             {
                 robotBase.driveBase.setOdometryEnabled(true, true);
-timestamps[4] = TrcTimer.getModeElapsedTime();
+timestamps[3] = TrcTimer.getModeElapsedTime();
                 // Set ramp rate control in TeleOp.
                 if (runMode == RunMode.TELEOP_MODE && robotInfo.driveOpenLoopRampRate != null)
                 {
@@ -334,7 +339,7 @@ timestamps[4] = TrcTimer.getModeElapsedTime();
                         robotBase.driveMotors[i].setOpenLoopRampRate(robotInfo.driveOpenLoopRampRate);
                     }
                 }
-timestamps[5] = TrcTimer.getModeElapsedTime();
+timestamps[4] = TrcTimer.getModeElapsedTime();
 
                 if (runMode != RunMode.AUTO_MODE)
                 {
@@ -350,7 +355,7 @@ timestamps[5] = TrcTimer.getModeElapsedTime();
                     }
                 }
             }
-timestamps[6] = TrcTimer.getModeElapsedTime();
+timestamps[5] = TrcTimer.getModeElapsedTime();
             // Zero calibrate it only once. Don't do it again just because we are enabling/disabling robot.
             if (!zeroCalibrated &&
                 dashboard.getBoolean(
@@ -358,13 +363,13 @@ timestamps[6] = TrcTimer.getModeElapsedTime();
             {
                 zeroCalibrate(null, null);
             }
-timestamps[7] = TrcTimer.getModeElapsedTime();
+timestamps[6] = TrcTimer.getModeElapsedTime();
             // Start subsystems.
             if (ledIndicator != null)
             {
                 ledIndicator.reset();
             }
-timestamps[8] = TrcTimer.getModeElapsedTime();
+timestamps[7] = TrcTimer.getModeElapsedTime();
         }
 globalTracer.traceInfo(moduleName, "RobotTimestamps=" + Arrays.toString(timestamps));
         globalTracer.traceInfo(moduleName, matchInfo.eventDate + ": ***** " + runMode + " *****");
@@ -411,7 +416,7 @@ globalTracer.traceInfo(moduleName, "RobotTimestamps=" + Arrays.toString(timestam
         }
         // Stop trace logging.
         setTraceLogEnabled(false);
-        closeTraceLog();
+        closeTraceLog(FrcMatchInfo.getMatchInfo());
     }   //robotStopMode
 
     /**
@@ -595,12 +600,18 @@ globalTracer.traceInfo(moduleName, "RobotTimestamps=" + Arrays.toString(timestam
 
     /**
      * This method closes the trace log if it was opened.
+     *
+     * @param matchInfo specifies the match info from which the trace log file name is derived.
      */
-    public void closeTraceLog()
+    public void closeTraceLog(FrcMatchInfo matchInfo)
     {
         if (traceLogOpened)
         {
-            TrcDbgTrace.closeTraceLog();
+            String fileName = matchInfo.eventName != null?
+                String.format(Locale.US, "%s_%s%03d", matchInfo.eventName, matchInfo.matchType, matchInfo.matchNumber):
+                getCurrentRunMode().name();
+
+            TrcDbgTrace.closeTraceLog(fileName);
             traceLogOpened = false;
         }
     }   //closeTraceLog
