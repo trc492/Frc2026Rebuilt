@@ -350,8 +350,7 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
                     {
                         robot.intakeSubsystem.setIntakeEnabled(false);
                     }
-
-                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.50);
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(isTrench ? 0.50: 0.75);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
                         (i, wp) ->
@@ -398,7 +397,7 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
                             new TrcPose2D[] {outpostTrenchSweep[5], outpostTrenchSweep[6], outpostTrenchSweep[7], outpostTrenchSweep[8], outpostTrenchSweep[9], outpostTrenchSweep[10], outpostTrenchSweep[11], outpostTrenchSweep[12]}:
                             new TrcPose2D[] {outpostBumpSweep[5], outpostBumpSweep[6], outpostBumpSweep[7], outpostBumpSweep[8], outpostBumpSweep[9], outpostBumpSweep[10], outpostBumpSweep[11]};
                     }
-
+                    // robot.robotBase.purePursuitDrive.setRotOutputLimit(0.50);
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.50);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
@@ -406,6 +405,13 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
                         {
                             robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
                             robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
+                            if (!isTrench)
+                            {
+                                if (i == 5)
+                                {
+                                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.75);
+                                }
+                            }
                         },
                         robot.adjustPathByAlliance(alliance, hubPath));
                     sm.waitForSingleEvent(event, State.SHOOT_HUB_FUEL);
