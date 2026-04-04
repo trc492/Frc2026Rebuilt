@@ -298,7 +298,7 @@ public class Robot extends FrcRobot
     @Override
     public void robotStartMode(RunMode runMode, RunMode prevMode)
     {
-double[] timestamps = new double[5];
+double[] timestamps = new double[9];
 timestamps[0] = TrcTimer.getModeElapsedTime();
         // Enable LostComm detection.
         if (dashboard.getBoolean(
@@ -317,19 +317,22 @@ timestamps[1] = TrcTimer.getModeElapsedTime();
             if (RobotParams.Preferences.useTraceLog)
             {
                 openTraceLog(matchInfo);
-                setTraceLogEnabled(true);
-            }
 timestamps[2] = TrcTimer.getModeElapsedTime();
+                setTraceLogEnabled(true);
+timestamps[3] = TrcTimer.getModeElapsedTime();
+            }
             // Start RobotDrive.
             if (robotBase != null)
             {
                 robotBase.driveBase.setOdometryEnabled(true, true);
+timestamps[4] = TrcTimer.getModeElapsedTime();
                 // Disable ramp rate control in autonomous.
                 Double rampRate = runMode == RunMode.AUTO_MODE? 0.0: robotInfo.driveOpenLoopRampRate;
                 for (int i = 0; i < robotBase.driveMotors.length; i++)
                 {
                     robotBase.driveMotors[i].setOpenLoopRampRate(rampRate);
                 }
+timestamps[5] = TrcTimer.getModeElapsedTime();
 
                 if (runMode != RunMode.AUTO_MODE)
                 {
@@ -345,7 +348,7 @@ timestamps[2] = TrcTimer.getModeElapsedTime();
                     }
                 }
             }
-timestamps[3] = TrcTimer.getModeElapsedTime();
+timestamps[6] = TrcTimer.getModeElapsedTime();
             // Zero calibrate it only once. Don't do it again just because we are enabling/disabling robot.
             if (!zeroCalibrated &&
                 dashboard.getBoolean(
@@ -353,12 +356,13 @@ timestamps[3] = TrcTimer.getModeElapsedTime();
             {
                 zeroCalibrate(null, null);
             }
-timestamps[4] = TrcTimer.getModeElapsedTime();
+timestamps[7] = TrcTimer.getModeElapsedTime();
             // Start subsystems.
             if (ledIndicator != null)
             {
                 ledIndicator.reset();
             }
+timestamps[8] = TrcTimer.getModeElapsedTime();
         }
 globalTracer.traceInfo(moduleName, "RobotTimestamps=" + Arrays.toString(timestamps));
         globalTracer.traceInfo(moduleName, matchInfo.eventDate + ": ***** " + runMode + " *****");
