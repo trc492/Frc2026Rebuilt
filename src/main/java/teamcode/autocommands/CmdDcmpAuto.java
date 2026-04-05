@@ -37,6 +37,7 @@ import teamcode.autotasks.TaskAutoClimb.ClimbSide;
 // import teamcode.autotasks.TaskAutoClimb;
 import teamcode.subsystems.Shooter;
 import trclib.pathdrive.TrcPose2D;
+import trclib.pathdrive.TrcPurePursuitDrive;
 import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcRobot;
 import trclib.robotcore.TrcStateMachine;
@@ -244,11 +245,12 @@ robot.globalTracer.traceInfo(moduleName, "DcmpAutoTimestamps=" + Arrays.toString
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
-                        (i, wp) ->
+                        (ctxt, canceled) ->
                         {
-                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
-                            robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
-                            if (i == 1)
+                            TrcPurePursuitDrive.WaypointContext wpCtxt = (TrcPurePursuitDrive.WaypointContext) ctxt;
+                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + wpCtxt.index);
+                            robot.setRelocalizationMode(wpCtxt.index == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
+                            if (wpCtxt.index == 1)
                             {
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.8);
                                 robot.intakeSubsystem.setIntakeEnabled(true);
@@ -328,11 +330,12 @@ robot.globalTracer.traceInfo(moduleName, "DcmpAutoTimestamps=" + Arrays.toString
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
-                        (i, wp) ->
+                        (ctxt, canceled) ->
                         {
-                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
-                            robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
-                            if (i == 2)
+                            TrcPurePursuitDrive.WaypointContext wpCtxt = (TrcPurePursuitDrive.WaypointContext) ctxt;
+                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + wpCtxt.index);
+                            robot.setRelocalizationMode(wpCtxt.index == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
+                            if (wpCtxt.index == 2)
                             {
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.65);
                             }
@@ -359,16 +362,17 @@ robot.globalTracer.traceInfo(moduleName, "DcmpAutoTimestamps=" + Arrays.toString
                     {
                         robot.intakeSubsystem.setIntakeEnabled(false);
                     }
-                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(isTrench ? 0.80: 0.75);
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(isTrench ? 0.8: 0.75);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
-                        (i, wp) ->
+                        (ctxt, canceled) ->
                         {
-                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
-                            robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
+                            TrcPurePursuitDrive.WaypointContext wpCtxt = (TrcPurePursuitDrive.WaypointContext) ctxt;
+                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + wpCtxt.index);
+                            robot.setRelocalizationMode(wpCtxt.index == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
                             if (isTrench)
                             {
-                                if (i == 1)
+                                if (wpCtxt.index == 2)
                                 {
                                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
                                 }
@@ -421,13 +425,14 @@ robot.globalTracer.traceInfo(moduleName, "DcmpAutoTimestamps=" + Arrays.toString
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.75);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
-                        (i, wp) ->
+                        (ctxt, canceled) ->
                         {
-                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
-                            robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
+                            TrcPurePursuitDrive.WaypointContext wpCtxt = (TrcPurePursuitDrive.WaypointContext) ctxt;
+                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + wpCtxt.index);
+                            robot.setRelocalizationMode(wpCtxt.index == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
                             if (!isTrench)
                             {
-                                if (i == 5)
+                                if (wpCtxt.index == 5)
                                 {
                                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.75);
                                 }
@@ -436,7 +441,7 @@ robot.globalTracer.traceInfo(moduleName, "DcmpAutoTimestamps=" + Arrays.toString
                         robot.adjustPathByAlliance(alliance, hubPath));
                     sm.waitForSingleEvent(event, State.SHOOT_HUB_FUEL);
                     break;
-                
+
                 // case RETURN_TO_SCORE_HUB:
                 //     if (atDepot)
                 //     {

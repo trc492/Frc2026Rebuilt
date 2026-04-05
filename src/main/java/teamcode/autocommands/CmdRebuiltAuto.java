@@ -33,6 +33,7 @@ import teamcode.RobotParams;
 import teamcode.autotasks.TaskAutoClimb;
 import teamcode.subsystems.Shooter;
 import trclib.pathdrive.TrcPose2D;
+import trclib.pathdrive.TrcPurePursuitDrive;
 import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcRobot;
 import trclib.robotcore.TrcStateMachine;
@@ -258,11 +259,12 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
-                        (i, wp) ->
+                        (ctxt, canceled) ->
                         {
-                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
-                            robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
-                            if (i == 2)
+                            TrcPurePursuitDrive.WaypointContext wpCtxt = (TrcPurePursuitDrive.WaypointContext) ctxt;
+                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + wpCtxt.index);
+                            robot.setRelocalizationMode(wpCtxt.index == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
+                            if (wpCtxt.index == 2)
                             {
                                 // At depotPickupPose.
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.3);
@@ -290,11 +292,12 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.6);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
-                        (i, wp) ->
+                        (ctxt, canceled) ->
                         {
-                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
-                            robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
-                            if (i == 1)
+                            TrcPurePursuitDrive.WaypointContext wpCtxt = (TrcPurePursuitDrive.WaypointContext) ctxt;
+                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + wpCtxt.index);
+                            robot.setRelocalizationMode(wpCtxt.index == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
+                            if (wpCtxt.index == 1)
                             {
                                 // At intermediatePose.
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.3);
@@ -409,11 +412,12 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.65);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
-                        (i, wp) ->
+                        (ctxt, canceled) ->
                         {
-                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
-                            robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
-                            if (i == 2)
+                            TrcPurePursuitDrive.WaypointContext wpCtxt = (TrcPurePursuitDrive.WaypointContext) ctxt;
+                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + wpCtxt.index);
+                            robot.setRelocalizationMode(wpCtxt.index == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
+                            if (wpCtxt.index == 2)
                             {
                                 // At pickupPose.
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.4);
@@ -442,17 +446,18 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     // Going back the same route we came, just in reverse.
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
-                        (i, wp) ->
+                        (ctxt, canceled) ->
                         {
-                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
-                            robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
-                            if (i == 4 || i == -1)
+                            TrcPurePursuitDrive.WaypointContext wpCtxt = (TrcPurePursuitDrive.WaypointContext) ctxt;
+                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + wpCtxt.index);
+                            robot.setRelocalizationMode(wpCtxt.index == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
+                            if (wpCtxt.index == 4 || wpCtxt.index == -1)
                             {
                                 //robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
                                 robot.intakeSubsystem.setIntakeEnabled(true);
                                 robot.autoShootTask.autoShoot(null, null, false, true, false);
                             } 
-                            else if ((i == 5 || i == -1) && atDepot)
+                            else if ((wpCtxt.index == 5 || wpCtxt.index == -1) && atDepot)
                             {
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.85);
                             }
