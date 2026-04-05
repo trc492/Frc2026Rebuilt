@@ -336,20 +336,35 @@ public class RobotParams
             new TrcPose2D(-107.08, 119.82, 135.00)
         };
 
+        // public static final TrcPose2D[] blueDoubleSweepDepotTrenchPath = new TrcPose2D[] {
+        //     new TrcPose2D(-295.80, 281.61, 90.00),
+        //     new TrcPose2D(-261.80, 301.61, 90.00),
+        //     new TrcPose2D(-166.80, 301.61, 90.00),
+        //     new TrcPose2D(-285.80, 301.61, 0.00),
+        //     new TrcPose2D(-292.80, 147.73, 0.00),
+        //     new TrcPose2D(-292.80, 257.41, 0.00),
+        //     new TrcPose2D(-187.68, 268.61, 90.00),
+        //     new TrcPose2D(-139.89, 246.89, 180.00),
+        //     new TrcPose2D(-186.60, 232.34, -90.00),
+        //     new TrcPose2D(-235.47, 227.34, -90.00),
+        //     new TrcPose2D(-275.60, 270.81, -90.00),
+        //     new TrcPose2D(-290.20, 250.01, 0.00),
+        //     new TrcPose2D(-293.52, 147.73, 0.00)
+        // };
+
         public static final TrcPose2D[] blueDoubleSweepDepotTrenchPath = new TrcPose2D[] {
             new TrcPose2D(-295.80, 281.61, 90.00),
             new TrcPose2D(-261.80, 301.61, 90.00),
             new TrcPose2D(-166.80, 301.61, 90.00),
             new TrcPose2D(-285.80, 301.61, 0.00),
             new TrcPose2D(-292.80, 147.73, 0.00),
-            new TrcPose2D(-292.80, 257.41, 0.00),
-            new TrcPose2D(-187.68, 268.61, 90.00),
-            new TrcPose2D(-139.89, 246.89, 180.00),
-            new TrcPose2D(-186.60, 232.34, -90.00),
-            new TrcPose2D(-235.47, 227.34, -90.00),
-            new TrcPose2D(-275.60, 270.81, -90.00),
-            new TrcPose2D(-290.20, 250.01, 0.00),
-            new TrcPose2D(-293.52, 147.73, 0.00)
+            new TrcPose2D(-289.23, 241.46, 0.00),
+            new TrcPose2D(-229.50, 230.60, 90.00),
+            new TrcPose2D(-149.12, 229.51, 90.00),
+            new TrcPose2D(-149.12, 281.65, 0.00),
+            new TrcPose2D(-234.93, 278.93, -90.00),
+            new TrcPose2D(-296.84, 267.53, 0.00),
+            new TrcPose2D(-296.29, 138.28, 0.00)
         };
 
         public static final TrcPose2D[] blueDoubleSweepOutpostTrenchPath = new TrcPose2D[] {
