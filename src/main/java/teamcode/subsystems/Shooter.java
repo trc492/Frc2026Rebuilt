@@ -762,8 +762,8 @@ public class Shooter extends TrcSubsystem
         // Retract hood, fire and forget.
         TrcEvent leftTiltEvent = new TrcEvent("stopLeftTilt");
         TrcEvent rightTiltEvent = new TrcEvent("stopRightTilt");
-        leftTiltEvent.setCallback(this::stopTiltCallback, "Left");
-        rightTiltEvent.setCallback(this::stopTiltCallback, "Right");
+        leftTiltEvent.setCallback(this::stopTiltCallback, "StopLeftTilt");
+        rightTiltEvent.setCallback(this::stopTiltCallback, "StopRightTilt");
         if (leftShooter != null) leftShooter.setTiltAngle(null, Params.TILT_MIN_POS, leftTiltEvent, 0.0);
         if (rightShooter != null) rightShooter.setTiltAngle(null, Params.TILT_MIN_POS, rightTiltEvent, 0.0);
     }   //stopTilt
@@ -776,9 +776,14 @@ public class Shooter extends TrcSubsystem
      */
     private void stopTiltCallback(Object ctxt, boolean canceled)
     {
+        String who = (String) ctxt;
         if (canceled)
         {
-            tracer.traceErr(instanceName, "Stop%sTilt was canceled.", (String) ctxt);
+            tracer.traceErr(instanceName, who + " was canceled.");
+        }
+        else
+        {
+            tracer.traceInfo(instanceName, who + " was completed.");
         }
     }   //stopTiltCallback
 
