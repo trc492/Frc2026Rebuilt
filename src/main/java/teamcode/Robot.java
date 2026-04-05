@@ -284,11 +284,6 @@ public class Robot extends FrcRobot
         //
         // Miscellaneous initializations.
         //
-        // Start trace logging.
-        if (RobotParams.Preferences.useTraceLog)
-        {
-            openTraceLog(FrcMatchInfo.getMatchInfo());
-        }
         // Enable LostComm detection.
         if (dashboard.getBoolean(
                 Dashboard.DBKEY_PREFERENCE_COMMSTATUS_MONITOR, RobotParams.Preferences.useCommStatusMonitor))
@@ -323,7 +318,7 @@ timestamps[1] = TrcTimer.getModeElapsedTime();
                 // Entering Disabled mode, close previous trace log and re-open a new trace log for the next RunMode.
                 // But don't enable trace logging because we don't want to log Disabled mode.
                 closeTraceLog(matchInfo, prevMode);
-                openTraceLog(matchInfo);
+                openTraceLog();
             }
         }
         else
@@ -586,18 +581,12 @@ globalTracer.traceInfo(moduleName, "RobotTimestamps=" + Arrays.toString(timestam
      * This method creates and opens the trace log with the file name derived from the given match info.
      * Note that the trace log is disabled after it is opened. The caller must explicitly call setTraceLogEnabled
      * to enable/disable it.
-     *
-     * @param matchInfo specifies the match info from which the trace log file name is derived.
      */
-    public void openTraceLog(FrcMatchInfo matchInfo)
+    public void openTraceLog()
     {
         if (!TrcDbgTrace.isTraceLogOpened())
         {
-            String fileName = matchInfo.eventName != null?
-                String.format(Locale.US, "%s_%s%03d", matchInfo.eventName, matchInfo.matchType, matchInfo.matchNumber):
-                null;
-
-            TrcDbgTrace.openTraceLog(RobotParams.Robot.teamFolderPath + RobotParams.Robot.LOG_FOLDER_NAME, fileName);
+            TrcDbgTrace.openTraceLog(RobotParams.Robot.teamFolderPath + RobotParams.Robot.LOG_FOLDER_NAME, null);
         }
     }   //openTraceLog
 
@@ -617,7 +606,9 @@ globalTracer.traceInfo(moduleName, "RobotTimestamps=" + Arrays.toString(timestam
                     matchInfo.eventName, matchInfo.matchType, matchInfo.matchNumber, prevRunMode.name()):
                 prevRunMode.name();
 
-            TrcDbgTrace.closeTraceLog(prevRunMode != RunMode.INVALID_MODE? fileName: null);
+            TrcDbgTrace.closeTraceLog(
+                prevRunMode != RunMode.INVALID_MODE?
+                    TrcTimer.getCurrentTimeString() + "!" + fileName: null);
         }
     }   //closeTraceLog
 
