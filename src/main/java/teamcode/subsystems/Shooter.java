@@ -1064,7 +1064,8 @@ public class Shooter extends TrcSubsystem
                 // Do robot motion compensation if enabled (aka SOTM).
                 if (dashboard.getBoolean(
                         Dashboard.DBKEY_SHOOTER_USE_MOTION_COMPENSATION,
-                        RobotParams.Preferences.useMotionCompensation))
+                        RobotParams.Preferences.useMotionCompensation) &&
+                    robot.autoShootTask != null && robot.autoShootTask.isActive())
                 {
                     // Compensate for robot motion.
                     TargetInfo targetInfo = leftShooter.compensateRobotMotion(
