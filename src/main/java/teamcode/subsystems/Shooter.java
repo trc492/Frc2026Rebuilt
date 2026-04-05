@@ -760,9 +760,27 @@ public class Shooter extends TrcSubsystem
     public void stopTilt()
     {
         // Retract hood, fire and forget.
-        if (leftShooter != null) leftShooter.setTiltAngle(Params.TILT_MIN_POS);
-        if (rightShooter != null) rightShooter.setTiltAngle(Params.TILT_MIN_POS);
+        TrcEvent leftTiltEvent = new TrcEvent("stopLeftTilt");
+        TrcEvent rightTiltEvent = new TrcEvent("stopRightTilt");
+        leftTiltEvent.setCallback(this::stopTiltCallback, "Left");
+        rightTiltEvent.setCallback(this::stopTiltCallback, "Right");
+        if (leftShooter != null) leftShooter.setTiltAngle(null, Params.TILT_MIN_POS, leftTiltEvent, 0.0);
+        if (rightShooter != null) rightShooter.setTiltAngle(null, Params.TILT_MIN_POS, rightTiltEvent, 0.0);
     }   //stopTilt
+
+    /**
+     * This method is called if stopTilt was completed or canceled.
+     *
+     * @param ctxt specifies a string indicating the callback is for the left or the right shooter.
+     * @param canceled specifies true if the operation was canceled.
+     */
+    private void stopTiltCallback(Object ctxt, boolean canceled)
+    {
+        if (canceled)
+        {
+            tracer.traceErr(instanceName, "Stop%sTilt was canceled.", (String) ctxt);
+        }
+    }   //stopTiltCallback
 
     /**
      * This method stops both the left right pan motors.
