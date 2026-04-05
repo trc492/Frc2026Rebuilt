@@ -370,15 +370,15 @@ public class RobotParams
 
         public static final TrcPose2D[] blueDoubleSweepDepotTrenchPath = new TrcPose2D[] {
             new TrcPose2D(-295.80, 281.61, 90.00),
-            new TrcPose2D(-261.80, 301.61, 90.00),
-            new TrcPose2D(-166.80, 301.61, 90.00),
-            new TrcPose2D(-281.80, 301.61, 0.00),
-            new TrcPose2D(-292.80, 147.73, 0.00),
+            new TrcPose2D(-261.80, 311.61, 110.00),
+            new TrcPose2D(-166.80, 311.61, 110.00),
+            new TrcPose2D(-278.80, 301.61, 0.00),
+            new TrcPose2D(-292.80, 142.73, 0.00),
             new TrcPose2D(-293.58, 233.32, 0.00),
-            new TrcPose2D(-249.59, 226.80, 90.00),
-            new TrcPose2D(-149.12, 229.51, 90.00),
-            new TrcPose2D(-104.05, 251.24, 0.00),
-            new TrcPose2D(-147.93, 274.59, -90.00),
+            new TrcPose2D(-249.59, 235.80, 90.00),
+            new TrcPose2D(-149.12 - 15.00, 235.80, 90.00),
+            new TrcPose2D(-104.05 - 15.00, 251.24, 0.00),
+            new TrcPose2D(-147.93 - 15.00, 274.59, -90.00),
             new TrcPose2D(-253.39, 280.56, -90.00),
             new TrcPose2D(-296.84, 267.53, 0.00),
             new TrcPose2D(-296.29, 138.28, 0.00)
