@@ -372,7 +372,7 @@ robot.globalTracer.traceInfo(moduleName, "DcmpAutoTimestamps=" + Arrays.toString
                             robot.setRelocalizationMode(wpCtxt.index == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
                             if (isTrench)
                             {
-                                if (wpCtxt.index == 2)
+                                if (wpCtxt.index == 1)
                                 {
                                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
                                 }
