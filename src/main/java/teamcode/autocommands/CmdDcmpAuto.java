@@ -408,7 +408,7 @@ robot.globalTracer.traceInfo(moduleName, "DcmpAutoTimestamps=" + Arrays.toString
                     if (atDepot)
                     {
                         hubPath = isTrench ?
-                            new TrcPose2D[] {depotTrenchSweep[5], depotTrenchSweep[6], depotTrenchSweep[7], depotTrenchSweep[8], depotTrenchSweep[9], depotTrenchSweep[10], depotTrenchSweep[11], depotTrenchSweep[12]}:
+                            new TrcPose2D[] {depotTrenchSweep[5], depotTrenchSweep[6], depotTrenchSweep[7], depotTrenchSweep[8], depotTrenchSweep[9], depotTrenchSweep[10], depotTrenchSweep[11]}:
                             new TrcPose2D[] {depotBumpSweep[5], depotBumpSweep[6], depotBumpSweep[7], depotBumpSweep[8], depotBumpSweep[9], depotBumpSweep[10], depotBumpSweep[11]};
                     }
                     else
@@ -418,7 +418,7 @@ robot.globalTracer.traceInfo(moduleName, "DcmpAutoTimestamps=" + Arrays.toString
                             new TrcPose2D[] {outpostBumpSweep[5], outpostBumpSweep[6], outpostBumpSweep[7], outpostBumpSweep[8], outpostBumpSweep[9], outpostBumpSweep[10], outpostBumpSweep[11]};
                     }
                     // robot.robotBase.purePursuitDrive.setRotOutputLimit(0.50);
-                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.50);
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.75);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
                         (i, wp) ->
