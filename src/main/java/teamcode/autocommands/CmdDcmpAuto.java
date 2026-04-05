@@ -325,7 +325,7 @@ robot.globalTracer.traceInfo(moduleName, "DcmpAutoTimestamps=" + Arrays.toString
                         robot.intakeSubsystem.setIntakeEnabled(true);
                     }
 
-                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.50);
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
                         (i, wp) ->
@@ -359,13 +359,20 @@ robot.globalTracer.traceInfo(moduleName, "DcmpAutoTimestamps=" + Arrays.toString
                     {
                         robot.intakeSubsystem.setIntakeEnabled(false);
                     }
-                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(isTrench ? 0.50: 0.75);
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(isTrench ? 0.65: 0.75);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
                         (i, wp) ->
                         {
                             robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + i);
                             robot.setRelocalizationMode(i == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
+                            if (isTrench)
+                            {
+                                if (i == 2)
+                                {
+                                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
+                                }
+                            }
                         },
                         robot.adjustPathByAlliance(alliance, neutralZoneReturnPath));
                     sm.waitForSingleEvent(event, State.SHOOT_NEUTRAL_FUEL);
@@ -389,6 +396,10 @@ robot.globalTracer.traceInfo(moduleName, "DcmpAutoTimestamps=" + Arrays.toString
                     break;
                 
                 case HUB_PICKUP:
+                    if (robot.autoShootTask != null)
+                    {
+                        robot.autoShootTask.cancel();
+                    }
                     if (robot.shooterSubsystem != null)
                     {
                         robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
