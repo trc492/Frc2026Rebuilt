@@ -59,7 +59,7 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
         GO_TO_CLIMB_POS,
         AUTO_CLIMB,
         NEUTRAL_ZONE_PICKUP,
-        RETURN_TO_SCORE_NEUTRAL,
+        // RETURN_TO_SCORE_NEUTRAL,
         SHOOT_NEUTRAL_FUEL,
         HUB_PICKUP,
         // RETURN_TO_SCORE_HUB,
@@ -88,7 +88,7 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
     private SweepDistance sweepDistance;
 
     private TrcPose2D[] neutralZonePath = null;
-    private TrcPose2D[] neutralZoneReturnPath = null;
+    // private TrcPose2D[] neutralZoneReturnPath = null;
     private TrcPose2D[] hubPath = null;
     // private TrcPose2D[] hubReturnPath = null;
 
@@ -335,7 +335,7 @@ robot.globalTracer.traceInfo(moduleName, "DcmpAutoTimestamps=" + Arrays.toString
                     }
 
                     TrcPose2D[] adjustedFullPath = getAdjustedSweepPath(fullPath, sweepDistance);
-                    neutralZonePath = new TrcPose2D[] {adjustedFullPath[0], adjustedFullPath[1], adjustedFullPath[2]};
+                    neutralZonePath = new TrcPose2D[] {adjustedFullPath[0], adjustedFullPath[1], adjustedFullPath[2], adjustedFullPath[3], adjustedFullPath[4]};
 
                     // if (atDepot)
                     // {
@@ -368,48 +368,57 @@ robot.globalTracer.traceInfo(moduleName, "DcmpAutoTimestamps=" + Arrays.toString
                             {
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.65);
                             }
-                        },
-                        robot.adjustPathByAlliance(alliance, neutralZonePath));
-                    sm.waitForSingleEvent(event, State.RETURN_TO_SCORE_NEUTRAL);
-                    break;
-                
-                case RETURN_TO_SCORE_NEUTRAL:
-                    if (atDepot)
-                    {
-                        neutralZoneReturnPath = isTrench ?
-                            new TrcPose2D[] {depotTrenchSweep[3], depotTrenchSweep[4]}:
-                            new TrcPose2D[] {depotBumpSweep[3], depotBumpSweep[4]};
-                    }
-                    else
-                    {
-                        neutralZoneReturnPath = isTrench ?
-                            new TrcPose2D[] {outpostTrenchSweep[3], outpostTrenchSweep[4]}:
-                            new TrcPose2D[] {outpostBumpSweep[3], outpostBumpSweep[4]};
-                    }
-
-                    if (robot.intakeSubsystem != null)
-                    {
-                        robot.intakeSubsystem.setIntakeEnabled(false);
-                    }
-                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(isTrench ? 0.8: 0.75);
-                    robot.robotBase.purePursuitDrive.start(
-                        null, event, 0.0, false,
-                        (ctxt, canceled) ->
-                        {
-                            TrcPurePursuitDrive.WaypointContext wpCtxt = (TrcPurePursuitDrive.WaypointContext) ctxt;
-                            robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + wpCtxt.index);
-                            robot.setRelocalizationMode(wpCtxt.index == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
-                            if (isTrench)
+                            if (wpCtxt.index == 3)
                             {
-                                if (wpCtxt.index == 1)
-                                {
-                                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
-                                }
+                                robot.intakeSubsystem.setIntakeEnabled(false);
+                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.8);
+                            }
+                            if (wpCtxt.index == 4)
+                            {
+                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
                             }
                         },
-                        robot.adjustPathByAlliance(alliance, neutralZoneReturnPath));
+                        robot.adjustPathByAlliance(alliance, neutralZonePath));
                     sm.waitForSingleEvent(event, State.SHOOT_NEUTRAL_FUEL);
                     break;
+                
+                // case RETURN_TO_SCORE_NEUTRAL:
+                //     if (atDepot)
+                //     {
+                //         neutralZoneReturnPath = isTrench ?
+                //             new TrcPose2D[] {depotTrenchSweep[3], depotTrenchSweep[4]}:
+                //             new TrcPose2D[] {depotBumpSweep[3], depotBumpSweep[4]};
+                //     }
+                //     else
+                //     {
+                //         neutralZoneReturnPath = isTrench ?
+                //             new TrcPose2D[] {outpostTrenchSweep[3], outpostTrenchSweep[4]}:
+                //             new TrcPose2D[] {outpostBumpSweep[3], outpostBumpSweep[4]};
+                //     }
+
+                //     if (robot.intakeSubsystem != null)
+                //     {
+                //         robot.intakeSubsystem.setIntakeEnabled(false);
+                //     }
+                //     robot.robotBase.purePursuitDrive.setMoveOutputLimit(isTrench ? 0.8: 0.75);
+                //     robot.robotBase.purePursuitDrive.start(
+                //         null, event, 0.0, false,
+                //         (ctxt, canceled) ->
+                //         {
+                //             TrcPurePursuitDrive.WaypointContext wpCtxt = (TrcPurePursuitDrive.WaypointContext) ctxt;
+                //             robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + wpCtxt.index);
+                //             robot.setRelocalizationMode(wpCtxt.index == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
+                //             if (isTrench)
+                //             {
+                //                 if (wpCtxt.index == 1)
+                //                 {
+                //                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
+                //                 }
+                //             }
+                //         },
+                //         robot.adjustPathByAlliance(alliance, neutralZoneReturnPath));
+                //     sm.waitForSingleEvent(event, State.SHOOT_NEUTRAL_FUEL);
+                //     break;
                 
                 case SHOOT_NEUTRAL_FUEL:
                     if (robot.intakeSubsystem != null)
