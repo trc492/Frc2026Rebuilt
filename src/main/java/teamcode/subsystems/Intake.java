@@ -57,7 +57,7 @@ public class Intake extends TrcSubsystem
         public static final double INTAKE_MOTOR_STATOR_LIMIT    = 100.0;
         public static final boolean INTAKE_FOC_ENABLED          = true;
         // Intake Parameters
-        public static final double INTAKE_POWER                 = 0.7;
+        public static final double INTAKE_POWER                 = 0.65;
 
         // Deployer:
         // PID Parameters

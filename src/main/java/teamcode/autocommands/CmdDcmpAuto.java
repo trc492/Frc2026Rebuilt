@@ -438,10 +438,10 @@ robot.globalTracer.traceInfo(moduleName, "DcmpAutoTimestamps=" + Arrays.toString
                     break;
                 
                 case HUB_PICKUP:
-                    // if (robot.autoShootTask != null)
-                    // {
-                    //     robot.autoShootTask.cancel();
-                    // }
+                    if (robot.autoShootTask != null)
+                    {
+                        robot.autoShootTask.cancel();
+                    }
                     if (robot.shooterSubsystem != null)
                     {
                         robot.shooterSubsystem.enableGoalTracking(false, false, true, true);

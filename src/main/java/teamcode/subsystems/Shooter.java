@@ -760,6 +760,7 @@ public class Shooter extends TrcSubsystem
     public void stopTilt()
     {
         // Retract hood, fire and forget.
+        tracer.traceErr(instanceName, "StopTilt is called");
         TrcEvent leftTiltEvent = new TrcEvent("stopLeftTilt");
         TrcEvent rightTiltEvent = new TrcEvent("stopRightTilt");
         leftTiltEvent.setCallback(this::stopTiltCallback, "StopLeftTilt");
@@ -783,7 +784,7 @@ public class Shooter extends TrcSubsystem
         }
         else
         {
-            tracer.traceInfo(instanceName, who + " was completed.");
+            tracer.traceErr(instanceName, who + " was completed.");
         }
     }   //stopTiltCallback
 

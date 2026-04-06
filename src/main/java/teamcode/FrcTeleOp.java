@@ -50,7 +50,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     protected static final boolean traceButtonEvents = true;
 
     public static final double DEF_DRIVE_NORMAL_SCALE = 1.0;
-    public static final double DEF_DRIVE_SLOW_SCALE = 0.25;
+    public static final double DEF_DRIVE_SLOW_SCALE = 0.2;
     public static final double DEF_TURN_NORMAL_SCALE = 0.75;
     public static final double DEF_TURN_SLOW_SCALE = 0.2;
     //
