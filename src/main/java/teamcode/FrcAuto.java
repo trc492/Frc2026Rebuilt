@@ -355,6 +355,8 @@ public class FrcAuto implements TrcRobot.RobotMode
 
     public static final AutoChoices autoChoices = new AutoChoices();
     private final Robot robot;
+    private final TrcRobot.RobotCommand rebuiltAuto;
+    private final TrcRobot.RobotCommand dcmpAuto;
     private TrcRobot.RobotCommand autoCommand;
 
     /**
@@ -368,6 +370,8 @@ public class FrcAuto implements TrcRobot.RobotMode
         // Create and initialize global objects.
         //
         this.robot = robot;
+        rebuiltAuto = new CmdRebuiltAuto(robot, autoChoices);
+        dcmpAuto = new CmdDcmpAuto(robot, autoChoices);
     }   //FrcAuto
 
     /**
@@ -424,7 +428,7 @@ timestamps[1] = TrcTimer.getModeElapsedTime();
             case REBUILT_AUTO:
                 if (robot.robotBase != null)
                 {
-                    autoCommand = new CmdRebuiltAuto(robot, autoChoices);
+                    autoCommand = rebuiltAuto;
                 }
 timestamps[2] = TrcTimer.getModeElapsedTime();
                 break;
@@ -432,7 +436,7 @@ timestamps[2] = TrcTimer.getModeElapsedTime();
             case DCMP_AUTO:
                 if (robot.robotBase != null)
                 {
-                    autoCommand = new CmdDcmpAuto(robot, autoChoices);
+                    autoCommand = dcmpAuto;
                 }
 timestamps[2] = TrcTimer.getModeElapsedTime();
 robot.globalTracer.traceErr(moduleName, "AutoTimestamps=" + Arrays.toString(timestamps));
