@@ -396,8 +396,8 @@ public class RobotParams
             new TrcPose2D(-198.64, 251.24, 0.00),
             new TrcPose2D(-154.76, 274.59, 90.00),
             new TrcPose2D(-64.30, 280.56, 90.00),
-            new TrcPose2D(-20.85, 267.53, 0.00),
-            new TrcPose2D(-21.40, 151.73, 0.00)
+            new TrcPose2D(-17.85, 267.53, 0.00),
+            new TrcPose2D(-17.40, 151.73, 0.00)
         };
 
         // public static final TrcPose2D[] blueDoubleSweepDepotBumpPath = new TrcPose2D[] {
@@ -428,7 +428,7 @@ public class RobotParams
             new TrcPose2D(-162.93, 274.59, -90.00),
             new TrcPose2D(-225.93, 274.59, -90.00),
             new TrcPose2D(-225.18, 231.14, -45.00),
-            new TrcPose2D(-225.09, 60.70, -45.00)
+            new TrcPose2D(-225.09, 75.70, -45.00)
         };
 
         public static final TrcPose2D[] blueDoubleSweepOutpostBumpPath = new TrcPose2D[] {
@@ -444,7 +444,7 @@ public class RobotParams
             new TrcPose2D(-154.76, 274.59, 90.00),
             new TrcPose2D(-91.76, 274.59, 90.00),
             new TrcPose2D(-92.51, 231.14, 45.00),
-            new TrcPose2D(-92.60, 60.70, 45.00)
+            new TrcPose2D(-92.60, 75.70, 45.00)
         };
         
     }   //class Game
