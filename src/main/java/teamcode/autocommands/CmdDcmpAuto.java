@@ -373,7 +373,7 @@ robot.globalTracer.traceErr(moduleName, "DcmpSTARTTimestamps=" + Arrays.toString
                             robot.setRelocalizationMode(wpCtxt.index == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
                             if (wpCtxt.index == 2)
                             {
-                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.65);
+                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.7);
                             }
                             if (wpCtxt.index == 3)
                             {
@@ -471,7 +471,7 @@ robot.globalTracer.traceErr(moduleName, "DcmpSTARTTimestamps=" + Arrays.toString
                             new TrcPose2D[] {outpostBumpSweep[5], outpostBumpSweep[6], outpostBumpSweep[7], outpostBumpSweep[8], outpostBumpSweep[9], outpostBumpSweep[10], outpostBumpSweep[11], outpostBumpSweep[12], hubOutpostExtraPose};
                     }
                     // robot.robotBase.purePursuitDrive.setRotOutputLimit(0.50);
-                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.75);
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.8);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
                         (ctxt, canceled) ->
