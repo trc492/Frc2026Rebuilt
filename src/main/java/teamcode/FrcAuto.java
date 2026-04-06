@@ -435,6 +435,7 @@ timestamps[2] = TrcTimer.getModeElapsedTime();
                     autoCommand = new CmdDcmpAuto(robot, autoChoices);
                 }
 timestamps[2] = TrcTimer.getModeElapsedTime();
+robot.globalTracer.traceErr(moduleName, "AutoTimestamps=" + Arrays.toString(timestamps));
                 break;
 
             case PP_DRIVE:
@@ -480,7 +481,6 @@ timestamps[2] = TrcTimer.getModeElapsedTime();
                 autoCommand = null;
                 break;
         }
-        robot.globalTracer.traceInfo(moduleName, "AutoTimestamps=" + Arrays.toString(timestamps));
     }   //startMode
 
     /**

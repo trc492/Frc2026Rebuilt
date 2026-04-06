@@ -371,7 +371,7 @@ timestamps[6] = TrcTimer.getModeElapsedTime();
             }
 timestamps[7] = TrcTimer.getModeElapsedTime();
         }
-globalTracer.traceInfo(moduleName, "RobotTimestamps=" + Arrays.toString(timestamps));
+globalTracer.traceErr(moduleName, "RobotTimestamps=" + Arrays.toString(timestamps));
         globalTracer.traceInfo(moduleName, matchInfo.eventDate + ": ***** " + runMode + " *****");
         globalTracer.traceInfo(moduleName, "<BuildInfo " + buildInfo + " />");
     }   //robotStartMode
