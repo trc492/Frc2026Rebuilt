@@ -22,6 +22,8 @@
 
 package teamcode.subsystems;
 
+import java.util.Arrays;
+
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frclib.driverio.FrcDashboard;
 import frclib.motor.FrcCANSparkMax.SparkMaxMotorParams;
@@ -1008,21 +1010,27 @@ public class Shooter extends TrcSubsystem
      */
     public void enableGoalTracking(TrcShooter.GoalTrackingParams goalTrackingParams, boolean noPassback)
     {
+double[] timestamps = new double[4];
+timestamps[0] = TrcTimer.getCurrentTime();
         synchronized (goalTrackingState)
         {
             goalTrackingState.goalTrackingParams = goalTrackingParams;
             goalTrackingState.noPassback = noPassback;
             setupGoalTrackingMode();
+timestamps[1] = TrcTimer.getCurrentTime();
 
             if (leftShooter != null)
             {
                 leftShooter.enableGoalTracking(goalTrackingState.goalTrackingParams, this::getLeftShooterAimInfo);
             }
+timestamps[2] = TrcTimer.getCurrentTime();
 
             if (rightShooter != null)
             {
                 rightShooter.enableGoalTracking(goalTrackingState.goalTrackingParams, this::getRightShooterAimInfo);
             }
+timestamps[3] = TrcTimer.getCurrentTime();
+tracer.traceErr(instanceName, "EnableGoalTrackingTimestamps=" + Arrays.toString(timestamps));
         }
     }   //enableGoalTracking
 

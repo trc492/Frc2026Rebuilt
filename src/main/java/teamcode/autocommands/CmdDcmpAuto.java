@@ -122,6 +122,8 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
      */
     public CmdDcmpAuto(Robot robot, FrcAuto.AutoChoices autoChoices)
     {
+double[] timestamps = new double[2];
+timestamps[0] = TrcTimer.getModeElapsedTime();
         this.robot = robot;
         this.autoChoices = autoChoices;
 
@@ -129,6 +131,8 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
         event = new TrcEvent(moduleName);
         sm = new TrcStateMachine<>(moduleName);
         sm.start(State.START);
+timestamps[1] = TrcTimer.getModeElapsedTime();
+robot.globalTracer.traceErr(moduleName, "DcmpConstructorTimestamps=" + Arrays.toString(timestamps));
     }   //CmdDcmpAuto
 
     //
@@ -249,7 +253,7 @@ timestamps[4] = TrcTimer.getModeElapsedTime();
                     {
                         sm.setState(type != Type.CENTER ? State.NEUTRAL_ZONE_PICKUP: State.PICKUP_DEPOT);
                     }
-robot.globalTracer.traceInfo(moduleName, "DcmpAutoTimestamps=" + Arrays.toString(timestamps));
+robot.globalTracer.traceErr(moduleName, "DcmpSTARTTimestamps=" + Arrays.toString(timestamps));
                     break;
                 
                 case PICKUP_DEPOT:

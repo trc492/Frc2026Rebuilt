@@ -45,6 +45,7 @@ public class LEDIndicator
     public static final String DRIVE_FIELD_MODE = "FieldMode";
     public static final String DRIVE_ROBOT_MODE = "RobotMode";
     public static final String DRIVE_INVERTED_MODE = "InvertedMode";
+    public static final String DISABLED_MODE = "DisabledMode";
     public static final String OFF = "Off";
 
     private static final int BRIGHTNESS = 128;
@@ -56,6 +57,7 @@ public class LEDIndicator
     private static final FrcColor colorCyan = new FrcColor(0, BRIGHTNESS, BRIGHTNESS);
     private static final FrcColor colorMagenta = new FrcColor(BRIGHTNESS, 0, BRIGHTNESS);
     private static final FrcColor colorWhite = new FrcColor(BRIGHTNESS, BRIGHTNESS, BRIGHTNESS);
+    private static final FrcColor colorDimBlue = new FrcColor(0, 0, 32);
 
     private static final TrcAddressableLED.LedPattern aprilTagFoundPattern =
         new TrcAddressableLED.LedPattern(APRILTAG_FOUND, colorGreen, RobotParams.HwConfig.NUM_LEDS);
@@ -71,12 +73,16 @@ public class LEDIndicator
         new TrcAddressableLED.LedPattern(DRIVE_ROBOT_MODE, colorWhite, RobotParams.HwConfig.NUM_LEDS);
     private static final TrcAddressableLED.LedPattern driveInvertedModePattern =
         new TrcAddressableLED.LedPattern(DRIVE_INVERTED_MODE, colorBlue, RobotParams.HwConfig.NUM_LEDS);
+    private static final TrcAddressableLED.LedPattern disabledModePattern =
+        TrcAddressableLED.LedPattern.createLightChase(
+            DISABLED_MODE, colorDimBlue, colorBlack, RobotParams.HwConfig.NUM_LEDS, 2, 10, 0.08);
     private static final TrcAddressableLED.LedPattern offPattern =
         new TrcAddressableLED.LedPattern(OFF, colorBlack, RobotParams.HwConfig.NUM_LEDS);
 
     private static final TrcAddressableLED.Pattern[] priorities =
     {
         // Highest priority
+        new TrcPriorityIndicator.Pattern(DISABLED_MODE, disabledModePattern),
         new TrcPriorityIndicator.Pattern(YELLOW_BLOB, yellowBlobPattern, 0.5, 0.0),
         new TrcPriorityIndicator.Pattern(NOT_FOUND, notFoundPattern, 0.5, 0.0),
         new TrcPriorityIndicator.Pattern(INTAKE_ON, intakeOnPattern, 0.25, 0.25),
@@ -141,6 +147,16 @@ public class LEDIndicator
     {
         leds[0].setPatternState(patternName, on);
     }   //setStatusPatternState
+
+    /**
+     * This method enables/disables the disabled-mode dim chase pattern.
+     *
+     * @param enabled specifies true to turn on disabled-mode pattern, false to turn it off.
+     */
+    public void setDisabledMode(boolean enabled)
+    {
+        leds[0].setPatternState(DISABLED_MODE, enabled);
+    }   //setDisabledMode
 
     /**
      * This method sets the LED to indicate the drive orientation mode of the robot.
