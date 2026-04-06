@@ -381,7 +381,7 @@ public class RobotParams
             new TrcPose2D(-162.93, 274.59, -90.00),
             new TrcPose2D(-253.39, 280.56, -90.00),
             new TrcPose2D(-296.84, 267.53, 0.00),
-            new TrcPose2D(-296.29, 138.28, 0.00)
+            new TrcPose2D(-296.29, 151.73, 0.00)
         };
 
         public static final TrcPose2D[] blueDoubleSweepOutpostTrenchPath = new TrcPose2D[] {
@@ -389,15 +389,15 @@ public class RobotParams
             new TrcPose2D(-55.89, 311.61, -110.00),
             new TrcPose2D(-150.89, 311.61, -110.00),
             new TrcPose2D(-38.89, 301.61, 0.00),
-            new TrcPose2D(-24.89, 151.73, 0.00),
+            new TrcPose2D(-32.89, 151.73, 0.00),
             new TrcPose2D(-24.11, 233.32, 0.00),
-            new TrcPose2D(-68.10, 235.80, -90.00),
-            new TrcPose2D(-153.57, 235.80, -90.00),
+            new TrcPose2D(-68.10, 240.80, -90.00),
+            new TrcPose2D(-153.57, 240.80, -90.00),
             new TrcPose2D(-198.64, 251.24, 0.00),
             new TrcPose2D(-154.76, 274.59, 90.00),
             new TrcPose2D(-64.30, 280.56, 90.00),
             new TrcPose2D(-20.85, 267.53, 0.00),
-            new TrcPose2D(-21.40, 138.28, 0.00)
+            new TrcPose2D(-21.40, 151.73, 0.00)
         };
 
         // public static final TrcPose2D[] blueDoubleSweepDepotBumpPath = new TrcPose2D[] {
@@ -420,7 +420,7 @@ public class RobotParams
             new TrcPose2D(-261.80, 311.61, 110.00),
             new TrcPose2D(-166.80, 311.61, 110.00),
             new TrcPose2D(-278.80, 301.61, 0.00),
-            new TrcPose2D(-284.80, 142.73, 0.00),
+            new TrcPose2D(-284.80, 151.73, 0.00),
             new TrcPose2D(-287.58, 233.32, 0.00),
             new TrcPose2D(-249.59, 240.80, 90.00),
             new TrcPose2D(-164.12, 240.80, 90.00),
@@ -436,10 +436,10 @@ public class RobotParams
             new TrcPose2D(-55.89, 311.61, -110.00),
             new TrcPose2D(-150.89, 311.61, -110.00),
             new TrcPose2D(-38.89, 301.61, 0.00),
-            new TrcPose2D(-29.89, 142.73, 0.00),
+            new TrcPose2D(-32.89, 151.73, 0.00),
             new TrcPose2D(-30.11, 233.32, 0.00),
-            new TrcPose2D(-68.10, 235.80, -90.00),
-            new TrcPose2D(-153.57, 235.80, -90.00),
+            new TrcPose2D(-68.10, 240.80, -90.00),
+            new TrcPose2D(-153.57, 240.80, -90.00),
             new TrcPose2D(-198.64, 251.24, 0.00),
             new TrcPose2D(-154.76, 274.59, 90.00),
             new TrcPose2D(-91.76, 274.59, 90.00),
