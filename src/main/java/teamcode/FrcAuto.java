@@ -100,6 +100,13 @@ public class FrcAuto implements TrcRobot.RobotMode
         CENTER
     }   //enum Type
 
+    // Specifies how far we want to sweep in the neutral zone
+    public enum SweepDistance
+    {
+        STANDARD,
+        PUSH_FUEL
+    }   //enum SweepDistance
+
     /**
      * This class encapsulates all user choices for autonomous mode from the smart dashboard.
      *
@@ -123,6 +130,7 @@ public class FrcAuto implements TrcRobot.RobotMode
         private final FrcChoiceMenu<PassBack> passBackChoiceMenu;
         private final FrcChoiceMenu<TaskAutoClimb.ClimbSide> climbSideChoiceMenu;
         private final FrcChoiceMenu<Type> typeChoiceMenu;
+        private final FrcChoiceMenu<SweepDistance> sweepDistanceChoiceMenu;
 
         public AutoChoices()
         {
@@ -137,6 +145,7 @@ public class FrcAuto implements TrcRobot.RobotMode
             passBackChoiceMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_PASS_BACK);
             climbSideChoiceMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_CLIMB_SIDE);
             typeChoiceMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_TYPE);
+            sweepDistanceChoiceMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_SWEEP_DISTANCE);
             //
             // Populate autonomous mode choice menus.
             //
@@ -175,6 +184,9 @@ public class FrcAuto implements TrcRobot.RobotMode
             typeChoiceMenu.addChoice("Trench Auto", Type.TRENCH, true, false);
             typeChoiceMenu.addChoice("Bump Auto", Type.BUMP);
             typeChoiceMenu.addChoice("Center Auto", Type.CENTER, false, true);
+
+            sweepDistanceChoiceMenu.addChoice("Standard", SweepDistance.STANDARD, true, false);
+            sweepDistanceChoiceMenu.addChoice("Push Fuel", SweepDistance.PUSH_FUEL, false, true);
             //
             // Initialize dashboard with default choice values.
             //
@@ -191,6 +203,7 @@ public class FrcAuto implements TrcRobot.RobotMode
             userChoices.addBoolean(Dashboard.DBKEY_AUTO_CLIMB, false);
             userChoices.addNumber(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_CYCLES, 0.0);
             userChoices.addChoiceMenu(Dashboard.DBKEY_AUTO_TYPE, typeChoiceMenu);
+            userChoices.addChoiceMenu(Dashboard.DBKEY_AUTO_SWEEP_DISTANCE, sweepDistanceChoiceMenu);
 
             userChoices.addString(Dashboard.DBKEY_AUTO_PATHFILE, "DrivePath.csv");
             userChoices.addNumber(Dashboard.DBKEY_AUTO_X_DRIVE_DISTANCE, 0.0);      // in feet
@@ -271,6 +284,11 @@ public class FrcAuto implements TrcRobot.RobotMode
             return typeChoiceMenu.getCurrentChoiceObject();
         }   //getType
 
+        public SweepDistance getSweepDistance()
+        {
+            return sweepDistanceChoiceMenu.getCurrentChoiceObject();
+        }   //getSweepDistance
+
         public String getPathFile()
         {
             return userChoices.getUserString(Dashboard.DBKEY_AUTO_PATHFILE);
@@ -318,6 +336,7 @@ public class FrcAuto implements TrcRobot.RobotMode
                    "climbSide=\"" + getClimbSide() + "\" " +
                    "neutralZoneCycles=\"" + getNeutralZoneCycles() + "\" " +
                    "type=\"" + getType() + "\" " +
+                   "sweepDistance=\"" + getSweepDistance() + "\" " +
 
 
                    "pathFile=\"" + getPathFile() + "\" " +

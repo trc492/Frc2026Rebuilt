@@ -27,6 +27,7 @@ import java.util.Arrays;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import teamcode.FrcAuto;
 import teamcode.FrcAuto.AutoStartPos;
+import teamcode.FrcAuto.SweepDistance;
 // import teamcode.FrcAuto.MoveTo;
 import teamcode.FrcAuto.Type;
 // import teamcode.FrcAuto.PassBack;
@@ -84,6 +85,7 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
     // private TaskAutoClimb.ClimbSide climbSide;
     // private double neutralZoneCycles;
     // private int currentNeutralZoneCycles = 0;
+    private SweepDistance sweepDistance;
 
     private TrcPose2D[] neutralZonePath = null;
     private TrcPose2D[] neutralZoneReturnPath = null;
@@ -98,6 +100,19 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
 
     boolean atDepot = false;
     boolean isTrench = false;
+
+    public TrcPose2D[] getAdjustedSweepPath(TrcPose2D[] basePath, SweepDistance distance) {
+        TrcPose2D[] adjustedPath = basePath.clone();
+        double sign = (basePath[1].angle < 0) ? -1.0 : 1.0;
+        if (distance == SweepDistance.PUSH_FUEL) {
+            adjustedPath[1] = new TrcPose2D(adjustedPath[1].x, 311.61, 110.0 * sign);
+            adjustedPath[2] = new TrcPose2D(adjustedPath[2].x, 311.61, 110.0 * sign);
+        } else if (distance == SweepDistance.STANDARD) {
+            adjustedPath[1] = new TrcPose2D(adjustedPath[1].x, 301.61, 90.0 * sign);
+            adjustedPath[2] = new TrcPose2D(adjustedPath[2].x, 301.61, 90.0 * sign);
+        }
+        return adjustedPath;
+    }
 
     /**
      * Constructor: Create an instance of the object.
@@ -188,6 +203,7 @@ timestamps[1] = TrcTimer.getModeElapsedTime();
                     type = autoChoices.getType();
                     // passBack = autoChoices.getPassBack();
                     climb = autoChoices.getClimb();
+                    sweepDistance = autoChoices.getSweepDistance();
 timestamps[2] = TrcTimer.getModeElapsedTime();
                     // climbSide = autoChoices.getClimbSide();
                     // neutralZoneCycles = autoChoices.getNeutralZoneCycles();
@@ -308,19 +324,32 @@ robot.globalTracer.traceInfo(moduleName, "DcmpAutoTimestamps=" + Arrays.toString
                     atDepot = startPos == AutoStartPos.START_POS_DEPOT;
                     isTrench = type == Type.TRENCH;
 
+                    TrcPose2D[] fullPath;
                     if (atDepot)
                     {
-                        
-                        neutralZonePath = isTrench ? 
-                            new TrcPose2D[] {depotTrenchSweep[0], depotTrenchSweep[1], depotTrenchSweep[2]}:
-                            new TrcPose2D[] {depotBumpSweep[0], depotBumpSweep[1], depotBumpSweep[2]};
+                        fullPath = isTrench ? depotTrenchSweep : depotBumpSweep;
                     }
                     else
                     {
-                        neutralZonePath = isTrench ? 
-                            new TrcPose2D[] {outpostTrenchSweep[0], outpostTrenchSweep[1], outpostTrenchSweep[2]}:
-                            new TrcPose2D[] {outpostBumpSweep[0], outpostBumpSweep[1], outpostBumpSweep[2]};
+                        fullPath = isTrench ? outpostTrenchSweep : outpostBumpSweep;
                     }
+
+                    TrcPose2D[] adjustedFullPath = getAdjustedSweepPath(fullPath, sweepDistance);
+                    neutralZonePath = new TrcPose2D[] {adjustedFullPath[0], adjustedFullPath[1], adjustedFullPath[2]};
+
+                    // if (atDepot)
+                    // {
+                        
+                    //     neutralZonePath = isTrench ? 
+                    //         new TrcPose2D[] {depotTrenchSweep[0], depotTrenchSweep[1], depotTrenchSweep[2]}:
+                    //         new TrcPose2D[] {depotBumpSweep[0], depotBumpSweep[1], depotBumpSweep[2]};
+                    // }
+                    // else
+                    // {
+                    //     neutralZonePath = isTrench ? 
+                    //         new TrcPose2D[] {outpostTrenchSweep[0], outpostTrenchSweep[1], outpostTrenchSweep[2]}:
+                    //         new TrcPose2D[] {outpostBumpSweep[0], outpostBumpSweep[1], outpostBumpSweep[2]};
+                    // }
 
                     if (robot.intakeSubsystem != null)
                     {
