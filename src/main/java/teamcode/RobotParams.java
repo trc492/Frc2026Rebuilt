@@ -386,15 +386,15 @@ public class RobotParams
 
         public static final TrcPose2D[] blueDoubleSweepOutpostTrenchPath = new TrcPose2D[] {
             new TrcPose2D(-21.89, 281.61, -90.00),
-            new TrcPose2D(-55.89, 301.61, -90.00),
-            new TrcPose2D(-150.89, 301.61, -90.00),
-            new TrcPose2D(-35.89, 301.61, 0.00),
-            new TrcPose2D(-24.89, 147.73, 0.00),
+            new TrcPose2D(-55.89, 311.61, -110.00),
+            new TrcPose2D(-150.89, 311.61, -110.00),
+            new TrcPose2D(-38.89, 301.61, 0.00),
+            new TrcPose2D(-24.89, 142.73, 0.00),
             new TrcPose2D(-24.11, 233.32, 0.00),
-            new TrcPose2D(-68.10, 226.80, -90.00),
-            new TrcPose2D(-168.57, 229.51, -90.00),
-            new TrcPose2D(-213.64, 251.24, 0.00),
-            new TrcPose2D(-169.76, 274.59, 90.00),
+            new TrcPose2D(-68.10, 235.80, -90.00),
+            new TrcPose2D(-153.57, 235.80, -90.00),
+            new TrcPose2D(-198.64, 251.24, 0.00),
+            new TrcPose2D(-154.76, 274.59, 90.00),
             new TrcPose2D(-64.30, 280.56, 90.00),
             new TrcPose2D(-20.85, 267.53, 0.00),
             new TrcPose2D(-21.40, 138.28, 0.00)
@@ -433,17 +433,18 @@ public class RobotParams
 
         public static final TrcPose2D[] blueDoubleSweepOutpostBumpPath = new TrcPose2D[] {
             new TrcPose2D(-21.89, 281.61, -90.00),
-            new TrcPose2D(-55.89, 301.61, -90.00),
-            new TrcPose2D(-150.89, 301.61, -90.00),
-            new TrcPose2D(-99.60, 225.17, -145.00),
-            new TrcPose2D(-95.25, 117.10, -145.00),
-            new TrcPose2D(-23.57, 139.91, 0.00),
-            new TrcPose2D(-25.74, 242.00, 0.00),
-            new TrcPose2D(-111.54, 268.07, -90.00),
-            new TrcPose2D(-170.19, 247.98, -180.00),
-            new TrcPose2D(-132.18, 229.51, 145.00),
-            new TrcPose2D(-88.74, 226.26, 145.00),
-            new TrcPose2D(-84.93, 133.94, 145.00)
+            new TrcPose2D(-55.89, 311.61, -110.00),
+            new TrcPose2D(-150.89, 311.61, -110.00),
+            new TrcPose2D(-38.89, 301.61, 0.00),
+            new TrcPose2D(-29.89, 142.73, 0.00),
+            new TrcPose2D(-30.11, 233.32, 0.00),
+            new TrcPose2D(-68.10, 235.80, -90.00),
+            new TrcPose2D(-153.57, 235.80, -90.00),
+            new TrcPose2D(-198.64, 251.24, 0.00),
+            new TrcPose2D(-154.76, 274.59, 90.00),
+            new TrcPose2D(-91.76, 274.59, 90.00),
+            new TrcPose2D(-92.51, 231.14, 45.00),
+            new TrcPose2D(-92.60, 60.70, 45.00)
         };
         
     }   //class Game
