@@ -220,6 +220,7 @@ timestamps[3] = TrcTimer.getModeElapsedTime();
                         {
                             robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
 timestamps[4] = TrcTimer.getModeElapsedTime();
+                            robot.zeroCalibrate(null, null);
                         }
                         else
                         {
@@ -439,7 +440,7 @@ robot.globalTracer.traceErr(moduleName, "DcmpSTARTTimestamps=" + Arrays.toString
                     if (robot.autoShootTask != null)
                     {
                         robot.autoShootTask.autoShoot(null, event, true, true, false);
-                        sm.waitForSingleEvent(event, State.HUB_PICKUP, 5.0);
+                        sm.waitForSingleEvent(event, State.HUB_PICKUP, 4.0);
                     }
                     else
                     {

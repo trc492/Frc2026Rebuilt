@@ -361,7 +361,10 @@ timestamps[5] = TrcTimer.getModeElapsedTime();
                 dashboard.getBoolean(
                     Dashboard.DBKEY_PREFERENCE_SUBSYSTEM_ZEROCAL, RobotParams.Preferences.zeroCalSubsystems))
             {
-                zeroCalibrate(null, null);
+                if (runMode != RunMode.AUTO_MODE)
+                {
+                    zeroCalibrate(null, null);
+                }
             }
 timestamps[6] = TrcTimer.getModeElapsedTime();
             // Start subsystems.

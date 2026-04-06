@@ -130,7 +130,7 @@ public class Shooter extends TrcSubsystem
         public static final double SHOOTER_MOTOR_OFF_DELAY      = 0.5;         // in sec
         public static final double SHOOTER_VEL_TRIGGER_THRESHOLD= 350.0;       // in RPM
         public static final double SHOOTER_VEL_TRIGGER_SETTLING = 0.0;
-        public static final double SHOOTER_VEL_TRIGGER_TIMEOUT  = 2.0;
+        public static final double SHOOTER_VEL_TRIGGER_TIMEOUT  = 1.5;
         public static final double SHOOTER_RPM_CONFLICT_ZONE_ADJ= 0.0;
         public static final double SHOOTER_READY_TIMEOUT        = 1.0;          // in sec
         public static final double SHOOTER_EXIT_DELAY           = 0.0;
@@ -311,6 +311,7 @@ public class Shooter extends TrcSubsystem
         TrcTimer timer;
         TrcEvent.Callback velTriggerCallback;
         boolean autoStop;
+        TrcEvent completionEvent;
 
         ShooterContext(
             TrcShooter shooter, TrcRollerIntake transfer, TrcTimer timer, TrcEvent.Callback velTriggerCallback,
@@ -321,6 +322,7 @@ public class Shooter extends TrcSubsystem
             this.timer = timer;
             this.velTriggerCallback = velTriggerCallback;
             this.autoStop = autoStop;
+            this.completionEvent = null;
         }
     }   //class ShooterContext
 
@@ -1356,6 +1358,7 @@ tracer.traceErr(instanceName, "EnableGoalTrackingTimestamps=" + Arrays.toString(
                     currFlywheelRPM - Params.SHOOTER_VEL_TRIGGER_THRESHOLD,
                     currFlywheelRPM + Params.SHOOTER_VEL_TRIGGER_THRESHOLD,
                     Params.SHOOTER_VEL_TRIGGER_SETTLING);
+                shooterContext.completionEvent = completionEvent;
                 velTrigger.enableTrigger(null, TriggerMode.OnInactive, shooterContext.velTriggerCallback);
                 shooterContext.timer.set(Params.SHOOTER_VEL_TRIGGER_TIMEOUT, this::velTriggerTimeout, shooterContext);
             }
@@ -1478,6 +1481,10 @@ tracer.traceErr(instanceName, "EnableGoalTrackingTimestamps=" + Arrays.toString(
         shooterContext.shooter.cancel();
         shooterContext.transfer.cancel();
         if (feeder != null) feeder.cancel();
+        if (shooterContext.completionEvent != null)
+        {
+            shooterContext.completionEvent.signal();
+        }
     }   //velTriggerTimeout
 
     //
