@@ -339,7 +339,9 @@ robot.globalTracer.traceErr(moduleName, "DcmpSTARTTimestamps=" + Arrays.toString
                     }
 
                     TrcPose2D[] adjustedFullPath = getAdjustedSweepPath(fullPath, sweepDistance);
-                    neutralZonePath = new TrcPose2D[] {adjustedFullPath[0], adjustedFullPath[1], adjustedFullPath[2], adjustedFullPath[3], adjustedFullPath[4]};
+                    TrcPose2D neutralExtraPoint = adjustedFullPath[4].clone();
+                    neutralExtraPoint.y -= 13.0;
+                    neutralZonePath = new TrcPose2D[] {adjustedFullPath[0], adjustedFullPath[1], adjustedFullPath[2], adjustedFullPath[3], adjustedFullPath[4], neutralExtraPoint};
 
                     // if (atDepot)
                     // {
@@ -380,6 +382,10 @@ robot.globalTracer.traceErr(moduleName, "DcmpSTARTTimestamps=" + Arrays.toString
                             if (wpCtxt.index == 4)
                             {
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
+                            }
+                            if (wpCtxt.index == 5)
+                            {
+                                robot.robotBase.purePursuitDrive.cancel();
                             }
                         },
                         robot.adjustPathByAlliance(alliance, neutralZonePath));
@@ -446,22 +452,22 @@ robot.globalTracer.traceErr(moduleName, "DcmpSTARTTimestamps=" + Arrays.toString
                     {
                         robot.autoShootTask.cancel();
                     }
-                    if (robot.shooterSubsystem != null)
-                    {
-                        robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
-                    }
 
                     if (atDepot)
                     {
+                        TrcPose2D hubDepotExtraPose = isTrench ? depotTrenchSweep[12].clone(): depotBumpSweep[12].clone();
+                        hubDepotExtraPose.y -= 13.0;
                         hubPath = isTrench ?
-                            new TrcPose2D[] {depotTrenchSweep[5], depotTrenchSweep[6], depotTrenchSweep[7], depotTrenchSweep[8], depotTrenchSweep[9], depotTrenchSweep[10], depotTrenchSweep[11], depotTrenchSweep[12]}:
-                            new TrcPose2D[] {depotBumpSweep[5], depotBumpSweep[6], depotBumpSweep[7], depotBumpSweep[8], depotBumpSweep[9], depotBumpSweep[10], depotBumpSweep[11], depotBumpSweep[12]};
+                            new TrcPose2D[] {depotTrenchSweep[5], depotTrenchSweep[6], depotTrenchSweep[7], depotTrenchSweep[8], depotTrenchSweep[9], depotTrenchSweep[10], depotTrenchSweep[11], depotTrenchSweep[12], hubDepotExtraPose}:
+                            new TrcPose2D[] {depotBumpSweep[5], depotBumpSweep[6], depotBumpSweep[7], depotBumpSweep[8], depotBumpSweep[9], depotBumpSweep[10], depotBumpSweep[11], depotBumpSweep[12], hubDepotExtraPose};
                     }
                     else
                     {
+                        TrcPose2D hubOutpostExtraPose = isTrench ? outpostTrenchSweep[12].clone() : outpostBumpSweep[12].clone();
+                        hubOutpostExtraPose.y -= 13.0;
                         hubPath = isTrench ?
-                            new TrcPose2D[] {outpostTrenchSweep[5], outpostTrenchSweep[6], outpostTrenchSweep[7], outpostTrenchSweep[8], outpostTrenchSweep[9], outpostTrenchSweep[10], outpostTrenchSweep[11], outpostTrenchSweep[12]}:
-                            new TrcPose2D[] {outpostBumpSweep[5], outpostBumpSweep[6], outpostBumpSweep[7], outpostBumpSweep[8], outpostBumpSweep[9], outpostBumpSweep[10], outpostBumpSweep[11]};
+                            new TrcPose2D[] {outpostTrenchSweep[5], outpostTrenchSweep[6], outpostTrenchSweep[7], outpostTrenchSweep[8], outpostTrenchSweep[9], outpostTrenchSweep[10], outpostTrenchSweep[11], outpostTrenchSweep[12], hubOutpostExtraPose}:
+                            new TrcPose2D[] {outpostBumpSweep[5], outpostBumpSweep[6], outpostBumpSweep[7], outpostBumpSweep[8], outpostBumpSweep[9], outpostBumpSweep[10], outpostBumpSweep[11], outpostBumpSweep[12], hubOutpostExtraPose};
                     }
                     // robot.robotBase.purePursuitDrive.setRotOutputLimit(0.50);
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.75);
@@ -472,12 +478,27 @@ robot.globalTracer.traceErr(moduleName, "DcmpSTARTTimestamps=" + Arrays.toString
                             TrcPurePursuitDrive.WaypointContext wpCtxt = (TrcPurePursuitDrive.WaypointContext) ctxt;
                             robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + wpCtxt.index);
                             robot.setRelocalizationMode(wpCtxt.index == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
+                            if (wpCtxt.index == 1)
+                            {
+                                if (robot.shooterSubsystem != null)
+                                {
+                                    robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
+                                }
+                            }
                             if (!isTrench)
                             {
                                 if (wpCtxt.index == 5)
                                 {
                                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
                                 }
+                            }
+                            if (wpCtxt.index == 7)
+                            {
+                                robot.intakeSubsystem.setIntakeEnabled(false);
+                            }
+                            if (wpCtxt.index == 8)
+                            {
+                                robot.robotBase.purePursuitDrive.cancel();
                             }
                         },
                         robot.adjustPathByAlliance(alliance, hubPath));

@@ -181,12 +181,12 @@ public class FrcAuto implements TrcRobot.RobotMode
             climbSideChoiceMenu.addChoice("Depot Side", TaskAutoClimb.ClimbSide.DEPOT, true, false);
             climbSideChoiceMenu.addChoice("Outpost Side", TaskAutoClimb.ClimbSide.OUTPOST, false, true);
 
-            typeChoiceMenu.addChoice("Trench Auto", Type.TRENCH, true, false);
-            typeChoiceMenu.addChoice("Bump Auto", Type.BUMP);
+            typeChoiceMenu.addChoice("Trench Auto", Type.TRENCH, false, false);
+            typeChoiceMenu.addChoice("Bump Auto", Type.BUMP, true, false);
             typeChoiceMenu.addChoice("Center Auto", Type.CENTER, false, true);
 
-            sweepDistanceChoiceMenu.addChoice("Standard", SweepDistance.STANDARD, true, false);
-            sweepDistanceChoiceMenu.addChoice("Push Fuel", SweepDistance.PUSH_FUEL, false, true);
+            sweepDistanceChoiceMenu.addChoice("Standard", SweepDistance.STANDARD, false, true);
+            sweepDistanceChoiceMenu.addChoice("Push Fuel", SweepDistance.PUSH_FUEL, true, false);
             //
             // Initialize dashboard with default choice values.
             //
