@@ -1012,25 +1012,25 @@ public class Shooter extends TrcSubsystem
     public void enableGoalTracking(TrcShooter.GoalTrackingParams goalTrackingParams, boolean noPassback)
     {
 double[] timestamps = new double[4];
-timestamps[0] = TrcTimer.getCurrentTime();
+timestamps[0] = TrcTimer.getModeElapsedTime();
         synchronized (goalTrackingState)
         {
             goalTrackingState.goalTrackingParams = goalTrackingParams;
             goalTrackingState.noPassback = noPassback;
             setupGoalTrackingMode();
-timestamps[1] = TrcTimer.getCurrentTime();
+timestamps[1] = TrcTimer.getModeElapsedTime();
 
             if (leftShooter != null)
             {
                 leftShooter.enableGoalTracking(goalTrackingState.goalTrackingParams, this::getLeftShooterAimInfo);
             }
-timestamps[2] = TrcTimer.getCurrentTime();
+timestamps[2] = TrcTimer.getModeElapsedTime();
 
             if (rightShooter != null)
             {
                 rightShooter.enableGoalTracking(goalTrackingState.goalTrackingParams, this::getRightShooterAimInfo);
             }
-timestamps[3] = TrcTimer.getCurrentTime();
+timestamps[3] = TrcTimer.getModeElapsedTime();
 tracer.traceErr(instanceName, "EnableGoalTrackingTimestamps=" + Arrays.toString(timestamps));
         }
     }   //enableGoalTracking
