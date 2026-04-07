@@ -401,6 +401,12 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             {
                 boolean myShift = shiftAlliance == null || shiftAlliance == myAlliance;
                 // While in the current shift, update dashboard with shift time left and which alliance is active.
+                if (autoTopAlliance == ' ')
+                {
+                    String gameMessage = DriverStation.getGameSpecificMessage();
+                    autoTopAlliance = gameMessage != null && gameMessage.length() > 0 ? gameMessage.charAt(0) : ' ';
+                }
+
                 robot.dashboard.putNumber(
                     Dashboard.DBKEY_TELEOP_SHIFT_TIME_LEFT, RobotParams.Game.SHIFTS[shiftIndex] - elapsedTime);
                 robot.dashboard.putBoolean(Dashboard.DBKEY_TELEOP_RED_SHIFT, myShift && myAlliance == Alliance.Red);
