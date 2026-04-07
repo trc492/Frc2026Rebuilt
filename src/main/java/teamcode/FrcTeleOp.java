@@ -38,9 +38,6 @@ import trclib.drivebase.TrcSwerveDrive;
 import trclib.driverio.TrcGameController.DriveMode;
 import trclib.robotcore.TrcRobot;
 import trclib.robotcore.TrcRobot.RunMode;
-import trclib.sensor.TrcTriggerThresholdZones;
-import trclib.sensor.TrcTrigger.TriggerMode;
-import trclib.timer.TrcTimer;
 
 /**
  * This class implements the code to run in TeleOp Mode.
@@ -62,7 +59,6 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     private final FrcChoiceMenu<DriveOrientation> driveOrientationMenu;
     private double driveSpeedScale;
     private double turnSpeedScale;
-    private TrcTriggerThresholdZones shiftsTrigger;
     private boolean controlsEnabled = false;
     protected boolean driverAltFunc = false;
     protected boolean operatorAltFunc = false;
@@ -107,13 +103,6 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         turnSpeedScale = robot.dashboard.getNumber(
             Dashboard.DBKEY_TELEOP_TURN_NORMAL_SCALE, DEF_TURN_NORMAL_SCALE);
 
-        if ((robot.driverController != null || robot.operatorController != null) &&
-             robot.dashboard.getBoolean(Dashboard.DBKEY_PREFERENCE_USE_RUMBLE, RobotParams.Preferences.useRumble))
-        {
-            shiftsTrigger = new TrcTriggerThresholdZones(
-                "ShiftsTrigger", TrcTimer::getModeElapsedTime, RobotParams.Game.SHIFTS);
-        }
-
         turnPidCtrl = robot.robotBase != null && robot.robotBase.purePursuitDrive != null?
             robot.robotBase.purePursuitDrive.getTurnPidCtrl(): null;
         lockedHeading = null;
@@ -152,31 +141,6 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             robot.setDriveOrientation(driveOrientationMenu.getCurrentChoiceObject(), false);
         }
 
-        if (shiftsTrigger != null)
-        {
-            shiftsTrigger.enableTrigger(
-                TriggerMode.OnActive,
-                (ctxt, canceled) ->
-                {
-                    if (!canceled)
-                    {
-                        TrcTriggerThresholdZones.CallbackContext context =
-                            (TrcTriggerThresholdZones.CallbackContext) ctxt;
-
-                        robot.globalTracer.traceInfo(moduleName, "End of shift " + context.prevZone);
-                        if (robot.driverController != null)
-                        {
-                            robot.driverController.setRumble(RumbleType.kBothRumble, 1.0, 0.5);
-                        }
-
-                        if (robot.operatorController != null)
-                        {
-                            robot.operatorController.setRumble(RumbleType.kBothRumble, 1.0, 0.5);
-                        }
-                    }
-                });
-        }
-
         if (RobotParams.Preferences.hybridMode)
         {
             // This makes sure that the autonomous stops running when
@@ -200,10 +164,6 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     @Override
     public void stopMode(RunMode prevMode, RunMode nextMode)
     {
-        if (shiftsTrigger != null)
-        {
-            shiftsTrigger.disableTrigger();
-        }
         //
         // Disabling joysticks.
         //
@@ -397,53 +357,60 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 }
             }
 
-            if (elapsedTime < RobotParams.Game.SHIFTS[shiftIndex])
+            if (elapsedTime < RobotParams.Game.TELEOP_PERIOD)
             {
-                boolean myShift = shiftAlliance == null || shiftAlliance == myAlliance;
-                // While in the current shift, update dashboard with shift time left and which alliance is active.
-                if (allianceInactiveFirst == ' ')
+                if (elapsedTime < RobotParams.Game.SHIFTS[shiftIndex])
                 {
-                    String gameMessage = DriverStation.getGameSpecificMessage();
-                    allianceInactiveFirst =
-                        gameMessage != null && gameMessage.length() > 0 ? gameMessage.charAt(0) : ' ';
-                }
+                    boolean myShift = shiftAlliance == null || shiftAlliance == myAlliance;
+                    // While in the current shift, update dashboard with shift time left and which alliance is active.
+                    if (allianceInactiveFirst == ' ')
+                    {
+                        String gameMessage = DriverStation.getGameSpecificMessage();
+                        allianceInactiveFirst =
+                            gameMessage != null && gameMessage.length() > 0 ? gameMessage.charAt(0) : ' ';
+                    }
 
-                robot.dashboard.putNumber(
-                    Dashboard.DBKEY_TELEOP_SHIFT_TIME_LEFT, RobotParams.Game.SHIFTS[shiftIndex] - elapsedTime);
-                robot.dashboard.putBoolean(Dashboard.DBKEY_TELEOP_RED_SHIFT, myShift && myAlliance == Alliance.Red);
-                robot.dashboard.putBoolean(Dashboard.DBKEY_TELEOP_BLUE_SHIFT, myShift && myAlliance == Alliance.Blue);
+                    double shiftTimeLeft = RobotParams.Game.SHIFTS[shiftIndex] - elapsedTime;
+                    robot.dashboard.putString(
+                        Dashboard.DBKEY_TELEOP_SHIFT_TIME_LEFT,
+                        String.format("%s: %.3f", shiftIndex == 5? "EndGame": shiftIndex, shiftTimeLeft));
+                    robot.dashboard.putBoolean(
+                        Dashboard.DBKEY_TELEOP_RED_SHIFT, myShift && myAlliance == Alliance.Red);
+                    robot.dashboard.putBoolean(
+                        Dashboard.DBKEY_TELEOP_BLUE_SHIFT, myShift && myAlliance == Alliance.Blue);
 
-                if (!rumbling && myShift && RobotParams.Preferences.useRumble && robot.driverController != null)
-                {
-                    if (elapsedTime > RobotParams.Game.SHIFTS[shiftIndex] - RobotParams.Game.SHIFT_THRESHOLD)
+                    if (!rumbling && !myShift && RobotParams.Preferences.useRumble && robot.driverController != null)
                     {
-                        robot.driverController.setRumble(RumbleType.kBothRumble, 1.0, 0.5);
-                        robot.operatorController.setRumble(RumbleType.kBothRumble, 1.0, 0.5);
-                        rumbling = true;
+                        if (elapsedTime > RobotParams.Game.SHIFTS[shiftIndex] - RobotParams.Game.SHIFT_THRESHOLD)
+                        {
+                            robot.driverController.setRumble(RumbleType.kBothRumble, 1.0, 0.5);
+                            robot.operatorController.setRumble(RumbleType.kBothRumble, 1.0, 0.5);
+                            rumbling = true;
+                        }
                     }
                 }
-            }
-            else if (elapsedTime >= RobotParams.Game.SHIFTS[shiftIndex])
-            {
-                // Move to the next shift.
-                rumbling = false;
-                shiftIndex++;
-                if (shiftIndex < RobotParams.Game.SHIFTS.length)
+                else if (elapsedTime >= RobotParams.Game.SHIFTS[shiftIndex])
                 {
-                    if (shiftIndex == RobotParams.Game.SHIFTS.length - 1)
+                    // Move to the next shift.
+                    rumbling = false;
+                    shiftIndex++;
+                    if (shiftIndex < RobotParams.Game.SHIFTS.length)
                     {
-                        // End Game period, both alliances are active.
-                        shiftAlliance = null;
+                        if (shiftIndex == RobotParams.Game.SHIFTS.length - 1)
+                        {
+                            // End Game period, both alliances are active.
+                            shiftAlliance = null;
+                        }
+                        if (shiftIndex % 2 == 0)
+                        {
+                            shiftAlliance = allianceInactiveFirst == 'R'? Alliance.Red: Alliance.Blue;
+                        }
+                        else
+                        {
+                            shiftAlliance = allianceInactiveFirst == 'R'? Alliance.Blue: Alliance.Red;
+                        }
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Shift[" + shiftIndex + "]: " + shiftAlliance);
                     }
-                    if (shiftIndex % 2 == 0)
-                    {
-                        shiftAlliance = allianceInactiveFirst == 'R'? Alliance.Red: Alliance.Blue;
-                    }
-                    else
-                    {
-                        shiftAlliance = allianceInactiveFirst == 'R'? Alliance.Blue: Alliance.Red;
-                    }
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> Shift[" + shiftIndex + "]: " + shiftAlliance);
                 }
             }
         }

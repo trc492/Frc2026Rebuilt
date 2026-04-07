@@ -196,7 +196,7 @@ public class RobotParams
         public static final double TELEOP_PERIOD                = 140.0;    // in seconds
         public static final double ENDGAME_THRESHOLD            = 30.0;     // in seconds
         public static final double SHIFT_THRESHOLD              = 2.0;
-        public static final double[] SHIFTS                     = new double[] {10, 35, 60, 85, 110};
+        public static final double[] SHIFTS                     = new double[] {10, 35, 60, 85, 110, 140};
         //
         // Field configuration and dimensions in inches.
         //

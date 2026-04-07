@@ -266,7 +266,7 @@ public class Dashboard
         dashboard.refreshKey(DBKEY_TELEOP_DRIVE_POWER, "");
         dashboard.refreshKey(DBKEY_TELEOP_RED_SHIFT, false);
         dashboard.refreshKey(DBKEY_TELEOP_BLUE_SHIFT, false);
-        dashboard.refreshKey(DBKEY_TELEOP_SHIFT_TIME_LEFT, 0.0);
+        dashboard.refreshKey(DBKEY_TELEOP_SHIFT_TIME_LEFT, "");
         // Test.
         dashboard.refreshKey(DBKEY_TEST_LSHOOTER_TARGET_RPM, 0.0);
         dashboard.refreshKey(DBKEY_TEST_LTILT_TARGET_POS, 0.0);
