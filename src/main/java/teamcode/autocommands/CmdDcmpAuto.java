@@ -260,7 +260,7 @@ robot.globalTracer.traceErr(moduleName, "DcmpSTARTTimestamps=" + Arrays.toString
                 case PICKUP_DEPOT:
                     TrcPose2D depotPickupPose = RobotParams.Game.BLUE_DEPOT_PICKUP_POSE;
                     TrcPose2D depotEndPose = depotPickupPose.clone();
-                    depotEndPose.y -= 45.0;
+                    depotEndPose.y -= 35.0;
                     TrcPose2D[] depotPickupPath = new TrcPose2D[] {depotPickupPose, depotEndPose};
 
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
