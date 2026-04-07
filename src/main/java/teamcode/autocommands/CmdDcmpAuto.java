@@ -263,7 +263,7 @@ robot.globalTracer.traceErr(moduleName, "DcmpSTARTTimestamps=" + Arrays.toString
                     depotEndPose.y -= 45.0;
                     TrcPose2D[] depotPickupPath = new TrcPose2D[] {depotPickupPose, depotEndPose};
 
-                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
+                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
                         (ctxt, canceled) ->
