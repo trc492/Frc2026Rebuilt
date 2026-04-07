@@ -1490,6 +1490,7 @@ tracer.traceErr(instanceName, "EnableGoalTrackingTimestamps=" + Arrays.toString(
         if (shooterContext.completionEvent != null)
         {
             shooterContext.completionEvent.signal();
+            shooterContext.completionEvent = null;
         }
     }   //velTriggerTimeout
 

@@ -60,10 +60,6 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     protected final Robot robot;
     private final FrcChoiceMenu<DriveMode> driveModeMenu;
     private final FrcChoiceMenu<DriveOrientation> driveOrientationMenu;
-    private char autoTopAlliance;
-    private Alliance myAlliance;
-    private int shiftIndex;
-    private Alliance shiftAlliance;
     private double driveSpeedScale;
     private double turnSpeedScale;
     private TrcTriggerThresholdZones shiftsTrigger;
@@ -77,6 +73,12 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     // Locked heading
     private final TrcPidController turnPidCtrl;
     private Double lockedHeading;
+    // Shift tracking.
+    private char autoTopAlliance;
+    private Alliance myAlliance;
+    private int shiftIndex;
+    private Alliance shiftAlliance;
+    private boolean rumbling;
 
     /**
      * Constructor: Create an instance of the object.
@@ -136,6 +138,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         myAlliance = FrcAuto.autoChoices.getAlliance();
         shiftIndex = 0;
         shiftAlliance = null;
+        rumbling = false;
         //
         // Enabling joysticks.
         //
@@ -392,34 +395,31 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                         }
                     }
                 }
-
-                // if (RobotParams.Preferences.useRumble && robot.driverController != null)
-                // {
-                //     if (!rumbling && elapsedTime > RobotParams.Game.TELEOP_PERIOD - RobotParams.Game.ENDGAME_THRESHOLD)
-                //     {
-                //         robot.driverController.setRumble(RumbleType.kBothRumble, 1.0, 0.5);
-                //         rumbling = true;
-                //     }
-                // }
             }
 
             if (elapsedTime < RobotParams.Game.SHIFTS[shiftIndex])
             {
+                boolean myShift = shiftAlliance == null || shiftAlliance == myAlliance;
                 // While in the current shift, update dashboard with shift time left and which alliance is active.
                 robot.dashboard.putNumber(
                     Dashboard.DBKEY_TELEOP_SHIFT_TIME_LEFT, RobotParams.Game.SHIFTS[shiftIndex] - elapsedTime);
-                robot.dashboard.putBoolean(
-                    Dashboard.DBKEY_TELEOP_RED_SHIFT,
-                    shiftAlliance == null ||
-                    shiftAlliance == Alliance.Red && myAlliance == Alliance.Red);
-                robot.dashboard.putBoolean(
-                    Dashboard.DBKEY_TELEOP_BLUE_SHIFT,
-                    shiftAlliance == null ||
-                    shiftAlliance == Alliance.Blue && myAlliance == Alliance.Blue);
+                robot.dashboard.putBoolean(Dashboard.DBKEY_TELEOP_RED_SHIFT, myShift && myAlliance == Alliance.Red);
+                robot.dashboard.putBoolean(Dashboard.DBKEY_TELEOP_BLUE_SHIFT, myShift && myAlliance == Alliance.Blue);
+
+                if (!rumbling && myShift && RobotParams.Preferences.useRumble && robot.driverController != null)
+                {
+                    if (elapsedTime > RobotParams.Game.SHIFTS[shiftIndex] - RobotParams.Game.SHIFT_THRESHOLD)
+                    {
+                        robot.driverController.setRumble(RumbleType.kBothRumble, 1.0, 0.5);
+                        robot.operatorController.setRumble(RumbleType.kBothRumble, 1.0, 0.5);
+                        rumbling = true;
+                    }
+                }
             }
             else if (elapsedTime >= RobotParams.Game.SHIFTS[shiftIndex])
             {
                 // Move to the next shift.
+                rumbling = false;
                 shiftIndex++;
                 if (shiftIndex < RobotParams.Game.SHIFTS.length)
                 {

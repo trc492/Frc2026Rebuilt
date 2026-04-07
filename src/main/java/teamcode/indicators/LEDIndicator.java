@@ -48,36 +48,25 @@ public class LEDIndicator
     public static final String DISABLED_MODE = "DisabledMode";
     public static final String OFF = "Off";
 
-    private static final int BRIGHTNESS = 128;
-    private static final FrcColor colorBlack = new FrcColor(0, 0, 0);
-    private static final FrcColor colorRed = new FrcColor(BRIGHTNESS, 0, 0);
-    private static final FrcColor colorGreen = new FrcColor(0, BRIGHTNESS, 0);
-    private static final FrcColor colorBlue = new FrcColor(0, 0, BRIGHTNESS);
-    private static final FrcColor colorYellow = new FrcColor(BRIGHTNESS, BRIGHTNESS, 0);
-    private static final FrcColor colorCyan = new FrcColor(0, BRIGHTNESS, BRIGHTNESS);
-    private static final FrcColor colorMagenta = new FrcColor(BRIGHTNESS, 0, BRIGHTNESS);
-    private static final FrcColor colorWhite = new FrcColor(BRIGHTNESS, BRIGHTNESS, BRIGHTNESS);
-    private static final FrcColor colorDimBlue = new FrcColor(0, 0, 32);
-
     private static final TrcAddressableLED.LedPattern aprilTagFoundPattern =
-        new TrcAddressableLED.LedPattern(APRILTAG_FOUND, colorGreen, RobotParams.HwConfig.NUM_LEDS);
+        new TrcAddressableLED.LedPattern(APRILTAG_FOUND, FrcColor.HALF_GREEN, RobotParams.HwConfig.NUM_LEDS);
     private static final TrcAddressableLED.LedPattern yellowBlobPattern =
-        new TrcAddressableLED.LedPattern(YELLOW_BLOB, colorYellow, RobotParams.HwConfig.NUM_LEDS);
+        new TrcAddressableLED.LedPattern(YELLOW_BLOB, FrcColor.HALF_YELLOW, RobotParams.HwConfig.NUM_LEDS);
     private static final TrcAddressableLED.LedPattern notFoundPattern =
-        new TrcAddressableLED.LedPattern(NOT_FOUND, colorRed, RobotParams.HwConfig.NUM_LEDS);
+        new TrcAddressableLED.LedPattern(NOT_FOUND, FrcColor.HALF_RED, RobotParams.HwConfig.NUM_LEDS);
     private static final TrcAddressableLED.LedPattern intakeOnPattern =
-        new TrcAddressableLED.LedPattern(DRIVE_FIELD_MODE, colorMagenta, RobotParams.HwConfig.NUM_LEDS);
+        new TrcAddressableLED.LedPattern(DRIVE_FIELD_MODE, FrcColor.HALF_MAGENTA, RobotParams.HwConfig.NUM_LEDS);
     private static final TrcAddressableLED.LedPattern driveFieldModePattern =
-        new TrcAddressableLED.LedPattern(DRIVE_FIELD_MODE, colorCyan, RobotParams.HwConfig.NUM_LEDS);
+        new TrcAddressableLED.LedPattern(DRIVE_FIELD_MODE, FrcColor.HALF_CYAN, RobotParams.HwConfig.NUM_LEDS);
     private static final TrcAddressableLED.LedPattern driveRobotModePattern =
-        new TrcAddressableLED.LedPattern(DRIVE_ROBOT_MODE, colorWhite, RobotParams.HwConfig.NUM_LEDS);
+        new TrcAddressableLED.LedPattern(DRIVE_ROBOT_MODE, FrcColor.HALF_WHITE, RobotParams.HwConfig.NUM_LEDS);
     private static final TrcAddressableLED.LedPattern driveInvertedModePattern =
-        new TrcAddressableLED.LedPattern(DRIVE_INVERTED_MODE, colorBlue, RobotParams.HwConfig.NUM_LEDS);
+        new TrcAddressableLED.LedPattern(DRIVE_INVERTED_MODE, FrcColor.HALF_BLUE, RobotParams.HwConfig.NUM_LEDS);
     private static final TrcAddressableLED.LedPattern disabledModePattern =
         TrcAddressableLED.LedPattern.createColorWaves(
-            DISABLED_MODE, colorGreen, RobotParams.HwConfig.NUM_LEDS, 255, 0.08, 0.2);
+            DISABLED_MODE, FrcColor.HALF_GREEN, RobotParams.HwConfig.NUM_LEDS, 255, 0.08, 0.2);
     private static final TrcAddressableLED.LedPattern offPattern =
-        new TrcAddressableLED.LedPattern(OFF, colorBlack, RobotParams.HwConfig.NUM_LEDS);
+        new TrcAddressableLED.LedPattern(OFF, FrcColor.BLACK, RobotParams.HwConfig.NUM_LEDS);
 
     private static final TrcAddressableLED.Pattern[] priorities =
     {
