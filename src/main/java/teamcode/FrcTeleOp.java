@@ -74,7 +74,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     private final TrcPidController turnPidCtrl;
     private Double lockedHeading;
     // Shift tracking.
-    private char autoTopAlliance;
+    private char allianceInactiveFirst;
     private Alliance myAlliance;
     private int shiftIndex;
     private Alliance shiftAlliance;
@@ -134,7 +134,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     public void startMode(RunMode prevMode, RunMode nextMode)
     {
         String gameMessage = DriverStation.getGameSpecificMessage();
-        autoTopAlliance = gameMessage != null && gameMessage.length() > 0 ? gameMessage.charAt(0) : ' ';
+        allianceInactiveFirst = gameMessage != null && gameMessage.length() > 0 ? gameMessage.charAt(0) : ' ';
         myAlliance = FrcAuto.autoChoices.getAlliance();
         shiftIndex = 0;
         shiftAlliance = null;
@@ -401,10 +401,11 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             {
                 boolean myShift = shiftAlliance == null || shiftAlliance == myAlliance;
                 // While in the current shift, update dashboard with shift time left and which alliance is active.
-                if (autoTopAlliance == ' ')
+                if (allianceInactiveFirst == ' ')
                 {
                     String gameMessage = DriverStation.getGameSpecificMessage();
-                    autoTopAlliance = gameMessage != null && gameMessage.length() > 0 ? gameMessage.charAt(0) : ' ';
+                    allianceInactiveFirst =
+                        gameMessage != null && gameMessage.length() > 0 ? gameMessage.charAt(0) : ' ';
                 }
 
                 robot.dashboard.putNumber(
@@ -436,11 +437,11 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                     }
                     if (shiftIndex % 2 == 0)
                     {
-                        shiftAlliance = autoTopAlliance == 'R'? Alliance.Red: Alliance.Blue;
+                        shiftAlliance = allianceInactiveFirst == 'R'? Alliance.Red: Alliance.Blue;
                     }
                     else
                     {
-                        shiftAlliance = autoTopAlliance == 'R'? Alliance.Blue: Alliance.Red;
+                        shiftAlliance = allianceInactiveFirst == 'R'? Alliance.Blue: Alliance.Red;
                     }
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Shift[" + shiftIndex + "]: " + shiftAlliance);
                 }
