@@ -368,13 +368,13 @@ public class RobotParams
             new TrcPose2D(-278.80, 301.61, 0.00),
             new TrcPose2D(-284.80, 151.73, 0.00),
             new TrcPose2D(-293.58, 233.32, 0.00),
-            new TrcPose2D(-249.59, 240.80, 90.00),
-            new TrcPose2D(-164.12, 240.80, 90.00),
-            new TrcPose2D(-119.05, 251.24, 0.00),
+            new TrcPose2D(-276.59, 243.80, 90.00),
+            new TrcPose2D(-164.12, 243.80, 90.00),
+            new TrcPose2D(-119.05, 251.24, -90.00),
             new TrcPose2D(-162.93, 274.59, -90.00),
             new TrcPose2D(-253.39, 280.56, -90.00),
-            new TrcPose2D(-296.84, 267.53, 0.00),
-            new TrcPose2D(-296.29, 151.73, 0.00)
+            new TrcPose2D(-280.84, 267.53, 0.00),
+            new TrcPose2D(-290.29, 151.73, 0.00)
         };
 
         public static final TrcPose2D[] blueDoubleSweepOutpostTrenchPath = new TrcPose2D[] {

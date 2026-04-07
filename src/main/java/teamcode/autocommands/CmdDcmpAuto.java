@@ -218,7 +218,7 @@ timestamps[3] = TrcTimer.getModeElapsedTime();
                     {
                         if (Shooter.Params.TURRET_HAS_ABS_ENC)
                         {
-                            robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
+                            // robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
 timestamps[4] = TrcTimer.getModeElapsedTime();
                             robot.zeroCalibrate(null, null);
                         }
@@ -278,6 +278,7 @@ robot.globalTracer.traceErr(moduleName, "DcmpSTARTTimestamps=" + Arrays.toString
                             } 
                         },
                         robot.adjustPathByAlliance(alliance, depotPickupPath));
+                    robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
                     sm.waitForSingleEvent(event, State.SHOOT_DEPOT);
                     break;
             
@@ -390,6 +391,7 @@ robot.globalTracer.traceErr(moduleName, "DcmpSTARTTimestamps=" + Arrays.toString
                             }
                         },
                         robot.adjustPathByAlliance(alliance, neutralZonePath));
+                    robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
                     sm.waitForSingleEvent(event, State.SHOOT_NEUTRAL_FUEL);
                     break;
                 
@@ -470,7 +472,7 @@ robot.globalTracer.traceErr(moduleName, "DcmpSTARTTimestamps=" + Arrays.toString
                             new TrcPose2D[] {outpostTrenchSweep[5], outpostTrenchSweep[6], outpostTrenchSweep[7], outpostTrenchSweep[8], outpostTrenchSweep[9], outpostTrenchSweep[10], outpostTrenchSweep[11], outpostTrenchSweep[12], hubOutpostExtraPose}:
                             new TrcPose2D[] {outpostBumpSweep[5], outpostBumpSweep[6], outpostBumpSweep[7], outpostBumpSweep[8], outpostBumpSweep[9], outpostBumpSweep[10], outpostBumpSweep[11], outpostBumpSweep[12], hubOutpostExtraPose};
                     }
-                    // robot.robotBase.purePursuitDrive.setRotOutputLimit(0.50);
+                    robot.robotBase.purePursuitDrive.setRotOutputLimit(0.8);
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.8);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
