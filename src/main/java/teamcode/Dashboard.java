@@ -144,6 +144,9 @@ public class Dashboard
     public static final String DBKEY_TELEOP_TURN_SLOW_SCALE         = "TeleOp/TurnSlowScale";       //Number
     public static final String DBKEY_TELEOP_SHOW_DRIVE_POWER        = "TeleOp/ShowDrivePower";      //Boolean
     public static final String DBKEY_TELEOP_DRIVE_POWER             = "TeleOp/DrivePower";          //String
+    public static final String DBKEY_TELEOP_RED_SHIFT               = "TeleOp/RedShift";            //Boolean
+    public static final String DBKEY_TELEOP_BLUE_SHIFT              = "TeleOp/BlueShift";           //Boolean
+    public static final String DBKEY_TELEOP_SHIFT_TIME_LEFT         = "TeleOp/ShiftTimeLeft";       //Number
 
     // Test choices.
     public static final String DBKEY_TEST_TESTS                     = "Test/Tests";
@@ -261,6 +264,9 @@ public class Dashboard
         dashboard.refreshKey(DBKEY_TELEOP_TURN_SLOW_SCALE, FrcTeleOp.DEF_TURN_SLOW_SCALE);
         dashboard.refreshKey(DBKEY_TELEOP_SHOW_DRIVE_POWER, RobotParams.Preferences.showDrivePower);
         dashboard.refreshKey(DBKEY_TELEOP_DRIVE_POWER, "");
+        dashboard.refreshKey(DBKEY_TELEOP_RED_SHIFT, false);
+        dashboard.refreshKey(DBKEY_TELEOP_BLUE_SHIFT, false);
+        dashboard.refreshKey(DBKEY_TELEOP_SHIFT_TIME_LEFT, 0.0);
         // Test.
         dashboard.refreshKey(DBKEY_TEST_LSHOOTER_TARGET_RPM, 0.0);
         dashboard.refreshKey(DBKEY_TEST_LTILT_TARGET_POS, 0.0);

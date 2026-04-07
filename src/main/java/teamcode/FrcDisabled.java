@@ -22,7 +22,6 @@
 
 package teamcode;
 
-import teamcode.indicators.LEDIndicator;
 import trclib.robotcore.TrcRobot;
 import trclib.robotcore.TrcRobot.RunMode;
 

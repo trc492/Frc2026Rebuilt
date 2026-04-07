@@ -868,6 +868,9 @@ public class Shooter extends TrcSubsystem
                 if (goalTrackingState.trackingMode != TrackingMode.Disabled)
                 {
                     // We crossed field zones, let's re-evaluate tracking modes.
+                    tracer.traceInfo(
+                        instanceName, "FieldTriggerCallback: canceled=%s, zoneCtxt=%s",
+                        canceled, (TrcTriggerThresholdZones.CallbackContext) context);
                     setupGoalTrackingMode();
                 }
             }
@@ -1013,6 +1016,9 @@ public class Shooter extends TrcSubsystem
      */
     public void enableGoalTracking(TrcShooter.GoalTrackingParams goalTrackingParams, boolean noPassback)
     {
+        tracer.traceInfo(
+            instanceName, "EnableGoalTracking: goalTrackingParams=%s, noPassback=%s",
+            goalTrackingParams, noPassback);
 double[] timestamps = new double[4];
 timestamps[0] = TrcTimer.getModeElapsedTime();
         synchronized (goalTrackingState)

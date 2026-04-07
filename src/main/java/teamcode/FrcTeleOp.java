@@ -22,6 +22,7 @@
 
 package teamcode;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frclib.driverio.FrcChoiceMenu;
@@ -59,6 +60,10 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     protected final Robot robot;
     private final FrcChoiceMenu<DriveMode> driveModeMenu;
     private final FrcChoiceMenu<DriveOrientation> driveOrientationMenu;
+    private char autoTopAlliance;
+    private Alliance myAlliance;
+    private int shiftIndex;
+    private Alliance shiftAlliance;
     private double driveSpeedScale;
     private double turnSpeedScale;
     private TrcTriggerThresholdZones shiftsTrigger;
@@ -126,6 +131,11 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     @Override
     public void startMode(RunMode prevMode, RunMode nextMode)
     {
+        String gameMessage = DriverStation.getGameSpecificMessage();
+        autoTopAlliance = gameMessage != null && gameMessage.length() > 0 ? gameMessage.charAt(0) : ' ';
+        myAlliance = FrcAuto.autoChoices.getAlliance();
+        shiftIndex = 0;
+        shiftAlliance = null;
         //
         // Enabling joysticks.
         //
@@ -391,6 +401,43 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 //         rumbling = true;
                 //     }
                 // }
+            }
+
+            if (elapsedTime < RobotParams.Game.SHIFTS[shiftIndex])
+            {
+                // While in the current shift, update dashboard with shift time left and which alliance is active.
+                robot.dashboard.putNumber(
+                    Dashboard.DBKEY_TELEOP_SHIFT_TIME_LEFT, RobotParams.Game.SHIFTS[shiftIndex] - elapsedTime);
+                robot.dashboard.putBoolean(
+                    Dashboard.DBKEY_TELEOP_RED_SHIFT,
+                    shiftAlliance == null ||
+                    shiftAlliance == Alliance.Red && myAlliance == Alliance.Red);
+                robot.dashboard.putBoolean(
+                    Dashboard.DBKEY_TELEOP_BLUE_SHIFT,
+                    shiftAlliance == null ||
+                    shiftAlliance == Alliance.Blue && myAlliance == Alliance.Blue);
+            }
+            else if (elapsedTime >= RobotParams.Game.SHIFTS[shiftIndex])
+            {
+                // Move to the next shift.
+                shiftIndex++;
+                if (shiftIndex < RobotParams.Game.SHIFTS.length)
+                {
+                    if (shiftIndex == RobotParams.Game.SHIFTS.length - 1)
+                    {
+                        // End Game period, both alliances are active.
+                        shiftAlliance = null;
+                    }
+                    if (shiftIndex % 2 == 0)
+                    {
+                        shiftAlliance = autoTopAlliance == 'R'? Alliance.Red: Alliance.Blue;
+                    }
+                    else
+                    {
+                        shiftAlliance = autoTopAlliance == 'R'? Alliance.Blue: Alliance.Red;
+                    }
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> Shift[" + shiftIndex + "]: " + shiftAlliance);
+                }
             }
         }
     }   //periodic
