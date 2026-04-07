@@ -32,6 +32,7 @@ import teamcode.Robot;
 import teamcode.RobotParams;
 import teamcode.autotasks.TaskAutoClimb;
 import teamcode.subsystems.Shooter;
+import teamcode.subsystems.Intake.Params;
 import trclib.pathdrive.TrcPose2D;
 import trclib.pathdrive.TrcPurePursuitDrive;
 import trclib.robotcore.TrcEvent;
@@ -184,7 +185,8 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     {
                         if (Shooter.Params.TURRET_HAS_ABS_ENC)
                         {
-                            robot.shooterSubsystem.enableGoalTracking(true, false, true, true);
+                            // robot.shooterSubsystem.enableGoalTracking(true, false, true, true);
+                            robot.zeroCalibrate(null, null);
                         }
                         else
                         {
@@ -271,11 +273,12 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                                 if (robot.intakeSubsystem != null)
                                 {
                                     // Turning on Intake will deploy hopper too.
-                                    robot.intakeSubsystem.setIntakeEnabled(true);
+                                    robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
                                 }
                             }
                         },
                         robot.adjustPathByAlliance(alliance, intermediatePose, pickupPose, endPose));
+                    robot.shooterSubsystem.enableGoalTracking(true, false, true, true);
                     sm.waitForSingleEvent(event, State.FINISH_PICKUP);
                     break;
 
@@ -286,7 +289,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
 
                     if (robot.intakeSubsystem != null)
                     {
-                        robot.intakeSubsystem.setIntakeEnabled(true);
+                        robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
                     }
 
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.6);
@@ -304,6 +307,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                             }
                         },
                         robot.adjustPathByAlliance(alliance, intermediatePose, pickupPose));
+                    robot.shooterSubsystem.enableGoalTracking(true, false, true, true);    
                     sm.waitForSingleEvent(event, State.OUTPOST_DELAY);
                     break;
 
@@ -406,7 +410,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
 
                     if (robot.intakeSubsystem != null)
                     {
-                        robot.intakeSubsystem.setIntakeEnabled(true);
+                        robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
                     }
 
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.65);
@@ -428,6 +432,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                             }
                         },
                         robot.adjustPathByAlliance(alliance, neutralZonePath));
+                    robot.shooterSubsystem.enableGoalTracking(true, false, true, true);
                     sm.waitForSingleEvent(event, State.RETURN_TO_SCORE_POS);
                     break;
 
@@ -454,7 +459,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                             if (wpCtxt.index == 4 || wpCtxt.index == -1)
                             {
                                 //robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
-                                robot.intakeSubsystem.setIntakeEnabled(true);
+                                robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
                                 robot.autoShootTask.autoShoot(null, null, false, true, false);
                             } 
                             else if ((wpCtxt.index == 5 || wpCtxt.index == -1) && atDepot)
@@ -478,7 +483,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     robot.globalTracer.traceInfo(moduleName, "Shooting NeutralZone cycle " + currentNeutralZoneCycles);
                     if (robot.intakeSubsystem != null)
                     {
-                        robot.intakeSubsystem.setIntakeEnabled(true);
+                        robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
                     }
                     if (robot.autoShootTask != null)
                     {

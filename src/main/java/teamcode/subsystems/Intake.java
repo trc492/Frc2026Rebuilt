@@ -58,6 +58,7 @@ public class Intake extends TrcSubsystem
         public static final boolean INTAKE_FOC_ENABLED          = true;
         // Intake Parameters
         public static final double INTAKE_POWER                 = 0.6;
+        public static final double INTAKE_AUTO_POWER            = 1.0;
 
         // Deployer:
         // PID Parameters
@@ -154,6 +155,16 @@ public class Intake extends TrcSubsystem
     {
         intakeOn = enabled;
         intake.setPower(enabled? Params.INTAKE_POWER: 0.0);
+        if (robot.ledIndicator != null)
+        {
+            robot.ledIndicator.setStatusPatternState(LEDIndicator.INTAKE_ON, enabled);
+        }
+    }   //setIntakeEnabled
+
+    public void setIntakeEnabled(boolean enabled, double power)
+    {
+        intakeOn = enabled;
+        intake.setPower(enabled? power: 0.0);
         if (robot.ledIndicator != null)
         {
             robot.ledIndicator.setStatusPatternState(LEDIndicator.INTAKE_ON, enabled);

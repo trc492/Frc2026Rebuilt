@@ -37,6 +37,7 @@ import teamcode.RobotParams;
 import teamcode.autotasks.TaskAutoClimb.ClimbSide;
 // import teamcode.autotasks.TaskAutoClimb;
 import teamcode.subsystems.Shooter;
+import teamcode.subsystems.Intake.Params;
 import trclib.pathdrive.TrcPose2D;
 import trclib.pathdrive.TrcPurePursuitDrive;
 import trclib.robotcore.TrcEvent;
@@ -274,7 +275,7 @@ robot.globalTracer.traceErr(moduleName, "DcmpSTARTTimestamps=" + Arrays.toString
                             if (wpCtxt.index == 1)
                             {
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.8);
-                                robot.intakeSubsystem.setIntakeEnabled(true);
+                                robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
                             } 
                         },
                         robot.adjustPathByAlliance(alliance, depotPickupPath));
@@ -301,7 +302,7 @@ robot.globalTracer.traceErr(moduleName, "DcmpSTARTTimestamps=" + Arrays.toString
                     }
                     if (robot.intakeSubsystem != null)
                     {
-                        robot.intakeSubsystem.setIntakeEnabled(false);
+                        robot.intakeSubsystem.setIntakeEnabled(false);  
                     }
 
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.8);
@@ -361,7 +362,7 @@ robot.globalTracer.traceErr(moduleName, "DcmpSTARTTimestamps=" + Arrays.toString
 
                     if (robot.intakeSubsystem != null)
                     {
-                        robot.intakeSubsystem.setIntakeEnabled(true);
+                        robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
                     }
 
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
@@ -436,7 +437,7 @@ robot.globalTracer.traceErr(moduleName, "DcmpSTARTTimestamps=" + Arrays.toString
                 case SHOOT_NEUTRAL_FUEL:
                     if (robot.intakeSubsystem != null)
                     {
-                        robot.intakeSubsystem.setIntakeEnabled(true);
+                        robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
                     }
 
                     if (robot.autoShootTask != null)
@@ -538,7 +539,7 @@ robot.globalTracer.traceErr(moduleName, "DcmpSTARTTimestamps=" + Arrays.toString
                 case SHOOT_HUB_FUEL:
                     if (robot.intakeSubsystem != null)
                     {
-                        robot.intakeSubsystem.setIntakeEnabled(true);
+                        robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
                     }
 
                     if (robot.autoShootTask != null)
