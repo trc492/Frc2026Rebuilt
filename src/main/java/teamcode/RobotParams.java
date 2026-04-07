@@ -281,7 +281,7 @@ public class RobotParams
         public static final TrcPose2D BLUE_CLIMB_LOOKOUT_POSE   =
             new TrcPose2D(170.22, 65.0, -180.0); // TODO: Fine tune x and y
         public static final TrcPose2D BLUE_DEPOT_CLIMB_POSE     =
-            new TrcPose2D(-190.95, 53.29, -90.0); // TODO: Determine x and y
+            new TrcPose2D(-190.95, 47.29, -90.0); // TODO: Determine x and y
         public static final TrcPose2D BLUE_OUTPOST_CLIMB_POSE   =
             new TrcPose2D(-105.95, 53.29, 90.0); // TODO: Determine x and y
 
