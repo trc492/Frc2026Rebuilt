@@ -387,14 +387,14 @@ public class FrcAuto implements TrcRobot.RobotMode
     /**
      * This method cancels the autonomous command if one is running.
      */
-    public void cancel()
-    {
-        if (autoCommand != null)
-        {
-            autoCommand.cancel();
-            autoCommand = null;
-        }
-    }   //cancel
+    // public void cancel()
+    // {
+    //     if (autoCommand != null)
+    //     {
+    //         autoCommand.cancel();
+    //         autoCommand = null;
+    //     }
+    // }   //cancel
 
     //
     // Implements TrcRobot.RunMode.
@@ -429,6 +429,7 @@ timestamps[1] = TrcTimer.getModeElapsedTime();
                 if (robot.robotBase != null)
                 {
                     autoCommand = rebuiltAuto;
+                    robot.globalTracer.traceErr(moduleName, "Selecting Rebuilt Auto.");
                 }
 timestamps[2] = TrcTimer.getModeElapsedTime();
                 break;
@@ -437,6 +438,7 @@ timestamps[2] = TrcTimer.getModeElapsedTime();
                 if (robot.robotBase != null)
                 {
                     autoCommand = dcmpAuto;
+                    robot.globalTracer.traceErr(moduleName, "Selecting Dcmp Auto.");
                 }
 timestamps[2] = TrcTimer.getModeElapsedTime();
 robot.globalTracer.traceErr(moduleName, "AutoTimestamps=" + Arrays.toString(timestamps));
@@ -523,6 +525,7 @@ robot.globalTracer.traceErr(moduleName, "AutoTimestamps=" + Arrays.toString(time
             //
             // Run the autonomous command.
             //
+            robot.globalTracer.traceErr(moduleName, "Calling cmdPeriodic.");
             autoCommand.cmdPeriodic(elapsedTime);
         }
     }   //periodic

@@ -166,6 +166,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
             switch (state)
             {
                 case START:
+robot.globalTracer.traceErr(moduleName, "*********** Calling DCMP Start **************.");
                     // Set robot location according to auto choices.
                     robot.setRobotStartPosition(autoChoices);
                     // Retrieve auto choice options.
