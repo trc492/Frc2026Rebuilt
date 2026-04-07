@@ -440,7 +440,7 @@ robot.globalTracer.traceErr(moduleName, "DcmpSTARTTimestamps=" + Arrays.toString
                     if (robot.autoShootTask != null)
                     {
                         robot.autoShootTask.autoShoot(null, event, true, true, false);
-                        sm.waitForSingleEvent(event, State.HUB_PICKUP, 4.0);
+                        sm.waitForSingleEvent(event, State.HUB_PICKUP, 4.5);
                     }
                     else
                     {

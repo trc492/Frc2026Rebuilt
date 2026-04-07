@@ -22,6 +22,7 @@
 
 package teamcode;
 
+import teamcode.indicators.LEDIndicator;
 import trclib.robotcore.TrcRobot;
 import trclib.robotcore.TrcRobot.RunMode;
 
@@ -64,6 +65,7 @@ public class FrcDisabled implements TrcRobot.RobotMode
     @Override
     public void startMode(RunMode prevMode, RunMode nextMode)
     {
+        robot.ledIndicator.setDisabledMode(true);
     }   //startMode
 
     /**
@@ -76,6 +78,7 @@ public class FrcDisabled implements TrcRobot.RobotMode
     @Override
     public void stopMode(RunMode prevMode, RunMode nextMode)
     {
+        robot.ledIndicator.setDisabledMode(false);
     }   //stopMode
 
     /**

@@ -74,8 +74,8 @@ public class LEDIndicator
     private static final TrcAddressableLED.LedPattern driveInvertedModePattern =
         new TrcAddressableLED.LedPattern(DRIVE_INVERTED_MODE, colorBlue, RobotParams.HwConfig.NUM_LEDS);
     private static final TrcAddressableLED.LedPattern disabledModePattern =
-        TrcAddressableLED.LedPattern.createLightChase(
-            DISABLED_MODE, colorDimBlue, colorBlack, RobotParams.HwConfig.NUM_LEDS, 2, 10, 0.08);
+        TrcAddressableLED.LedPattern.createColorWaves(
+            DISABLED_MODE, colorGreen, RobotParams.HwConfig.NUM_LEDS, 255, 0.08, 0.2);
     private static final TrcAddressableLED.LedPattern offPattern =
         new TrcAddressableLED.LedPattern(OFF, colorBlack, RobotParams.HwConfig.NUM_LEDS);
 
