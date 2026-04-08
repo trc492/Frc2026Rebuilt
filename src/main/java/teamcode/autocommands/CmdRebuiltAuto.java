@@ -106,7 +106,6 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
         timer = new TrcTimer(moduleName);
         event = new TrcEvent(moduleName);
         sm = new TrcStateMachine<>(moduleName);
-        sm.start(State.START);
     }   //CmdRebuiltAuto
 
     //
@@ -114,15 +113,14 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
     //
 
     /**
-     * This method checks if the current RobotCommand  is running.
-     *
-     * @return true if the command is running, false otherwise.
+     * This method starts the RobotCommand. It is called to set the state to start from the beginning. Typically,
+     * you will reset the state machine to the initial state and reset any timers used by the command.
      */
     @Override
-    public boolean isActive()
+    public void start()
     {
-        return sm.isEnabled();
-    }   //isActive
+        sm.start(State.START);
+    }   //start
 
     /**
      * This method cancels the command if it is active.
@@ -141,6 +139,17 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
         }
         sm.stop();
     }   //cancel
+
+    /**
+     * This method checks if the current RobotCommand  is running.
+     *
+     * @return true if the command is running, false otherwise.
+     */
+    @Override
+    public boolean isActive()
+    {
+        return sm.isEnabled();
+    }   //isActive
 
     /**
      * This method must be called periodically by the caller to drive the command sequence forward.
@@ -166,7 +175,6 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
             switch (state)
             {
                 case START:
-robot.globalTracer.traceErr(moduleName, "*********** Calling DCMP Start **************.");
                     // Set robot location according to auto choices.
                     robot.setRobotStartPosition(autoChoices);
                     // Retrieve auto choice options.

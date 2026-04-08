@@ -418,7 +418,7 @@ public class FrcTest extends FrcTeleOp
                 {
                     robot.robotBase.driveBase.resetOdometry();
                     testCommand = new CmdPidDrive(robot.robotBase.driveBase, robot.robotBase.pidDrive);
-                    ((CmdPidDrive) testCommand).start(
+                    ((CmdPidDrive) testCommand).startPath(
                         0.0, testChoices.getDrivePower(), null,
                         new TrcPose2D(
                             testChoices.getXTarget()*12.0, testChoices.getYTarget()*12.0,

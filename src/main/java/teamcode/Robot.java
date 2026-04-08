@@ -27,7 +27,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.PrintStream;
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.stream.Stream;
@@ -305,12 +304,9 @@ public class Robot extends FrcRobot
     @Override
     public void robotStartMode(RunMode runMode, RunMode prevMode)
     {
-double[] timestamps = new double[8];
-timestamps[0] = TrcTimer.getModeElapsedTime();
         // Read FMS Match info and Build info.
         FrcMatchInfo matchInfo = FrcMatchInfo.getMatchInfo();
         TrcBuildInfo buildInfo = TrcBuildInfo.getBuildInfo();
-timestamps[1] = TrcTimer.getModeElapsedTime();
         if (runMode == RunMode.DISABLED_MODE)
         {
             if (RobotParams.Preferences.useTraceLog)
@@ -325,12 +321,10 @@ timestamps[1] = TrcTimer.getModeElapsedTime();
         {
             // Start trace logging.
             setTraceLogEnabled(true);
-timestamps[2] = TrcTimer.getModeElapsedTime();
             // Start RobotDrive.
             if (robotBase != null)
             {
                 robotBase.driveBase.setOdometryEnabled(true, true);
-timestamps[3] = TrcTimer.getModeElapsedTime();
                 // Set ramp rate control in TeleOp.
                 if (runMode == RunMode.TELEOP_MODE && robotInfo.driveOpenLoopRampRate != null)
                 {
@@ -339,7 +333,6 @@ timestamps[3] = TrcTimer.getModeElapsedTime();
                         robotBase.driveMotors[i].setOpenLoopRampRate(robotInfo.driveOpenLoopRampRate);
                     }
                 }
-timestamps[4] = TrcTimer.getModeElapsedTime();
 
                 if (runMode != RunMode.AUTO_MODE)
                 {
@@ -355,7 +348,6 @@ timestamps[4] = TrcTimer.getModeElapsedTime();
                     }
                 }
             }
-timestamps[5] = TrcTimer.getModeElapsedTime();
             // Zero calibrate it only once. Don't do it again just because we are enabling/disabling robot.
             if (!zeroCalibrated &&
                 dashboard.getBoolean(
@@ -366,15 +358,12 @@ timestamps[5] = TrcTimer.getModeElapsedTime();
                     zeroCalibrate(null, null);
                 }
             }
-timestamps[6] = TrcTimer.getModeElapsedTime();
             // Start subsystems.
             if (ledIndicator != null)
             {
                 ledIndicator.reset();
             }
-timestamps[7] = TrcTimer.getModeElapsedTime();
         }
-globalTracer.traceErr(moduleName, "RobotTimestamps=" + Arrays.toString(timestamps));
         globalTracer.traceInfo(moduleName, matchInfo.eventDate + ": ***** " + runMode + " *****");
         globalTracer.traceInfo(moduleName, "<BuildInfo " + buildInfo + " />");
     }   //robotStartMode

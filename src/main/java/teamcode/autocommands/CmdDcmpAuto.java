@@ -22,8 +22,6 @@
 
 package teamcode.autocommands;
 
-import java.util.Arrays;
-
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import teamcode.FrcAuto;
 import teamcode.FrcAuto.AutoStartPos;
@@ -98,17 +96,20 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
     private TrcPose2D[] depotBumpSweep = RobotParams.Game.blueDoubleSweepDepotBumpPath;
     private TrcPose2D[] outpostBumpSweep = RobotParams.Game.blueDoubleSweepOutpostBumpPath;
 
-
     boolean atDepot = false;
     boolean isTrench = false;
 
-    public TrcPose2D[] getAdjustedSweepPath(TrcPose2D[] basePath, SweepDistance distance) {
+    public TrcPose2D[] getAdjustedSweepPath(TrcPose2D[] basePath, SweepDistance distance)
+    {
         TrcPose2D[] adjustedPath = basePath.clone();
         double sign = (basePath[1].angle < 0) ? -1.0 : 1.0;
-        if (distance == SweepDistance.PUSH_FUEL) {
+        if (distance == SweepDistance.PUSH_FUEL)
+        {
             adjustedPath[1] = new TrcPose2D(adjustedPath[1].x, 311.61, 110.0 * sign);
             adjustedPath[2] = new TrcPose2D(adjustedPath[2].x, 311.61, 110.0 * sign);
-        } else if (distance == SweepDistance.STANDARD) {
+        }
+        else if (distance == SweepDistance.STANDARD)
+        {
             adjustedPath[1] = new TrcPose2D(adjustedPath[1].x, 301.61, 90.0 * sign);
             adjustedPath[2] = new TrcPose2D(adjustedPath[2].x, 301.61, 90.0 * sign);
         }
@@ -123,17 +124,12 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
      */
     public CmdDcmpAuto(Robot robot, FrcAuto.AutoChoices autoChoices)
     {
-double[] timestamps = new double[2];
-timestamps[0] = TrcTimer.getModeElapsedTime();
         this.robot = robot;
         this.autoChoices = autoChoices;
 
         timer = new TrcTimer(moduleName);
         event = new TrcEvent(moduleName);
         sm = new TrcStateMachine<>(moduleName);
-        sm.start(State.START);
-timestamps[1] = TrcTimer.getModeElapsedTime();
-robot.globalTracer.traceErr(moduleName, "DcmpConstructorTimestamps=" + Arrays.toString(timestamps));
     }   //CmdDcmpAuto
 
     //
@@ -141,15 +137,14 @@ robot.globalTracer.traceErr(moduleName, "DcmpConstructorTimestamps=" + Arrays.to
     //
 
     /**
-     * This method checks if the current RobotCommand  is running.
-     *
-     * @return true if the command is running, false otherwise.
+     * This method starts the RobotCommand. It is called to set the state to start from the beginning. Typically,
+     * you will reset the state machine to the initial state and reset any timers used by the command.
      */
     @Override
-    public boolean isActive()
+    public void start()
     {
-        return sm.isEnabled();
-    }   //isActive
+        sm.start(State.START);
+    }   //start
 
     /**
      * This method cancels the command if it is active.
@@ -170,6 +165,17 @@ robot.globalTracer.traceErr(moduleName, "DcmpConstructorTimestamps=" + Arrays.to
     }   //cancel
 
     /**
+     * This method checks if the current RobotCommand  is running.
+     *
+     * @return true if the command is running, false otherwise.
+     */
+    @Override
+    public boolean isActive()
+    {
+        return sm.isEnabled();
+    }   //isActive
+
+    /**
      * This method must be called periodically by the caller to drive the command sequence forward.
      *
      * @param elapsedTime specifies the elapsed time in seconds since the start of the robot mode.
@@ -186,7 +192,6 @@ robot.globalTracer.traceErr(moduleName, "DcmpConstructorTimestamps=" + Arrays.to
         }
         else
         {
-            double[] timestamps = new double[5];
             // State nextState;
 
             robot.dashboard.displayPrintf(15, "State: " + state);
@@ -194,10 +199,8 @@ robot.globalTracer.traceErr(moduleName, "DcmpConstructorTimestamps=" + Arrays.to
             switch (state)
             {
                 case START:
-timestamps[0] = TrcTimer.getModeElapsedTime();
                     // Set robot location according to auto choices.
                     robot.setRobotStartPosition(autoChoices);
-timestamps[1] = TrcTimer.getModeElapsedTime();
                     // Retrieve auto choice options.
                     startPos = autoChoices.getStartPos();
                     alliance = autoChoices.getAlliance();
@@ -209,18 +212,15 @@ timestamps[1] = TrcTimer.getModeElapsedTime();
                     // passBack = autoChoices.getPassBack();
                     climb = autoChoices.getClimb();
                     sweepDistance = autoChoices.getSweepDistance();
-timestamps[2] = TrcTimer.getModeElapsedTime();
                     // climbSide = autoChoices.getClimbSide();
                     // neutralZoneCycles = autoChoices.getNeutralZoneCycles();
                     robot.robotBase.purePursuitDrive.getTurnPidCtrl().setNoOscillation(true);
-timestamps[3] = TrcTimer.getModeElapsedTime();
 
                     if (robot.shooterSubsystem != null)
                     {
                         if (Shooter.Params.TURRET_HAS_ABS_ENC)
                         {
                             // robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
-timestamps[4] = TrcTimer.getModeElapsedTime();
                             robot.zeroCalibrate(null, null);
                         }
                         else
@@ -255,7 +255,6 @@ timestamps[4] = TrcTimer.getModeElapsedTime();
                     {
                         sm.setState(type != Type.CENTER ? State.NEUTRAL_ZONE_PICKUP: State.PICKUP_DEPOT);
                     }
-robot.globalTracer.traceErr(moduleName, "DcmpSTARTTimestamps=" + Arrays.toString(timestamps));
                     break;
                 
                 case PICKUP_DEPOT:
