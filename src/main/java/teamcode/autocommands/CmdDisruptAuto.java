@@ -219,7 +219,7 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
                         robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
                     }
                     TrcPose2D[] neutralPathReturnDepot = new TrcPose2D[] {
-                            new TrcPose2D(-260.45, 300.73, 125.00),
+                            new TrcPose2D(-260.45, 300.73, 90.00),
                             new TrcPose2D(-164.45, 293.79, 90.00),
                             new TrcPose2D(-278.80, 301.61, 0.00),
                             new TrcPose2D(-284.80, 151.73, 0.00), // Standard Trench Auton End Point
@@ -237,6 +237,8 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
 
                     TrcPose2D[] returnPath = atDepot ? neutralPathReturnDepot : neutralPathReturnOutpost;
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
+                    // Increasing rot limit to turn quickly
+                    robot.robotBase.purePursuitDrive.setRotOutputLimit(0.5);
                     robot.robotBase.purePursuitDrive.start(
                             null, null, 0.0, false,
                             (ctxt, canceled) -> {
@@ -247,6 +249,8 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
                                 if (wpCtxt.index == 1) {
                                     // Intaking, set to lower speed
                                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.6);
+                                    // Resetting rot limit to 0.5 after turning
+                                    robot.robotBase.purePursuitDrive.setRotOutputLimit(0.5);
                                 } else if (wpCtxt.index == 2) {
                                     // End of intake, restore higher speed and disable intake
                                     robot.intakeSubsystem.setIntakeEnabled(false);
