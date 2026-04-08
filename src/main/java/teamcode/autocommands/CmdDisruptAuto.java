@@ -227,7 +227,7 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
                             new TrcPose2D(-208.40, 48.00, -90.00) // Climb Pos End Point
                     };
                     TrcPose2D[] neutralPathReturnOutpost = new TrcPose2D[] {
-                            new TrcPose2D(-57.24, 300.73, -125.00),
+                            new TrcPose2D(-57.24, 300.73, -90.00),
                             new TrcPose2D(-153.24, 293.79, -90.00),
                             new TrcPose2D(-38.89, 301.61, 0.00),
                             new TrcPose2D(-32.89, 151.73, 0.00), // Standard Trench Auton End Point
