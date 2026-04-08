@@ -222,7 +222,7 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
                             new TrcPose2D(-260.45, 300.73, 90.00),
                             new TrcPose2D(-164.45, 293.79, 90.00),
                             new TrcPose2D(-278.80, 301.61, 0.00),
-                            new TrcPose2D(-284.80, 151.73, 0.00), // Standard Trench Auton End Point
+                            new TrcPose2D(-287.80, 151.73, 0.00), // Standard Trench Auton End Point
                             new TrcPose2D(-258.14, 78.07, -45.00), // Climb wp1
                             new TrcPose2D(-208.40, 48.00, -90.00) // Climb Pos End Point
                     };
@@ -230,7 +230,7 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
                             new TrcPose2D(-57.24, 300.73, -90.00),
                             new TrcPose2D(-153.24, 293.79, -90.00),
                             new TrcPose2D(-38.89, 301.61, 0.00),
-                            new TrcPose2D(-32.89, 151.73, 0.00), // Standard Trench Auton End Point
+                            new TrcPose2D(-29.89, 151.73, 0.00), // Standard Trench Auton End Point
                             new TrcPose2D(-59.55, 78.07, 45.00), // Climb wp1
                             new TrcPose2D(-109.29, 48.00, 90.00) // Climb Pos End Point
                     };
@@ -238,7 +238,7 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
                     TrcPose2D[] returnPath = atDepot ? neutralPathReturnDepot : neutralPathReturnOutpost;
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
                     // Increasing rot limit to turn quickly
-                    robot.robotBase.purePursuitDrive.setRotOutputLimit(0.5);
+                    robot.robotBase.purePursuitDrive.setRotOutputLimit(0.8);
                     robot.robotBase.purePursuitDrive.start(
                             null, null, 0.0, false,
                             (ctxt, canceled) -> {
