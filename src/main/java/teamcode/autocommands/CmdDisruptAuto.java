@@ -43,7 +43,7 @@ import trclib.timer.TrcTimer;
  * This class implements an autonomous strategy.
  */
 public class CmdDisruptAuto implements TrcRobot.RobotCommand {
-    private static final String moduleName = CmdDcmpAuto.class.getSimpleName();
+    private static final String moduleName = CmdDisruptAuto.class.getSimpleName();
 
     private enum State {
         START,
@@ -212,7 +212,8 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
                     break;
 
                 case NEUTRAL_ZONE_RETURN_AND_SHOOT:
-                    event.clear(); // Adding this here because no clue what the event is going at this point and we
+                    ((FrcSwerveBase) robot.robotBase).setXModeEnabled(moduleName, false);
+                    // event.clear(); // Adding this here because no clue what the event is going at this point and we
                                    // aren't registering the new one until like 5 years later
                     if (robot.intakeSubsystem != null) {
                         robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
@@ -278,7 +279,7 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
                         robot.autoShootTask.cancel();
                     }
                     if (robot.climberSubsystem != null) {
-                        double climbDelay = RobotParams.Game.AUTONOMOUS_PERIOD - TrcTimer.getModeElapsedTime() - 2.0;
+                        double climbDelay = RobotParams.Game.AUTONOMOUS_PERIOD - TrcTimer.getModeElapsedTime() - 3.0;
                         robot.autoClimbTask.autoClimb(
                                 null, event, alliance, atDepot ? ClimbSide.DEPOT : ClimbSide.OUTPOST,
                                 climbDelay > 0.0 ? climbDelay : 0.0);

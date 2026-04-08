@@ -28,6 +28,7 @@ import frclib.driverio.FrcMatchInfo;
 import frclib.driverio.FrcUserChoices;
 import teamcode.autocommands.CmdRebuiltAuto;
 import teamcode.autocommands.CmdDcmpAuto;
+import teamcode.autocommands.CmdDisruptAuto;
 import teamcode.autotasks.TaskAutoClimb;
 import trclib.command.CmdPidDrive;
 import trclib.command.CmdPurePursuitDrive;
@@ -53,6 +54,7 @@ public class FrcAuto implements TrcRobot.RobotMode
     {
         REBUILT_AUTO,
         DCMP_AUTO,
+        DISRUPT_AUTO,
         PP_DRIVE,
         PID_DRIVE,
         TIMED_DRIVE,
@@ -155,8 +157,9 @@ public class FrcAuto implements TrcRobot.RobotMode
             }
             else
             {
-                autoStrategyMenu.addChoice("Rebuilt Auto", AutoStrategy.REBUILT_AUTO, true, false);
-                autoStrategyMenu.addChoice("DCMP Auto", AutoStrategy.DCMP_AUTO);
+                autoStrategyMenu.addChoice("Rebuilt Auto", AutoStrategy.REBUILT_AUTO, false, false);
+                autoStrategyMenu.addChoice("DCMP Auto", AutoStrategy.DCMP_AUTO, true, false);
+                autoStrategyMenu.addChoice("Disrupt Auto", AutoStrategy.DISRUPT_AUTO);
                 autoStrategyMenu.addChoice("Pure Pursuit Drive", AutoStrategy.PP_DRIVE);
                 autoStrategyMenu.addChoice("PID Drive", AutoStrategy.PID_DRIVE);
                 autoStrategyMenu.addChoice("Timed Drive", AutoStrategy.TIMED_DRIVE);
@@ -354,6 +357,7 @@ public class FrcAuto implements TrcRobot.RobotMode
     private final Robot robot;
     private final TrcRobot.RobotCommand rebuiltAuto;
     private final TrcRobot.RobotCommand dcmpAuto;
+    private final TrcRobot.RobotCommand disruptAuto;
     private TrcRobot.RobotCommand autoCommand;
 
     /**
@@ -369,6 +373,7 @@ public class FrcAuto implements TrcRobot.RobotMode
         this.robot = robot;
         rebuiltAuto = new CmdRebuiltAuto(robot, autoChoices);
         dcmpAuto = new CmdDcmpAuto(robot, autoChoices);
+        disruptAuto = new CmdDisruptAuto(robot, autoChoices);
     }   //FrcAuto
 
     /**
@@ -432,6 +437,14 @@ public class FrcAuto implements TrcRobot.RobotMode
                 {
                     autoCommand = dcmpAuto;
                     robot.globalTracer.traceErr(moduleName, "Selecting Dcmp Auto.");
+                }
+                break;
+            
+            case DISRUPT_AUTO:
+                if (robot.robotBase != null)
+                {
+                    autoCommand = disruptAuto;
+                    robot.globalTracer.traceErr(moduleName, "Selecting Disrupt Auto.");
                 }
                 break;
 
