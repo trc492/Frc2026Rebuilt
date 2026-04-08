@@ -301,7 +301,7 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
                     }
                     if (robot.intakeSubsystem != null)
                     {
-                        robot.intakeSubsystem.setIntakeEnabled(false);  
+                        robot.intakeSubsystem.setIntakeEnabled(false);
                     }
 
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.8);

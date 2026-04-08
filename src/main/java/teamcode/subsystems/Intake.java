@@ -151,16 +151,6 @@ public class Intake extends TrcSubsystem
         return intake;
     }   //getIntake
 
-    public void setIntakeEnabled(boolean enabled)
-    {
-        intakeOn = enabled;
-        intake.setPower(enabled? Params.INTAKE_POWER: 0.0);
-        if (robot.ledIndicator != null)
-        {
-            robot.ledIndicator.setStatusPatternState(LEDIndicator.INTAKE_ON, enabled);
-        }
-    }   //setIntakeEnabled
-
     public void setIntakeEnabled(boolean enabled, double power)
     {
         intakeOn = enabled;
@@ -169,6 +159,11 @@ public class Intake extends TrcSubsystem
         {
             robot.ledIndicator.setStatusPatternState(LEDIndicator.INTAKE_ON, enabled);
         }
+    }   //setIntakeEnabled
+
+    public void setIntakeEnabled(boolean enabled)
+    {
+        setIntakeEnabled(enabled, enabled? Params.INTAKE_POWER: 0.0);
     }   //setIntakeEnabled
 
     public boolean isIntakeOn()
