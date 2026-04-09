@@ -534,7 +534,6 @@ public class FrcAuto implements TrcRobot.RobotMode
             //
             // Run the autonomous command.
             //
-            robot.globalTracer.traceErr(moduleName, "Calling cmdPeriodic.");
             autoCommand.cmdPeriodic(elapsedTime);
         }
     }   //periodic
