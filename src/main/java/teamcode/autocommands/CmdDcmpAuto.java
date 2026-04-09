@@ -22,6 +22,8 @@
 
 package teamcode.autocommands;
 
+import java.util.Arrays;
+
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import teamcode.FrcAuto;
 import teamcode.FrcAuto.AutoStartPos;
@@ -192,6 +194,7 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
         }
         else
         {
+double[] timestamps = new double[8];
             // State nextState;
 
             robot.dashboard.displayPrintf(15, "State: " + state);
@@ -327,6 +330,7 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
                     break;
                 
                 case NEUTRAL_ZONE_PICKUP:
+timestamps[0] = TrcTimer.getModeElapsedTime();
                     atDepot = startPos == AutoStartPos.START_POS_DEPOT;
                     isTrench = type == Type.TRENCH;
 
@@ -359,10 +363,12 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
                     //         new TrcPose2D[] {outpostBumpSweep[0], outpostBumpSweep[1], outpostBumpSweep[2]};
                     // }
 
+timestamps[1] = TrcTimer.getModeElapsedTime();
                     if (robot.intakeSubsystem != null)
                     {
                         robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
                     }
+timestamps[2] = TrcTimer.getModeElapsedTime();
 
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
                     robot.robotBase.purePursuitDrive.start(
@@ -391,8 +397,11 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
                             }
                         },
                         robot.adjustPathByAlliance(alliance, neutralZonePath));
+timestamps[3] = TrcTimer.getModeElapsedTime();
                     robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
+timestamps[4] = TrcTimer.getModeElapsedTime();
                     sm.waitForSingleEvent(event, State.SHOOT_NEUTRAL_FUEL);
+robot.globalTracer.traceErr("DEBUG_PERF", "NeutralZonePickupTimestamps=" + Arrays.toString(timestamps));
                     break;
                 
                 // case RETURN_TO_SCORE_NEUTRAL:
