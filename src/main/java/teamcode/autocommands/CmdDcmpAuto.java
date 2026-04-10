@@ -112,8 +112,8 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
         }
         else if (distance == SweepDistance.STANDARD)
         {
-            adjustedPath[1] = new TrcPose2D(adjustedPath[1].x, 301.61, 90.0 * sign);
-            adjustedPath[2] = new TrcPose2D(adjustedPath[2].x, 301.61, 90.0 * sign);
+            adjustedPath[1] = new TrcPose2D(adjustedPath[1].x, 306.61, 90.0 * sign);
+            adjustedPath[2] = new TrcPose2D(adjustedPath[2].x, 306.61, 90.0 * sign);
         }
         return adjustedPath;
     }
@@ -267,6 +267,7 @@ double[] timestamps = new double[8];
                     TrcPose2D[] depotPickupPath = new TrcPose2D[] {depotPickupPose, depotEndPose};
 
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
+                    robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
                         (ctxt, canceled) ->
@@ -277,7 +278,7 @@ double[] timestamps = new double[8];
                             if (wpCtxt.index == 1)
                             {
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.8);
-                                robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
+                               // robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
                             } 
                         },
                         robot.adjustPathByAlliance(alliance, depotPickupPath));
@@ -378,13 +379,17 @@ timestamps[2] = TrcTimer.getModeElapsedTime();
                             TrcPurePursuitDrive.WaypointContext wpCtxt = (TrcPurePursuitDrive.WaypointContext) ctxt;
                             robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + wpCtxt.index);
                             robot.setRelocalizationMode(wpCtxt.index == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
+                            if (wpCtxt.index == 1)
+                            {
+                                robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
+                            }
                             if (wpCtxt.index == 2)
                             {
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.7);
                             }
                             if (wpCtxt.index == 3)
                             {
-                                robot.intakeSubsystem.setIntakeEnabled(false);
+                                //robot.intakeSubsystem.setIntakeEnabled(false);
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.8);
                             }
                             if (wpCtxt.index == 4)
@@ -398,7 +403,7 @@ timestamps[2] = TrcTimer.getModeElapsedTime();
                         },
                         robot.adjustPathByAlliance(alliance, neutralZonePath));
 timestamps[3] = TrcTimer.getModeElapsedTime();
-                    robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
+                    // robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
 timestamps[4] = TrcTimer.getModeElapsedTime();
                     sm.waitForSingleEvent(event, State.SHOOT_NEUTRAL_FUEL);
 robot.globalTracer.traceErr("DEBUG_PERF", "NeutralZonePickupTimestamps=" + Arrays.toString(timestamps));
@@ -481,7 +486,7 @@ robot.globalTracer.traceErr("DEBUG_PERF", "NeutralZonePickupTimestamps=" + Array
                             new TrcPose2D[] {outpostTrenchSweep[5], outpostTrenchSweep[6], outpostTrenchSweep[7], outpostTrenchSweep[8], outpostTrenchSweep[9], outpostTrenchSweep[10], outpostTrenchSweep[11], outpostTrenchSweep[12], hubOutpostExtraPose}:
                             new TrcPose2D[] {outpostBumpSweep[5], outpostBumpSweep[6], outpostBumpSweep[7], outpostBumpSweep[8], outpostBumpSweep[9], outpostBumpSweep[10], outpostBumpSweep[11], outpostBumpSweep[12], hubOutpostExtraPose};
                     }
-                    robot.robotBase.purePursuitDrive.setRotOutputLimit(0.8);
+                    robot.robotBase.purePursuitDrive.setRotOutputLimit(0.85);
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.8);
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
@@ -506,7 +511,7 @@ robot.globalTracer.traceErr("DEBUG_PERF", "NeutralZonePickupTimestamps=" + Array
                             }
                             if (wpCtxt.index == 7)
                             {
-                                robot.intakeSubsystem.setIntakeEnabled(false);
+                                //robot.intakeSubsystem.setIntakeEnabled(false);
                             }
                             if (wpCtxt.index == 8)
                             {

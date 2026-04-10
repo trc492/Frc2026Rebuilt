@@ -354,6 +354,22 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                             prevClimbPower = climbPower;
                         }
                     }
+
+                    if(robot.autoShootTask != null)
+                    {
+                        double lTrigger =  robot.driverController.getRightTrigger(); 
+
+                        if(lTrigger > 0.0)
+                        {
+                            //robot.globalTracer.traceInfo(moduleName, ">>>>> Start Auto Shoot.");
+                            robot.intakeSubsystem.setIntakeEnabled(true);
+                        } 
+                        else
+                        {
+                            robot.intakeSubsystem.setIntakeEnabled(false);
+                        }
+
+                    }
                 }
             }
 

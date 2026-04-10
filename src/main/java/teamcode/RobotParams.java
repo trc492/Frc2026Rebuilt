@@ -281,9 +281,9 @@ public class RobotParams
         public static final TrcPose2D BLUE_CLIMB_LOOKOUT_POSE   =
             new TrcPose2D(170.22, 65.0, -180.0); // TODO: Fine tune x and y
         public static final TrcPose2D BLUE_DEPOT_CLIMB_POSE     =
-            new TrcPose2D(-190.95, 49.29, -90.0); // TODO: Determine x and y
+            new TrcPose2D(-190.95, 43.29, -90.0); // TODO: Determine x and y
         public static final TrcPose2D BLUE_OUTPOST_CLIMB_POSE   =
-            new TrcPose2D(-105.95, 53.29, 90.0); // TODO: Determine x and y
+            new TrcPose2D(-105.95, 43.29, 90.0); // TODO: Determine x and y
 
         public static final double allianceAreaWidth            = 182.11;   // Distance from alliance wall to center of trench.
         public static final double[] fieldLengthTriggerPoints   = new double[]
@@ -369,9 +369,9 @@ public class RobotParams
             new TrcPose2D(-284.80, 151.73, 0.00),
             new TrcPose2D(-293.58, 233.32, 0.00),
             new TrcPose2D(-276.59, 243.80, 90.00),
-            new TrcPose2D(-164.12, 243.80, 90.00),
-            new TrcPose2D(-119.05, 251.24, -90.00),
-            new TrcPose2D(-162.93, 274.59, -90.00),
+            new TrcPose2D(-184.12, 243.80, 90.00),
+            new TrcPose2D(-139.05, 251.24, -90.00),
+            new TrcPose2D(-182.93, 274.59, -90.00),
             new TrcPose2D(-253.39, 280.56, -90.00),
             new TrcPose2D(-280.84, 267.53, 0.00),
             new TrcPose2D(-290.29, 151.73, 0.00)
@@ -385,9 +385,9 @@ public class RobotParams
             new TrcPose2D(-32.89, 151.73, 0.00),
             new TrcPose2D(-24.11, 233.32, 0.00),
             new TrcPose2D(-41.10, 243.80, -90.00),
-            new TrcPose2D(-153.57, 243.80, -90.00),
-            new TrcPose2D(-198.64, 251.24, 90.00),
-            new TrcPose2D(-154.76, 274.59, 90.00),
+            new TrcPose2D(-133.57, 243.80, -90.00),
+            new TrcPose2D(-178.64, 251.24, 90.00),
+            new TrcPose2D(-134.76, 274.59, 90.00),
             new TrcPose2D(-64.30, 280.56, 90.00),
             new TrcPose2D(-36.85, 267.53, 0.00),
             new TrcPose2D(-27.40, 151.73, 0.00)
@@ -415,8 +415,8 @@ public class RobotParams
             new TrcPose2D(-278.80, 301.61, 0.00),
             new TrcPose2D(-284.80, 151.73, 0.00),
             new TrcPose2D(-287.58, 233.32, 0.00),
-            new TrcPose2D(-249.59, 240.80, 90.00),
-            new TrcPose2D(-164.12, 240.80, 90.00),
+            new TrcPose2D(-249.59, 235.80, 90.00),
+            new TrcPose2D(-164.12, 235.80, 90.00),
             new TrcPose2D(-119.05, 251.24, 0.00),
             new TrcPose2D(-162.93, 274.59, -90.00),
             new TrcPose2D(-225.93, 274.59, -90.00),
@@ -431,8 +431,8 @@ public class RobotParams
             new TrcPose2D(-38.89, 301.61, 0.00),
             new TrcPose2D(-32.89, 151.73, 0.00),
             new TrcPose2D(-30.11, 233.32, 0.00),
-            new TrcPose2D(-68.10, 240.80, -90.00),
-            new TrcPose2D(-153.57, 240.80, -90.00),
+            new TrcPose2D(-68.10, 235.80, -90.00),
+            new TrcPose2D(-153.57, 235.80, -90.00),
             new TrcPose2D(-198.64, 251.24, 0.00),
             new TrcPose2D(-154.76, 274.59, 90.00),
             new TrcPose2D(-91.76, 274.59, 90.00),

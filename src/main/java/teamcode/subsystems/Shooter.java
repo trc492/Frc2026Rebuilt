@@ -62,6 +62,10 @@ public class Shooter extends TrcSubsystem
 {
     public static final String SUBSYSTEM_NAME = "Shooter";
     private static final boolean NEED_ZERO_CAL = true;
+    private static Double enteredShadowZoneLTransfer = null;
+    private static Double enteredShadowZoneRTransfer = null;
+    private static Double enteredShadowZoneFeeder = null;
+
 
     public static final String HUB_SHOOT_POINT = "HubShootPoint";
     public static final String TOWER_SHOOT_POINT = "TowerShootPoint";
@@ -993,7 +997,37 @@ public class Shooter extends TrcSubsystem
                 // We are in hub shadown zone or trench zone, don't passback there.
                 if (robot.autoShootTask != null && robot.autoShootTask.isActive())
                 {
-                    robot.autoShootTask.cancel();
+                    // robot.autoShootTask.cancel();
+                    // We want to hold the shooter to the correct location, pause shooting
+                    if (robot.leftTransfer != null && robot.leftTransfer.isActive()) {
+                        robot.leftTransfer.cancel();
+                        enteredShadowZoneLTransfer = robot.leftTransfer.getPower();
+                    }
+                    if (robot.rightTransfer != null && robot.rightTransfer.isActive()) {
+                        robot.rightTransfer.cancel();
+                        enteredShadowZoneRTransfer = robot.rightTransfer.getPower();
+                    }
+                    double feederPower = robot.feeder.getPower();
+                    if (robot.feeder != null && feederPower != 0.0) {
+                        robot.feeder.cancel();
+                        enteredShadowZoneFeeder = feederPower;
+                    }
+                    
+                }
+            }
+            else 
+            {
+                if (enteredShadowZoneFeeder != null) {
+                    robot.feeder.setPower(enteredShadowZoneFeeder);
+                    enteredShadowZoneFeeder = null;
+                }
+                if (enteredShadowZoneLTransfer != null) {
+                    robot.leftTransfer.setPower(enteredShadowZoneLTransfer);
+                    enteredShadowZoneLTransfer = null;
+                }
+                if (enteredShadowZoneRTransfer != null) {
+                    robot.rightTransfer.setPower(enteredShadowZoneRTransfer);
+                    enteredShadowZoneRTransfer = null;
                 }
             }
             tracer.traceInfo(
