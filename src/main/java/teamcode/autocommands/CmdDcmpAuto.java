@@ -428,7 +428,7 @@ timestamps[0] = TrcTimer.getModeElapsedTime();
                     }
                     else
                     {
-                        fullPath = isTrench ? outpostTrenchSweep : outpostBumpSweep;
+                        fullPath = isTrench ? RobotParams.Game.blueDoubleSweepOutpostShallowPath : outpostBumpSweep;
                     }
 
                     // TrcPose2D[] adjustedFullPath = getAdjustedSweepPath(fullPath, sweepDistance);
