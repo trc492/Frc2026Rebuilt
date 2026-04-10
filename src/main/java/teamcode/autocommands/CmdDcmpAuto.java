@@ -115,6 +115,11 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
             adjustedPath[1] = new TrcPose2D(adjustedPath[1].x, 306.61, 90.0 * sign);
             adjustedPath[2] = new TrcPose2D(adjustedPath[2].x, 306.61, 90.0 * sign);
         }
+        else if (distance == SweepDistance.SHALLOW_SWEEP)
+        {
+            adjustedPath[1] = new TrcPose2D(adjustedPath[1].x, 288.61, 110.0 * sign);
+            adjustedPath[2] = new TrcPose2D(adjustedPath[2].x, 288.61, 110.0 * sign);
+        }
         return adjustedPath;
     }
 
@@ -331,6 +336,87 @@ double[] timestamps = new double[8];
                     break;
                 
                 case NEUTRAL_ZONE_PICKUP:
+// timestamps[0] = TrcTimer.getModeElapsedTime();
+//                     atDepot = startPos == AutoStartPos.START_POS_DEPOT;
+//                     isTrench = type == Type.TRENCH;
+
+//                     TrcPose2D[] fullPath;
+//                     if (atDepot)
+//                     {
+//                         fullPath = isTrench ? depotTrenchSweep : depotBumpSweep;
+//                     }
+//                     else
+//                     {
+//                         fullPath = isTrench ? outpostTrenchSweep : outpostBumpSweep;
+//                     }
+
+//                     TrcPose2D[] adjustedFullPath = getAdjustedSweepPath(fullPath, sweepDistance);
+//                     TrcPose2D neutralExtraPoint = adjustedFullPath[4].clone();
+//                     neutralExtraPoint.y -= 13.0;
+//                     if (sweepDistance == SweepDistance.SHALLOW_SWEEP)
+//                     {
+//                         adjustedFullPath[3].y = 276.61;
+//                     }
+//                     neutralZonePath = new TrcPose2D[] {adjustedFullPath[0], adjustedFullPath[1], adjustedFullPath[2], adjustedFullPath[3], adjustedFullPath[4], neutralExtraPoint};
+
+//                     // if (atDepot)
+//                     // {
+                        
+//                     //     neutralZonePath = isTrench ? 
+//                     //         new TrcPose2D[] {depotTrenchSweep[0], depotTrenchSweep[1], depotTrenchSweep[2]}:
+//                     //         new TrcPose2D[] {depotBumpSweep[0], depotBumpSweep[1], depotBumpSweep[2]};
+//                     // }
+//                     // else
+//                     // {
+//                     //     neutralZonePath = isTrench ? 
+//                     //         new TrcPose2D[] {outpostTrenchSweep[0], outpostTrenchSweep[1], outpostTrenchSweep[2]}:
+//                     //         new TrcPose2D[] {outpostBumpSweep[0], outpostBumpSweep[1], outpostBumpSweep[2]};
+//                     // }
+
+// timestamps[1] = TrcTimer.getModeElapsedTime();
+//                     if (robot.intakeSubsystem != null)
+//                     {
+//                         robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
+//                     }
+// timestamps[2] = TrcTimer.getModeElapsedTime();
+
+//                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
+//                     robot.robotBase.purePursuitDrive.start(
+//                         null, event, 0.0, false,
+//                         (ctxt, canceled) ->
+//                         {
+//                             TrcPurePursuitDrive.WaypointContext wpCtxt = (TrcPurePursuitDrive.WaypointContext) ctxt;
+//                             robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + wpCtxt.index);
+//                             robot.setRelocalizationMode(wpCtxt.index == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
+//                             if (wpCtxt.index == 1)
+//                             {
+//                                 robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
+//                             }
+//                             if (wpCtxt.index == 2)
+//                             {
+//                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.7);
+//                             }
+//                             if (wpCtxt.index == 3)
+//                             {
+//                                 //robot.intakeSubsystem.setIntakeEnabled(false);
+//                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.8);
+//                             }
+//                             if (wpCtxt.index == 4)
+//                             {
+//                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
+//                             }
+//                             if (wpCtxt.index == 5)
+//                             {
+//                                 robot.robotBase.purePursuitDrive.cancel();
+//                             }
+//                         },
+//                         robot.adjustPathByAlliance(alliance, neutralZonePath));
+// timestamps[3] = TrcTimer.getModeElapsedTime();
+//                     // robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
+// timestamps[4] = TrcTimer.getModeElapsedTime();
+//                     sm.waitForSingleEvent(event, State.SHOOT_NEUTRAL_FUEL);
+// robot.globalTracer.traceErr("DEBUG_PERF", "NeutralZonePickupTimestamps=" + Arrays.toString(timestamps));
+
 timestamps[0] = TrcTimer.getModeElapsedTime();
                     atDepot = startPos == AutoStartPos.START_POS_DEPOT;
                     isTrench = type == Type.TRENCH;
@@ -338,17 +424,21 @@ timestamps[0] = TrcTimer.getModeElapsedTime();
                     TrcPose2D[] fullPath;
                     if (atDepot)
                     {
-                        fullPath = isTrench ? depotTrenchSweep : depotBumpSweep;
+                        fullPath = isTrench ? RobotParams.Game.blueDoubleSweepDepotShallowPath : depotBumpSweep;
                     }
                     else
                     {
                         fullPath = isTrench ? outpostTrenchSweep : outpostBumpSweep;
                     }
 
-                    TrcPose2D[] adjustedFullPath = getAdjustedSweepPath(fullPath, sweepDistance);
-                    TrcPose2D neutralExtraPoint = adjustedFullPath[4].clone();
+                    // TrcPose2D[] adjustedFullPath = getAdjustedSweepPath(fullPath, sweepDistance);
+                    TrcPose2D neutralExtraPoint = fullPath[6].clone();
                     neutralExtraPoint.y -= 13.0;
-                    neutralZonePath = new TrcPose2D[] {adjustedFullPath[0], adjustedFullPath[1], adjustedFullPath[2], adjustedFullPath[3], adjustedFullPath[4], neutralExtraPoint};
+                    // if (sweepDistance == SweepDistance.SHALLOW_SWEEP)
+                    // {
+                    //     adjustedFullPath[3].y = 276.61;
+                    // }
+                    neutralZonePath = new TrcPose2D[] {fullPath[0], fullPath[1], fullPath[2], fullPath[3], fullPath[4], fullPath[5], fullPath[6], neutralExtraPoint};
 
                     // if (atDepot)
                     // {
@@ -395,8 +485,9 @@ timestamps[2] = TrcTimer.getModeElapsedTime();
                             if (wpCtxt.index == 4)
                             {
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
+                                robot.robotBase.purePursuitDrive.setRotOutputLimit(1.0);
                             }
-                            if (wpCtxt.index == 5)
+                            if (wpCtxt.index == 7)
                             {
                                 robot.robotBase.purePursuitDrive.cancel();
                             }

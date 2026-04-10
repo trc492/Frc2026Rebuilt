@@ -357,7 +357,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
 
                     if(robot.autoShootTask != null)
                     {
-                        double lTrigger =  robot.driverController.getRightTrigger(); 
+                        double lTrigger =  robot.driverController.getLeftTrigger(); 
 
                         if(lTrigger > 0.0)
                         {

@@ -368,8 +368,8 @@ public class RobotParams
             new TrcPose2D(-278.80, 301.61, 0.00),
             new TrcPose2D(-284.80, 151.73, 0.00),
             new TrcPose2D(-293.58, 233.32, 0.00),
-            new TrcPose2D(-276.59, 243.80, 90.00),
-            new TrcPose2D(-184.12, 243.80, 90.00),
+            new TrcPose2D(-276.59, 231.80, 90.00),
+            new TrcPose2D(-184.12, 231.80, 90.00),
             new TrcPose2D(-139.05, 251.24, -90.00),
             new TrcPose2D(-182.93, 274.59, -90.00),
             new TrcPose2D(-253.39, 280.56, -90.00),
@@ -384,13 +384,23 @@ public class RobotParams
             new TrcPose2D(-38.89, 301.61, 0.00),
             new TrcPose2D(-32.89, 151.73, 0.00),
             new TrcPose2D(-24.11, 233.32, 0.00),
-            new TrcPose2D(-41.10, 243.80, -90.00),
-            new TrcPose2D(-133.57, 243.80, -90.00),
+            new TrcPose2D(-41.10, 231.80, -90.00),
+            new TrcPose2D(-133.57, 231.80, -90.00),
             new TrcPose2D(-178.64, 251.24, 90.00),
             new TrcPose2D(-134.76, 274.59, 90.00),
             new TrcPose2D(-64.30, 280.56, 90.00),
             new TrcPose2D(-36.85, 267.53, 0.00),
             new TrcPose2D(-27.40, 151.73, 0.00)
+        };
+
+        public static final TrcPose2D[] blueDoubleSweepDepotShallowPath = new TrcPose2D[] {
+            new TrcPose2D(-295.01, 265.24, 90.00),
+            new TrcPose2D(-252.57, 279.38, 110.00),
+            new TrcPose2D(-172.06, 279.38, 110.00),
+            new TrcPose2D(-158.46, 237.42, -90.00),
+            new TrcPose2D(-250.94, 234.60, -90.00),
+            new TrcPose2D(-287.01, 255.22, 0.00),
+            new TrcPose2D(-291.01, 141.75, 0.00)
         };
 
         // public static final TrcPose2D[] blueDoubleSweepDepotBumpPath = new TrcPose2D[] {

@@ -103,7 +103,8 @@ public class FrcAuto implements TrcRobot.RobotMode
     public enum SweepDistance
     {
         STANDARD,
-        PUSH_FUEL
+        PUSH_FUEL,
+        SHALLOW_SWEEP
     }   //enum SweepDistance
 
     /**
@@ -186,6 +187,7 @@ public class FrcAuto implements TrcRobot.RobotMode
             typeChoiceMenu.addChoice("Center Auto", Type.CENTER, false, true);
 
             sweepDistanceChoiceMenu.addChoice("Standard", SweepDistance.STANDARD, false, true);
+            sweepDistanceChoiceMenu.addChoice("Shallow Sweep", SweepDistance.SHALLOW_SWEEP, false, false);
             sweepDistanceChoiceMenu.addChoice("Push Fuel", SweepDistance.PUSH_FUEL, true, false);
             //
             // Initialize dashboard with default choice values.
