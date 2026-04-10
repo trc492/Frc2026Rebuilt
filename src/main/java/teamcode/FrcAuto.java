@@ -23,6 +23,7 @@
 package teamcode;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcMatchInfo;
 import frclib.driverio.FrcUserChoices;
@@ -30,6 +31,7 @@ import teamcode.autocommands.CmdRebuiltAuto;
 import teamcode.autocommands.CmdDcmpAuto;
 import teamcode.autocommands.CmdDisruptAuto;
 import teamcode.autotasks.TaskAutoClimb;
+import teamcode.autotasks.TaskAutoClimb.ClimbSide;
 import trclib.command.CmdPidDrive;
 import trclib.command.CmdPurePursuitDrive;
 import trclib.command.CmdTimedDrive;
@@ -132,6 +134,28 @@ public class FrcAuto implements TrcRobot.RobotMode
         private final FrcChoiceMenu<Type> typeChoiceMenu;
         private final FrcChoiceMenu<SweepDistance> sweepDistanceChoiceMenu;
 
+        public Alliance alliance;
+        public AutoStrategy strategy;
+        public AutoStartPos startPos;
+        public double startDelay;
+        public boolean depotPickup;
+        public boolean outpostPickup;
+        public boolean neutralZonePickup;
+        public MoveTo moveTo;
+        public PassBack passback;
+        public boolean doClimb;
+        public ClimbSide climbSide;
+        public double neutralZoneCycles;
+        public Type autoType;
+        public SweepDistance sweepDistance;
+
+        public String pathFile;
+        public double xDriveDistance;
+        public double yDriveDistance;
+        public double turnAngle;
+        public double driveTime;
+        public double drivePower;
+
         public AutoChoices()
         {
             //
@@ -219,134 +243,160 @@ public class FrcAuto implements TrcRobot.RobotMode
         // Getters for autonomous mode choices.
         //
 
-        public DriverStation.Alliance getAlliance()
+        // public DriverStation.Alliance getAlliance()
+        // {
+        //     // Get alliance info from FMS if one is connected. If not, get it from dashboard.
+        //     FrcMatchInfo matchInfo = FrcMatchInfo.getMatchInfo();
+        //     return matchInfo.eventName != null? matchInfo.alliance: allianceMenu.getCurrentChoiceObject();
+        // }   //getAlliance
+
+        // public AutoStrategy getStrategy()
+        // {
+        //     return autoStrategyMenu.getCurrentChoiceObject();
+        // }   //getStrategy
+
+        // public AutoStartPos getStartPos()
+        // {
+        //     return autoStartPosMenu.getCurrentChoiceObject();
+        // }   //getStartPos
+
+        // public double getStartDelay()
+        // {
+        //     return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_START_DELAY);
+        // }   //getStartDelay
+
+        // public boolean depotPickup()
+        // {
+        //     return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_DEPOT_PICKUP);
+        // }   //depotPickup
+
+        // public boolean outpostPickup()
+        // {
+        //     return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_OUTPOST_PICKUP);
+        // }   //outpostPickup
+
+        // public boolean neutralZonePickup()
+        // {
+        //     return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_PICKUP);
+        // }   //neutralZonePickup
+
+        // public MoveTo getMoveTo()
+        // {
+        //     return moveToChoiceMenu.getCurrentChoiceObject();
+        // }   //getMoveTo
+
+        // public PassBack getPassBack()
+        // {
+        //     return passBackChoiceMenu.getCurrentChoiceObject();
+        // }   //getPassBack
+
+        // public boolean getClimb()
+        // {
+        //     return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_CLIMB);
+        // }   //getClimb
+
+        // public TaskAutoClimb.ClimbSide getClimbSide()
+        // {
+        //     return climbSideChoiceMenu.getCurrentChoiceObject();
+        // }   //getClimbSide
+
+        // public double getNeutralZoneCycles()
+        // {
+        //     return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_CYCLES);
+        // }   //getNeutralZoneCycles
+
+        // public Type getType()
+        // {
+        //     return typeChoiceMenu.getCurrentChoiceObject();
+        // }   //getType
+
+        // public SweepDistance getSweepDistance()
+        // {
+        //     return sweepDistanceChoiceMenu.getCurrentChoiceObject();
+        // }   //getSweepDistance
+
+        // public String getPathFile()
+        // {
+        //     return userChoices.getUserString(Dashboard.DBKEY_AUTO_PATHFILE);
+        // }   //getPathFile
+
+        // public double getXDriveDistance()
+        // {
+        //     return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_X_DRIVE_DISTANCE);
+        // }   //getXDriveDistance
+
+        // public double getYDriveDistance()
+        // {
+        //     return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_Y_DRIVE_DISTANCE);
+        // }   //getYDriveDistance
+
+        // public double getTurnAngle()
+        // {
+        //     return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_TURN_ANGLE);
+        // }   //getTurnAngle
+
+        // public double getDriveTime()
+        // {
+        //     return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_DRIVE_TIME);
+        // }   //getDriveTime
+
+        // public double getDrivePower()
+        // {
+        //     return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_DRIVE_POWER);
+        // }   //getDrivePower
+
+        public void fetchChoices()
         {
             // Get alliance info from FMS if one is connected. If not, get it from dashboard.
             FrcMatchInfo matchInfo = FrcMatchInfo.getMatchInfo();
-            return matchInfo.eventName != null? matchInfo.alliance: allianceMenu.getCurrentChoiceObject();
-        }   //getAlliance
+            alliance = matchInfo.eventName != null? matchInfo.alliance: allianceMenu.getCurrentChoiceObject();
+            strategy = autoStrategyMenu.getCurrentChoiceObject();
+            startPos = autoStartPosMenu.getCurrentChoiceObject();
+            startDelay = userChoices.getUserNumber(Dashboard.DBKEY_AUTO_START_DELAY);
+            depotPickup = userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_DEPOT_PICKUP);
+            outpostPickup = userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_OUTPOST_PICKUP);
+            neutralZonePickup = userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_PICKUP);
+            moveTo = moveToChoiceMenu.getCurrentChoiceObject();
+            passback = passBackChoiceMenu.getCurrentChoiceObject();
+            doClimb = userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_CLIMB);
+            climbSide = climbSideChoiceMenu.getCurrentChoiceObject();
+            neutralZoneCycles = userChoices.getUserNumber(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_CYCLES);
+            autoType = typeChoiceMenu.getCurrentChoiceObject();
+            sweepDistance = sweepDistanceChoiceMenu.getCurrentChoiceObject();
 
-        public AutoStrategy getStrategy()
-        {
-            return autoStrategyMenu.getCurrentChoiceObject();
-        }   //getStrategy
-
-        public AutoStartPos getStartPos()
-        {
-            return autoStartPosMenu.getCurrentChoiceObject();
-        }   //getStartPos
-
-        public double getStartDelay()
-        {
-            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_START_DELAY);
-        }   //getStartDelay
-
-        public boolean depotPickup()
-        {
-            return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_DEPOT_PICKUP);
-        }   //depotPickup
-
-        public boolean outpostPickup()
-        {
-            return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_OUTPOST_PICKUP);
-        }   //outpostPickup
-
-        public boolean neutralZonePickup()
-        {
-            return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_PICKUP);
-        }   //neutralZonePickup
-
-        public MoveTo getMoveTo()
-        {
-            return moveToChoiceMenu.getCurrentChoiceObject();
-        }   //getMoveTo
-
-        public PassBack getPassBack()
-        {
-            return passBackChoiceMenu.getCurrentChoiceObject();
-        }   //getPassBack
-
-        public boolean getClimb()
-        {
-            return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_CLIMB);
-        }   //getClimb
-
-        public TaskAutoClimb.ClimbSide getClimbSide()
-        {
-            return climbSideChoiceMenu.getCurrentChoiceObject();
-        }   //getClimbSide
-
-        public double getNeutralZoneCycles()
-        {
-            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_CYCLES);
-        }   //getNeutralZoneCycles
-
-        public Type getType()
-        {
-            return typeChoiceMenu.getCurrentChoiceObject();
-        }   //getType
-
-        public SweepDistance getSweepDistance()
-        {
-            return sweepDistanceChoiceMenu.getCurrentChoiceObject();
-        }   //getSweepDistance
-
-        public String getPathFile()
-        {
-            return userChoices.getUserString(Dashboard.DBKEY_AUTO_PATHFILE);
-        }   //getPathFile
-
-        public double getXDriveDistance()
-        {
-            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_X_DRIVE_DISTANCE);
-        }   //getXDriveDistance
-
-        public double getYDriveDistance()
-        {
-            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_Y_DRIVE_DISTANCE);
-        }   //getYDriveDistance
-
-        public double getTurnAngle()
-        {
-            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_TURN_ANGLE);
-        }   //getTurnAngle
-
-        public double getDriveTime()
-        {
-            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_DRIVE_TIME);
-        }   //getDriveTime
-
-        public double getDrivePower()
-        {
-            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_DRIVE_TIME);
-        }   //getDrivePower
+            pathFile = userChoices.getUserString(Dashboard.DBKEY_AUTO_PATHFILE);
+            xDriveDistance = userChoices.getUserNumber(Dashboard.DBKEY_AUTO_X_DRIVE_DISTANCE);
+            yDriveDistance = userChoices.getUserNumber(Dashboard.DBKEY_AUTO_Y_DRIVE_DISTANCE);
+            turnAngle = userChoices.getUserNumber(Dashboard.DBKEY_AUTO_TURN_ANGLE);
+            driveTime = userChoices.getUserNumber(Dashboard.DBKEY_AUTO_DRIVE_TIME);
+            drivePower = userChoices.getUserNumber(Dashboard.DBKEY_AUTO_DRIVE_POWER);
+        }   //fetchChoices
 
         @Override
         public String toString()
         {
-            return "alliance=\"" + getAlliance() + "\" " +
-                   "strategy=\"" + getStrategy() + "\" " +
-                   "startPos=\"" + getStartPos() + "\" " +
-                   "startDelay=" + getStartDelay() + " sec " +
+            return "alliance=\"" + alliance + "\" " +
+                   "strategy=\"" + strategy + "\" " +
+                   "startPos=\"" + startPos + "\" " +
+                   "startDelay=" + startDelay + " sec " +
 
-                   "depotPickup=\"" + depotPickup() + "\" " +
-                   "outpostPickup=\"" + outpostPickup() + "\" " +
-                   "neutralZonePickup=\"" + neutralZonePickup() + "\" " +
-                   "moveTo=\"" + getMoveTo() + "\" " +
-                   "passBack=\"" + getPassBack() + "\" " +
-                   "climb=\"" + getClimb() + "\" " +
-                   "climbSide=\"" + getClimbSide() + "\" " +
-                   "neutralZoneCycles=\"" + getNeutralZoneCycles() + "\" " +
-                   "type=\"" + getType() + "\" " +
-                   "sweepDistance=\"" + getSweepDistance() + "\" " +
+                   "depotPickup=\"" + depotPickup + "\" " +
+                   "outpostPickup=\"" + outpostPickup + "\" " +
+                   "neutralZonePickup=\"" + neutralZonePickup + "\" " +
+                   "moveTo=\"" + moveTo + "\" " +
+                   "passBack=\"" + passback + "\" " +
+                   "climb=\"" + doClimb + "\" " +
+                   "climbSide=\"" + climbSide + "\" " +
+                   "neutralZoneCycles=\"" + neutralZoneCycles + "\" " +
+                   "autoType=\"" + autoType + "\" " +
+                   "sweepDistance=\"" + sweepDistance + "\" " +
 
-
-                   "pathFile=\"" + getPathFile() + "\" " +
-                   "xDistance=" + getXDriveDistance() + " ft " +
-                   "yDistance=" + getYDriveDistance() + " ft " +
-                   "turnDegrees=" + getTurnAngle() + " deg " +
-                   "driveTime=" + getDriveTime() + " sec " +
-                   "drivePower=" + getDrivePower() + "\" ";
+                   "pathFile=\"" + pathFile + "\" " +
+                   "xDistance=" + xDriveDistance + " ft " +
+                   "yDistance=" + yDriveDistance + " ft " +
+                   "turnDegrees=" + turnAngle + " deg " +
+                   "driveTime=" + driveTime + " sec " +
+                   "drivePower=" + drivePower + "\" ";
         }   //toString
 
     }   //class AutoChoices
@@ -391,14 +441,6 @@ public class FrcAuto implements TrcRobot.RobotMode
     /**
      * This method cancels the autonomous command if one is running.
      */
-    // public void cancel()
-    // {
-    //     if (autoCommand != null)
-    //     {
-    //         autoCommand.cancel();
-    //         autoCommand = null;
-    //     }
-    // }   //cancel
 
     //
     // Implements TrcRobot.RunMode.
@@ -417,14 +459,9 @@ public class FrcAuto implements TrcRobot.RobotMode
     public void startMode(RunMode prevMode, RunMode nextMode)
     {
         //
-        // Retrieve Auto choices.
-        //
-        robot.globalTracer.logInfo(moduleName, "MatchInfo", FrcMatchInfo.getMatchInfo().toString());
-        robot.globalTracer.logInfo(moduleName, "AutoChoices", autoChoices.toString());
-        //
         // Create autonomous command.
         //
-        switch (autoChoices.getStrategy())
+        switch (autoChoices.strategy)
         {
             case REBUILT_AUTO:
                 if (robot.robotBase != null)
@@ -459,7 +496,7 @@ public class FrcAuto implements TrcRobot.RobotMode
                         robot.robotInfo.baseParams.profiledMaxDriveVelocity,
                         robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
                         robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
-                        RobotParams.Robot.teamFolderPath + "/" + autoChoices.getPathFile(), false);
+                        RobotParams.Robot.teamFolderPath + "/" + autoChoices.pathFile, false);
                 }
                 break;
 
@@ -468,10 +505,10 @@ public class FrcAuto implements TrcRobot.RobotMode
                 {
                     autoCommand = new CmdPidDrive(robot.robotBase.driveBase, robot.robotBase.pidDrive);
                     ((CmdPidDrive) autoCommand).startPath(
-                        autoChoices.getStartDelay(), autoChoices.getDrivePower(), null,
-                        new TrcPose2D(autoChoices.getXDriveDistance()*12.0,
-                                      autoChoices.getYDriveDistance()*12.0,
-                                      autoChoices.getTurnAngle()));
+                        autoChoices.startDelay, autoChoices.drivePower, null,
+                        new TrcPose2D(autoChoices.xDriveDistance*12.0,
+                                      autoChoices.yDriveDistance*12.0,
+                                      autoChoices.turnAngle));
                 }
                 break;
 
@@ -479,8 +516,8 @@ public class FrcAuto implements TrcRobot.RobotMode
                 if (robot.robotBase != null)
                 {
                     autoCommand = new CmdTimedDrive(
-                        robot.robotBase.driveBase, autoChoices.getStartDelay(), autoChoices.getDriveTime(), 0.0,
-                        autoChoices.getDrivePower(), 0.0);
+                        robot.robotBase.driveBase, autoChoices.startDelay, autoChoices.driveTime, 0.0,
+                        autoChoices.drivePower, 0.0);
                 }
                 break;
 
@@ -488,6 +525,8 @@ public class FrcAuto implements TrcRobot.RobotMode
             case DO_NOTHING:
             default:
                 autoCommand = null;
+                robot.globalTracer.logInfo(moduleName, "MatchInfo", FrcMatchInfo.getMatchInfo().toString());
+                robot.globalTracer.logInfo(moduleName, "AutoChoices", autoChoices.toString());
                 break;
         }
 

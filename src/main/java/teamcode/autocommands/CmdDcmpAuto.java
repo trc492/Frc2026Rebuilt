@@ -24,7 +24,6 @@ package teamcode.autocommands;
 
 import java.util.Arrays;
 
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import teamcode.FrcAuto;
 import teamcode.FrcAuto.AutoStartPos;
 import teamcode.FrcAuto.SweepDistance;
@@ -73,20 +72,6 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
     private final TrcTimer timer;
     private final TrcEvent event;
     private final TrcStateMachine<State> sm;
-
-    private FrcAuto.AutoStartPos startPos;
-    private Alliance alliance;
-    // private boolean depotPickup;
-    // private boolean outpostPickup;
-    // private boolean neutralZonePickup;
-    // private MoveTo moveTo;
-    private Type type;
-    // private PassBack passBack;
-    private boolean climb;
-    // private TaskAutoClimb.ClimbSide climbSide;
-    // private double neutralZoneCycles;
-    // private int currentNeutralZoneCycles = 0;
-    private SweepDistance sweepDistance;
 
     private TrcPose2D[] neutralZonePath = null;
     // private TrcPose2D[] neutralZoneReturnPath = null;
@@ -209,19 +194,6 @@ double[] timestamps = new double[8];
                 case START:
                     // Set robot location according to auto choices.
                     robot.setRobotStartPosition(autoChoices);
-                    // Retrieve auto choice options.
-                    startPos = autoChoices.getStartPos();
-                    alliance = autoChoices.getAlliance();
-                    // depotPickup = autoChoices.depotPickup();
-                    // outpostPickup = autoChoices.outpostPickup();
-                    // neutralZonePickup = autoChoices.neutralZonePickup();
-                    // moveTo = autoChoices.getMoveTo();
-                    type = autoChoices.getType();
-                    // passBack = autoChoices.getPassBack();
-                    climb = autoChoices.getClimb();
-                    sweepDistance = autoChoices.getSweepDistance();
-                    // climbSide = autoChoices.getClimbSide();
-                    // neutralZoneCycles = autoChoices.getNeutralZoneCycles();
                     robot.robotBase.purePursuitDrive.getTurnPidCtrl().setNoOscillation(true);
 
                     if (robot.shooterSubsystem != null)
@@ -252,16 +224,16 @@ double[] timestamps = new double[8];
                         }
                     }
                     // Do delay if necessary.
-                    double startDelay = autoChoices.getStartDelay();
-                    if (startDelay > 0.0)
+                    if (autoChoices.startDelay > 0.0)
                     {
-                        robot.globalTracer.traceInfo(moduleName, "***** Do delay " + startDelay + "s.");
-                        timer.set(startDelay, event);
-                        sm.waitForSingleEvent(event, type != Type.CENTER ? State.NEUTRAL_ZONE_PICKUP: State.PICKUP_DEPOT);
+                        robot.globalTracer.traceInfo(moduleName, "***** Do delay " + autoChoices.startDelay + "s.");
+                        timer.set(autoChoices.startDelay, event);
+                        sm.waitForSingleEvent(
+                            event, autoChoices.autoType != Type.CENTER ? State.NEUTRAL_ZONE_PICKUP: State.PICKUP_DEPOT);
                     }
                     else
                     {
-                        sm.setState(type != Type.CENTER ? State.NEUTRAL_ZONE_PICKUP: State.PICKUP_DEPOT);
+                        sm.setState(autoChoices.autoType != Type.CENTER ? State.NEUTRAL_ZONE_PICKUP: State.PICKUP_DEPOT);
                     }
                     break;
                 
@@ -286,7 +258,7 @@ double[] timestamps = new double[8];
                                // robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
                             } 
                         },
-                        robot.adjustPathByAlliance(alliance, depotPickupPath));
+                        robot.adjustPathByAlliance(autoChoices.alliance, depotPickupPath));
                     robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
                     sm.waitForSingleEvent(event, State.SHOOT_DEPOT);
                     break;
@@ -295,11 +267,13 @@ double[] timestamps = new double[8];
                     if (robot.autoShootTask != null)
                     {
                         robot.autoShootTask.autoShoot(null, event, true, true, false);
-                        sm.waitForSingleEvent(event, climb ? State.GO_TO_CLIMB_POS: State.DONE, climb ? 7.0: 15.0);
+                        sm.waitForSingleEvent(
+                            event, autoChoices.doClimb ? State.GO_TO_CLIMB_POS: State.DONE,
+                            autoChoices.doClimb ? 7.0: 15.0);
                     }
                     else
                     {
-                        sm.setState(climb ? State.GO_TO_CLIMB_POS: State.DONE);
+                        sm.setState(autoChoices.doClimb ? State.GO_TO_CLIMB_POS: State.DONE);
                     }
                     break;
                 
@@ -326,7 +300,7 @@ double[] timestamps = new double[8];
                         double climbDelay =
                             RobotParams.Game.AUTONOMOUS_PERIOD - TrcTimer.getModeElapsedTime() - 3.5;
                         robot.autoClimbTask.autoClimb(
-                            null, event, alliance, ClimbSide.DEPOT, climbDelay > 0.0 ? climbDelay: 0.0);
+                            null, event, autoChoices.alliance, ClimbSide.DEPOT, climbDelay > 0.0 ? climbDelay: 0.0);
                         sm.waitForSingleEvent(event, State.DONE);
                     }
                     else
@@ -418,8 +392,8 @@ double[] timestamps = new double[8];
 // robot.globalTracer.traceErr("DEBUG_PERF", "NeutralZonePickupTimestamps=" + Arrays.toString(timestamps));
 
 timestamps[0] = TrcTimer.getModeElapsedTime();
-                    atDepot = startPos == AutoStartPos.START_POS_DEPOT;
-                    isTrench = type == Type.TRENCH;
+                    atDepot = autoChoices.startPos == AutoStartPos.START_POS_DEPOT;
+                    isTrench = autoChoices.autoType == Type.TRENCH;
 
                     TrcPose2D[] fullPath;
                     if (atDepot)
@@ -492,7 +466,7 @@ timestamps[2] = TrcTimer.getModeElapsedTime();
                                 robot.robotBase.purePursuitDrive.cancel();
                             }
                         },
-                        robot.adjustPathByAlliance(alliance, neutralZonePath));
+                        robot.adjustPathByAlliance(autoChoices.alliance, neutralZonePath));
 timestamps[3] = TrcTimer.getModeElapsedTime();
                     // robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
 timestamps[4] = TrcTimer.getModeElapsedTime();
@@ -609,7 +583,7 @@ robot.globalTracer.traceInfo("DEBUG_PERF", "NeutralZonePickupTimestamps=" + Arra
                                 robot.robotBase.purePursuitDrive.cancel();
                             }
                         },
-                        robot.adjustPathByAlliance(alliance, hubPath));
+                        robot.adjustPathByAlliance(autoChoices.alliance, hubPath));
                     sm.waitForSingleEvent(event, State.SHOOT_HUB_FUEL);
                     break;
 

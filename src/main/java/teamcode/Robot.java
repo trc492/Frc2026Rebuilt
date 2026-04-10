@@ -492,6 +492,10 @@ public class Robot extends FrcRobot
             }
         }
 
+        Runtime runtime = Runtime.getRuntime();
+        long usedMemoryMB = (runtime.totalMemory() - runtime.freeMemory()) / (1024 * 1024);
+        dashboard.putNumber("Memory/UsedMB", usedMemoryMB);
+
         if (slowPeriodicLoop)
         {
             Dashboard.checkDashboardUpdateEnabled();
@@ -704,9 +708,9 @@ public class Robot extends FrcRobot
      */
     public void setRobotStartPosition(FrcAuto.AutoChoices autoChoices)
     {
-        int startPosIndex = FrcAuto.autoChoices.getStartPos().value;
-        Alliance alliance = FrcAuto.autoChoices.getAlliance();
-        TrcPose2D robotPose = adjustPoseByAlliance(alliance, RobotParams.Game.blueStartPoses[startPosIndex]);
+        int startPosIndex = FrcAuto.autoChoices.startPos.value;
+        TrcPose2D robotPose = adjustPoseByAlliance(
+            FrcAuto.autoChoices.alliance, RobotParams.Game.blueStartPoses[startPosIndex]);
         setFieldPosition(robotPose, false);
     }   //setRobotStartPosition
 

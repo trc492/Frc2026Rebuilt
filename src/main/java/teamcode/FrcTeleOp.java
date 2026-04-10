@@ -124,7 +124,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     {
         String gameMessage = DriverStation.getGameSpecificMessage();
         allianceInactiveFirst = gameMessage != null && gameMessage.length() > 0 ? gameMessage.charAt(0) : ' ';
-        myAlliance = FrcAuto.autoChoices.getAlliance();
+        myAlliance = FrcAuto.autoChoices.alliance;
         shiftIndex = 0;
         shiftAlliance = null;
         rumbling = false;
@@ -561,7 +561,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             case DpadUp:
                 if (robot.robotBase != null && pressed)
                 {
-                    lockedHeading = FrcAuto.autoChoices.getAlliance() == Alliance.Blue? 0.0: 180.0;
+                    lockedHeading = FrcAuto.autoChoices.alliance == Alliance.Blue? 0.0: 180.0;
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Lock heading to " + lockedHeading);
                 }
                 break;
@@ -569,7 +569,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             case DpadDown:
                 if (robot.robotBase != null && pressed)
                 {
-                    lockedHeading = FrcAuto.autoChoices.getAlliance() == Alliance.Blue? 180.0: 0.0;
+                    lockedHeading = FrcAuto.autoChoices.alliance == Alliance.Blue? 180.0: 0.0;
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Lock heading to " + lockedHeading);
                 }
                 break;
@@ -577,7 +577,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             case DpadLeft:
                 if (robot.robotBase != null && pressed)
                 {
-                    lockedHeading = FrcAuto.autoChoices.getAlliance() == Alliance.Blue? -90.0: 90.0;
+                    lockedHeading = FrcAuto.autoChoices.alliance == Alliance.Blue? -90.0: 90.0;
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Lock heading to " + lockedHeading);
                 }
                 break;
@@ -585,7 +585,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             case DpadRight:
                 if (robot.robotBase != null && pressed)
                 {
-                    lockedHeading = FrcAuto.autoChoices.getAlliance() == Alliance.Blue? 90.0: -90.0;
+                    lockedHeading = FrcAuto.autoChoices.alliance == Alliance.Blue? 90.0: -90.0;
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Lock heading to " + lockedHeading);
                 }
                 break;
@@ -729,7 +729,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                     {
                         robot.globalTracer.traceInfo(moduleName, ">>>>> Auto climbing on depot side.");
                         robot.autoClimbTask.autoClimb(
-                            null, null, FrcAuto.autoChoices.getAlliance(), ClimbSide.DEPOT, 0.0);
+                            null, null, FrcAuto.autoChoices.alliance, ClimbSide.DEPOT, 0.0);
                     }
                     else
                     {
@@ -747,7 +747,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                     {
                         robot.globalTracer.traceInfo(moduleName, ">>>>> Auto climbing on outpost side.");
                         robot.autoClimbTask.autoClimb(
-                            null, null, FrcAuto.autoChoices.getAlliance(), ClimbSide.OUTPOST, 0.0);
+                            null, null, FrcAuto.autoChoices.alliance, ClimbSide.OUTPOST, 0.0);
                     }
                     else
                     {

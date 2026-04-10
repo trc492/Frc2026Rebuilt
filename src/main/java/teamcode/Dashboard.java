@@ -135,6 +135,8 @@ public class Dashboard
     public static final String DBKEY_AUTO_DRIVE_TIME                = "Auto/DriveTime";             //Number
     public static final String DBKEY_AUTO_DRIVE_POWER               = "Auto/DrivePower";            //Number
 
+    public static final String DBKEY_AUTO_CHOICES_SUBMIT            = "Auto/ChoicesSubmit";         //Boolean
+
     // TeleOp.
     public static final String DBKEY_TELEOP_DRIVE_MODE              = "TeleOp/DriveMode";           //Choices
     public static final String DBKEY_TELEOP_DRIVE_ORIENTATION       = "TeleOp/DriveOrientation";    //Choices

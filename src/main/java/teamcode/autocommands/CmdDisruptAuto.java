@@ -22,7 +22,6 @@
 
 package teamcode.autocommands;
 
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frclib.drivebase.FrcSwerveBase;
 import teamcode.FrcAuto;
 import teamcode.FrcAuto.AutoStartPos;
@@ -59,10 +58,6 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
     private final TrcTimer timer;
     private final TrcEvent event;
     private final TrcStateMachine<State> sm;
-
-    private FrcAuto.AutoStartPos startPos;
-    private Alliance alliance;
-    private boolean climb;
 
     boolean atDepot = false;
     boolean isTrench = false;
@@ -146,10 +141,6 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
                 case START:
                     // Set robot location according to auto choices.
                     robot.setRobotStartPosition(autoChoices);
-                    // Retrieve auto choice options.
-                    startPos = autoChoices.getStartPos();
-                    alliance = autoChoices.getAlliance();
-                    climb = autoChoices.getClimb();
                     robot.robotBase.purePursuitDrive.getTurnPidCtrl().setNoOscillation(true);
 
                     if (robot.shooterSubsystem != null) {
@@ -177,7 +168,7 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
                     }
                     // Do delay if necessary - in the case of disrupt, we need to wait until the
                     // opponent robot has passed us
-                    double startDelay = autoChoices.getStartDelay();
+                    double startDelay = autoChoices.startDelay;
                     if (startDelay > 0.0) {
                         robot.globalTracer.traceInfo(moduleName, "***** Do delay " + startDelay + "s.");
                         timer.set(startDelay, event);
@@ -188,7 +179,7 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
                     break;
 
                 case GO_TO_NEUTRAL:
-                    atDepot = startPos == AutoStartPos.START_POS_DEPOT;
+                    atDepot = autoChoices.startPos == AutoStartPos.START_POS_DEPOT;
                     TrcPose2D[] neutralPathOutDepot = new TrcPose2D[] {
                             new TrcPose2D(-295.80, 281.61, 90.00),
                             new TrcPose2D(-272.02, 325.60, 130.00),
@@ -201,7 +192,7 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
                     };
                     TrcPose2D[] exitPath = atDepot ? neutralPathOutDepot : neutralPathOutOutpost;
                     robot.robotBase.purePursuitDrive.start(null, event, 0.0, false, null,
-                            robot.adjustPathByAlliance(alliance, exitPath));
+                            robot.adjustPathByAlliance(autoChoices.alliance, exitPath));
                     sm.waitForSingleEvent(event, State.X_AND_WAIT);
                     break;
 
@@ -265,7 +256,7 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
                                         robot.autoShootTask.autoShoot(null, event, true, true, false);
                                     }
 
-                                    if (!climb) {
+                                    if (!autoChoices.doClimb) {
                                         // If we aren't climbing, exit and shoot in place
                                         robot.robotBase.purePursuitDrive.cancel();
                                     } else {
@@ -273,8 +264,8 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
                                     }
                                 }
                             },
-                            robot.adjustPathByAlliance(alliance, returnPath));
-                    sm.waitForSingleEvent(event, climb ? State.AUTO_CLIMB : State.DONE, 6.0);
+                            robot.adjustPathByAlliance(autoChoices.alliance, returnPath));
+                    sm.waitForSingleEvent(event, autoChoices.doClimb ? State.AUTO_CLIMB : State.DONE, 6.0);
                     break;
 
                 case AUTO_CLIMB:
@@ -285,7 +276,7 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
                     if (robot.climberSubsystem != null) {
                         double climbDelay = RobotParams.Game.AUTONOMOUS_PERIOD - TrcTimer.getModeElapsedTime() - 3.0;
                         robot.autoClimbTask.autoClimb(
-                                null, event, alliance, atDepot ? ClimbSide.DEPOT : ClimbSide.OUTPOST,
+                                null, event, autoChoices.alliance, atDepot ? ClimbSide.DEPOT : ClimbSide.OUTPOST,
                                 climbDelay > 0.0 ? climbDelay : 0.0);
                         sm.waitForSingleEvent(event, State.DONE);
                     } else {

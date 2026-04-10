@@ -942,7 +942,7 @@ public class Shooter extends TrcSubsystem
             if (goalFieldPose == null)
             {
                 // Goal Tracking is not ON, just use the alliance's Hub pose.
-                Alliance alliance = FrcAuto.autoChoices.getAlliance();
+                Alliance alliance = FrcAuto.autoChoices.alliance;
                 goalFieldPose = robot.adjustPoseByAlliance(alliance, RobotParams.Game.BLUE_HUB_POSE);
             }
             return goalFieldPose;
@@ -955,7 +955,7 @@ public class Shooter extends TrcSubsystem
      */
     private void setupGoalTrackingMode()
     {
-        Alliance alliance = FrcAuto.autoChoices.getAlliance();
+        Alliance alliance = FrcAuto.autoChoices.alliance;
         int fieldLengthZone = goalTrackingState.fieldLengthTrigger.getCurrentZone();
         int fieldWidthZone = goalTrackingState.fieldWidthTrigger.getCurrentZone();
 
@@ -1603,7 +1603,7 @@ public class Shooter extends TrcSubsystem
                         turretZeroCalibrated = true;
                         TrcRobot.RunMode runMode = TrcRobot.getRunMode();
                         FrcAuto.AutoStartPos startPos =
-                            runMode == TrcRobot.RunMode.AUTO_MODE ? FrcAuto.autoChoices.getStartPos() : null;
+                            runMode == TrcRobot.RunMode.AUTO_MODE ? FrcAuto.autoChoices.startPos : null;
                         double turretTargetPos =
                             startPos != null && startPos == AutoStartPos.START_POS_CENTER? 180.0: 0.0;
                         // Fire and forget.

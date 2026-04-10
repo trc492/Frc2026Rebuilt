@@ -22,7 +22,6 @@
 
 package teamcode.autocommands;
 
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import teamcode.FrcAuto;
 import teamcode.FrcAuto.AutoStartPos;
 import teamcode.FrcAuto.MoveTo;
@@ -30,7 +29,6 @@ import teamcode.FrcAuto.PassBack;
 import teamcode.Robot.RelocalizationMode;
 import teamcode.Robot;
 import teamcode.RobotParams;
-import teamcode.autotasks.TaskAutoClimb;
 import teamcode.subsystems.Shooter;
 import teamcode.subsystems.Intake.Params;
 import trclib.pathdrive.TrcPose2D;
@@ -72,18 +70,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
     private final TrcEvent event;
     private final TrcStateMachine<State> sm;
 
-    private FrcAuto.AutoStartPos startPos;
-    private Alliance alliance;
-    private boolean depotPickup;
-    private boolean outpostPickup;
-    private boolean neutralZonePickup;
-    private MoveTo moveTo;
-    private PassBack passBack;
-    private boolean climb;
-    private TaskAutoClimb.ClimbSide climbSide;
-    private double neutralZoneCycles;
     private int currentNeutralZoneCycles = 0;
-
     boolean atDepot = false;
     private TrcPose2D startPose = null;
     private TrcPose2D intermediatePose = null;
@@ -177,17 +164,6 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                 case START:
                     // Set robot location according to auto choices.
                     robot.setRobotStartPosition(autoChoices);
-                    // Retrieve auto choice options.
-                    startPos = autoChoices.getStartPos();
-                    alliance = autoChoices.getAlliance();
-                    depotPickup = autoChoices.depotPickup();
-                    outpostPickup = autoChoices.outpostPickup();
-                    neutralZonePickup = autoChoices.neutralZonePickup();
-                    moveTo = autoChoices.getMoveTo();
-                    passBack = autoChoices.getPassBack();
-                    climb = autoChoices.getClimb();
-                    climbSide = autoChoices.getClimbSide();
-                    neutralZoneCycles = autoChoices.getNeutralZoneCycles();
                     robot.robotBase.purePursuitDrive.getTurnPidCtrl().setNoOscillation(true);
 
                     if (robot.shooterSubsystem != null)
@@ -218,7 +194,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         }
                     }
                     // Do delay if necessary.
-                    double startDelay = autoChoices.getStartDelay();
+                    double startDelay = autoChoices.startDelay;
                     if (startDelay > 0.0)
                     {
                         robot.globalTracer.traceInfo(moduleName, "***** Do delay " + startDelay + "s.");
@@ -232,24 +208,26 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     break;
 
                 case DELAY_DONE:
-                    if (depotPickup &&
-                        (startPos == AutoStartPos.START_POS_DEPOT ||
-                         startPos == AutoStartPos.START_POS_CENTER && moveTo == MoveTo.DEPOT))
+                    if (autoChoices.depotPickup &&
+                        (autoChoices.startPos == AutoStartPos.START_POS_DEPOT ||
+                         autoChoices.startPos == AutoStartPos.START_POS_CENTER && autoChoices.moveTo == MoveTo.DEPOT))
                     {
                         nextState = State.PICKUP_DEPOT;
                     }
-                    else if (outpostPickup &&
-                             (startPos == AutoStartPos.START_POS_OUTPOST ||
-                              startPos == AutoStartPos.START_POS_CENTER && moveTo == MoveTo.OUTPOST))
+                    else if (autoChoices.outpostPickup &&
+                             (autoChoices.startPos == AutoStartPos.START_POS_OUTPOST ||
+                              autoChoices.startPos == AutoStartPos.START_POS_CENTER &&
+                              autoChoices.moveTo == MoveTo.OUTPOST))
                     {
                         nextState = State.PICKUP_OUTPOST;
                     }
-                    else if (neutralZonePickup &&
-                             (startPos == AutoStartPos.START_POS_DEPOT || startPos == AutoStartPos.START_POS_OUTPOST))
+                    else if (autoChoices.neutralZonePickup &&
+                             (autoChoices.startPos == AutoStartPos.START_POS_DEPOT ||
+                              autoChoices.startPos == AutoStartPos.START_POS_OUTPOST))
                     {
                         nextState = State.CREATE_NEUTRAL_ZONE_PATH;
                     }
-                    else if (climb)
+                    else if (autoChoices.doClimb)
                     {
                         nextState = State.GO_TO_CLIMB_POS;
                     }
@@ -286,7 +264,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                                 }
                             }
                         },
-                        robot.adjustPathByAlliance(alliance, intermediatePose, pickupPose, endPose));
+                        robot.adjustPathByAlliance(autoChoices.alliance, intermediatePose, pickupPose, endPose));
                     robot.shooterSubsystem.enableGoalTracking(true, false, true, true);
                     sm.waitForSingleEvent(event, State.FINISH_PICKUP);
                     break;
@@ -315,7 +293,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.3);
                             }
                         },
-                        robot.adjustPathByAlliance(alliance, intermediatePose, pickupPose));
+                        robot.adjustPathByAlliance(autoChoices.alliance, intermediatePose, pickupPose));
                     robot.shooterSubsystem.enableGoalTracking(true, false, true, true);    
                     sm.waitForSingleEvent(event, State.OUTPOST_DELAY);
                     break;
@@ -334,7 +312,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     break;
                 
                 case SHOOT_FUEL:
-                    nextState = climb? State.GO_TO_CLIMB_POS: State.DONE;
+                    nextState = autoChoices.doClimb? State.GO_TO_CLIMB_POS: State.DONE;
                     if (robot.shooterSubsystem != null)
                     {
                         robot.autoShootTask.autoShoot(null, event, true, true, false);
@@ -347,8 +325,9 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     break;
 
                 case CREATE_NEUTRAL_ZONE_PATH:
-                    atDepot = startPos == AutoStartPos.START_POS_DEPOT || 
-                              startPos == AutoStartPos.START_POS_CENTER && moveTo == MoveTo.DEPOT;
+                    atDepot = autoChoices.startPos == AutoStartPos.START_POS_DEPOT || 
+                              autoChoices.startPos == AutoStartPos.START_POS_CENTER &&
+                              autoChoices.moveTo == MoveTo.DEPOT;
 
                     // (-291.47,167.7345,90.0) or (-26.22,167.7345,-90.0)
                     startPose = atDepot? RobotParams.Game.STARTPOS_BLUE_DEPOT: RobotParams.Game.STARTPOS_BLUE_OUTPOST;
@@ -434,13 +413,13 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                             {
                                 // At pickupPose.
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.4);
-                                if (passBack == PassBack.PASS_BACK && robot.autoShootTask != null)
+                                if (autoChoices.passback == PassBack.PASS_BACK && robot.autoShootTask != null)
                                 {
                                     robot.autoShootTask.autoShoot(null, null, false, false, false);
                                 }
                             }
                         },
-                        robot.adjustPathByAlliance(alliance, neutralZonePath));
+                        robot.adjustPathByAlliance(autoChoices.alliance, neutralZonePath));
                     robot.shooterSubsystem.enableGoalTracking(true, false, true, true);
                     sm.waitForSingleEvent(event, State.RETURN_TO_SCORE_POS);
                     break;
@@ -476,19 +455,19 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.85);
                             }
                         },
-                        robot.adjustPathByAlliance(alliance, neutralZoneReturnPath));
+                        robot.adjustPathByAlliance(autoChoices.alliance, neutralZoneReturnPath));
                     sm.waitForSingleEvent(event, State.SHOOT_DELAY);
                     break;
                 
                 case SHOOT_DELAY:
-                    nextState = climb ? State.GO_TO_CLIMB_POS: State.DONE;
+                    nextState = autoChoices.doClimb ? State.GO_TO_CLIMB_POS: State.DONE;
                     timer.set(10.0, event);
                     sm.waitForSingleEvent(event, nextState);
                     break;
 
                 case SHOOT_NEUTRAL_FUEL:
-                    nextState = ++currentNeutralZoneCycles < neutralZoneCycles? State.CYCLE_NEUTRAL_ZONE:
-                                climb? State.GO_TO_CLIMB_POS: State.DONE;
+                    nextState = ++currentNeutralZoneCycles < autoChoices.neutralZoneCycles? State.CYCLE_NEUTRAL_ZONE:
+                                autoChoices.doClimb? State.GO_TO_CLIMB_POS: State.DONE;
                     robot.globalTracer.traceInfo(moduleName, "Shooting NeutralZone cycle " + currentNeutralZoneCycles);
                     if (robot.intakeSubsystem != null)
                     {
@@ -512,7 +491,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     // - From Depot
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false, null,
-                        robot.adjustPoseByAlliance(alliance, RobotParams.Game.BLUE_CLIMB_LOOKOUT_POSE));
+                        robot.adjustPoseByAlliance(autoChoices.alliance, RobotParams.Game.BLUE_CLIMB_LOOKOUT_POSE));
                     sm.waitForSingleEvent(event, State.CLIMB);
                     break;
 
@@ -522,7 +501,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                         double climbDelay =
                             RobotParams.Game.AUTONOMOUS_PERIOD - TrcTimer.getModeElapsedTime() - 3.5;
                         robot.autoClimbTask.autoClimb(
-                            null, event, alliance, climbSide, climbDelay > 0.0? climbDelay: 0.0);
+                            null, event, autoChoices.alliance, autoChoices.climbSide, climbDelay > 0.0? climbDelay: 0.0);
                         sm.waitForSingleEvent(event, State.DONE);
                     }
                     else
