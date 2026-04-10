@@ -766,7 +766,6 @@ public class Shooter extends TrcSubsystem
     public void stopTilt()
     {
         // Retract hood, fire and forget.
-        tracer.traceErr(instanceName, "StopTilt is called");
         TrcEvent leftTiltEvent = new TrcEvent("stopLeftTilt");
         TrcEvent rightTiltEvent = new TrcEvent("stopRightTilt");
         leftTiltEvent.setCallback(this::stopTiltCallback, "StopLeftTilt");
@@ -786,11 +785,11 @@ public class Shooter extends TrcSubsystem
         String who = (String) ctxt;
         if (canceled)
         {
-            tracer.traceErr(instanceName, who + " was canceled.");
+            tracer.traceDebug(instanceName, who + " was canceled.");
         }
         else
         {
-            tracer.traceErr(instanceName, who + " was completed.");
+            tracer.traceDebug(instanceName, who + " was completed.");
         }
     }   //stopTiltCallback
 
@@ -817,7 +816,6 @@ public class Shooter extends TrcSubsystem
             pos = turret.getPosition();
             if (pos < Params.TURRET_FORBIDDEN_MIN_POS)
             {
-                //tracer.traceErr(instanceName, "Hit hard stop too hard, readjust: pos was " + pos);
                 pos = Params.TURRET_MAX_POS;
             }
         }

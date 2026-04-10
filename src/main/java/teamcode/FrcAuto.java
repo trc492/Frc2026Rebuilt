@@ -430,7 +430,6 @@ public class FrcAuto implements TrcRobot.RobotMode
                 if (robot.robotBase != null)
                 {
                     autoCommand = rebuiltAuto;
-                    robot.globalTracer.traceErr(moduleName, "Selecting Rebuilt Auto.");
                 }
                 break;
             
@@ -438,7 +437,6 @@ public class FrcAuto implements TrcRobot.RobotMode
                 if (robot.robotBase != null)
                 {
                     autoCommand = dcmpAuto;
-                    robot.globalTracer.traceErr(moduleName, "Selecting Dcmp Auto.");
                 }
                 break;
             
@@ -446,7 +444,6 @@ public class FrcAuto implements TrcRobot.RobotMode
                 if (robot.robotBase != null)
                 {
                     autoCommand = disruptAuto;
-                    robot.globalTracer.traceErr(moduleName, "Selecting Disrupt Auto.");
                 }
                 break;
 

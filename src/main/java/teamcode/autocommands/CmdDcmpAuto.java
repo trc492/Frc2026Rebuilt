@@ -497,7 +497,7 @@ timestamps[3] = TrcTimer.getModeElapsedTime();
                     // robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
 timestamps[4] = TrcTimer.getModeElapsedTime();
                     sm.waitForSingleEvent(event, State.SHOOT_NEUTRAL_FUEL);
-robot.globalTracer.traceErr("DEBUG_PERF", "NeutralZonePickupTimestamps=" + Arrays.toString(timestamps));
+robot.globalTracer.traceInfo("DEBUG_PERF", "NeutralZonePickupTimestamps=" + Arrays.toString(timestamps));
                     break;
                 
                 // case RETURN_TO_SCORE_NEUTRAL:
