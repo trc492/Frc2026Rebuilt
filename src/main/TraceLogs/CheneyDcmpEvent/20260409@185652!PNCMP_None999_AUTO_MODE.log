@@ -1,0 +1,686 @@
+Shooter.LeftTiltMotor.isMotorStalled_INFO [0.004089487] Stall detection triggered.
+Shooter.LeftTiltMotor.checkStallReset_INFO [0.005815032] Resetting stall.
+Shooter.RightTiltMotor.isMotorStalled_INFO [0.006893998] Stall detection triggered.
+Shooter.RightTiltMotor.checkStallReset_INFO [0.008333825] Resetting stall.
+Shooter.TurretMotor.isMotorStalled_INFO [0.00962046] Stall detection triggered.
+Climber.Motor.isMotorStalled_INFO [0.011477566] Stall detection triggered.
+Climber.Motor.checkStallReset_INFO [0.017152053] Resetting stall.
+Robot.robotStartMode_INFO [0.020205924] Thu Apr 09 18:56:32 UTC 2026: ***** AUTO_MODE *****
+Robot.robotStartMode_INFO [0.022596356] <BuildInfo Host="DESKTOP_NJF" User="NoahJ" Timestamp="2026-04-09 08:07:22" Branch="dev" />
+FrcAuto.startMode_INFO [0.04119556] <Info name="MatchInfo" date="Thu Apr 09 18:56:32 UTC 2026" event="PNCMP" type="None" match=999 replay=3 alliance="Red" location=2 gameMsg="" />
+FrcAuto.startMode_INFO [0.049627039] <Info name="AutoChoices" alliance="Red" strategy="DCMP_AUTO" startPos="START_POS_DEPOT" startDelay=0.0 sec depotPickup="false" outpostPickup="false" neutralZonePickup="true" moveTo="DEPOT" passBack="NONE" climb="false" climbSide="DEPOT" neutralZoneCycles="0.0" type="TRENCH" sweepDistance="STANDARD" pathFile="DrivePath.csv" xDistance=0.0 ft yDistance=0.0 ft turnDegrees=0.0 deg driveTime=0.0 sec drivePower=0.0"  />
+FrcAuto.startMode_ERR [0.061351831] Selecting Dcmp Auto.
+Shooter.stopTiltCallback_ERR [0.103916176] StopRightTilt was completed.
+Shooter.stopTiltCallback_ERR [0.106280467] StopLeftTilt was completed.
+FrcAuto.periodic_ERR [0.109820185] Calling cmdPeriodic.
+CmdDcmpAuto.cmdPeriodic_INFO [0.113964581] <Event name="StateInfo" time="0.112544898" tag="vvvvv" CmdDcmpAuto.state="START" />
+Shooter.LeftTiltMotor.isMotorStalled_INFO [0.116653288] Stall detection triggered.
+Shooter.LeftTiltMotor.checkStallReset_INFO [0.120587585] Resetting stall.
+Shooter.RightTiltMotor.isMotorStalled_INFO [0.124547626] Stall detection triggered.
+Shooter.RightTiltMotor.checkStallReset_INFO [0.126628055] Resetting stall.
+Shooter.TurretMotor.isMotorStalled_INFO [0.129786695] Stall detection triggered.
+Robot.zeroCalibrate_INFO [0.132219612] Zero calibrate all subsystems.
+Climber.Motor.isMotorStalled_INFO [0.134620394] Stall detection triggered.
+TrcSubsystem.zeroCalibrateAll_INFO [0.136074099] ZeroCalibrate(Subsystem=Shooter, owner=null, event=null)
+Climber.Motor.checkStallReset_INFO [0.137353369] Resetting stall.
+Shooter.zeroCalibrate_INFO [0.142284402] ZeroCalibrate left shooter.
+Shooter.zeroCalibrate_INFO [0.154422656] ZeroCalibrate right shooter.
+TrcSubsystem.zeroCalibrateAll_INFO [0.173735415] ZeroCalibrate(Subsystem=Climber, owner=null, event=null)
+CmdDcmpAuto.cmdPeriodic_INFO [0.180993619] <Event name="StateInfo" time="0.17940382" tag="^^^^^" CmdDcmpAuto.state="START" />
+FrcAuto.periodic_ERR [0.200897736] Calling cmdPeriodic.
+CmdDcmpAuto.cmdPeriodic_INFO [0.206028816] <Event name="StateInfo" time="0.205786788" tag="vvvvv" CmdDcmpAuto.state="NEUTRAL_ZONE_PICKUP" />
+Shooter.LeftTiltMotor.isMotorStalled_INFO [0.397694066] Stall detection triggered.
+Shooter.LeftTiltMotor.zeroCalibratingMotor_WARN [0.420821355] Stalled, lower limit switch may not exist or might have failed!
+purePursuitDrive.start_INFO [0.423181044] Path=TrcPath(degrees=true, [Waypoint(simple=true,index=0,pose=(x=-17.220000,y=477.610472,angle=-90.000000),vel=0.0), Waypoint(simple=false,index=-1,timestep=0.20104971205682792,pose=(x=-20.357894,y=404.761355,angle=-90.001853),vel=175.0,encPos=0.0,accel=0.0,jerk=0.0), Waypoint(simple=true,index=1,pose=(x=-21.871988,y=369.610249,angle=269.997253),vel=175.0), Waypoint(simple=true,index=2,pose=(x=-55.871029,y=349.608619,angle=269.997253),vel=175.0), Waypoint(simple=true,index=3,pose=(x=-150.871029,y=349.604065,angle=269.997253),vel=175.0), Waypoint(simple=true,index=4,pose=(x=-38.871029,y=349.609434,angle=179.997253),vel=175.0), Waypoint(simple=false,index=-1,timestep=1.1690533151385476,pose=(x=-38.185183,y=366.762443,angle=179.997253),vel=175.0,encPos=0.0,accel=0.0,jerk=0.0), Waypoint(simple=true,index=5,pose=(x=-32.878214,y=499.489722,angle=179.997253),vel=52.24940191045253), Waypoint(simple=true,index=6,pose=(x=-32.878837,y=512.489722,angle=179.997253),vel=0.0)])
+Shooter.LeftTiltMotor.pidCtrlTask_INFO [0.426849915] Zero calibration done, event=(Shooter.leftTiltZeroCalCallback=CLEARED)
+Shooter.LeftTiltMotor.pidCtrlTask_INFO [0.431334705] controlMode: Power,onTarget=false(-0.0733603909611702/null), stalled=false, expired=false, event=(Shooter.leftTiltZeroCalCallback=SIGNALED)
+Shooter.RightTiltMotor.isMotorStalled_INFO [0.435115891] Stall detection triggered.
+Shooter.enableGoalTracking_INFO [0.435959366] EnableGoalTracking: goalTrackingParams=(trackFlywheel=false,trackTiltPos=false,trackPanPos=true), noPassback=true
+Shooter.setupGoalTrackingMode_INFO [0.440306069] AlliancHub: alliance=Red, fieldLengthZone=6, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [0.443429713] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=true).
+Shooter.LeftTiltMotor.isMotorStalled_INFO [0.44737124] Stall detection triggered.
+Shooter.LeftTiltMotor.checkStallReset_INFO [0.451114647] Resetting stall.
+Shooter.RightTiltMotor.zeroCalibratingMotor_WARN [0.451684596] Stalled, lower limit switch may not exist or might have failed!
+Shooter.RightTiltMotor.pidCtrlTask_INFO [0.457668844] Zero calibration done, event=(Shooter.rightTiltZeroCalCallback=CLEARED)
+Shooter.RightTiltMotor.pidCtrlTask_INFO [0.460737712] controlMode: Power,onTarget=false(-0.0704321414232254/null), stalled=false, expired=false, event=(Shooter.rightTiltZeroCalCallback=SIGNALED)
+Shooter.LeftShooter.enableGoalTracking_INFO [0.466043344] Enable GoalTracking (trackingParams=(trackFlywheel=false,trackTiltPos=false,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [0.470944765] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [0.476562939] Cancel: stopping motor.
+Shooter.RightTiltMotor.isMotorStalled_INFO [0.478055616] Stall detection triggered.
+Shooter.RightTiltMotor.checkStallReset_INFO [0.481608602] Resetting stall.
+Shooter.RightShooter.enableGoalTracking_INFO [0.489445924] Enable GoalTracking (trackingParams=(trackFlywheel=false,trackTiltPos=false,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [0.491763452] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [0.497507873] Cancel: stopping motor.
+Shooter.enableGoalTracking_ERR [0.502278542] EnableGoalTrackingTimestamps=[0.439065786, 0.445689463, 0.478674943, 0.500811087]
+CmdDcmpAuto.cmdPeriodic_INFO [0.511274257] <Event name="StateInfo" time="0.509593442" tag="^^^^^" CmdDcmpAuto.state="NEUTRAL_ZONE_PICKUP" RobotPose=(x=-17.220000,y=477.610472,angle=-90.005493) TargetPose=(x=-32.878837,y=512.489722,angle=179.997253) vel=(x=-0.000000,y=0.000000,angle=-0.000000) Path=TrcPath(degrees=true, [Waypoint(simple=true,index=0,pose=(x=0.000000,y=0.000000,angle=0.000000),vel=0.0), Waypoint(simple=false,index=-1,timestep=0.20104971205682792,pose=(x=-72.849117,y=3.137894,angle=-0.001853),vel=175.0,encPos=0.0,accel=0.0,jerk=0.0), Waypoint(simple=true,index=1,pose=(x=-108.000223,y=4.651988,angle=359.997253),vel=175.0), Waypoint(simple=true,index=2,pose=(x=-128.001853,y=38.651029,angle=359.997253),vel=175.0), Waypoint(simple=true,index=3,pose=(x=-128.006407,y=133.651029,angle=359.997253),vel=175.0), Waypoint(simple=true,index=4,pose=(x=-128.001038,y=21.651029,angle=269.997253),vel=175.0), Waypoint(simple=false,index=-1,timestep=1.1690533151385476,pose=(x=-110.848029,y=20.965183,angle=269.997253),vel=175.0,encPos=0.0,accel=0.0,jerk=0.0), Waypoint(simple=true,index=5,pose=(x=21.879249,y=15.658214,angle=269.997253),vel=52.24940191045253), Waypoint(simple=true,index=6,pose=(x=34.879249,y=15.658837,angle=269.997253),vel=0.0)]) />
+CmdDcmpAuto.lambda$cmdPeriodic$2_INFO [0.738063159] WaypointHandler: index=0
+Robot.setRelocalizationMode_INFO [0.741643324] setRelocalizationMode to OneShot
+FrcAuto.periodic_ERR [0.846777444] Calling cmdPeriodic.
+Climber.Motor.isMotorStalled_INFO [0.910959429] Stall detection triggered.
+FrcAuto.periodic_ERR [0.94374703] Calling cmdPeriodic.
+Climber.Motor.zeroCalibratingMotor_WARN [0.960276758] Stalled, lower limit switch may not exist or might have failed!
+Climber.Motor.pidCtrlTask_INFO [0.963179147] Zero calibration done, event=null
+FrcAuto.periodic_ERR [1.068488985] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.148660478] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.237685058] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.319540481] Calling cmdPeriodic.
+Shooter.fieldTriggerCallback_INFO [1.37343749] FieldTriggerCallback: canceled=false, zoneCtxt=(value-432.031555,prevZone=6,currZone=5)
+Shooter.setupGoalTrackingMode_INFO [1.374889815] AlliancHub: alliance=Red, fieldLengthZone=5, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [1.380232449] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=true).
+FrcAuto.periodic_ERR [1.382643376] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.443443087] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.501141668] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.546901665] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.609147877] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.643856593] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.709277031] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.753314867] Calling cmdPeriodic.
+CmdDcmpAuto.lambda$cmdPeriodic$2_INFO [1.798853919] WaypointHandler: index=1
+Robot.setRelocalizationMode_INFO [1.803928385] setRelocalizationMode to OneShot
+FrcAuto.periodic_ERR [1.811456469] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.88119538] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.936557275] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.99814008] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.044399804] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.097018571] Calling cmdPeriodic.
+Shooter.fieldTriggerCallback_INFO [2.147452342] FieldTriggerCallback: canceled=false, zoneCtxt=(value-349.829117,prevZone=5,currZone=4)
+Shooter.setupGoalTrackingMode_INFO [2.149959971] AlliancHub: alliance=Red, fieldLengthZone=4, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [2.151997998] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=true).
+FrcAuto.periodic_ERR [2.15390207] Calling cmdPeriodic.
+CmdDcmpAuto.lambda$cmdPeriodic$2_INFO [2.208542497] WaypointHandler: index=2
+Robot.setRelocalizationMode_INFO [2.212395773] setRelocalizationMode to OneShot
+FrcAuto.periodic_ERR [2.216646469] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.266447153] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.327735799] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.384600327] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.438355081] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.482688804] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.530493581] Calling cmdPeriodic.
+Shooter.fieldTriggerCallback_INFO [2.581630853] FieldTriggerCallback: canceled=false, zoneCtxt=(value-357.161761,prevZone=4,currZone=5)
+Shooter.setupGoalTrackingMode_INFO [2.583754791] AlliancHub: alliance=Red, fieldLengthZone=5, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [2.585750839] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=true).
+FrcAuto.periodic_ERR [2.588806143] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.649383713] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.698612982] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.74759846] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.797535099] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.866048316] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.924739507] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.978412199] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.032959693] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.081120593] Calling cmdPeriodic.
+Shooter.fieldTriggerCallback_INFO [3.13821283] FieldTriggerCallback: canceled=false, zoneCtxt=(value--129.581242,prevZone=3,currZone=2)
+Shooter.setupGoalTrackingMode_INFO [3.142470114] AlliancHub: alliance=Red, fieldLengthZone=5, fieldWidthZone=2.
+Shooter.setupGoalTrackingMode_INFO [3.144268531] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=true).
+FrcAuto.periodic_ERR [3.146410683] Calling cmdPeriodic.
+Shooter.fieldTriggerCallback_INFO [3.194339612] FieldTriggerCallback: canceled=false, zoneCtxt=(value-351.135159,prevZone=5,currZone=4)
+Shooter.setupGoalTrackingMode_INFO [3.195772516] AlliancHub: alliance=Red, fieldLengthZone=4, fieldWidthZone=2.
+Shooter.setupGoalTrackingMode_INFO [3.197628687] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=true).
+FrcAuto.periodic_ERR [3.198437533] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.255565946] Calling cmdPeriodic.
+CmdDcmpAuto.lambda$cmdPeriodic$2_INFO [3.314749619] WaypointHandler: index=3
+Robot.setRelocalizationMode_INFO [3.320612649] setRelocalizationMode to OneShot
+FrcAuto.periodic_ERR [3.333960244] Calling cmdPeriodic.
+Shooter.fieldTriggerCallback_INFO [3.391824072] FieldTriggerCallback: canceled=false, zoneCtxt=(value-362.920203,prevZone=4,currZone=5)
+Shooter.setupGoalTrackingMode_INFO [3.397314716] AlliancHub: alliance=Red, fieldLengthZone=5, fieldWidthZone=2.
+Shooter.setupGoalTrackingMode_INFO [3.398670077] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=true).
+FrcAuto.periodic_ERR [3.401143817] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.460692422] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.508182448] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.558724031] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.609280899] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.645547796] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.702932842] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.756255603] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.796656956] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.837794305] Calling cmdPeriodic.
+Shooter.fieldTriggerCallback_INFO [3.891055493] FieldTriggerCallback: canceled=false, zoneCtxt=(value--128.670303,prevZone=2,currZone=3)
+Shooter.setupGoalTrackingMode_INFO [3.903841826] AlliancHub: alliance=Red, fieldLengthZone=5, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [3.907094638] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=true).
+FrcAuto.periodic_ERR [3.911614328] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.979428348] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [4.02876061] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [4.093488191] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [4.143004] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [4.195955297] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [4.238969824] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [4.288037998] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [4.359952707] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [4.415821657] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [4.463396651] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [4.520282153] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [4.568294002] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [4.613775394] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [4.654881238] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [4.707037005] Calling cmdPeriodic.
+CmdDcmpAuto.lambda$cmdPeriodic$2_INFO [4.742030801] WaypointHandler: index=4
+Robot.setRelocalizationMode_INFO [4.743904451] setRelocalizationMode to OneShot
+FrcAuto.periodic_ERR [4.754303755] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [4.804891154] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [4.860451841] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [4.905144928] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [4.956207991] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.000890779] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.05137352] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.108855173] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.158407376] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.212089866] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.256275406] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.305423985] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.357919818] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.401594186] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.446195164] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.499912018] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.540247452] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.605228709] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.655755852] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.718306972] Calling cmdPeriodic.
+Shooter.fieldTriggerCallback_INFO [5.777463623] FieldTriggerCallback: canceled=false, zoneCtxt=(value-439.933991,prevZone=5,currZone=6)
+Shooter.setupGoalTrackingMode_INFO [5.780157207] AlliancHub: alliance=Red, fieldLengthZone=6, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [5.780742293] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=true).
+FrcAuto.periodic_ERR [5.782119092] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.824929485] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.866646967] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.915438522] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.958860945] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.996928433] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [6.044810019] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [6.092627414] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [6.146635834] Calling cmdPeriodic.
+Shooter.fieldTriggerCallback_INFO [6.203938581] FieldTriggerCallback: canceled=false, zoneCtxt=(value-502.030640,prevZone=6,currZone=7)
+Shooter.setupGoalTrackingMode_INFO [6.205925336] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [6.208980307] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=true).
+CmdDcmpAuto.lambda$cmdPeriodic$2_INFO [6.210346184] WaypointHandler: index=5
+Robot.setRelocalizationMode_INFO [6.211543339] setRelocalizationMode to OneShot
+FrcAuto.periodic_ERR [6.220816556] Calling cmdPeriodic.
+CmdDcmpAuto.cmdPeriodic_INFO [6.223484853] <Event name="StateInfo" time="6.223178144" tag="vvvvv" CmdDcmpAuto.state="SHOOT_NEUTRAL_FUEL" />
+TaskAutoShoot.autoShoot_INFO [6.228130572] autoShoot(owner=null, event=(CmdDcmpAuto=CANCELED), taskParams=(autoStop=true, noPassback=true, noWait=false))
+Shooter.enableGoalTracking_INFO [6.231905592] EnableGoalTracking: goalTrackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true), noPassback=true
+Shooter.setupGoalTrackingMode_INFO [6.234247413] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [6.237468825] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=true).
+Shooter.LeftShooter.enableGoalTracking_INFO [6.243222294] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [6.246626616] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [6.251677226] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [6.260061297] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [6.280188512] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [6.281468475] Cancel: stopping motor.
+Shooter.enableGoalTracking_ERR [6.282992565] EnableGoalTrackingTimestamps=[6.233541038, 6.242242448, 6.259329721, 6.282144108]
+CmdDcmpAuto.cmdPeriodic_INFO [6.29679215] <Event name="StateInfo" time="6.29612208" tag="^^^^^" CmdDcmpAuto.state="SHOOT_NEUTRAL_FUEL" />
+TaskAutoShoot.autoTask_INFO [6.449195172] <Event name="StateInfo" time="6.44890794" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [6.454915013] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [6.456370918] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [6.457964086] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [6.463240041] <Event name="StateInfo" time="6.462901265" tag="^^^^^" TaskAutoShoot.state="START" />
+CmdDcmpAuto.lambda$cmdPeriodic$2_INFO [6.478236125] WaypointHandler: index=-1
+Robot.setRelocalizationMode_INFO [6.479669934] setRelocalizationMode to Continuous
+FrcAuto.periodic_ERR [6.488241612] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [6.611086448] Calling cmdPeriodic.
+TaskAutoShoot.autoTask_INFO [6.69583194] <Event name="StateInfo" time="6.695632066" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [6.700215519] <Event name="StateInfo" time="6.700030103" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcAuto.periodic_ERR [6.712509007] Calling cmdPeriodic.
+TaskAutoShoot.autoTask_INFO [6.799334865] <Event name="StateInfo" time="6.799130473" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [6.805855426] <Event name="StateInfo" time="6.805646051" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcAuto.periodic_ERR [6.81465896] Calling cmdPeriodic.
+TaskAutoShoot.autoTask_INFO [6.903597271] <Event name="StateInfo" time="6.903368849" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [6.90483544] <Event name="StateInfo" time="6.904634722" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcAuto.periodic_ERR [6.919611121] Calling cmdPeriodic.
+TaskAutoShoot.autoTask_INFO [7.020120624] <Event name="StateInfo" time="7.019907816" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [7.021672374] <Event name="StateInfo" time="7.021477471" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcAuto.periodic_ERR [7.03474484] Calling cmdPeriodic.
+TaskAutoShoot.autoTask_INFO [7.113728714] <Event name="StateInfo" time="7.11350997" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [7.122617126] <Event name="StateInfo" time="7.12159026" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcAuto.periodic_ERR [7.132655368] Calling cmdPeriodic.
+TaskAutoShoot.autoTask_INFO [7.235761726] <Event name="StateInfo" time="7.235312696" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [7.246807717] <Event name="StateInfo" time="7.241697796" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcAuto.periodic_ERR [7.260821851] Calling cmdPeriodic.
+Shooter.LeftShooter.goalTrackingTask_INFO [7.332029051] Shooter.LeftShooter is Ready: rpm1=5176.865986/5216.806621, rpm2=3173.320313/0.000000, tilt=26.435220/26.412449, pan=null/null
+Shooter.RightShooter.goalTrackingTask_INFO [7.372416974] Shooter.RightShooter is Ready: rpm1=5164.750601/5216.806621, rpm2=3179.765625/0.000000, tilt=26.435220/26.412449, pan=null/null
+TaskAutoShoot.autoTask_INFO [7.377258199] <Event name="StateInfo" time="7.377036088" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [7.379163866] <Event name="StateInfo" time="7.378960609" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcAuto.periodic_ERR [7.384621503] Calling cmdPeriodic.
+TaskAutoShoot.autoTask_INFO [7.503051979] <Event name="StateInfo" time="7.502843135" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [7.506745888] ***** Start left shooter shooting (timedout=true, turretReady=false).
+Shooter.shoot_INFO [7.508425715] shoot(owner=null, event=(TaskAutoShoot.leftShooterDone=CLEARED), shooter=leftShooter, autoStop=true)
+Shooter.LeftTransferMotor.cancel_INFO [7.540782248] Cancel: stopping motor.
+TaskAutoShoot.runTaskState_INFO [7.542164609] ***** Start right shooter shooting (timedout=true, turretReady=false).
+Shooter.shoot_INFO [7.54320703] shoot(owner=null, event=(TaskAutoShoot.rightShooterDone=CLEARED), shooter=rightShooter, autoStop=true)
+Shooter.RightTransferMotor.cancel_INFO [7.544450009] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [7.549046946] <Event name="StateInfo" time="7.548745178" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcAuto.periodic_ERR [7.569624537] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.682767827] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.784755773] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.886279675] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.000234661] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.111930044] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.221270592] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.31393737] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.418870305] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.518594966] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.61909585] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.737848574] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.837963874] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.941664687] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.039122137] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.133361453] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.250691441] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.348619711] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.464712871] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.557253914] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.654107997] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.747085005] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.842687955] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.93812349] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.039523402] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.122351982] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.225074275] Calling cmdPeriodic.
+Shooter.LeftShooter.cancel_INFO [10.329869682] owner=null
+Shooter.LeftShooter.disableGoalTracking_INFO [10.331502395] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [10.332972494] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [10.335186183] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [10.336792752] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [10.343817566] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [10.345852625] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [10.34775399] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [10.351303754] Cancel: stopping motor.
+FrcAuto.periodic_ERR [10.35706276] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.398348281] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.442519261] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.487910144] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.530370765] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.564932752] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.610243209] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.651661833] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.703558358] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.729999558] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.777342817] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.825200618] Calling cmdPeriodic.
+CmdDcmpAuto.cmdPeriodic_INFO [10.833102208] <Event name="StateInfo" time="10.832410518" tag="vvvvv" CmdDcmpAuto.state="HUB_PICKUP" />
+TaskAutoShoot.cancel_INFO [10.839954877] Canceling auto task operation.
+TaskAutoShoot.stopSubsystems_INFO [10.842390727] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [10.845071102] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [10.848787664] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [10.852011441] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [10.853825463] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [10.856048243] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [10.857386186] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [10.858856389] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [10.862942474] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [10.865135887] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [10.866049175] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [10.869057019] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [10.869679593] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [10.873206691] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [10.873857451] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [10.876359591] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [10.878213894] Cancel: stopping motor.
+Shooter.stopTilt_ERR [10.883311822] StopTilt is called
+purePursuitDrive.start_INFO [10.96319934] Path=TrcPath(degrees=true, [Waypoint(simple=true,index=0,pose=(x=-20.177468,y=537.186454,angle=176.383848),vel=0.0), Waypoint(simple=false,index=-1,timestep=0.26533541344794875,pose=(x=-22.572193,y=464.309122,angle=178.593123),vel=175.0,encPos=0.0,accel=0.0,jerk=0.0), Waypoint(simple=true,index=1,pose=(x=-24.097165,y=417.900472,angle=180.000000),vel=175.0), Waypoint(simple=true,index=2,pose=(x=-41.087165,y=407.420472,angle=270.000000),vel=175.0), Waypoint(simple=true,index=3,pose=(x=-153.557165,y=407.420472,angle=270.000000),vel=175.0), Waypoint(simple=true,index=4,pose=(x=-198.627165,y=399.980472,angle=90.000000),vel=175.0), Waypoint(simple=true,index=5,pose=(x=-154.747165,y=376.630472,angle=90.000000),vel=175.0), Waypoint(simple=true,index=6,pose=(x=-64.287165,y=370.660472,angle=90.000000),vel=175.0), Waypoint(simple=false,index=-1,timestep=0.09801574770617813,pose=(x=-51.877133,y=376.551282,angle=130.688629),vel=175.0,encPos=0.0,accel=0.0,jerk=0.0), Waypoint(simple=true,index=7,pose=(x=-36.837165,y=383.690472,angle=180.000000),vel=164.7083464908513), Waypoint(simple=true,index=8,pose=(x=-27.387165,y=499.490472,angle=180.000000),vel=52.24940191045253), Waypoint(simple=true,index=9,pose=(x=-27.387165,y=512.490472,angle=180.000000),vel=0.0)])
+CmdDcmpAuto.cmdPeriodic_INFO [10.98173826] <Event name="StateInfo" time="10.980718853" tag="^^^^^" CmdDcmpAuto.state="HUB_PICKUP" RobotPose=(x=-20.177468,y=537.186454,angle=176.389342) TargetPose=(x=-27.387165,y=512.490472,angle=180.000000) vel=(x=-0.000000,y=0.000000,angle=-0.000000) Path=TrcPath(degrees=true, [Waypoint(simple=true,index=0,pose=(x=0.000000,y=0.000000,angle=0.000000),vel=0.0), Waypoint(simple=false,index=-1,timestep=0.26533541344794875,pose=(x=6.986465,y=72.581193,angle=2.209275),vel=175.0,encPos=0.0,accel=0.0,jerk=0.0), Waypoint(simple=true,index=1,pose=(x=11.435482,y=118.801259,angle=3.616152),vel=175.0), Waypoint(simple=true,index=2,pose=(x=29.052647,y=128.188802,angle=93.616152),vel=175.0), Waypoint(simple=true,index=3,pose=(x=141.298718,y=121.095110,angle=93.616152),vel=175.0), Waypoint(simple=true,index=4,pose=(x=186.748238,y=125.677649,angle=-86.383848),vel=175.0), Waypoint(simple=true,index=5,pose=(x=144.428332,y=151.748752,angle=-86.383848),vel=175.0), Waypoint(simple=true,index=6,pose=(x=54.524977,y=163.412346,angle=-86.383848),vel=175.0), Waypoint(simple=false,index=-1,timestep=0.09801574770617813,pose=(x=41.768110,y=158.315989,angle=-45.695219),vel=175.0,encPos=0.0,accel=0.0,jerk=0.0), Waypoint(simple=true,index=7,pose=(x=26.307804,y=152.139611,angle=3.616152),vel=164.7083464908513), Waypoint(simple=true,index=8,pose=(x=9.572898,y=37.166199,angle=3.616152),vel=52.24940191045253), Waypoint(simple=true,index=9,pose=(x=8.752964,y=24.192082,angle=3.616152),vel=0.0)]) />
+CmdDcmpAuto.lambda$cmdPeriodic$3_INFO [11.005934445] WaypointHandler: index=0
+Robot.setRelocalizationMode_INFO [11.006562075] setRelocalizationMode to OneShot
+Shooter.RightShooter.cancel_INFO [11.007418381] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [11.008073648] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [11.008978704] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [11.009617863] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [11.014098455] Cancel: stopping motor.
+Shooter.LeftTiltMotor.pidCtrlTask_INFO [11.037704055] controlMode: Position,onTarget=true(17.343931918753718/17.0), stalled=false, expired=false, event=(stopLeftTilt=SIGNALED)
+FrcAuto.periodic_ERR [11.043739804] Calling cmdPeriodic.
+Shooter.stopTiltCallback_ERR [11.068321929] StopRightTilt was canceled.
+Shooter.stopTiltCallback_ERR [11.077046771] StopLeftTilt was completed.
+FrcAuto.periodic_ERR [11.083990548] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.113419289] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.145702966] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.173314371] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.201505] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.2251579] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.236838986] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.258072463] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.275439156] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.287803931] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.30446613] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.36622126] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.399104741] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.426704204] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.440482251] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.45953269] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.471474665] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.487707063] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.502944608] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.513779581] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.527410532] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.5452698] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.560567559] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.578348137] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.606587719] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.63748679] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.648019771] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.665028842] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.693804914] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.705275393] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.720352969] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.735050938] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.753919697] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.768113362] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.783079762] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.796451113] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.805519359] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.817262896] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.834387695] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.849587693] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.868457888] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.879253443] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.901685318] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.915820841] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.939997433] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.957116714] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.975160992] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.994362841] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.005486612] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.016805714] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.027247985] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.036942243] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.048772026] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.057440996] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.07011872] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.07961201] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.121407995] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.14114208] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.154381076] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.183324236] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.198359152] Calling cmdPeriodic.
+CmdDcmpAuto.lambda$cmdPeriodic$3_INFO [12.210215376] WaypointHandler: index=1
+Robot.setRelocalizationMode_INFO [12.214054649] setRelocalizationMode to OneShot
+Shooter.enableGoalTracking_INFO [12.215753556] EnableGoalTracking: goalTrackingParams=(trackFlywheel=false,trackTiltPos=false,trackPanPos=true), noPassback=true
+Shooter.setupGoalTrackingMode_INFO [12.217425175] AlliancHub: alliance=Red, fieldLengthZone=5, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [12.219677309] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=true).
+Shooter.LeftShooter.enableGoalTracking_INFO [12.225035215] Enable GoalTracking (trackingParams=(trackFlywheel=false,trackTiltPos=false,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [12.231366683] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [12.236630074] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [12.239438882] Enable GoalTracking (trackingParams=(trackFlywheel=false,trackTiltPos=false,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [12.243284005] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [12.245325971] Cancel: stopping motor.
+Shooter.enableGoalTracking_ERR [12.24855789] EnableGoalTrackingTimestamps=[12.216918952, 12.224787752, 12.238504276, 12.24824568]
+FrcAuto.periodic_ERR [12.253268822] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.301441738] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.386502503] Calling cmdPeriodic.
+CmdDcmpAuto.lambda$cmdPeriodic$3_INFO [12.454278735] WaypointHandler: index=2
+Robot.setRelocalizationMode_INFO [12.457330427] setRelocalizationMode to OneShot
+FrcAuto.periodic_ERR [12.465162428] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.528196754] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.600132345] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.652789373] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.710798272] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.76014687] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.81327436] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.862822278] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.906802343] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.979059412] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.03417746] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.092698295] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.157393917] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.210116569] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.268878737] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.304671909] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.359688224] Calling cmdPeriodic.
+Shooter.fieldTriggerCallback_INFO [13.420370137] FieldTriggerCallback: canceled=false, zoneCtxt=(value--136.164549,prevZone=3,currZone=2)
+Shooter.setupGoalTrackingMode_INFO [13.422724602] AlliancHub: alliance=Red, fieldLengthZone=5, fieldWidthZone=2.
+Shooter.setupGoalTrackingMode_INFO [13.423991827] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=true).
+FrcAuto.periodic_ERR [13.424690712] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.470739713] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.509923402] Calling cmdPeriodic.
+CmdDcmpAuto.lambda$cmdPeriodic$3_INFO [13.563785601] WaypointHandler: index=3
+Robot.setRelocalizationMode_INFO [13.56525424] setRelocalizationMode to OneShot
+FrcAuto.periodic_ERR [13.578743516] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.624281138] Calling cmdPeriodic.
+Shooter.fieldTriggerCallback_INFO [13.679192589] FieldTriggerCallback: canceled=false, zoneCtxt=(value--163.333342,prevZone=2,currZone=1)
+Shooter.setupGoalTrackingMode_INFO [13.680061408] AlliancHub: alliance=Red, fieldLengthZone=5, fieldWidthZone=1.
+Shooter.setupGoalTrackingMode_INFO [13.681677355] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=true).
+FrcAuto.periodic_ERR [13.691530401] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.732227133] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.774235697] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.832022213] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.885154535] Calling cmdPeriodic.
+Shooter.fieldTriggerCallback_INFO [13.95600943] FieldTriggerCallback: canceled=false, zoneCtxt=(value--189.710263,prevZone=1,currZone=0)
+Shooter.setupGoalTrackingMode_INFO [13.95712659] AlliancHub: alliance=Red, fieldLengthZone=5, fieldWidthZone=0.
+Shooter.setupGoalTrackingMode_INFO [13.958313478] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=true).
+FrcAuto.periodic_ERR [13.959122264] Calling cmdPeriodic.
+CmdDcmpAuto.lambda$cmdPeriodic$3_INFO [14.010785653] WaypointHandler: index=4
+Robot.setRelocalizationMode_INFO [14.01220613] setRelocalizationMode to OneShot
+FrcAuto.periodic_ERR [14.021500875] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.069323228] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.111432643] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.156419368] Calling cmdPeriodic.
+Shooter.fieldTriggerCallback_INFO [14.192885892] FieldTriggerCallback: canceled=false, zoneCtxt=(value--187.835758,prevZone=0,currZone=1)
+Shooter.setupGoalTrackingMode_INFO [14.193649117] AlliancHub: alliance=Red, fieldLengthZone=5, fieldWidthZone=1.
+Shooter.setupGoalTrackingMode_INFO [14.194137429] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=true).
+FrcAuto.periodic_ERR [14.194770019] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.24250673] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.290411543] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.340737864] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.387744729] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.444611553] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.479544165] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.51869276] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.566146934] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.612112878] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.672107504] Calling cmdPeriodic.
+CmdDcmpAuto.lambda$cmdPeriodic$3_INFO [14.715106401] WaypointHandler: index=5
+Robot.setRelocalizationMode_INFO [14.716881928] setRelocalizationMode to OneShot
+FrcAuto.periodic_ERR [14.720592845] Calling cmdPeriodic.
+Shooter.fieldTriggerCallback_INFO [14.77767176] FieldTriggerCallback: canceled=false, zoneCtxt=(value--156.277641,prevZone=1,currZone=2)
+Shooter.setupGoalTrackingMode_INFO [14.77822661] AlliancHub: alliance=Red, fieldLengthZone=5, fieldWidthZone=2.
+Shooter.setupGoalTrackingMode_INFO [14.78470508] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=true).
+FrcAuto.periodic_ERR [14.789688361] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.83620273] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.880530348] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.918422615] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.976702016] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.015696266] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.053783727] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.094072565] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.136632319] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.185179716] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.224555144] Calling cmdPeriodic.
+Shooter.fieldTriggerCallback_INFO [15.272879484] FieldTriggerCallback: canceled=false, zoneCtxt=(value--125.833853,prevZone=2,currZone=3)
+Shooter.setupGoalTrackingMode_INFO [15.276482498] AlliancHub: alliance=Red, fieldLengthZone=5, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [15.277791209] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=true).
+FrcAuto.periodic_ERR [15.282122283] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.330871045] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.375002033] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.425804337] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.478576775] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.524176932] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.567241222] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.619318856] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.664258349] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.717020462] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.756946616] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.816901478] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.860072005] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.911905427] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.964889337] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.006699772] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.051485306] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.089415372] Calling cmdPeriodic.
+CmdDcmpAuto.lambda$cmdPeriodic$3_INFO [16.13064726] WaypointHandler: index=6
+Robot.setRelocalizationMode_INFO [16.132748063] setRelocalizationMode to OneShot
+FrcAuto.periodic_ERR [16.135210669] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.17836542] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.218564045] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.259679579] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.299490187] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.344585932] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.391377472] Calling cmdPeriodic.
+CmdDcmpAuto.lambda$cmdPeriodic$3_INFO [16.444349138] WaypointHandler: index=7
+Robot.setRelocalizationMode_INFO [16.444935626] setRelocalizationMode to OneShot
+FrcAuto.periodic_ERR [16.450106198] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.502450063] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.554033801] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.602629512] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.641557965] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.688442188] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.738885735] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.774878085] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.819095123] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.858977078] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.905238424] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.947434788] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.985016043] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.02457829] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.072395607] Calling cmdPeriodic.
+Shooter.fieldTriggerCallback_INFO [17.133893455] FieldTriggerCallback: canceled=false, zoneCtxt=(value-438.281598,prevZone=5,currZone=6)
+Shooter.setupGoalTrackingMode_INFO [17.140729066] AlliancHub: alliance=Red, fieldLengthZone=6, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [17.142873674] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=true).
+FrcAuto.periodic_ERR [17.151431264] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.192181042] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.24773451] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.280648727] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.339886677] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.385769218] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.424221239] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.468673802] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.516850449] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.57237979] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.61265244] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.65225754] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.694184106] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.73867157] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.779776606] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.819393059] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.867591978] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.922509206] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.964058524] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.022217252] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.064624705] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.113626997] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.152515799] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.203997123] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.250260915] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.314833793] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.358769885] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.396551607] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.452446927] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.502566257] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.546436333] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.602035064] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.64538702] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.693350141] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.768754725] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [18.772101571] PID stalled (stallTime=0.21044230461120605/0.2, error=-39.336652716907146, errorRate=0.005381163719142869/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [18.77259448] PID stalled (stallTime=7.3139588832855225/0.2, error=-42.28017662361731, errorRate=0.09727660672191246/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [18.773487783] PID stalled (stallTime=7.314741611480713/0.2, error=37.201597309002636, errorRate=0.05520070150891501/0.1).
+FrcAuto.periodic_ERR [18.817467373] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [18.820801227] PID stalled (stallTime=0.25987982749938965/0.2, error=-39.332773924172265, errorRate=0.0784422098615758/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [18.821388436] PID stalled (stallTime=7.362757205963135/0.2, error=-42.276934400373364, errorRate=0.06557243183501864/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [18.82255425] PID stalled (stallTime=7.363917589187622/0.2, error=37.201597309002636, errorRate=0.0/0.1).
+FrcAuto.periodic_ERR [18.86151963] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [18.864708123] PID stalled (stallTime=0.30406689643859863/0.2, error=-39.332264415938845, errorRate=0.011529900249098656/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [18.865151687] PID stalled (stallTime=7.406543731689453/0.2, error=-42.27632506805287, errorRate=0.013788791835767294/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [18.865598193] PID stalled (stallTime=7.406999826431274/0.2, error=37.201597309002636, errorRate=0.0/0.1).
+FrcAuto.periodic_ERR [18.912167683] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.965275228] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.013632215] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.050226139] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.084259363] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.131697371] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.168235964] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.214786194] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.254542786] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.296832942] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.350444584] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.38108876] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.431579511] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.48787736] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.538094137] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.583357496] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.618759685] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.657037761] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.700546268] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.753796227] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.80348793] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.847606123] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.891385481] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.954970738] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.997251978] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.032479354] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [20.03573935] PID stalled (stallTime=0.22876286506652832/0.2, error=-39.35271296356459, errorRate=0.08607432450864905/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [20.036490391] PID stalled (stallTime=8.577752351760864/0.2, error=-42.203834847072756, errorRate=-0.010009288007153005/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [20.03696695] PID stalled (stallTime=8.578294038772583/0.2, error=37.262022113690136, errorRate=-0.07605165174681137/0.1).
+FrcAuto.periodic_ERR [20.091520972] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.133068262] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.178912956] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.22228524] Calling cmdPeriodic.
+FrcRobot.startCompetition_INFO [20.266072666] *** Transitioning from AUTO_MODE to DISABLED_MODE ***
+Shooter.LeftShooter.disableGoalTracking_INFO [20.274935029] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [20.275910008] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [20.27638069] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [20.276939426] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [20.283708446] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [20.287382952] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [20.287789773] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [20.289572216] Cancel: stopping motor.
+Robot.cancelAll_INFO [20.292992765] Cancel all operations.
+Shooter.LeftShooter.cancel_INFO [20.296763613] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [20.299456928] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [20.301726287] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [20.303706146] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [20.305928375] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [20.308411388] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [20.314501286] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [20.315416607] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [20.317206421] Cancel: stopping motor.
+Shooter.stopTilt_ERR [20.317724533] StopTilt is called
+Shooter.LeftTiltMotor.pidCtrlTask_INFO [20.357361329] controlMode: Position,onTarget=true(16.988185492673313/17.0), stalled=false, expired=false, event=(stopLeftTilt=SIGNALED)
+Intake.IntakeMotor.cancel_INFO [20.382411378] Cancel: stopping motor.
+Climber.Motor.cancel_INFO [20.386794801] Cancel: stopping motor.
+TaskAutoShoot.cancel_INFO [20.390571268] Canceling auto task operation.
+TaskAutoClimb.cancel_INFO [20.392243313] Canceling auto task operation.
+FrcRobot.printPerformanceMetrics_INFO [20.448868381] [FrcRobot] Loop Performance Metrics:
+Average Loop Interval = 0.001432s (freq=698.556Hz, min=0.000784s, max=0.539913s)
+[03]                StartTask=0.000000s
+[04]          PrePeriodicTask=0.000096s
+[07]               UpdateTask=0.000938s
+[02]                StartMode=0.000000s
+[06]         PostPeriodicTask=0.000129s
+[08]                 StopTask=0.000000s
+[09]                 StopMode=0.000000s
+[00]                RobotInit=17.866896s
+[01]           RobotStartMode=0.000001s
+[05]                 Periodic=0.000224s
+[10]            RobotStopMode=0.000000s
+
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.450708094] FrcDashboard.task: STANDALONE_TASK=2.674230272948925E-4/0.010453244491878027
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.451927864] TrcWatchdogMgr: STANDALONE_TASK=9.392265151515152E-5/0.9973113129909091
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.453822957] flDriveMotor.pidCtrlTask: OUTPUT_TASK=1.9489211753028953E-5/0.011298482025326854
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.454882107] flDriveMotor.odometryCleanupTask: STOP_TASK=5.53535E-5/10.1764131425
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.456570994] frDriveMotor.pidCtrlTask: OUTPUT_TASK=8.051041823533438E-6/0.011298477498494079
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.458114201] blDriveMotor.pidCtrlTask: OUTPUT_TASK=7.780909545158972E-6/0.011298443906738766
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.459423941] brDriveMotor.pidCtrlTask: OUTPUT_TASK=6.232083883774257E-6/0.011298443681029467
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.46030857] flSteerMotor.pidCtrlTask: OUTPUT_TASK=9.987784934460455E-6/0.011298443484855744
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.461340501] frSteerMotor.pidCtrlTask: OUTPUT_TASK=9.299310277559124E-6/0.01129845332872446
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.462569668] blSteerMotor.pidCtrlTask: OUTPUT_TASK=8.493400047914029E-6/0.011298409404770868
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.463582001] brSteerMotor.pidCtrlTask: OUTPUT_TASK=9.732290769704644E-6/0.011298414465005648
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.470151378] FrcSwerveDrive.odometryTask: INPUT_TASK=0.003047258593327322/0.01837044133724076
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.471889638] FrcSwerveDrive.stopTask: STOP_TASK=0.0056080865/10.176374965
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.474322505] purePursuitDrive.driveTask: POST_PERIODIC_TASK=0.008801813932515338/0.060443468493865025
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.476529415] LED: OUTPUT_TASK=3.7315509958932244E-5/0.01129838042149213
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.478725279] LED.ledTask: OUTPUT_TASK=2.3456467052620329E-4/0.011018446255085683
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.482804033] Shooter.LeftPrimaryMotor.pidCtrlTask: OUTPUT_TASK=8.877548543855446E-6/0.011298309743711713
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.484481562] Shooter.LeftFollowerMotor.pidCtrlTask: OUTPUT_TASK=4.632922350364464E-6/0.011298309231545806
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.488636093] Shooter.LeftTiltMotor.pidCtrlTask: OUTPUT_TASK=1.36341650662195E-4/0.011298308980185483
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.495474891] Shooter.LeftShooter.ShooterMotor1VelTrigger.triggerTask: PRE_PERIODIC_TASK=2.425327142857143E-4/0.09909323764285714
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.496678911] Shooter.LeftShooter.goalTracking: POST_PERIODIC_TASK=0.037371937386666665/0.06519977571333332
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.497628012] Shooter.LeftTransferMotor.pidCtrlTask: OUTPUT_TASK=6.2154728971322975E-6/0.011298293421189515
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.499599889] Shooter.RightPrimaryMotor.pidCtrlTask: OUTPUT_TASK=7.429304393949764E-6/0.011298292947265759
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.501077744] Shooter.RightFollowerMotor.pidCtrlTask: OUTPUT_TASK=5.260743318618897E-6/0.011298247255552134
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.502929757] Shooter.RightTiltMotor.pidCtrlTask: OUTPUT_TASK=1.0211741060123874E-4/0.011298230817643636
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.504251574] Shooter.RightShooter.ShooterMotor1VelTrigger.triggerTask: PRE_PERIODIC_TASK=2.9681220512820514E-4/0.08380505143589743
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.505100751] Shooter.RightShooter.goalTracking: POST_PERIODIC_TASK=0.004394404713826367/0.06282653047588424
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.506153645] Shooter.RightTransferMotor.pidCtrlTask: OUTPUT_TASK=6.127309105841289E-6/0.011298227587379804
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.509410311] Shooter.TurretMotor.pidCtrlTask: OUTPUT_TASK=3.255472547650823E-4/0.011298227248434453
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.515003703] Shooter.FeederMotor.pidCtrlTask: OUTPUT_TASK=6.1505695661100465E-6/0.011298218460956749
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.516471183] ShooterfieldLengthTrigger.triggerTask: PRE_PERIODIC_TASK=1.17434862218134E-5/0.001430078260794106
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.518212448] ShooterfieldWidthTrigger.triggerTask: PRE_PERIODIC_TASK=5.721163802267511E-6/0.0014300905561736082
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.520650802] Intake.IntakeMotor.pidCtrlTask: OUTPUT_TASK=6.08683311661648E-6/0.011298217850636463
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.52321408] Climber.Motor.pidCtrlTask: OUTPUT_TASK=6.029593293413173E-5/0.011298146132899914
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.524677171] TaskAutoShoot: POST_PERIODIC_TASK=0.0026352799791666665/0.09107241089583333

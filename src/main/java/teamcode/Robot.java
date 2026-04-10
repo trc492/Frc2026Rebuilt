@@ -484,8 +484,6 @@ public class Robot extends FrcRobot
     @Override
     public void robotPeriodic(RunMode runMode, boolean slowPeriodicLoop)
     {
-        double[] timestamps = new double[3];
-        timestamps[0] = TrcTimer.getModeElapsedTime();
         if (relocalizationMode != RelocalizationMode.Disabled)
         {
             if (relocalizeRobot() && relocalizationMode == RelocalizationMode.OneShot)
@@ -493,7 +491,6 @@ public class Robot extends FrcRobot
                 relocalizationMode = RelocalizationMode.Disabled;
             }
         }
-        timestamps[1] = TrcTimer.getModeElapsedTime();
 
         if (slowPeriodicLoop)
         {
@@ -508,8 +505,6 @@ public class Robot extends FrcRobot
             // in the Command-based framework to work.
             CommandScheduler.getInstance().run();
         }
-        //timestamps[1] = TrcTimer.getModeElapsedTime();
-        //globalTracer.traceInfo(moduleName, "RobotPeriodicTimestamps=" + Arrays.toString(timestamps));
     }   //robotPeriodic
 
     /**
