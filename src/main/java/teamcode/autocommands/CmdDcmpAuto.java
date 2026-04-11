@@ -297,7 +297,7 @@ double[] timestamps = new double[8];
                         double climbDelay =
                             RobotParams.Game.AUTONOMOUS_PERIOD - TrcTimer.getModeElapsedTime() - 3.5;
                         robot.autoClimbTask.autoClimb(
-                            null, event, autoChoices.alliance, ClimbSide.DEPOT, climbDelay > 0.0 ? climbDelay: 0.0);
+                            null, event, autoChoices.alliance, ClimbSide.DEPOT, 0.0);
                         sm.waitForSingleEvent(event, State.DONE);
                     }
                     else
@@ -395,11 +395,11 @@ timestamps[0] = TrcTimer.getModeElapsedTime();
                     TrcPose2D[] fullPath;
                     if (atDepot)
                     {
-                        fullPath = isTrench ? RobotParams.Game.blueDoubleSweepDepotShallowPath : depotBumpSweep;
+                        fullPath = isTrench ? RobotParams.Game.blueDoubleSweepDepotShallowPath : RobotParams.Game.blueDoubleSweepDepotShallowPath; //TODO: Fix this line when cleaning up
                     }
                     else
                     {
-                        fullPath = isTrench ? RobotParams.Game.blueDoubleSweepOutpostShallowPath : outpostBumpSweep;
+                        fullPath = isTrench ? RobotParams.Game.blueDoubleSweepOutpostShallowPath : RobotParams.Game.blueDoubleSweepOutpostShallowPath; //TODO: Fix this line when cleaning up
                     }
 
                     // TrcPose2D[] adjustedFullPath = getAdjustedSweepPath(fullPath, sweepDistance);
