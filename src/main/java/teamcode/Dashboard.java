@@ -259,6 +259,7 @@ public class Dashboard
         dashboard.refreshKey(DBKEY_INTAKE_SHOW_STATUS, RobotParams.Preferences.showIntakeStatus);
         // Climber.
         dashboard.refreshKey(DBKEY_CLIMBER_SHOW_STATUS, RobotParams.Preferences.showClimberStatus);
+        dashboard.refreshKey(DBKEY_AUTO_CHOICES_SUBMIT, false);
         // TeleOp.
         dashboard.refreshKey(DBKEY_TELEOP_DRIVE_NORMAL_SCALE, FrcTeleOp.DEF_DRIVE_NORMAL_SCALE);
         dashboard.refreshKey(DBKEY_TELEOP_DRIVE_SLOW_SCALE, FrcTeleOp.DEF_DRIVE_SLOW_SCALE);
