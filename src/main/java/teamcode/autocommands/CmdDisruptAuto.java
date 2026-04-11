@@ -57,6 +57,8 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
     private final FrcAuto.AutoChoices autoChoices;
     private final TrcTimer timer;
     private final TrcEvent event;
+    private final TrcEvent driveEvent;
+    private final TrcEvent shootEvent;
     private final TrcStateMachine<State> sm;
 
     boolean atDepot = false;
@@ -75,6 +77,8 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
 
         timer = new TrcTimer(moduleName);
         event = new TrcEvent(moduleName);
+        driveEvent = new TrcEvent(moduleName + ".driveEvent");
+        shootEvent = new TrcEvent(moduleName + ".shootEvent");
         sm = new TrcStateMachine<>(moduleName);
     } // CmdDcmpAuto
 
@@ -99,11 +103,17 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
     @Override
     public void cancel() {
         timer.cancel();
+        if (robot.autoShootTask != null && robot.autoShootTask.isActive()) {
+            robot.autoShootTask.cancel();
+        }
         if (robot.shooterSubsystem != null) {
             robot.shooterSubsystem.disableGoalTracking();
         }
         if (robot.robotBase != null && robot.robotBase.purePursuitDrive != null) {
             robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
+        }
+        if (robot.robotBase instanceof FrcSwerveBase) {
+            ((FrcSwerveBase) robot.robotBase).setXModeEnabled(moduleName, false);
         }
         sm.stop();
     } // cancel
@@ -197,13 +207,17 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
                     break;
 
                 case X_AND_WAIT:
-                    ((FrcSwerveBase) robot.robotBase).setXModeEnabled(moduleName, true);
+                    if (robot.robotBase instanceof FrcSwerveBase) {
+                        ((FrcSwerveBase) robot.robotBase).setXModeEnabled(moduleName, true);
+                    }
                     timer.set(5.0, event); // TODO: Make configurable
                     sm.waitForSingleEvent(event, State.NEUTRAL_ZONE_RETURN_AND_SHOOT);
                     break;
 
                 case NEUTRAL_ZONE_RETURN_AND_SHOOT:
-                    ((FrcSwerveBase) robot.robotBase).setXModeEnabled(moduleName, false);
+                    if (robot.robotBase instanceof FrcSwerveBase) {
+                        ((FrcSwerveBase) robot.robotBase).setXModeEnabled(moduleName, false);
+                    }
                     // event.clear(); // Adding this here because no clue what the event is going at this point and we
                                    // aren't registering the new one until like 5 years later
                     if (robot.intakeSubsystem != null) {
@@ -231,7 +245,7 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
                     // Increasing rot limit to turn quickly
                     robot.robotBase.purePursuitDrive.setRotOutputLimit(0.8);
                     robot.robotBase.purePursuitDrive.start(
-                            null, null, 0.0, false,
+                null, driveEvent, 0.0, false,
                             (ctxt, canceled) -> {
                                 TrcPurePursuitDrive.WaypointContext wpCtxt = (TrcPurePursuitDrive.WaypointContext) ctxt;
                                 robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + wpCtxt.index);
@@ -244,16 +258,19 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
                                     robot.robotBase.purePursuitDrive.setRotOutputLimit(0.5);
                                 } else if (wpCtxt.index == 2) {
                                     // End of intake, restore higher speed and disable intake
-                                    robot.intakeSubsystem.setIntakeEnabled(false);
+                                    if (robot.intakeSubsystem != null) {
+                                        robot.intakeSubsystem.setIntakeEnabled(false);
+                                    }
                                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.8);
                                 } else if (wpCtxt.index == 4) {
 
-                                    if (robot.intake != null) {
+                                    if (robot.intakeSubsystem != null) {
                                         robot.intakeSubsystem.setIntakeEnabled(true, 0.2); // Just agitation
                                     }
                                     if (robot.autoShootTask != null) {
                                         // Enable SOTM/Shoot in place
-                                        robot.autoShootTask.autoShoot(null, event, true, true, false);
+                                        robot.autoShootTask.autoShoot(
+                                                null, autoChoices.doClimb ? null : shootEvent, true, true, false);
                                     }
 
                                     if (!autoChoices.doClimb) {
@@ -265,7 +282,13 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
                                 }
                             },
                             robot.adjustPathByAlliance(autoChoices.alliance, returnPath));
-                    sm.waitForSingleEvent(event, autoChoices.doClimb ? State.AUTO_CLIMB : State.DONE, 6.0);
+                    if (autoChoices.doClimb) {
+                        sm.waitForSingleEvent(driveEvent, State.AUTO_CLIMB, 6.0);
+                    } else if (robot.autoShootTask != null) {
+                        sm.waitForSingleEvent(shootEvent, State.DONE, 6.0);
+                    } else {
+                        sm.waitForSingleEvent(driveEvent, State.DONE, 6.0);
+                    }
                     break;
 
                 case AUTO_CLIMB:
@@ -273,7 +296,7 @@ public class CmdDisruptAuto implements TrcRobot.RobotCommand {
                         // Cancel the shoot task in case we timed out
                         robot.autoShootTask.cancel();
                     }
-                    if (robot.climberSubsystem != null) {
+                    if (robot.climberSubsystem != null && robot.autoClimbTask != null) {
                         double climbDelay = RobotParams.Game.AUTONOMOUS_PERIOD - TrcTimer.getModeElapsedTime() - 3.0;
                         robot.autoClimbTask.autoClimb(
                                 null, event, autoChoices.alliance, atDepot ? ClimbSide.DEPOT : ClimbSide.OUTPOST,
