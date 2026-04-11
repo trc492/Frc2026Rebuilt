@@ -440,23 +440,43 @@ timestamps[2] = TrcTimer.getModeElapsedTime();
                             TrcPurePursuitDrive.WaypointContext wpCtxt = (TrcPurePursuitDrive.WaypointContext) ctxt;
                             robot.globalTracer.traceInfo(moduleName, "WaypointHandler: index=" + wpCtxt.index);
                             robot.setRelocalizationMode(wpCtxt.index == -1? RelocalizationMode.Continuous: RelocalizationMode.OneShot);
+                            // TODO: For old auto before changes
+                            // if (wpCtxt.index == 1)
+                            // {
+                            //     robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
+                            // }
+                            // if (wpCtxt.index == 2)
+                            // {
+                            //     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.7);
+                            // }
+                            // if (wpCtxt.index == 3)
+                            // {
+                            //     //robot.intakeSubsystem.setIntakeEnabled(false);
+                            //     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.8);
+                            // }
+                            // if (wpCtxt.index == 4)
+                            // {
+                            //     robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
+                            //     robot.robotBase.purePursuitDrive.setRotOutputLimit(1.0);
+                            // }
+                            // if (wpCtxt.index == 7)
+                            // {
+                            //     robot.robotBase.purePursuitDrive.cancel();
+                            // }
+
                             if (wpCtxt.index == 1)
                             {
                                 robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
                             }
-                            if (wpCtxt.index == 2)
-                            {
-                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.7);
-                            }
                             if (wpCtxt.index == 3)
                             {
-                                //robot.intakeSubsystem.setIntakeEnabled(false);
-                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.8);
+                                robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.7);
+                                robot.robotBase.purePursuitDrive.setRotOutputLimit(1.0);
                             }
-                            if (wpCtxt.index == 4)
+                            if (wpCtxt.index == 5)
                             {
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
-                                robot.robotBase.purePursuitDrive.setRotOutputLimit(1.0);
+                                // robot.robotBase.purePursuitDrive.setRotOutputLimit(1.0);
                             }
                             if (wpCtxt.index == 7)
                             {

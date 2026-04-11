@@ -393,23 +393,43 @@ public class RobotParams
             new TrcPose2D(-27.40, 151.73, 0.00)
         };
 
+        // public static final TrcPose2D[] blueDoubleSweepDepotShallowPath = new TrcPose2D[] {
+        //     new TrcPose2D(-295.01, 265.24, 90.00),
+        //     new TrcPose2D(-252.57, 279.38, 110.00),
+        //     new TrcPose2D(-172.06, 279.38, 110.00),
+        //     new TrcPose2D(-158.46, 237.42, -90.00),
+        //     new TrcPose2D(-250.94, 234.60, -90.00),
+        //     new TrcPose2D(-287.01, 255.22, 0.00),
+        //     new TrcPose2D(-291.01, 141.75, 0.00)
+        // };
+
+        // public static final TrcPose2D[] blueDoubleSweepOutpostShallowPath = new TrcPose2D[] {
+        //     new TrcPose2D(-22.68, 265.24, -90.00),
+        //     new TrcPose2D(-65.12, 279.38, -110.00),
+        //     new TrcPose2D(-145.63, 279.38, -110.00),
+        //     new TrcPose2D(-159.23, 237.42, 90.00),
+        //     new TrcPose2D(-66.75, 234.60, 90.00),
+        //     new TrcPose2D(-30.68, 255.22, 0.00),
+        //     new TrcPose2D(-26.68, 141.75, 0.00)
+        // };
+
         public static final TrcPose2D[] blueDoubleSweepDepotShallowPath = new TrcPose2D[] {
-            new TrcPose2D(-295.01, 265.24, 90.00),
-            new TrcPose2D(-252.57, 279.38, 110.00),
-            new TrcPose2D(-172.06, 279.38, 110.00),
-            new TrcPose2D(-158.46, 237.42, -90.00),
-            new TrcPose2D(-250.94, 234.60, -90.00),
-            new TrcPose2D(-287.01, 255.22, 0.00),
+            new TrcPose2D(-298.27, 226.62, 90.00),
+            new TrcPose2D(-275.42, 302.23, 74.48),
+            new TrcPose2D(-242.78, 337.59, 74.00),
+            new TrcPose2D(-194.37, 343.57, 178.64),
+            new TrcPose2D(-230.81, 288.09, -124.22),
+            new TrcPose2D(-287.01, 255.22, 0.25),
             new TrcPose2D(-291.01, 141.75, 0.00)
         };
 
         public static final TrcPose2D[] blueDoubleSweepOutpostShallowPath = new TrcPose2D[] {
-            new TrcPose2D(-22.68, 265.24, -90.00),
-            new TrcPose2D(-65.12, 279.38, -110.00),
-            new TrcPose2D(-145.63, 279.38, -110.00),
-            new TrcPose2D(-159.23, 237.42, 90.00),
-            new TrcPose2D(-66.75, 234.60, 90.00),
-            new TrcPose2D(-30.68, 255.22, 0.00),
+            new TrcPose2D(-19.42, 226.62, -90.00),
+            new TrcPose2D(-42.27, 302.23, -74.48),
+            new TrcPose2D(-74.91, 337.59, -74.00),
+            new TrcPose2D(-123.32, 343.57, -178.64),
+            new TrcPose2D(-86.88, 288.09, 124.22),
+            new TrcPose2D(-30.68, 255.22, -0.25),
             new TrcPose2D(-26.68, 141.75, 0.00)
         };
 
