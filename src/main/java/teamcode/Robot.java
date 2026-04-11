@@ -95,6 +95,8 @@ public class Robot extends FrcRobot
     public static final String moduleName = Robot.class.getSimpleName();
     public final TrcDbgTrace globalTracer = TrcDbgTrace.getGlobalTracer();
     public FrcDashboard dashboard;
+    private TrcBuildInfo buildInfo;
+    private FrcMatchInfo matchInfo;
     // Inputs.
     public FrcXboxController driverController;
     public FrcXboxController operatorController;
@@ -162,6 +164,7 @@ public class Robot extends FrcRobot
         dashboard = new Dashboard().getDashboard();
         createTeamFolderPath();
         DataLogManager.start();
+        buildInfo = TrcBuildInfo.getBuildInfo();
         // Create and initialize inputs.
         if (RobotParams.Preferences.hasDriverGameController)
         {
@@ -305,8 +308,7 @@ public class Robot extends FrcRobot
     public void robotStartMode(RunMode runMode, RunMode prevMode)
     {
         // Read FMS Match info and Build info.
-        FrcMatchInfo matchInfo = FrcMatchInfo.getMatchInfo();
-        TrcBuildInfo buildInfo = TrcBuildInfo.getBuildInfo();
+        matchInfo = FrcMatchInfo.getMatchInfo();
         if (runMode == RunMode.DISABLED_MODE)
         {
             if (RobotParams.Preferences.useTraceLog)
