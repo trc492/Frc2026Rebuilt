@@ -359,16 +359,16 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                     {
                         double lTrigger =  robot.driverController.getLeftTrigger(); 
 
-                        if(lTrigger > 0.0)
+                        if (lTrigger > 0.0 && !robot.intakeSubsystem.isIntakeOn())
                         {
-                            //robot.globalTracer.traceInfo(moduleName, ">>>>> Start Auto Shoot.");
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Enable Intake.");
                             robot.intakeSubsystem.setIntakeEnabled(true);
                         } 
-                        else
+                        else if (lTrigger == 0.0 && robot.intakeSubsystem.isIntakeOn())
                         {
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Disable Intake.");
                             robot.intakeSubsystem.setIntakeEnabled(false);
                         }
-
                     }
                 }
             }
