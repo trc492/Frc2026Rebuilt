@@ -499,6 +499,12 @@ public class Robot extends FrcRobot
         if (slowPeriodicLoop)
         {
             Dashboard.checkDashboardUpdateEnabled();
+            if (dashboard.getBoolean(Dashboard.DBKEY_AUTO_CHOICES_SUBMIT, false))
+            {
+                FrcAuto.autoChoices.fetchChoices();
+dashboard.displayPrintf(7, "%s", FrcAuto.autoChoices);
+                dashboard.putBoolean(Dashboard.DBKEY_AUTO_CHOICES_SUBMIT, false);
+            }
         }
 
         if (RobotParams.Preferences.hybridMode)

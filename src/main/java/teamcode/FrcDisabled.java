@@ -92,12 +92,6 @@ public class FrcDisabled implements TrcRobot.RobotMode
     @Override
     public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
-        if (robot.dashboard.getBoolean(Dashboard.DBKEY_AUTO_CHOICES_SUBMIT, false))
-        {
-            FrcAuto.autoChoices.fetchChoices();
-robot.dashboard.displayPrintf(7, "%s", FrcAuto.autoChoices);
-            robot.dashboard.putBoolean(Dashboard.DBKEY_AUTO_CHOICES_SUBMIT, false);
-        }
     }   //periodic
 
 }   //class FrcDisabled
