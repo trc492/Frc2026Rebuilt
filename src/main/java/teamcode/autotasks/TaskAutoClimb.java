@@ -169,6 +169,7 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
         timer.cancel();
         robot.robotBase.cancel(owner);
         robot.climber.cancel();
+        robot.shooterSubsystem.disableGoalTracking();
     }   //stopSubsystems
 
     /**
@@ -225,20 +226,20 @@ public class TaskAutoClimb extends TrcAutoTask<TaskAutoClimb.State>
                 robot.robotBase.purePursuitDrive.start(
                     owner, event, 0.0, true, null,
                     new TrcPose2D(0.0, -21.0, 0.0)); // TODO: Tune this
-                sm.waitForSingleEvent(event, State.CLIMB_DELAY, 1.5);
+                sm.waitForSingleEvent(event, State.CLIMB, 1.5);
                 break;
             
-            case CLIMB_DELAY:
-                if (taskParams.climbDelay > 0.0)
-                {
-                    timer.set(taskParams.climbDelay, event);
-                    sm.waitForSingleEvent(event, State.CLIMB);
-                }
-                else
-                {
-                    sm.setState(State.CLIMB);
-                }
-                break;
+            // case CLIMB_DELAY:
+            //     if (taskParams.climbDelay > 0.0)
+            //     {
+            //         timer.set(taskParams.climbDelay, event);
+            //         sm.waitForSingleEvent(event, State.CLIMB);
+            //     }
+            //     else
+            //     {
+            //         sm.setState(State.CLIMB);
+            //     }
+            //     break;
 
             case CLIMB:
                 robot.climber.setPosition(

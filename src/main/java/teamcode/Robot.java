@@ -73,6 +73,7 @@ import trclib.sensor.TrcRobotBattery;
 import trclib.subsystem.TrcRollerIntake;
 import trclib.subsystem.TrcShooter;
 import trclib.subsystem.TrcSubsystem;
+import trclib.timer.TrcTimer;
 import trclib.vision.TrcVisionRelocalize;
 
 /**
@@ -94,7 +95,8 @@ public class Robot extends FrcRobot
     public static final String moduleName = Robot.class.getSimpleName();
     public final TrcDbgTrace globalTracer = TrcDbgTrace.getGlobalTracer();
     public FrcDashboard dashboard;
-    private boolean traceLogOpened;
+    private TrcBuildInfo buildInfo;
+    private FrcMatchInfo matchInfo;
     // Inputs.
     public FrcXboxController driverController;
     public FrcXboxController operatorController;
@@ -160,9 +162,9 @@ public class Robot extends FrcRobot
     {
         // Initialize global objects.
         dashboard = new Dashboard().getDashboard();
-        traceLogOpened = false;
         createTeamFolderPath();
         DataLogManager.start();
+        buildInfo = TrcBuildInfo.getBuildInfo();
         // Create and initialize inputs.
         if (RobotParams.Preferences.hasDriverGameController)
         {
@@ -282,6 +284,15 @@ public class Robot extends FrcRobot
             pdp.registerEnergyUsedForAllUnregisteredChannels();
         }
         //
+        // Miscellaneous initializations.
+        //
+        // Enable LostComm detection.
+        if (dashboard.getBoolean(
+                Dashboard.DBKEY_PREFERENCE_COMMSTATUS_MONITOR, RobotParams.Preferences.useCommStatusMonitor))
+        {
+            super.setCommStatusMonitorEnabled(this::commStatusCallback);
+        }
+        //
         // Create Robot Modes.
         //
         setupRobotModes(new FrcTeleOp(this), new FrcAuto(this), new FrcTest(this), new FrcDisabled(this));
@@ -296,33 +307,33 @@ public class Robot extends FrcRobot
     @Override
     public void robotStartMode(RunMode runMode, RunMode prevMode)
     {
-        // Enable LostComm detection.
-        if (dashboard.getBoolean(
-                Dashboard.DBKEY_PREFERENCE_COMMSTATUS_MONITOR, RobotParams.Preferences.useCommStatusMonitor))
+        // Read FMS Match info and Build info.
+        matchInfo = FrcMatchInfo.getMatchInfo();
+        if (runMode == RunMode.DISABLED_MODE)
         {
-            super.setCommStatusMonitorEnabled(this::commStatusCallback);
-        }
-
-        // Read FMS Match info.
-        FrcMatchInfo matchInfo = FrcMatchInfo.getMatchInfo();
-        TrcBuildInfo buildInfo = TrcBuildInfo.getBuildInfo();
-        if (runMode != RunMode.DISABLED_MODE)
-        {
-            // Start trace logging.
             if (RobotParams.Preferences.useTraceLog)
             {
-                openTraceLog(matchInfo);
-                setTraceLogEnabled(true);
+                // Entering Disabled mode, close previous trace log and re-open a new trace log for the next RunMode.
+                // But don't enable trace logging because we don't want to log Disabled mode.
+                closeTraceLog(matchInfo, prevMode);
+                openTraceLog();
             }
+        }
+        else
+        {
+            // Start trace logging.
+            setTraceLogEnabled(true);
             // Start RobotDrive.
             if (robotBase != null)
             {
                 robotBase.driveBase.setOdometryEnabled(true, true);
-                // Disable ramp rate control in autonomous.
-                Double rampRate = runMode == RunMode.AUTO_MODE? 0.0: robotInfo.driveOpenLoopRampRate;
-                for (int i = 0; i < robotBase.driveMotors.length; i++)
+                // Set ramp rate control in TeleOp.
+                if (runMode == RunMode.TELEOP_MODE && robotInfo.driveOpenLoopRampRate != null)
                 {
-                    robotBase.driveMotors[i].setOpenLoopRampRate(rampRate);
+                    for (int i = 0; i < robotBase.driveMotors.length; i++)
+                    {
+                        robotBase.driveMotors[i].setOpenLoopRampRate(robotInfo.driveOpenLoopRampRate);
+                    }
                 }
 
                 if (runMode != RunMode.AUTO_MODE)
@@ -344,7 +355,10 @@ public class Robot extends FrcRobot
                 dashboard.getBoolean(
                     Dashboard.DBKEY_PREFERENCE_SUBSYSTEM_ZEROCAL, RobotParams.Preferences.zeroCalSubsystems))
             {
-                zeroCalibrate(null, null);
+                if (runMode != RunMode.AUTO_MODE)
+                {
+                    zeroCalibrate(null, null);
+                }
             }
             // Start subsystems.
             if (ledIndicator != null)
@@ -352,7 +366,7 @@ public class Robot extends FrcRobot
                 ledIndicator.reset();
             }
         }
-        globalTracer.traceInfo(moduleName, "%s: ***** %s *****", matchInfo.eventDate, runMode);
+        globalTracer.traceInfo(moduleName, matchInfo.eventDate + ": ***** " + runMode + " *****");
         globalTracer.traceInfo(moduleName, "<BuildInfo " + buildInfo + " />");
     }   //robotStartMode
 
@@ -396,7 +410,6 @@ public class Robot extends FrcRobot
         }
         // Stop trace logging.
         setTraceLogEnabled(false);
-        closeTraceLog();
     }   //robotStopMode
 
     /**
@@ -481,9 +494,19 @@ public class Robot extends FrcRobot
             }
         }
 
+        Runtime runtime = Runtime.getRuntime();
+        long usedMemoryMB = (runtime.totalMemory() - runtime.freeMemory()) / (1024 * 1024);
+        dashboard.putNumber("Memory/UsedMB", usedMemoryMB);
+
         if (slowPeriodicLoop)
         {
             Dashboard.checkDashboardUpdateEnabled();
+            if (dashboard.getBoolean(Dashboard.DBKEY_AUTO_CHOICES_SUBMIT, false))
+            {
+                FrcAuto.autoChoices.fetchChoices();
+dashboard.displayPrintf(7, "%s", FrcAuto.autoChoices);
+                dashboard.putBoolean(Dashboard.DBKEY_AUTO_CHOICES_SUBMIT, false);
+            }
         }
 
         if (RobotParams.Preferences.hybridMode)
@@ -557,31 +580,34 @@ public class Robot extends FrcRobot
      * This method creates and opens the trace log with the file name derived from the given match info.
      * Note that the trace log is disabled after it is opened. The caller must explicitly call setTraceLogEnabled
      * to enable/disable it.
-     *
-     * @param matchInfo specifies the match info from which the trace log file name is derived.
      */
-    public void openTraceLog(FrcMatchInfo matchInfo)
+    public void openTraceLog()
     {
-        if (RobotParams.Preferences.useTraceLog && !traceLogOpened)
+        if (!TrcDbgTrace.isTraceLogOpened())
         {
-            String fileName = matchInfo.eventName != null?
-                String.format(Locale.US, "%s_%s%03d", matchInfo.eventName, matchInfo.matchType, matchInfo.matchNumber):
-                getCurrentRunMode().name();
-
-            traceLogOpened = TrcDbgTrace.openTraceLog(
-                RobotParams.Robot.teamFolderPath + RobotParams.Robot.LOG_FOLDER_NAME, fileName);
+            TrcDbgTrace.openTraceLog(RobotParams.Robot.teamFolderPath + RobotParams.Robot.LOG_FOLDER_NAME, null);
         }
     }   //openTraceLog
 
     /**
      * This method closes the trace log if it was opened.
+     *
+     * @param matchInfo specifies the match info from which the trace log file name is derived.
+     * @param prevRunMode specifies the previous run mode as the file name suffix.
      */
-    public void closeTraceLog()
+    public void closeTraceLog(FrcMatchInfo matchInfo, RunMode prevRunMode)
     {
-        if (traceLogOpened)
+        if (TrcDbgTrace.isTraceLogOpened())
         {
-            TrcDbgTrace.closeTraceLog();
-            traceLogOpened = false;
+            String fileName = matchInfo.eventName != null?
+                String.format(
+                    Locale.US, "%s_%s%03d_%s",
+                    matchInfo.eventName, matchInfo.matchType, matchInfo.matchNumber, prevRunMode.name()):
+                prevRunMode.name();
+
+            TrcDbgTrace.closeTraceLog(
+                prevRunMode != RunMode.INVALID_MODE?
+                    TrcTimer.getCurrentTimeString() + "!" + fileName: null);
         }
     }   //closeTraceLog
 
@@ -592,7 +618,7 @@ public class Robot extends FrcRobot
      */
     public void setTraceLogEnabled(boolean enabled)
     {
-        if (traceLogOpened)
+        if (TrcDbgTrace.isTraceLogOpened())
         {
             TrcDbgTrace.setTraceLogEnabled(enabled);
         }
@@ -690,9 +716,9 @@ public class Robot extends FrcRobot
      */
     public void setRobotStartPosition(FrcAuto.AutoChoices autoChoices)
     {
-        int startPosIndex = FrcAuto.autoChoices.getStartPos().value;
-        Alliance alliance = FrcAuto.autoChoices.getAlliance();
-        TrcPose2D robotPose = adjustPoseByAlliance(alliance, RobotParams.Game.blueStartPoses[startPosIndex]);
+        int startPosIndex = FrcAuto.autoChoices.startPos.value;
+        TrcPose2D robotPose = adjustPoseByAlliance(
+            FrcAuto.autoChoices.alliance, RobotParams.Game.blueStartPoses[startPosIndex]);
         setFieldPosition(robotPose, false);
     }   //setRobotStartPosition
 

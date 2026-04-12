@@ -1,0 +1,1354 @@
+Robot.robotStartMode_INFO [0.024929283] Thu Apr 09 18:11:39 UTC 2026: ***** AUTO_MODE *****
+Robot.robotStartMode_INFO [0.027689283] <BuildInfo Host="DESKTOP_NJF" User="NoahJ" Timestamp="2026-04-09 08:07:22" Branch="dev" />
+FrcAuto.startMode_INFO [0.041477941] <Info name="MatchInfo" date="Thu Apr 09 18:11:39 UTC 2026" event="PNCMP" type="Practice" match=7 replay=1 alliance="Blue" location=2 gameMsg="" />
+FrcAuto.startMode_INFO [0.053185005] <Info name="AutoChoices" alliance="Blue" strategy="DCMP_AUTO" startPos="START_POS_CENTER" startDelay=0.0 sec depotPickup="false" outpostPickup="false" neutralZonePickup="true" moveTo="DEPOT" passBack="NONE" climb="false" climbSide="DEPOT" neutralZoneCycles="0.0" type="CENTER" sweepDistance="STANDARD" pathFile="DrivePath.csv" xDistance=0.0 ft yDistance=0.0 ft turnDegrees=0.0 deg driveTime=0.0 sec drivePower=0.0"  />
+FrcAuto.startMode_ERR [0.065725753] Selecting Dcmp Auto.
+Shooter.stopTiltCallback_ERR [0.111267005] StopRightTilt was completed.
+Shooter.stopTiltCallback_ERR [0.114058599] StopLeftTilt was completed.
+FrcAuto.periodic_ERR [0.118220093] Calling cmdPeriodic.
+CmdDcmpAuto.cmdPeriodic_INFO [0.123359599] <Event name="StateInfo" time="0.122954241" tag="vvvvv" CmdDcmpAuto.state="START" />
+Shooter.LeftTiltMotor.isMotorStalled_INFO [0.129987289] Stall detection triggered.
+Shooter.LeftTiltMotor.checkStallReset_INFO [0.133452529] Resetting stall.
+Shooter.RightTiltMotor.isMotorStalled_INFO [0.141642499] Stall detection triggered.
+Shooter.RightTiltMotor.checkStallReset_INFO [0.151444586] Resetting stall.
+Shooter.TurretMotor.isMotorStalled_INFO [0.154966808] Stall detection triggered.
+Climber.Motor.isMotorStalled_INFO [0.165222534] Stall detection triggered.
+Climber.Motor.checkStallReset_INFO [0.167656146] Resetting stall.
+Robot.zeroCalibrate_INFO [0.166700341] Zero calibrate all subsystems.
+TrcSubsystem.zeroCalibrateAll_INFO [0.175612845] ZeroCalibrate(Subsystem=Shooter, owner=null, event=null)
+Shooter.zeroCalibrate_INFO [0.179180124] ZeroCalibrate left shooter.
+Shooter.zeroCalibrate_INFO [0.188588025] ZeroCalibrate right shooter.
+TrcSubsystem.zeroCalibrateAll_INFO [0.201859513] ZeroCalibrate(Subsystem=Climber, owner=null, event=null)
+CmdDcmpAuto.cmdPeriodic_INFO [0.206729762] <Event name="StateInfo" time="0.204849106" tag="^^^^^" CmdDcmpAuto.state="START" />
+FrcAuto.periodic_ERR [0.218319099] Calling cmdPeriodic.
+CmdDcmpAuto.cmdPeriodic_INFO [0.225446144] <Event name="StateInfo" time="0.225199694" tag="vvvvv" CmdDcmpAuto.state="PICKUP_DEPOT" />
+Climber.Motor.isMotorStalled_INFO [0.354060745] Stall detection triggered.
+Climber.Motor.zeroCalibratingMotor_WARN [0.359558855] Stalled, lower limit switch may not exist or might have failed!
+Climber.Motor.pidCtrlTask_INFO [0.365602484] Zero calibration done, event=null
+purePursuitDrive.start_INFO [0.412989963] Path=TrcPath(degrees=true, [Waypoint(simple=true,index=0,pose=(x=-158.838583,y=139.610000,angle=-179.997253),vel=0.0), Waypoint(simple=false,index=-1,timestep=0.34926151239279585,pose=(x=-208.784320,y=86.485019,angle=-179.997253),vel=122.4045997986548,encPos=0.0,accel=0.0,jerk=0.0), Waypoint(simple=true,index=1,pose=(x=-233.680982,y=60.003588,angle=-179.997253),vel=85.73214099741124), Waypoint(simple=true,index=2,pose=(x=-233.682659,y=25.003588,angle=-179.997253),vel=0.0)])
+Shooter.LeftTiltMotor.isMotorStalled_INFO [0.418516582] Stall detection triggered.
+Shooter.RightTiltMotor.isMotorStalled_INFO [0.4204402] Stall detection triggered.
+Shooter.enableGoalTracking_INFO [0.425738923] EnableGoalTracking: goalTrackingParams=(trackFlywheel=false,trackTiltPos=false,trackPanPos=true), noPassback=true
+Shooter.setupGoalTrackingMode_INFO [0.431939217] AlliancHub: alliance=Blue, fieldLengthZone=0, fieldWidthZone=2.
+Shooter.setupGoalTrackingMode_INFO [0.436229224] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=182.110000,angle=0.000000), noPassback=true).
+Shooter.LeftTiltMotor.zeroCalibratingMotor_WARN [0.438492622] Stalled, lower limit switch may not exist or might have failed!
+Shooter.LeftTiltMotor.pidCtrlTask_INFO [0.440847943] Zero calibration done, event=(Shooter.leftTiltZeroCalCallback=CLEARED)
+Shooter.LeftTiltMotor.pidCtrlTask_INFO [0.442942356] controlMode: Power,onTarget=false(-0.0700930804014206/null), stalled=false, expired=false, event=(Shooter.leftTiltZeroCalCallback=SIGNALED)
+Shooter.RightTiltMotor.zeroCalibratingMotor_WARN [0.445230156] Stalled, lower limit switch may not exist or might have failed!
+Shooter.RightTiltMotor.pidCtrlTask_INFO [0.450203235] Zero calibration done, event=(Shooter.rightTiltZeroCalCallback=CLEARED)
+Shooter.RightTiltMotor.pidCtrlTask_INFO [0.452758864] controlMode: Power,onTarget=false(-0.06469893455505371/null), stalled=false, expired=false, event=(Shooter.rightTiltZeroCalCallback=SIGNALED)
+Shooter.LeftTiltMotor.isMotorStalled_INFO [0.460267735] Stall detection triggered.
+Shooter.LeftTiltMotor.checkStallReset_INFO [0.46496754] Resetting stall.
+Shooter.LeftShooter.enableGoalTracking_INFO [0.465629919] Enable GoalTracking (trackingParams=(trackFlywheel=false,trackTiltPos=false,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [0.468723133] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [0.471707806] Cancel: stopping motor.
+Shooter.RightTiltMotor.isMotorStalled_INFO [0.471857755] Stall detection triggered.
+Shooter.RightTiltMotor.checkStallReset_INFO [0.475528207] Resetting stall.
+Shooter.RightShooter.enableGoalTracking_INFO [0.487662764] Enable GoalTracking (trackingParams=(trackFlywheel=false,trackTiltPos=false,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [0.49411959] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [0.497194585] Cancel: stopping motor.
+Shooter.enableGoalTracking_ERR [0.503284493] EnableGoalTrackingTimestamps=[0.428718313, 0.43823828, 0.474143522, 0.502832409]
+CmdDcmpAuto.cmdPeriodic_INFO [0.522014343] <Event name="StateInfo" time="0.520923024" tag="^^^^^" CmdDcmpAuto.state="PICKUP_DEPOT" RobotPose=(x=-158.838583,y=139.610000,angle=-179.997253) TargetPose=(x=-233.682659,y=25.003588,angle=-179.997253) vel=(x=-0.000000,y=0.000000,angle=-0.000000) Path=TrcPath(degrees=true, [Waypoint(simple=true,index=0,pose=(x=0.000000,y=0.000000,angle=0.000000),vel=0.0), Waypoint(simple=false,index=-1,timestep=0.34926151239279585,pose=(x=49.943191,y=53.127375,angle=0.000000),vel=122.4045997986548,encPos=0.0,accel=0.0,jerk=0.0), Waypoint(simple=true,index=1,pose=(x=74.838583,y=79.610000,angle=0.000000),vel=85.73214099741124), Waypoint(simple=true,index=2,pose=(x=74.838583,y=114.610000,angle=0.000000),vel=0.0)]) />
+Shooter.fieldTriggerCallback_INFO [0.779942089] FieldTriggerCallback: canceled=false, zoneCtxt=(value--159.746001,prevZone=2,currZone=1)
+Shooter.setupGoalTrackingMode_INFO [0.78447133] AlliancHub: alliance=Blue, fieldLengthZone=0, fieldWidthZone=1.
+Shooter.setupGoalTrackingMode_INFO [0.788575787] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=182.110000,angle=0.000000), noPassback=true).
+CmdDcmpAuto.lambda$cmdPeriodic$1_INFO [0.79551862] WaypointHandler: index=0
+Robot.setRelocalizationMode_INFO [0.797993858] setRelocalizationMode to OneShot
+FrcAuto.periodic_ERR [0.805300358] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [0.878286958] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [0.975080949] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.029763094] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.071184056] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.122865751] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.188295009] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.242098716] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.291584328] Calling cmdPeriodic.
+Shooter.fieldTriggerCallback_INFO [1.339734931] FieldTriggerCallback: canceled=false, zoneCtxt=(value--190.060127,prevZone=1,currZone=0)
+Shooter.setupGoalTrackingMode_INFO [1.340941843] AlliancHub: alliance=Blue, fieldLengthZone=0, fieldWidthZone=0.
+Shooter.setupGoalTrackingMode_INFO [1.341522724] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=182.110000,angle=0.000000), noPassback=true).
+FrcAuto.periodic_ERR [1.342820498] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.388765174] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.443389655] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.508593387] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.646344288] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.71713519] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.77136461] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.824734022] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.894028605] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.944167138] Calling cmdPeriodic.
+CmdDcmpAuto.lambda$cmdPeriodic$1_INFO [2.00504612] WaypointHandler: index=1
+Robot.setRelocalizationMode_INFO [2.010836513] setRelocalizationMode to OneShot
+FrcAuto.periodic_ERR [2.021954598] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.07121819] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.137637898] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.185062718] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.237944501] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.307207644] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.351056796] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.403132731] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.45062996] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.510768526] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.575380845] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.62106179] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.668231924] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.72891911] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.805605707] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.855472915] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.910762544] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.953324927] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.014742756] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.059234192] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.13343117] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.178196305] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.228426515] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.273324394] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.332395982] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.382628925] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.427839392] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.469521568] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [3.541897518] Calling cmdPeriodic.
+purePursuitDrive.driveTask_INFO [3.552255076] Done: index=3/4, stalled=false, timeout=false, posOnTarget=true, headingOnTarget=true, robotPose=(x=-234.103425,y=23.936506,angle=178.982490)
+purePursuitDrive.driveTask_INFO [3.558648807] Signal completion event (CmdDcmpAuto=CLEARED).
+CmdDcmpAuto.lambda$cmdPeriodic$1_INFO [3.601189258] WaypointHandler: index=-1
+Robot.setRelocalizationMode_INFO [3.605832201] setRelocalizationMode to Continuous
+FrcAuto.periodic_ERR [3.612300995] Calling cmdPeriodic.
+CmdDcmpAuto.cmdPeriodic_INFO [3.616823216] <Event name="StateInfo" time="3.616539912" tag="vvvvv" CmdDcmpAuto.state="SHOOT_DEPOT" />
+TaskAutoShoot.autoShoot_INFO [3.623347157] autoShoot(owner=null, event=(CmdDcmpAuto=SIGNALED), taskParams=(autoStop=true, noPassback=true, noWait=false))
+Shooter.enableGoalTracking_INFO [3.628995735] EnableGoalTracking: goalTrackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true), noPassback=true
+Shooter.setupGoalTrackingMode_INFO [3.630851122] AlliancHub: alliance=Blue, fieldLengthZone=0, fieldWidthZone=0.
+Shooter.setupGoalTrackingMode_INFO [3.632924876] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=182.110000,angle=0.000000), noPassback=true).
+Shooter.LeftShooter.enableGoalTracking_INFO [3.636641535] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.LeftPrimaryMotor.cancel_INFO [3.640254033] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [3.643837446] Cancel: stopping motor.
+Shooter.RightShooter.enableGoalTracking_INFO [3.651297511] Enable GoalTracking (trackingParams=(trackFlywheel=true,trackTiltPos=true,trackPanPos=true)).
+Shooter.RightPrimaryMotor.cancel_INFO [3.652650382] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [3.653889333] Cancel: stopping motor.
+Shooter.enableGoalTracking_ERR [3.656654461] EnableGoalTrackingTimestamps=[3.630447931, 3.63632773, 3.647236926, 3.656395785]
+CmdDcmpAuto.cmdPeriodic_INFO [3.671889641] <Event name="StateInfo" time="3.669207463" tag="^^^^^" CmdDcmpAuto.state="SHOOT_DEPOT" />
+TaskAutoShoot.autoTask_INFO [3.804914143] <Event name="StateInfo" time="3.804697871" tag="vvvvv" TaskAutoShoot.state="START" />
+TaskAutoShoot.runTaskState_INFO [3.808599426] ***** Wait for left Shooter ready.
+TaskAutoShoot.runTaskState_INFO [3.811258539] ***** Wait for right Shooter ready.
+TaskAutoShoot.runTaskState_INFO [3.814213109] ***** Wait for Turret ready.
+TaskAutoShoot.autoTask_INFO [3.817466665] <Event name="StateInfo" time="3.81725444" tag="^^^^^" TaskAutoShoot.state="START" />
+FrcAuto.periodic_ERR [3.852551333] Calling cmdPeriodic.
+Shooter.TurretMotor.pidCtrlTask_INFO [3.889079966] controlMode: Position,onTarget=true(-151.942720413208/-150.39061663907032), stalled=false, expired=false, event=(TaskAutoShoot.turretReady=SIGNALED)
+TaskAutoShoot.autoTask_INFO [3.936929789] <Event name="StateInfo" time="3.936582994" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [3.941333067] <Event name="StateInfo" time="3.939310437" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcAuto.periodic_ERR [3.959196999] Calling cmdPeriodic.
+TaskAutoShoot.autoTask_INFO [4.049858113] <Event name="StateInfo" time="4.048606822" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [4.062655961] <Event name="StateInfo" time="4.059347992" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcAuto.periodic_ERR [4.093118481] Calling cmdPeriodic.
+TaskAutoShoot.autoTask_INFO [4.173507574] <Event name="StateInfo" time="4.173280834" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [4.181935794] <Event name="StateInfo" time="4.181728194" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcAuto.periodic_ERR [4.200454732] Calling cmdPeriodic.
+TaskAutoShoot.autoTask_INFO [4.301131275] <Event name="StateInfo" time="4.29491629" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [4.309679669] <Event name="StateInfo" time="4.301967814" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcAuto.periodic_ERR [4.331752377] Calling cmdPeriodic.
+TaskAutoShoot.autoTask_INFO [4.42876553] <Event name="StateInfo" time="4.4285672" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [4.433247239] <Event name="StateInfo" time="4.433043414" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcAuto.periodic_ERR [4.454538089] Calling cmdPeriodic.
+TaskAutoShoot.autoTask_INFO [4.563858684] <Event name="StateInfo" time="4.556078274" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.autoTask_INFO [4.566114735] <Event name="StateInfo" time="4.565618676" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcAuto.periodic_ERR [4.576694812] Calling cmdPeriodic.
+Shooter.LeftShooter.goalTrackingTask_INFO [4.653436727] Shooter.LeftShooter is Ready: rpm1=5329.065505/5397.938297, rpm2=3334.804688/0.000000, tilt=27.858222/27.853466, pan=null/null
+Shooter.RightShooter.goalTrackingTask_INFO [4.684523987] Shooter.RightShooter is Ready: rpm1=5315.625000/5397.938297, rpm2=3275.859375/0.000000, tilt=27.858223/27.853466, pan=null/null
+TaskAutoShoot.autoTask_INFO [4.686302918] <Event name="StateInfo" time="4.685946207" tag="vvvvv" TaskAutoShoot.state="SHOOT" />
+TaskAutoShoot.runTaskState_INFO [4.692917092] ***** Start left shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [4.695209346] shoot(owner=null, event=(TaskAutoShoot.leftShooterDone=CLEARED), shooter=leftShooter, autoStop=true)
+Shooter.LeftTransferMotor.cancel_INFO [4.723599666] Cancel: stopping motor.
+TaskAutoShoot.runTaskState_INFO [4.72818812] ***** Start right shooter shooting (timedout=false, turretReady=true).
+Shooter.shoot_INFO [4.730449781] shoot(owner=null, event=(TaskAutoShoot.rightShooterDone=CLEARED), shooter=rightShooter, autoStop=true)
+Shooter.RightTransferMotor.cancel_INFO [4.733515737] Cancel: stopping motor.
+TaskAutoShoot.autoTask_INFO [4.73861409] <Event name="StateInfo" time="4.738160093" tag="^^^^^" TaskAutoShoot.state="SHOOT" />
+FrcAuto.periodic_ERR [4.76877276] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [4.873904095] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [4.986539517] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.074591167] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.178411707] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.273624003] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.401888191] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.510766505] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.626848842] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.734687135] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.850696472] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [5.953803065] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [6.053112637] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [6.15785487] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [6.277952277] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [6.383454957] Calling cmdPeriodic.
+Shooter.LeftShooter.cancel_INFO [6.492601762] owner=null
+Shooter.LeftShooter.disableGoalTracking_INFO [6.494007336] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [6.496163221] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [6.497746882] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [6.499522764] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [6.503580117] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [6.505345912] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [6.507771426] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [6.509446437] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [6.513321682] owner=null
+Shooter.RightShooter.disableGoalTracking_INFO [6.514902345] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [6.516290907] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [6.518912782] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [6.524346092] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [6.526445727] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [6.528309572] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [6.53017964] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [6.53323991] Cancel: stopping motor.
+FrcAuto.periodic_ERR [6.539062112] Calling cmdPeriodic.
+TaskAutoShoot.autoTask_INFO [6.543261064] <Event name="StateInfo" time="6.542979747" tag="vvvvv" TaskAutoShoot.state="DONE" />
+TaskAutoShoot.stopSubsystems_INFO [6.545037533] Stopping subsystems.
+Shooter.LeftTransferMotor.cancel_INFO [6.546537505] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [6.548247602] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [6.550410549] Cancel: stopping motor.
+Shooter.LeftShooter.cancel_INFO [6.553039075] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [6.555222759] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [6.556914515] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [6.559732209] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [6.561171649] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [6.563829561] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [6.565931642] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [6.57898789] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [6.58123173] Cancel: stopping motor.
+Shooter.stopTilt_ERR [6.582104082] StopTilt is called
+TaskAutoShoot.autoTask_INFO [6.665228833] <Event name="StateInfo" time="6.664021103" tag="^^^^^" TaskAutoShoot.state="DONE" />
+FrcAuto.periodic_ERR [6.694985548] Calling cmdPeriodic.
+CmdDcmpAuto.cmdPeriodic_INFO [6.713953482] <Event name="StateInfo" time="6.711963169" tag="vvvvv" CmdDcmpAuto.state="DONE" />
+CmdDcmpAuto.cmdPeriodic_INFO [6.722820153] <Event name="StateInfo" time="6.718698021" tag="^^^^^" CmdDcmpAuto.state="DONE" />
+Shooter.LeftTiltMotor.pidCtrlTask_INFO [6.751281569] controlMode: Position,onTarget=true(17.5810962440376/17.0), stalled=false, expired=false, event=(stopLeftTilt=SIGNALED)
+FrcAuto.periodic_ERR [6.762234075] Calling cmdPeriodic.
+Shooter.stopTiltCallback_ERR [6.779512372] StopLeftTilt was completed.
+FrcAuto.periodic_ERR [6.791190837] Calling cmdPeriodic.
+Shooter.RightTiltMotor.pidCtrlTask_INFO [6.796669869] controlMode: Position,onTarget=true(17.067240267767943/17.0), stalled=false, expired=false, event=(stopRightTilt=SIGNALED)
+Shooter.stopTiltCallback_ERR [6.816678222] StopRightTilt was completed.
+FrcAuto.periodic_ERR [6.826767889] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [6.848378558] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [6.866536568] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [6.878751938] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [6.897460114] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [6.914910099] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [6.934520746] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [6.946680808] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [6.966642568] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [6.999589522] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.041062374] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.080882757] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.10250013] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.13138039] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.15063979] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.16647586] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.171321167] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.184275957] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.191283938] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.202326283] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.212303125] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.219854718] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.232870756] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.256273611] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.271534392] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.290355331] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.312432597] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.340470322] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.353887548] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.368584091] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.376431801] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.385884566] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.397016481] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.406421458] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.457313796] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.489450113] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.511189002] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.526853663] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.541972653] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.56267128] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.585186011] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.613482177] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.642378009] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.6567601] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.669780811] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.678235205] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.68956813] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.711797189] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.732046031] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.737016297] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.74605122] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.756430941] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.765373498] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.773724822] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.786036937] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.795970819] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.809550802] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.871187884] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.894586392] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.90711846] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.918602878] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.931414593] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.942825331] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.95066723] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.962069498] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.966243454] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.97601165] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.984955396] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [7.99359393] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.000479164] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.026174526] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.062017147] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.080505293] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.091098024] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.099503539] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.11103421] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.115506239] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.130406009] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.140981037] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.1550486] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.167080915] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.17642376] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.189536188] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.19643661] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.209913065] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.21882019] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.230200524] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.26315906] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.273108576] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.291992517] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.29611476] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.313456202] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.323869124] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.333221993] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.343120339] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.356139617] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.36824848] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.380775984] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.39076591] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.408084728] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.413254488] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.428732656] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.441452031] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.450678706] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.463919959] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.474118383] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.484266686] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.494611261] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.514822833] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.527471364] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.531683378] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.550712104] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.572052782] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.596068484] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.627975802] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.652450746] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.68821428] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.699701464] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.711869795] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.722657139] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.733455614] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.752821718] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.777098284] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.818668795] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.845831989] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.878007688] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.89208925] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.900180924] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.907720312] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.919555621] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.926198605] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.932235406] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.942945406] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.950036194] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.956163411] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.971169609] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [8.991124539] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.003644896] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.022165983] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.038427587] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.04885087] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.065987364] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.07110209] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.078281517] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.086225736] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.098464059] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.111342136] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.116621056] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.123585734] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.13662072] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.142970896] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.155573202] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.168505124] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.175696886] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.186123338] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.202711718] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.216526158] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.237711445] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.248925844] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.256752127] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.272287729] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.278316734] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.285574276] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.294565136] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.300830534] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.307759563] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.314829264] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.318986258] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.351880005] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.371931283] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.385315359] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.394236415] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.415654978] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.430620104] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.442984625] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.457953165] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.48054515] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.496735774] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.508579091] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.528384039] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.571180907] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.594748208] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.611963413] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.622309774] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.631051486] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.640040386] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.64740507] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.654258399] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.663608723] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.674036742] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.683575281] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.692371621] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.708503122] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.735192754] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.75557115] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.775046446] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.791113708] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.799929868] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.812204011] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.815482157] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.836613552] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.84797492] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.857820821] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.893587158] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.903944681] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.909246217] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.929351656] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.945842811] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.954181162] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.965426357] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.976136694] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [9.981459606] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.002827425] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.01347178] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.024466684] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.029067553] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.058217709] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.076251385] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.086878632] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.103260196] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.111055083] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.133093572] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.194890479] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.221935431] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.229515693] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.233221553] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.241610375] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.253341642] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.26514253] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.272094571] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.276272671] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.282378257] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.28877987] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.295144769] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.306382975] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.311813252] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.315635732] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.328818445] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.337688827] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.344569948] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.356795366] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.374073589] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.388903759] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.404825936] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.416806026] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.431828351] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.442055268] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.448109023] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.455960755] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.483338386] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.491475603] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.50664463] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.520761566] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.530450126] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.538050211] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.552002201] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.572202597] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.589769688] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.598506471] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.606876577] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.613484285] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.617422156] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.627026883] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.632622268] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.63903628] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.647652774] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.651710329] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.656511073] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.666542588] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.671377116] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.676477679] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.691594483] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.745194612] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.779416182] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.81754718] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.829061293] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.837594459] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.84354323] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.850357223] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.854783405] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.860937713] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.871298938] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.877362028] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.889149395] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.900571678] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.919501778] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.927026796] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.936979741] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.943666065] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.948870615] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.973170044] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [10.989410518] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.018576228] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.033338806] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.048505789] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.053541344] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.061579764] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.071823585] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.078686738] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.081928196] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.089554217] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.101582434] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.130037199] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.142725828] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.151806699] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.162068765] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.205421389] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.26310429] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.273918367] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.290802639] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.29687337] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.313391624] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.3246601] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.343855171] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.365179321] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.379796907] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.384089256] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.403372047] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.418409912] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.43313343] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.455457483] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.502283819] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.52434789] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.545756292] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.591400888] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.60911677] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.625993019] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.636452838] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.661974397] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.680278611] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.696989029] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.706887811] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.718960254] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.730218234] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.791458906] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.810524543] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.825651893] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.831863327] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.841721308] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.851092632] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.860382315] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.869704958] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.873177691] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.882419028] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.89104307] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.894474779] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.908095001] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.91371999] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.921131381] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.932210474] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.936104123] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.946144715] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.951688976] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.956547386] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.967479596] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [11.972765647] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.00467436] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.016948291] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.041299815] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.050913781] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.058379881] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.071736179] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.076413565] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.107979849] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.118156182] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.134098764] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.158338951] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.182560338] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.192495597] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.217928584] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.231954515] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.243937085] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.252160027] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.256297247] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.265130922] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.271120997] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.280067103] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.29117977] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.311098224] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.319036257] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.335276028] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.342518118] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.359911421] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.368148981] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.375561607] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.381899977] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.389845164] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.393835994] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.400156085] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.406557739] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.421473163] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.425537] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.43427219] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.441641157] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.448605728] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.452274572] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.456598234] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.463718337] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.468291223] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.472708509] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.476539525] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.491675972] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.502183869] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.512815357] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.531504118] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.570088116] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.576433626] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.582062593] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.590749772] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.597913153] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.60893046] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.612786773] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.630233945] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.641112411] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.650879458] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.656340077] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.666942615] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.677035515] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.696503475] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.719209091] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.765621953] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.779934109] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.787197508] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.814684017] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.821571754] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.828798239] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.846355906] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.854129605] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.860896862] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.890437948] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.913204394] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.930995369] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.951604427] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.957716184] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.9802463] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.988924758] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [12.999896811] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.010500172] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.017061837] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.02882027] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.032681917] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.040230861] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.07524397] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.102132114] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.12676769] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.135841296] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.146467483] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.156600987] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.192712246] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.196561948] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.209623616] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.217661858] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.229137705] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.23491417] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.251030812] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.264863757] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.296583256] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.317130372] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.337565368] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.348639785] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.361856288] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.371907377] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.381167337] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.393382956] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.407611643] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.414422713] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.463039039] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.482716817] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.520234418] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.546735565] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.552886961] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.563540686] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.57061779] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.579739452] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.586359796] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.60352882] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.613725331] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.618416394] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.629243856] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.636462816] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.648430464] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.65559539] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.661022076] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.669762539] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.678405904] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.688828184] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.694414465] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.711193819] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.72121983] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.729691764] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.733642316] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.744732005] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.752563056] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.757879626] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.76654538] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.775306215] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.784485094] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.792750359] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.796394026] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.810804798] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.819104624] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.829834493] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.833557163] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.843514006] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.851513647] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.859796823] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.866695468] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.871082719] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.875447306] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.879833484] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.88534931] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.890574633] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.89613313] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.902213477] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.907250302] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.919035055] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.925050643] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.9302372] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.935346955] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.940571628] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.947732151] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.953681875] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.958262061] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.968037035] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.97233882] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.979567009] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [13.990801031] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.000202175] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.006372969] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.022225517] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.034898751] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.048305666] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.054954539] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.06710764] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.076840377] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.08577506] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.092965476] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.099826116] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.133104884] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.14867883] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.152001864] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.169086656] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.172723718] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.184255972] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.19284635] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.205804211] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.214184286] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.23260271] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.268796213] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.279772983] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.289940098] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.302181028] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.310317869] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.315778665] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.323170049] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.334830318] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.346248505] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.354809118] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.367746212] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.374462464] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.401336576] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.420125648] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.427663219] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.439808138] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.443314579] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.45365575] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.464412373] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.470777884] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.483820271] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.49303569] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.506635622] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.514274852] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.520862677] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.532947628] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.537948312] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.55283167] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.558865635] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.569879706] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.578373927] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.591008164] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.618008014] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.665743837] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.685973302] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.698982433] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.710864124] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.718814648] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.755059322] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.785927892] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.794324931] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.806696048] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.814112532] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.825201299] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.835431098] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.845163622] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.853506165] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.860549916] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.869549323] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.881244343] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.889916077] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.897788437] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.90304602] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.947440877] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.958688071] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.969117622] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.981284764] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.990487735] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [14.999935813] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.00840107] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.013979948] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.022188998] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.028815343] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.039319128] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.045441563] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.051731621] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.063801459] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.070300315] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.077949796] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.086557639] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.091709456] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.097763638] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.106074033] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.112540925] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.117094787] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.1249096] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.129837176] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.139160196] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.146980882] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.151213218] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.159148195] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.162043105] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.171083035] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.183472015] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.194254126] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.202221413] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.205589532] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.222277357] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.226971605] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.23396857] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.237917405] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.247655692] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.256034655] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.261230325] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.265680892] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.268899927] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.289706392] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.298061531] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.306803956] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.311721798] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.31873671] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.321934901] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.342097419] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.346513184] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.353671447] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.362914436] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.366838863] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.374172075] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.377765802] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.387141379] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.390349817] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.395875522] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.399084507] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.408469158] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.422004812] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.42813407] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.441643548] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.452760851] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.46049463] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.465080029] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.472577142] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.476045811] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.48394441] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.493021727] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.502414925] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.506953346] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.515928846] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.525312384] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.52905169] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.537190954] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.546577765] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.550720776] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.556897139] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.560982099] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.571651186] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.578070948] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.581055231] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.59210322] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.599498372] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.604030983] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.613533021] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.625718101] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.633900938] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.640146379] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.646119899] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.654202079] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.663678587] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.671072487] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.67643546] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.684922792] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.69437775] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.708063272] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.718551898] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.728329306] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.73586299] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.745982267] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.749414174] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.753443846] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.758273101] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.763108245] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.769401758] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.774113779] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.77804593] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.782674356] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.788056534] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.792709824] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.800762711] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.804018613] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.810288449] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.814099827] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.819729244] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.825614305] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.832352067] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.837762625] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.859475852] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.869631044] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.8789377] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.883472694] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.892858702] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.899900382] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.912842431] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.923568578] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.929716894] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.937104087] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.950666598] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.961262118] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [15.979899893] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.001022434] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.009177318] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.027292855] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.031567242] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.061307601] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.083383455] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.093347235] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.096832014] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.109313519] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.129428679] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.164661383] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.175624341] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.187856184] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.195939135] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.199208759] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.217471074] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.282412094] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.302877474] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.317528394] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.32841928] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.339550148] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.348859446] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.353891327] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.364537095] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.373774996] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.385549073] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.394852458] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.404258125] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.429551057] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.448854227] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.495255892] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.520792287] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.560716427] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.595393644] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.625631872] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.648378955] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.658234034] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.678265163] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.685384378] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.696567181] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.701181331] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.710907785] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.716900982] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.720446826] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.732913174] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.741116027] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.753767644] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.76328267] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.777262719] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.788702139] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.806089761] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.852695671] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.870595852] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.886024363] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.890513266] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.898007778] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.90317373] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.912259232] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.92067324] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.925963874] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.93312099] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.939757133] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.943037774] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.95247676] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.962567978] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [16.96990061] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.013161317] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.04609412] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.059755361] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.070064275] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.073798959] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.093318388] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.104823381] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.124684655] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.139427832] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.152534895] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.173020095] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.20419248] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.228109311] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.268579247] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.277900206] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.314413086] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.325117802] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.331993807] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.346865271] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.360031969] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.374134826] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.384255499] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.391290645] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.403183053] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.407639292] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.427748554] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.436422867] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.453944711] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.4612818] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.478570094] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.513094888] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.525318234] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.538009663] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.575486796] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.604403677] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.618355082] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.632106222] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.645099264] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.66591991] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.678500593] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.702885927] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.71488764] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.737818585] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.780142743] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.791165662] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.803294583] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.810514665] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.819324899] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.83406107] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.845038751] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.854604828] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.865366045] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.869824006] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.880079003] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.890822486] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.917007889] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.955597781] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [17.995312511] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.016073404] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.027887573] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.040010822] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.051837021] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.063024337] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.069824661] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.074892901] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.095273179] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.10492997] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.12441407] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.148515205] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.174191735] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.195364549] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.215774267] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.225995842] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.232075372] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.25041254] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.257839748] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.262893747] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.273515155] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.282079687] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.290197774] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.295451931] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.304205144] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.308184478] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.316987678] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.348372453] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.364968991] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.370517588] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.386654863] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.391198262] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.400285213] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.414610373] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.431208009] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.441734225] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.455938623] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.465047133] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.475281017] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.487024967] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.499433362] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.521052729] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.581329286] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.598472364] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.616939877] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.642088527] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.655564259] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.674515147] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.688003618] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.694809305] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.705965142] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.720419274] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.78297422] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.793302793] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.801734829] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.815650544] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.82588401] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.836276262] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.842916843] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.851541451] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.858500565] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.864793921] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.869818831] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.884249517] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.89389586] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.901920392] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.906102595] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.978479193] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [18.995244425] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.006862583] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.012999483] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.019755931] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.040377299] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.054498578] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.060931787] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.069254918] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.086006069] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.096206379] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.130260178] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.190884924] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.209253479] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.224129307] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.235210488] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.251225003] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.2702314] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.279311587] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.286774851] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.321317745] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.354499532] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.369635788] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.38894664] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.417953262] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.437133943] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.452783203] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.462781354] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.473386423] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.485531764] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.548275233] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.565547175] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.572271807] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.582902466] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.590249646] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.594439255] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.607888264] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.612474274] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.626077241] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.639433994] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.654166877] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.673006914] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.697115733] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.719536515] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.773770103] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.790709599] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.799091786] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.80609341] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.815551845] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.820877228] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.827247338] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.838694803] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.844687056] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.861520176] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.871527609] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.875224149] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.883425413] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.891715962] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.899395772] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.906316542] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.910623543] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.918561229] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.927635121] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.938791831] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.948476521] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [19.998389038] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.011646641] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.021595619] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.027697123] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.033020416] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.036863037] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.042921893] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.045877412] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.048873434] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.052965957] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.057745975] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.062703951] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.066480978] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.071733496] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.075419566] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.081451175] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.086021038] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.090491029] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.096374641] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.101716415] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.107291516] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.112156475] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.117617964] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.124503624] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.130384312] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.1341286] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.141307725] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.148328831] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.152869402] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.196736174] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.208114629] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.218547418] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.228164147] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.235997622] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.249464251] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.253146862] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.257163363] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.263095397] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.267267848] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.270527473] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.273942463] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.278456085] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.284212289] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.291242173] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.295981557] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.302781127] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.307318382] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.312719104] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.315995538] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.321621909] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.325381662] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.329985785] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.335832716] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.339040611] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.345281373] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.351135977] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.356973559] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.364546411] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.370317169] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.390170706] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.395624399] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.404080377] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.40931135] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.412309972] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.418941793] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.426490015] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.431281421] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.436381795] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.454197208] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.463371042] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.47167558] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.476488447] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.481867092] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.486761558] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [20.498636119] Calling cmdPeriodic.
+FrcRobot.startCompetition_INFO [20.523977878] *** Transitioning from AUTO_MODE to DISABLED_MODE ***
+Robot.cancelAll_INFO [20.526938403] Cancel all operations.
+Shooter.LeftShooter.cancel_INFO [20.534196995] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [20.535516245] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [20.537496716] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [20.539105037] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [20.543506745] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [20.546038854] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [20.548858769] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [20.550870303] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [20.571552689] Cancel: stopping motor.
+Shooter.stopTilt_ERR [20.591275218] StopTilt is called
+Shooter.LeftTiltMotor.pidCtrlTask_INFO [20.626780971] controlMode: Position,onTarget=true(16.988185486488774/17.0), stalled=false, expired=false, event=(stopLeftTilt=SIGNALED)
+Shooter.RightTiltMotor.pidCtrlTask_INFO [20.651579361] controlMode: Position,onTarget=true(16.988185492673313/17.0), stalled=false, expired=false, event=(stopRightTilt=SIGNALED)
+Intake.IntakeMotor.cancel_INFO [20.655929564] Cancel: stopping motor.
+Climber.Motor.cancel_INFO [20.657685958] Cancel: stopping motor.
+TaskAutoShoot.cancel_INFO [20.658765755] Canceling auto task operation.
+TaskAutoClimb.cancel_INFO [20.661035784] Canceling auto task operation.
+FrcRobot.printPerformanceMetrics_INFO [20.688242057] [FrcRobot] Loop Performance Metrics:
+Average Loop Interval = 0.001544s (freq=647.708Hz, min=0.000816s, max=0.561669s)
+[03]                StartTask=0.000000s
+[04]          PrePeriodicTask=0.000100s
+[07]               UpdateTask=0.000995s
+[02]                StartMode=0.000000s
+[06]         PostPeriodicTask=0.000103s
+[08]                 StopTask=0.000000s
+[09]                 StopMode=0.000000s
+[00]                RobotInit=17.674312s
+[01]           RobotStartMode=0.000002s
+[05]                 Periodic=0.000290s
+[10]            RobotStopMode=0.000001s
+
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.68990762] FrcDashboard.task: STANDALONE_TASK=3.326202071596551E-4/0.010500979658792788
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.692782537] TrcWatchdogMgr: STANDALONE_TASK=1.3052392039800996E-4/0.9954030476766169
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.693979361] flDriveMotor.pidCtrlTask: OUTPUT_TASK=2.012116240988096E-5/0.011229737714972337
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.696062227] flDriveMotor.odometryCleanupTask: STOP_TASK=4.96815E-5/10.311474083
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.697343785] frDriveMotor.pidCtrlTask: OUTPUT_TASK=6.642208114451772E-6/0.01122969423186543
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.699008762] blDriveMotor.pidCtrlTask: OUTPUT_TASK=5.434927070526433E-6/0.011229693330557728
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.702001502] brDriveMotor.pidCtrlTask: OUTPUT_TASK=5.401407399128199E-6/0.01122969291052867
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.702993459] flSteerMotor.pidCtrlTask: OUTPUT_TASK=1.8367829328266456E-5/0.011229692447636079
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.705041351] frSteerMotor.pidCtrlTask: OUTPUT_TASK=1.3474979210908685E-5/0.011229694072091203
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.708545605] blSteerMotor.pidCtrlTask: OUTPUT_TASK=1.4327713367609254E-5/0.011229690132614285
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.70948449] brSteerMotor.pidCtrlTask: OUTPUT_TASK=1.451830075440067E-5/0.011229696215143895
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.711062832] FrcSwerveDrive.odometryTask: INPUT_TASK=0.0032131823737832576/0.013382700432835822
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.718652063] FrcSwerveDrive.stopTask: STOP_TASK=0.005001478/10.3114393615
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.723325959] purePursuitDrive.driveTask: POST_PERIODIC_TASK=0.015490093408163265/0.061633222244897964
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.727363196] LED: OUTPUT_TASK=4.493398351586947E-5/0.0112296719487595
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.730792127] LED.ledTask: OUTPUT_TASK=2.4120634489733372E-4/0.011023199687526816
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.732281627] Shooter.LeftPrimaryMotor.pidCtrlTask: OUTPUT_TASK=1.064870564899145E-5/0.011229604001955636
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.7336713] Shooter.LeftFollowerMotor.pidCtrlTask: OUTPUT_TASK=5.793616304408559E-6/0.01122960310644242
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.741748367] Shooter.LeftTiltMotor.pidCtrlTask: OUTPUT_TASK=1.5097506123931386E-4/0.01122960264105716
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.745955853] Shooter.LeftShooter.ShooterMotor1VelTrigger.triggerTask: PRE_PERIODIC_TASK=4.6379829411764703E-4/0.10257408017647059
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.748184795] Shooter.LeftShooter.goalTracking: POST_PERIODIC_TASK=0.04570977452054795/0.07776072316438357
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.751694625] Shooter.LeftTransferMotor.pidCtrlTask: OUTPUT_TASK=9.258982400268187E-6/0.011229539812269528
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.75356431] Shooter.RightPrimaryMotor.pidCtrlTask: OUTPUT_TASK=7.216673892396223E-6/0.011229481256774122
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.79808156] Shooter.RightFollowerMotor.pidCtrlTask: OUTPUT_TASK=5.016538345528682E-6/0.01122933186555326
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.800065499] Shooter.RightTiltMotor.pidCtrlTask: OUTPUT_TASK=1.0681568575099146E-4/0.01122933142579456
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.801158861] Shooter.RightShooter.ShooterMotor1VelTrigger.triggerTask: PRE_PERIODIC_TASK=7.796364705882353E-5/0.10254091729411764
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.803308818] Shooter.RightShooter.goalTracking: POST_PERIODIC_TASK=0.008907563726027398/0.07776603326027398
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.80781785] Shooter.RightTransferMotor.pidCtrlTask: OUTPUT_TASK=6.8592393319928505E-6/0.011229446653485256
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.808800923] Shooter.TurretMotor.pidCtrlTask: OUTPUT_TASK=1.7394561282394995E-4/0.011229446147676498
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.810020063] Shooter.FeederMotor.pidCtrlTask: OUTPUT_TASK=7.1294268878462915E-6/0.011229335813337802
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.810992261] ShooterfieldLengthTrigger.triggerTask: PRE_PERIODIC_TASK=1.314402136380765E-5/0.001541426744995501
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.81296933] ShooterfieldWidthTrigger.triggerTask: PRE_PERIODIC_TASK=5.224610483492652E-6/0.0015414262217514016
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.813701676] Intake.IntakeMotor.pidCtrlTask: OUTPUT_TASK=6.109774128686328E-6/0.011229329957998212
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.814489943] Climber.Motor.pidCtrlTask: OUTPUT_TASK=6.603409321939233E-5/0.011229329446380698
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [20.817626844] TaskAutoShoot: POST_PERIODIC_TASK=0.01067177148/0.10954878323999999

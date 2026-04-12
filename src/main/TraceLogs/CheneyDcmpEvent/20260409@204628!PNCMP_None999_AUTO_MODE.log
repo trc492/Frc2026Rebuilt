@@ -1,0 +1,258 @@
+Robot.robotStartMode_INFO [0.007080787] Thu Apr 09 20:46:24 UTC 2026: ***** AUTO_MODE *****
+Robot.robotStartMode_INFO [0.008933061] <BuildInfo Host="TRC492-DS2024" User="User" Timestamp="2026-04-09 12:46:31" Branch="dev" />
+FrcAuto.startMode_INFO [0.01608286] <Info name="MatchInfo" date="Thu Apr 09 20:46:24 UTC 2026" event="PNCMP" type="None" match=999 replay=37 alliance="Red" location=1 gameMsg="" />
+FrcAuto.startMode_INFO [0.022811572] <Info name="AutoChoices" alliance="Red" strategy="DCMP_AUTO" startPos="START_POS_CENTER" startDelay=0.0 sec depotPickup="false" outpostPickup="false" neutralZonePickup="true" moveTo="DEPOT" passBack="NONE" climb="true" climbSide="DEPOT" neutralZoneCycles="0.0" type="CENTER" sweepDistance="STANDARD" pathFile="DrivePath.csv" xDistance=0.0 ft yDistance=0.0 ft turnDegrees=0.0 deg driveTime=0.0 sec drivePower=0.0"  />
+FrcAuto.startMode_ERR [0.029187735] Selecting Dcmp Auto.
+Shooter.stopTiltCallback_ERR [0.081709606] StopRightTilt was completed.
+Shooter.stopTiltCallback_ERR [0.084307384] StopLeftTilt was completed.
+FrcAuto.periodic_ERR [0.090444978] Calling cmdPeriodic.
+CmdDcmpAuto.cmdPeriodic_INFO [0.097703589] <Event name="StateInfo" time="0.096221626" tag="vvvvv" CmdDcmpAuto.state="START" />
+Shooter.LeftTiltMotor.isMotorStalled_INFO [0.105652853] Stall detection triggered.
+Shooter.LeftTiltMotor.checkStallReset_INFO [0.111473458] Resetting stall.
+Shooter.RightTiltMotor.isMotorStalled_INFO [0.118326386] Stall detection triggered.
+Shooter.RightTiltMotor.checkStallReset_INFO [0.1210638] Resetting stall.
+Shooter.TurretMotor.isMotorStalled_INFO [0.126697895] Stall detection triggered.
+Climber.Motor.isMotorStalled_INFO [0.129584278] Stall detection triggered.
+Robot.zeroCalibrate_INFO [0.127802354] Zero calibrate all subsystems.
+Climber.Motor.checkStallReset_INFO [0.132997032] Resetting stall.
+TrcSubsystem.zeroCalibrateAll_INFO [0.132554239] ZeroCalibrate(Subsystem=Shooter, owner=null, event=null)
+Shooter.zeroCalibrate_INFO [0.139466881] ZeroCalibrate left shooter.
+Shooter.zeroCalibrate_INFO [0.152637596] ZeroCalibrate right shooter.
+TrcSubsystem.zeroCalibrateAll_INFO [0.162114684] ZeroCalibrate(Subsystem=Climber, owner=null, event=null)
+CmdDcmpAuto.cmdPeriodic_INFO [0.168496755] <Event name="StateInfo" time="0.168245966" tag="^^^^^" CmdDcmpAuto.state="START" />
+FrcAuto.periodic_ERR [0.180794724] Calling cmdPeriodic.
+CmdDcmpAuto.cmdPeriodic_INFO [0.184185444] <Event name="StateInfo" time="0.183952001" tag="vvvvv" CmdDcmpAuto.state="PICKUP_DEPOT" />
+purePursuitDrive.start_INFO [0.343990585] Path=TrcPath(degrees=true, [Waypoint(simple=true,index=0,pose=(x=-158.838583,y=511.610472,angle=0.000000),vel=0.0), Waypoint(simple=false,index=-1,timestep=0.34926151239279585,pose=(x=-108.895392,y=564.737847,angle=0.000000),vel=122.4045997986548,encPos=0.0,accel=0.0,jerk=0.0), Waypoint(simple=true,index=1,pose=(x=-84.000000,y=591.220472,angle=0.000000),vel=85.73214099741124), Waypoint(simple=true,index=2,pose=(x=-84.000000,y=626.220472,angle=0.000000),vel=0.0)])
+Shooter.enableGoalTracking_INFO [0.351502604] EnableGoalTracking: goalTrackingParams=(trackFlywheel=false,trackTiltPos=false,trackPanPos=true), noPassback=true
+Shooter.setupGoalTrackingMode_INFO [0.353901512] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=2.
+Shooter.setupGoalTrackingMode_INFO [0.355283665] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=true).
+Shooter.LeftTiltMotor.isMotorStalled_INFO [0.359989091] Stall detection triggered.
+Shooter.LeftTiltMotor.zeroCalibratingMotor_WARN [0.370648364] Stalled, lower limit switch may not exist or might have failed!
+Shooter.LeftTiltMotor.pidCtrlTask_INFO [0.373290014] Zero calibration done, event=(Shooter.leftTiltZeroCalCallback=CLEARED)
+Shooter.LeftTiltMotor.pidCtrlTask_INFO [0.374659689] controlMode: Power,onTarget=false(-0.07400768995285034/null), stalled=false, expired=false, event=(Shooter.leftTiltZeroCalCallback=SIGNALED)
+Shooter.LeftTiltMotor.isMotorStalled_INFO [0.383665798] Stall detection triggered.
+Shooter.LeftTiltMotor.checkStallReset_INFO [0.386708906] Resetting stall.
+Shooter.LeftShooter.enableGoalTracking_INFO [0.390172579] Enable GoalTracking (trackingParams=(trackFlywheel=false,trackTiltPos=false,trackPanPos=true)).
+Shooter.RightTiltMotor.isMotorStalled_INFO [0.390465432] Stall detection triggered.
+Shooter.LeftPrimaryMotor.cancel_INFO [0.3949438] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [0.397000228] Cancel: stopping motor.
+Shooter.RightTiltMotor.zeroCalibratingMotor_WARN [0.404097183] Stalled, lower limit switch may not exist or might have failed!
+Shooter.RightTiltMotor.pidCtrlTask_INFO [0.407437039] Zero calibration done, event=(Shooter.rightTiltZeroCalCallback=CLEARED)
+Shooter.RightShooter.enableGoalTracking_INFO [0.410195839] Enable GoalTracking (trackingParams=(trackFlywheel=false,trackTiltPos=false,trackPanPos=true)).
+Shooter.RightTiltMotor.pidCtrlTask_INFO [0.410878588] controlMode: Power,onTarget=false(-0.07098697125911713/null), stalled=false, expired=false, event=(Shooter.rightTiltZeroCalCallback=SIGNALED)
+Shooter.RightPrimaryMotor.cancel_INFO [0.412540335] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [0.421142648] Cancel: stopping motor.
+Shooter.RightTiltMotor.isMotorStalled_INFO [0.431456046] Stall detection triggered.
+Shooter.RightTiltMotor.checkStallReset_INFO [0.434207016] Resetting stall.
+Shooter.enableGoalTracking_ERR [0.425966752] EnableGoalTrackingTimestamps=[0.352922707, 0.356775598, 0.40058902, 0.424430415]
+CmdDcmpAuto.cmdPeriodic_INFO [0.450703125] <Event name="StateInfo" time="0.449033916" tag="^^^^^" CmdDcmpAuto.state="PICKUP_DEPOT" RobotPose=(x=-158.838583,y=511.610472,angle=0.002747) TargetPose=(x=-84.000000,y=626.220472,angle=0.000000) vel=(x=-0.000000,y=0.000000,angle=-0.000000) Path=TrcPath(degrees=true, [Waypoint(simple=true,index=0,pose=(x=0.000000,y=0.000000,angle=0.000000),vel=0.0), Waypoint(simple=false,index=-1,timestep=0.34926151239279585,pose=(x=49.943191,y=53.127375,angle=0.000000),vel=122.4045997986548,encPos=0.0,accel=0.0,jerk=0.0), Waypoint(simple=true,index=1,pose=(x=74.838583,y=79.610000,angle=0.000000),vel=85.73214099741124), Waypoint(simple=true,index=2,pose=(x=74.838583,y=114.610000,angle=0.000000),vel=0.0)]) />
+Climber.Motor.isMotorStalled_INFO [0.583583676] Stall detection triggered.
+Climber.Motor.zeroCalibratingMotor_WARN [0.615724207] Stalled, lower limit switch may not exist or might have failed!
+Climber.Motor.pidCtrlTask_INFO [0.622724204] Zero calibration done, event=null
+Climber.Motor.isMotorStalled_INFO [0.672803348] Stall detection triggered.
+Climber.Motor.checkStallReset_INFO [0.676113652] Resetting stall.
+CmdDcmpAuto.lambda$cmdPeriodic$1_INFO [0.751244748] WaypointHandler: index=0
+Robot.setRelocalizationMode_INFO [0.758253944] setRelocalizationMode to OneShot
+FrcAuto.periodic_ERR [0.764740756] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [0.85252946] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [0.920519876] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [0.973375335] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.045854261] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.101683171] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.1589186] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.202787287] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.267668325] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.311445217] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.361595969] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.416588517] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.478125222] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.539724346] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.59113071] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.631073168] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.685523907] Calling cmdPeriodic.
+Shooter.fieldTriggerCallback_INFO [1.733298576] FieldTriggerCallback: canceled=false, zoneCtxt=(value--127.247360,prevZone=2,currZone=3)
+Shooter.setupGoalTrackingMode_INFO [1.735442722] AlliancHub: alliance=Red, fieldLengthZone=7, fieldWidthZone=3.
+Shooter.setupGoalTrackingMode_INFO [1.736871588] GoalTracking(trackingMode=AllianceHub, goalPose=(x=-158.838583,y=469.110472,angle=180.000000), noPassback=true).
+FrcAuto.periodic_ERR [1.741668664] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.786679972] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.843794105] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.910034256] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [1.959766332] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.016397167] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.05246656] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.103973829] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.156522333] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.1988728] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.266525843] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.312864086] Calling cmdPeriodic.
+FrcAuto.periodic_ERR [2.362032652] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [2.36811259] PID stalled (stallTime=0.20418477058410645/0.2, error=14.559472423013489, errorRate=-0.03673989409681279/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [2.37197957] PID stalled (stallTime=1.5342795848846436/0.2, error=1.7034776349534013, errorRate=-0.06221335670991913/0.1).
+FrcAuto.periodic_ERR [2.424141844] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [2.432886194] PID stalled (stallTime=0.2725701332092285/0.2, error=14.55963765095646, errorRate=0.002418297049674537/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [2.437064432] PID stalled (stallTime=1.601518154144287/0.2, error=1.7018082565035684, errorRate=-0.024432722364061903/0.1).
+FrcAuto.periodic_ERR [2.485213007] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [2.490641736] PID stalled (stallTime=0.3301212787628174/0.2, error=14.560294946707955, errorRate=0.011463575502209916/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [2.49209399] PID stalled (stallTime=1.6557857990264893/0.2, error=1.700906122754418, errorRate=-0.01573047086607454/0.1).
+FrcAuto.periodic_ERR [2.544032649] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [2.551014704] PID stalled (stallTime=0.39058995246887207/0.2, error=14.556354637174422, errorRate=-0.06513354735095232/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [2.554220541] PID stalled (stallTime=1.7178797721862793/0.2, error=1.700529577276825, errorRate=-0.006210172395171133/0.1).
+FrcAuto.periodic_ERR [2.610233186] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [2.613780453] PID stalled (stallTime=0.45261549949645996/0.2, error=14.553402173573133, errorRate=-0.04750362463938468/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [2.6157667] PID stalled (stallTime=1.780217170715332/0.2, error=1.7026653864339778, errorRate=0.03444560055632453/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [2.617259447] PID stalled (stallTime=0.24338293075561523/0.2, error=22.225341796875004, errorRate=0.0/0.1).
+FrcAuto.periodic_ERR [2.659857923] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [2.662873774] PID stalled (stallTime=0.5024693012237549/0.2, error=14.552514348356326, errorRate=-0.017774150067330467/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [2.664522632] PID stalled (stallTime=1.8284995555877686/0.2, error=1.7024213795494916, errorRate=-0.0048850106995890945/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [2.666070994] PID stalled (stallTime=0.2923612594604492/0.2, error=22.22808837890625, errorRate=0.05498176819832143/0.1).
+FrcAuto.periodic_ERR [2.714215944] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [2.724542894] PID stalled (stallTime=0.5642476081848145/0.2, error=14.551200799245109, errorRate=-0.02126222142565279/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [2.727917897] PID stalled (stallTime=1.8914544582366943/0.2, error=1.7023101809746777, errorRate=-0.0017998225924365507/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [2.7309946] PID stalled (stallTime=0.3572561740875244/0.2, error=22.22808837890625, errorRate=0.0/0.1).
+FrcAuto.periodic_ERR [2.785694886] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [2.790330978] PID stalled (stallTime=0.6300246715545654/0.2, error=14.55085018456164, errorRate=-0.005330116851098705/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [2.792557193] PID stalled (stallTime=1.956888198852539/0.2, error=1.7025172452791821, errorRate=0.003148119592281528/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [2.794028674] PID stalled (stallTime=0.4199092388153076/0.2, error=22.22808837890625, errorRate=0.0/0.1).
+FrcAuto.periodic_ERR [2.844259489] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [2.846743787] PID stalled (stallTime=0.6864404678344727/0.2, error=14.549213461747684, errorRate=-0.02914851727264058/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [2.851220011] PID stalled (stallTime=2.011873960494995/0.2, error=1.7007034757252768, errorRate=-0.03230100711629782/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [2.852290491] PID stalled (stallTime=0.47823286056518555/0.2, error=22.230834960937496, errorRate=0.048912628119602834/0.1).
+FrcAuto.periodic_ERR [2.900412666] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [2.910690297] PID stalled (stallTime=0.7501122951507568/0.2, error=14.5479910801551, errorRate=-0.019118761385772027/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [2.915586653] PID stalled (stallTime=2.079774856567383/0.2, error=1.6997374446359572, errorRate=-0.015109008222518655/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [2.919985036] PID stalled (stallTime=0.5454421043395996/0.2, error=22.230834960937496, errorRate=0.0/0.1).
+FrcAuto.periodic_ERR [2.975900518] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [2.979123019] PID stalled (stallTime=0.818246603012085/0.2, error=14.547228528848635, errorRate=-0.011206668540929101/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [2.982033764] PID stalled (stallTime=2.1442694664001465/0.2, error=1.69897019995949, errorRate=-0.011275327568999296/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [2.98471453] PID stalled (stallTime=0.6094741821289062/0.2, error=22.230834960937496, errorRate=0.0/0.1).
+FrcAuto.periodic_ERR [3.040365246] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [3.052716323] PID stalled (stallTime=0.8913168907165527/0.2, error=14.546037870648036, errorRate=-0.016291454470561288/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [3.054105994] PID stalled (stallTime=2.218467950820923/0.2, error=1.698082462992943, errorRate=-0.012147259472264482/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [3.055457801] PID stalled (stallTime=0.6816575527191162/0.2, error=22.233581542968754, errorRate=0.03758405026876446/0.1).
+FrcAuto.periodic_ERR [3.098356117] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [3.107351869] PID stalled (stallTime=0.9470705986022949/0.2, error=14.545424441007015, errorRate=-0.010982483745753967/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [3.110615551] PID stalled (stallTime=2.275069236755371/0.2, error=1.6970504272371727, errorRate=-0.018478144696981766/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [3.117615418] PID stalled (stallTime=0.7398254871368408/0.2, error=22.236328125, errorRate=0.049177598579250206/0.1).
+FrcAuto.periodic_ERR [3.171437157] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [3.181271547] PID stalled (stallTime=1.0208690166473389/0.2, error=14.544729616045686, errorRate=-0.009650407018163422/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [3.185430639] PID stalled (stallTime=2.3495452404022217/0.2, error=1.696716504675578, errorRate=-0.004637182063385673/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [3.187725641] PID stalled (stallTime=0.8139743804931641/0.2, error=22.236328125, errorRate=0.0/0.1).
+FrcAuto.periodic_ERR [3.231237559] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [3.240508494] PID stalled (stallTime=1.0786492824554443/0.2, error=14.544459855480397, errorRate=-0.004542766706406728/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [3.245127975] PID stalled (stallTime=2.4078071117401123/0.2, error=1.6967355714778023, errorRate=3.211196744155404E-4/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [3.247597623] PID stalled (stallTime=0.8738834857940674/0.2, error=22.236328125, errorRate=0.0/0.1).
+FrcAuto.periodic_ERR [3.294529935] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [3.303760506] PID stalled (stallTime=1.1434578895568848/0.2, error=14.544620297291303, errorRate=0.0024687680376824957/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [3.306941104] PID stalled (stallTime=2.4701573848724365/0.2, error=1.6958537626935595, errorRate=-0.013568466872784377/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [3.309514209] PID stalled (stallTime=0.9357891082763672/0.2, error=22.23907470703125, errorRate=0.04226173661986815/0.1).
+FrcAuto.periodic_ERR [3.361085786] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [3.366862452] PID stalled (stallTime=1.2060472965240479/0.2, error=14.546629417127818, errorRate=0.033419230027342435/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [3.370673327] PID stalled (stallTime=2.5344078540802/0.2, error=1.6955654702519496, errorRate=-0.004794780643861322/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [3.373475509] PID stalled (stallTime=0.9997062683105469/0.2, error=22.23907470703125, errorRate=0.0/0.1).
+FrcAuto.periodic_ERR [3.421964053] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [3.432350861] PID stalled (stallTime=1.272071123123169/0.2, error=14.547792912443398, errorRate=0.016984790619906348/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [3.43604766] PID stalled (stallTime=2.60050630569458/0.2, error=1.6949087660512987, errorRate=-0.009587951279442083/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [3.438125333] PID stalled (stallTime=1.0642306804656982/0.2, error=22.2418212890625, errorRate=0.0415783907863441/0.1).
+FrcAuto.periodic_ERR [3.486868927] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [3.498197059] PID stalled (stallTime=1.3376269340515137/0.2, error=14.5476016870456, errorRate=-0.0030050522133154784/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [3.504024365] PID stalled (stallTime=2.6661360263824463/0.2, error=1.694717540653528, errorRate=-0.0029706601681204025/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [3.505715687] PID stalled (stallTime=1.1319541931152344/0.2, error=22.2418212890625, errorRate=0.0/0.1).
+FrcAuto.periodic_ERR [3.563115083] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [3.569275567] PID stalled (stallTime=1.4089598655700684/0.2, error=14.547098036575875, errorRate=-0.00689131330256127/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [3.57125694] PID stalled (stallTime=2.7357029914855957/0.2, error=1.6945781617974944, errorRate=-0.0019261918272446452/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [3.572389843] PID stalled (stallTime=1.1985151767730713/0.2, error=22.2418212890625, errorRate=0.0/0.1).
+FrcAuto.periodic_ERR [3.623219347] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [3.626725558] PID stalled (stallTime=1.4664273262023926/0.2, error=14.54334944107653, errorRate=-0.06529597784514292/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [3.629174927] PID stalled (stallTime=2.7936267852783203/0.2, error=1.6943980398335725, errorRate=-0.003138092162168434/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [3.631064655] PID stalled (stallTime=1.2572875022888184/0.2, error=22.2418212890625, errorRate=0.0/0.1).
+FrcAuto.periodic_ERR [3.683120796] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [3.687679661] PID stalled (stallTime=1.5273828506469727/0.2, error=14.541376074667937, errorRate=-0.03281852888170078/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [3.692554982] PID stalled (stallTime=2.8567655086517334/0.2, error=1.6950868313881529, errorRate=0.011455108098042727/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [3.695152045] PID stalled (stallTime=1.3212604522705078/0.2, error=22.23907470703125, errorRate=-0.045689627819906715/0.1).
+FrcAuto.periodic_ERR [3.754956423] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [3.762126591] PID stalled (stallTime=1.6013000011444092/0.2, error=14.541457315167534, errorRate=0.0010855836946811043/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [3.76455223] PID stalled (stallTime=2.9285457134246826/0.2, error=1.6943897609555734, errorRate=-0.009313956011474389/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [3.766628043] PID stalled (stallTime=1.3927953243255615/0.2, error=22.2418212890625, errorRate=0.03669771531237656/0.1).
+FrcAuto.periodic_ERR [3.825173838] Calling cmdPeriodic.
+purePursuitDrive.xPosPid.isStalled_INFO [3.837359194] PID stalled (stallTime=1.6770844459533691/0.2, error=14.541457315167534, errorRate=0.0/0.1).
+purePursuitDrive.yPosPid.isStalled_INFO [3.838238037] PID stalled (stallTime=3.002734422683716/0.2, error=1.6943897609555734, errorRate=0.0/0.1).
+purePursuitDrive.turnPid.isStalled_INFO [3.839159607] PID stalled (stallTime=1.4653089046478271/0.2, error=22.2418212890625, errorRate=0.0/0.1).
+FrcRobot.startCompetition_INFO [3.886047998] *** Transitioning from AUTO_MODE to DISABLED_MODE ***
+Shooter.LeftShooter.disableGoalTracking_INFO [3.892889387] Disable Goal Tracking.
+Shooter.LeftShooter.stopGoalTracking_INFO [3.893482683] Stop GoalTracking.
+Shooter.LeftTiltMotor.cancel_INFO [3.893988305] Cancel: stopping motor.
+Shooter.LeftPrimaryMotor.cancel_INFO [3.894850372] Cancel: stopping motor.
+Shooter.RightShooter.disableGoalTracking_INFO [3.901456349] Disable Goal Tracking.
+Shooter.RightShooter.stopGoalTracking_INFO [3.901910043] Stop GoalTracking.
+Shooter.RightTiltMotor.cancel_INFO [3.904003921] Cancel: stopping motor.
+Shooter.RightPrimaryMotor.cancel_INFO [3.905647596] Cancel: stopping motor.
+Robot.cancelAll_INFO [3.90645943] Cancel all operations.
+Shooter.LeftShooter.cancel_INFO [3.917493103] owner=null
+Shooter.LeftPrimaryMotor.cancel_INFO [3.92055526] Cancel: stopping motor.
+Shooter.LeftTiltMotor.cancel_INFO [3.921278325] Cancel: stopping motor.
+Shooter.RightShooter.cancel_INFO [3.921790271] owner=null
+Shooter.RightPrimaryMotor.cancel_INFO [3.926997463] Cancel: stopping motor.
+Shooter.RightTiltMotor.cancel_INFO [3.929297505] Cancel: stopping motor.
+Shooter.LeftTransferMotor.cancel_INFO [3.933326166] Cancel: stopping motor.
+Shooter.RightTransferMotor.cancel_INFO [3.936792908] Cancel: stopping motor.
+Shooter.FeederMotor.cancel_INFO [3.941392059] Cancel: stopping motor.
+Shooter.stopTilt_ERR [3.943615061] StopTilt is called
+Shooter.LeftTiltMotor.isMotorStalled_INFO [3.982817082] Stall detection triggered.
+Shooter.LeftTiltMotor.checkStallReset_INFO [3.984246044] Resetting stall.
+Shooter.LeftTiltMotor.pidCtrlTask_INFO [3.987129097] controlMode: Position,onTarget=true(16.3952738259968/17.0), stalled=false, expired=false, event=(stopLeftTilt=SIGNALED)
+Shooter.RightTiltMotor.isMotorStalled_INFO [4.017601185] Stall detection triggered.
+Intake.IntakeMotor.cancel_INFO [4.020601081] Cancel: stopping motor.
+Shooter.RightTiltMotor.checkStallReset_INFO [4.023997111] Resetting stall.
+Climber.Motor.cancel_INFO [4.029625739] Cancel: stopping motor.
+Shooter.RightTiltMotor.pidCtrlTask_INFO [4.032404025] controlMode: Position,onTarget=true(16.355746487925824/17.0), stalled=false, expired=false, event=(stopRightTilt=SIGNALED)
+TaskAutoShoot.cancel_INFO [4.034385629] Canceling auto task operation.
+TaskAutoClimb.cancel_INFO [4.040614236] Canceling auto task operation.
+Shooter.TurretMotor.isMotorStalled_INFO [4.03677925] Stall detection triggered.
+Climber.Motor.isMotorStalled_INFO [4.045254444] Stall detection triggered.
+Climber.Motor.checkStallReset_INFO [4.053079289] Resetting stall.
+FrcRobot.printPerformanceMetrics_INFO [4.131631311] [FrcRobot] Loop Performance Metrics:
+Average Loop Interval = 0.001607s (freq=622.086Hz, min=0.000900s, max=0.571510s)
+[03]                StartTask=0.000000s
+[04]          PrePeriodicTask=0.000109s
+[07]               UpdateTask=0.001018s
+[02]                StartMode=0.000001s
+[06]         PostPeriodicTask=0.000135s
+[08]                 StopTask=0.000000s
+[09]                 StopMode=0.000000s
+[00]                RobotInit=17.899450s
+[01]           RobotStartMode=0.000007s
+[05]                 Periodic=0.000256s
+[10]            RobotStopMode=0.000002s
+
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.143660792] FrcDashboard.task: STANDALONE_TASK=3.385994690508941E-4/0.01048274548540425
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.145618368] TrcWatchdogMgr: STANDALONE_TASK=8.534048529411766E-5/0.9856249682794118
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.148065413] flDriveMotor.pidCtrlTask: OUTPUT_TASK=2.60835941401698E-5/0.011419338137006825
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.150626379] flDriveMotor.odometryCleanupTask: STOP_TASK=7.67205E-5/1.9913079635
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.152446915] frDriveMotor.pidCtrlTask: OUTPUT_TASK=1.1383581488263693E-5/0.011419304876810388
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.154062095] blDriveMotor.pidCtrlTask: OUTPUT_TASK=8.882180426098535E-6/0.011419094374001331
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.156516642] brDriveMotor.pidCtrlTask: OUTPUT_TASK=9.416751997336884E-6/0.01141909324117843
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.161381972] flSteerMotor.pidCtrlTask: OUTPUT_TASK=1.026800898801598E-5/0.011419092206058587
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.163102604] frSteerMotor.pidCtrlTask: OUTPUT_TASK=8.205387982689747E-6/0.011419110054260986
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.164817473] blSteerMotor.pidCtrlTask: OUTPUT_TASK=1.06075753037111E-5/0.01141891255400233
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.166703709] brSteerMotor.pidCtrlTask: OUTPUT_TASK=1.1817627059410883E-5/0.011418918387418871
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.168915833] FrcSwerveDrive.odometryTask: INPUT_TASK=0.0050591529086757995/0.01770569001826484
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.171383327] FrcSwerveDrive.stopTask: STOP_TASK=0.004707844/1.991238391
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.173451028] purePursuitDrive.driveTask: POST_PERIODIC_TASK=0.019451486722222223/0.062463507314814815
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.177289743] LED: OUTPUT_TASK=4.702252828618969E-5/0.011418787582695508
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.182298937] LED.ledTask: OUTPUT_TASK=3.4376652366040363E-4/0.011138333175539318
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.187075408] Shooter.LeftPrimaryMotor.pidCtrlTask: OUTPUT_TASK=1.0207369322908003E-5/0.01141848601397438
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.188995235] Shooter.LeftFollowerMotor.pidCtrlTask: OUTPUT_TASK=7.508177008817169E-6/0.011418439702046248
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.192089823] Shooter.LeftTiltMotor.pidCtrlTask: OUTPUT_TASK=1.2496754483447015E-4/0.011418435948095159
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.193941199] Shooter.LeftShooter.goalTracking: POST_PERIODIC_TASK=0.034433802666666666/0.05845490927777778
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.196786928] Shooter.LeftTransferMotor.pidCtrlTask: OUTPUT_TASK=7.007566866267465E-6/0.011418084160678642
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.199820228] Shooter.RightPrimaryMotor.pidCtrlTask: OUTPUT_TASK=6.33032119095143E-6/0.011418082046407185
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.201802794] Shooter.RightFollowerMotor.pidCtrlTask: OUTPUT_TASK=6.0188744178310045E-6/0.011418080878243513
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.205072021] Shooter.RightTiltMotor.pidCtrlTask: OUTPUT_TASK=9.153964321357285E-5/0.011418079756320693
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.207295766] Shooter.RightShooter.goalTracking: POST_PERIODIC_TASK=1.9917425925925926E-5/0.058264201814814814
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.209449642] Shooter.RightTransferMotor.pidCtrlTask: OUTPUT_TASK=8.14516946615666E-6/0.011417880144852819
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.212524088] Shooter.TurretMotor.pidCtrlTask: OUTPUT_TASK=2.9394823199733913E-4/0.01141787845567936
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.214354021] Shooter.FeederMotor.pidCtrlTask: OUTPUT_TASK=7.4274277398968895E-6/0.011417775919507732
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.215932314] ShooterfieldLengthTrigger.triggerTask: PRE_PERIODIC_TASK=1.4821216473743647E-5/0.001599092626082251
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.220245707] ShooterfieldWidthTrigger.triggerTask: PRE_PERIODIC_TASK=7.124950381140598E-6/0.001599126052653868
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.222208538] Intake.IntakeMotor.pidCtrlTask: OUTPUT_TASK=7.1247427668772865E-6/0.011417596307116728
+TrcTaskMgr.printTaskPerformanceMetrics_INFO [4.226197043] Climber.Motor.pidCtrlTask: OUTPUT_TASK=8.220392866644496E-5/0.011417594973727968

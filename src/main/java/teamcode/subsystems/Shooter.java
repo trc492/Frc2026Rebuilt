@@ -60,6 +60,10 @@ public class Shooter extends TrcSubsystem
 {
     public static final String SUBSYSTEM_NAME = "Shooter";
     private static final boolean NEED_ZERO_CAL = true;
+    private static Double enteredShadowZoneLTransfer = null;
+    private static Double enteredShadowZoneRTransfer = null;
+    private static Double enteredShadowZoneFeeder = null;
+
 
     public static final String HUB_SHOOT_POINT = "HubShootPoint";
     public static final String TOWER_SHOOT_POINT = "TowerShootPoint";
@@ -86,7 +90,7 @@ public class Shooter extends TrcSubsystem
             // Hood Angle (Constant)
             {40.0},
             // Time of Flight (Constant),
-            {1.5}
+            {1.0}
         })
     };
 
@@ -128,10 +132,10 @@ public class Shooter extends TrcSubsystem
         public static final double SHOOTER_MOTOR_OFF_DELAY      = 0.5;         // in sec
         public static final double SHOOTER_VEL_TRIGGER_THRESHOLD= 350.0;       // in RPM
         public static final double SHOOTER_VEL_TRIGGER_SETTLING = 0.0;
-        public static final double SHOOTER_VEL_TRIGGER_TIMEOUT  = 2.0;
+        public static final double SHOOTER_VEL_TRIGGER_TIMEOUT  = 1.5;
         public static final double SHOOTER_RPM_CONFLICT_ZONE_ADJ= 0.0;
         public static final double SHOOTER_READY_TIMEOUT        = 1.0;          // in sec
-        public static final double SHOOTER_EXIT_DELAY           = 0.0;          // TODO: Need to tune it by looking at timestamp in the log
+        public static final double SHOOTER_EXIT_DELAY           = 0.0;
         // Left Shooter Motor Characteristics
         public static final String LSHOOTER_PRIMARY_MOTOR_NAME  = SUBSYSTEM_NAME + ".LeftPrimaryMotor";
         public static final boolean LSHOOTER_PRIMARY_MOTOR_INVERTED = false;
@@ -170,7 +174,7 @@ public class Shooter extends TrcSubsystem
         public static final double TILT_MOTOR_DEG_PER_COUNT     = 360.0/TILT_MOTOR_GEAR_RATIO;
         public static final double TILT_PID_TOLERANCE           = 1.0;
         public static final boolean TILT_SOFTWARE_PID_ENABLED   = false;
-        public static final double TILT_POWER_LIMIT             = 0.25;
+        public static final double TILT_POWER_LIMIT             = 0.35;
         public static final double TILT_POS_OFFSET              = 16.0;
         public static final double TILT_MIN_POS                 = 17.0;
         public static final double TILT_MAX_POS                 = 47.0;
@@ -204,14 +208,16 @@ public class Shooter extends TrcSubsystem
 
         // Common Turret Motor Characteristics
         public static final boolean TURRET_HAS_ABS_ENC          = true;
-        public static final double TURRET_MOTOR_GEAR_RATIO      = 0.9571438827*(20.0*130.0/40.0);   // Load/Motor
-        public static final double TURRET_MOTOR_DEG_PER_COUNT   = 360.0/TURRET_MOTOR_GEAR_RATIO;
+        public static final boolean TURRET_SYNC_MOTOR_ENC       = false;
+        // public static final double TURRET_MOTOR_GEAR_RATIO      = 0.92237430460894509389916604972163*(60.0*130.0/40.0)*2.0; // Load/Motor
+        // public static final double TURRET_MOTOR_DEG_PER_COUNT   = 360.0/TURRET_MOTOR_GEAR_RATIO;
+        public static final double TURRET_MOTOR_DEG_PER_COUNT   = 1.9887;
         public static final MotorType TURRET_MOTOR_TYPE         = MotorType.CanSparkMax;
         public static final SparkMaxMotorParams TURRET_SPARKMAX_PARAMS = new SparkMaxMotorParams(true);
         public static final String TURRET_MOTOR_NAME            = SUBSYSTEM_NAME + ".TurretMotor";
         public static final boolean TURRET_MOTOR_INVERTED       = false;
         public static final int TURRET_MOTOR_CANID              = RobotParams.HwConfig.CANID_TURRET_MOTOR;
-        public static final double TURRET_MOTOR_PID_KP          = 0.18;
+        public static final double TURRET_MOTOR_PID_KP          = 0.045;
         public static final double TURRET_MOTOR_PID_KI          = 0.0;  
         public static final double TURRET_MOTOR_PID_KD          = 0.0;  
         public static final double TURRET_MOTOR_PID_KF          = 0.0;  
@@ -219,16 +225,23 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_PID_TOLERANCE         = 3.0;
         public static final double TURRET_PID_SETTLING          = 0.0;
         public static final boolean TURRET_SOFTWARE_PID_ENABLED = false;
-        public static final double TURRET_POWER_LIMIT           = 0.35; 
-        public static final double TURRET_POS_OFFSET            = 182.25;
-        public static final double TURRET_MIN_POS               = -171.0;   
-        public static final double TURRET_MAX_POS               = TURRET_POS_OFFSET - 2.5;//180.0;
-        public static final double TURRET_CONFLICT_ZONE_LOW     = 60.0;         //TODO: tune
-        public static final double TURRET_CONFLICT_ZONE_HIGH    = 120.0;        //TODO: tune
+        public static final double TURRET_POWER_LIMIT           = 1.0;
+        public static final double TURRET_POS_OFFSET            = 180.0;
+        public static final double TURRET_ENC_RANGE_LOWER       = -180.0;
+        public static final double TURRET_ENC_RANGE_UPPER       = 180.0;
+        public static final double TURRET_X_OFFSET              = 0.0;
+        public static final double TURRET_Y_OFFSET              = -6.0;         // inches from robot center
+        // Physical Range: -172.0 to 180.0
+        public static final double TURRET_FORBIDDEN_ZONE_WIDTH  = 8.0;
+        public static final double TURRET_FORBIDDEN_MIN_POS     = -180.0 + TURRET_FORBIDDEN_ZONE_WIDTH/2.0;
+        public static final double TURRET_MIN_POS               = -170.0;
+        public static final double TURRET_MAX_POS               = 178.0;
+        public static final double TURRET_CONFLICT_ZONE_LOW     = 60.0;
+        public static final double TURRET_CONFLICT_ZONE_HIGH    = 120.0;
         public static final double TURRET_POS_PRESET_TOLERANCE  = 5.0;
         public static final double[] TURRET_POS_PRESETS         =
             {TURRET_MIN_POS, -135.0, -90.0, -45.0, 0.0, 45.0, 90.0, 135.0, TURRET_MAX_POS};
-        public static final double TURRET_ZERO_CAL_POWER        = 0.2;
+        public static final double TURRET_ZERO_CAL_POWER        = 0.5;
         public static final double TURRET_ZERO_CAL_TIMEOUT      = 6.0;
         public static final double TURRET_STALL_MIN_POWER       = Math.abs(TURRET_ZERO_CAL_POWER) * 0.9;
         public static final double TURRET_STALL_TOLERANCE       = 2.0;          // in degrees
@@ -237,15 +250,15 @@ public class Shooter extends TrcSubsystem
         public static final double TURRET_CURRENT_LIMIT         = 20.0;
 
         public static final boolean TURRET_ABS_ENC_INVERTED     = true;
-        public static final double TURRET_ABS_ENC_SCALE         = TURRET_MOTOR_GEAR_RATIO;
+        public static final double TURRET_ABS_ENC_SCALE         = 360.0;
         public static final double TURRET_ABS_ENC_POS_OFFSET    = -180.0;
         public static final double TURRET_ABS_ENC_ZERO_OFFSET   = 0.0;
 
-        public static final double CAM_ROTATE_RADIUS            = 5.800896;     // inches from turret center
-        public static final double LTURRET_X_OFFSET             = -7.375;       // inches from robot center
-        public static final double LTURRET_Y_OFFSET             = -6.0;         // inches from robot center
-        public static final double RTURRET_X_OFFSET             = 7.376;        // inches from robot center
-        public static final double RTURRET_Y_OFFSET             = -6.0;         // inches from robot center
+        public static final double CAM_ROTATE_RADIUS            = 5.800896;         // inches from turret center
+        public static final double LTURRET_X_OFFSET             = -7.375;           // inches from robot center
+        public static final double LTURRET_Y_OFFSET             = TURRET_Y_OFFSET;  // inches from robot center
+        public static final double RTURRET_X_OFFSET             = 7.376;            // inches from robot center
+        public static final double RTURRET_Y_OFFSET             = TURRET_Y_OFFSET;  // inches from robot center
 
         // Common Transfer Motor Characteristics
         public static final MotorType TRANSFER_MOTOR_TYPE       = MotorType.CanSparkMax;
@@ -300,6 +313,7 @@ public class Shooter extends TrcSubsystem
         TrcTimer timer;
         TrcEvent.Callback velTriggerCallback;
         boolean autoStop;
+        TrcEvent completionEvent;
 
         ShooterContext(
             TrcShooter shooter, TrcRollerIntake transfer, TrcTimer timer, TrcEvent.Callback velTriggerCallback,
@@ -310,6 +324,7 @@ public class Shooter extends TrcSubsystem
             this.timer = timer;
             this.velTriggerCallback = velTriggerCallback;
             this.autoStop = autoStop;
+            this.completionEvent = null;
         }
     }   //class ShooterContext
 
@@ -514,10 +529,19 @@ public class Shooter extends TrcSubsystem
                 .setPrimaryMotor(
                     Params.TURRET_MOTOR_NAME, Params.TURRET_MOTOR_TYPE, Params.TURRET_MOTOR_INVERTED, true, true,
                     Params.TURRET_MOTOR_CANID, null, Params.TURRET_SPARKMAX_PARAMS)
-                .setPositionPresets(Params.TURRET_POS_PRESET_TOLERANCE, Params.TURRET_POS_PRESETS)
-                .setPositionScaleAndOffset(
-                    Params.TURRET_MOTOR_DEG_PER_COUNT,
-                    Params.TURRET_HAS_ABS_ENC? Params.TURRET_ABS_ENC_POS_OFFSET: Params.TURRET_POS_OFFSET);
+                .setPositionPresets(Params.TURRET_POS_PRESET_TOLERANCE, Params.TURRET_POS_PRESETS);
+
+            if (Params.TURRET_HAS_ABS_ENC)
+            {
+                // Absolute encoder is scaled to the unit of degrees by SparkMax already, so we don't scale here.
+                turretMotorParams.setPositionScaleAndOffset(1.0, Params.TURRET_ABS_ENC_POS_OFFSET);
+            }
+            else
+            {
+                // Scale the motor relative encoder to the unit of degrees.
+                turretMotorParams.setPositionScaleAndOffset(
+                    Params.TURRET_MOTOR_DEG_PER_COUNT, Params.TURRET_POS_OFFSET);
+            }
 
             turret = new FrcMotorActuator(turretMotorParams).getMotor();
             turret.setPositionPidParameters(
@@ -527,13 +551,8 @@ public class Shooter extends TrcSubsystem
                         Params.TURRET_MOTOR_PID_KF, Params.TURRET_MOTOR_PID_IZONE)
                     .setPidControlParams(
                         Params.TURRET_PID_TOLERANCE, Params.TURRET_PID_SETTLING, Params.TURRET_SOFTWARE_PID_ENABLED),
-                null);
-
-            if (Params.TURRET_HAS_ABS_ENC)
-            {
-                FrcCANSparkMax turretMotor = (FrcCANSparkMax) turret;
-                turretMotor.enableAbsoluteEncoder(Params.TURRET_ABS_ENC_INVERTED, Params.TURRET_ABS_ENC_SCALE, null);
-            }
+                this::getTurretPosition);
+            scaleTurretEncoder(Params.TURRET_SYNC_MOTOR_ENC);
             // turret.enableMotionProfile(
             //     Params.TURRET_SOFTWARE_PID_ENABLED, Params.TURRET_MAX_VELOCITY, Params.TURRET_MAX_ACCELERATION,
             //     0.0, 0.0, Params.TURRET_PID_TOLERANCE);
@@ -581,6 +600,37 @@ public class Shooter extends TrcSubsystem
             }
         }
     }   //Shooter
+
+    /**
+     * This method scales the turret encoder appropriately. If useMotorEnc is false, it enables the absolute encoder
+     * and scales it to the unit of degrees. If useMotorEnc is true, it enables the absolute encoder, sync it to the
+     * motor's relative encoder and disables the absolute encode so it will use the motor's relative encoder.
+     *
+     * @param syncMotorEnc specifies true to sync to motor's relative encoder and use it.
+     */
+    private void scaleTurretEncoder(boolean syncMotorEnc)
+    {
+        if (turret != null && Params.TURRET_HAS_ABS_ENC)
+        {
+            // Absolute encoder outputs a range between 0.0 and 1.0, scale it to degrees.
+            // Absolute encoder is Canandmag encoder which has hardware zero calibration switch, so there is no zero
+            // offset.
+            FrcCANSparkMax turretMotor = (FrcCANSparkMax) turret;
+            turretMotor.enableAbsoluteEncoder(Params.TURRET_ABS_ENC_INVERTED, Params.TURRET_ABS_ENC_SCALE, null);
+            if (syncMotorEnc)
+            {
+                // Absolute encoder is scaled to degrees.
+                double absEncPos = turretMotor.getMotorPosition();
+                // Convert degrees to motor revolutions.
+                double motorEncPos = absEncPos / Params.TURRET_MOTOR_DEG_PER_COUNT;
+                turret.tracer.traceInfo(instanceName, "SyncTurretMotorEnc: absEncPos=%f, motorEncPos=%f", absEncPos, motorEncPos);
+                turretMotor.disableAbsoluteEncoder();
+                turretMotor.resetMotorPosition(motorEncPos);
+                turret.setPositionSensorScaleAndOffset(
+                    Params.TURRET_MOTOR_DEG_PER_COUNT, Params.TURRET_ABS_ENC_POS_OFFSET);
+            }
+        }
+    }   //scaleTurretEncoder
 
     /**
      * This method returns the created left shooter.
@@ -716,9 +766,32 @@ public class Shooter extends TrcSubsystem
     public void stopTilt()
     {
         // Retract hood, fire and forget.
-        if (leftShooter != null) leftShooter.setTiltAngle(Params.TILT_MIN_POS);
-        if (rightShooter != null) rightShooter.setTiltAngle(Params.TILT_MIN_POS);
+        TrcEvent leftTiltEvent = new TrcEvent("stopLeftTilt");
+        TrcEvent rightTiltEvent = new TrcEvent("stopRightTilt");
+        leftTiltEvent.setCallback(this::stopTiltCallback, "StopLeftTilt");
+        rightTiltEvent.setCallback(this::stopTiltCallback, "StopRightTilt");
+        if (leftShooter != null) leftShooter.setTiltAngle(null, Params.TILT_MIN_POS, leftTiltEvent, 0.0);
+        if (rightShooter != null) rightShooter.setTiltAngle(null, Params.TILT_MIN_POS, rightTiltEvent, 0.0);
     }   //stopTilt
+
+    /**
+     * This method is called if stopTilt was completed or canceled.
+     *
+     * @param ctxt specifies a string indicating the callback is for the left or the right shooter.
+     * @param canceled specifies true if the operation was canceled.
+     */
+    private void stopTiltCallback(Object ctxt, boolean canceled)
+    {
+        String who = (String) ctxt;
+        if (canceled)
+        {
+            tracer.traceDebug(instanceName, who + " was canceled.");
+        }
+        else
+        {
+            tracer.traceDebug(instanceName, who + " was completed.");
+        }
+    }   //stopTiltCallback
 
     /**
      * This method stops both the left right pan motors.
@@ -728,6 +801,27 @@ public class Shooter extends TrcSubsystem
         if (leftShooter != null) leftShooter.panMotor.cancel();
         if (rightShooter != null) rightShooter.panMotor.cancel();
     }   //stopPan
+
+    /**
+     * This method returns the turret position and make sure it is not in the forbidden zone.
+     *
+     * @return turret position.
+     */
+    public double getTurretPosition()
+    {
+        double pos = 0.0;
+
+        if (turret != null)
+        {
+            pos = turret.getPosition();
+            if (pos < Params.TURRET_FORBIDDEN_MIN_POS)
+            {
+                pos = Params.TURRET_MAX_POS;
+            }
+        }
+
+        return pos;
+    }   //getTurretPosition
 
     /**
      * This method checks if the left or the right shooter is active.
@@ -774,6 +868,9 @@ public class Shooter extends TrcSubsystem
                 if (goalTrackingState.trackingMode != TrackingMode.Disabled)
                 {
                     // We crossed field zones, let's re-evaluate tracking modes.
+                    tracer.traceInfo(
+                        instanceName, "FieldTriggerCallback: canceled=%s, zoneCtxt=%s",
+                        canceled, (TrcTriggerThresholdZones.CallbackContext) context);
                     setupGoalTrackingMode();
                 }
             }
@@ -845,7 +942,7 @@ public class Shooter extends TrcSubsystem
             if (goalFieldPose == null)
             {
                 // Goal Tracking is not ON, just use the alliance's Hub pose.
-                Alliance alliance = FrcAuto.autoChoices.getAlliance();
+                Alliance alliance = FrcAuto.autoChoices.alliance;
                 goalFieldPose = robot.adjustPoseByAlliance(alliance, RobotParams.Game.BLUE_HUB_POSE);
             }
             return goalFieldPose;
@@ -858,7 +955,7 @@ public class Shooter extends TrcSubsystem
      */
     private void setupGoalTrackingMode()
     {
-        Alliance alliance = FrcAuto.autoChoices.getAlliance();
+        Alliance alliance = FrcAuto.autoChoices.alliance;
         int fieldLengthZone = goalTrackingState.fieldLengthTrigger.getCurrentZone();
         int fieldWidthZone = goalTrackingState.fieldWidthTrigger.getCurrentZone();
 
@@ -882,24 +979,12 @@ public class Shooter extends TrcSubsystem
         {
             // Passback tracking mode.
             // Check if we should point to the audience side or the scoretable side.
-            if(alliance == Alliance.Red)
-            {
-                goalTrackingState.goalFieldPose =
-                    robot.adjustPoseByAlliance(
-                        alliance,
-                        fieldWidthZone <= 1 && alliance == Alliance.Blue?
-                            RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE:
-                            RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE);
-            } else 
-            {
-                goalTrackingState.goalFieldPose =
-                    robot.adjustPoseByAlliance(
-                        alliance,
-                        fieldWidthZone <= 1 && alliance == Alliance.Blue?
-                            RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:
-                            RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE);        
-            }
-            
+            TrcPose2D blueGoalPose = 
+                    fieldWidthZone <= 1 && alliance == Alliance.Blue ||
+                    fieldWidthZone > 1 && alliance == Alliance.Red?
+                        RobotParams.Game.BLUE_PASSBACK_AUDIENCE_SIDE:   // TODO: CodeReview - this is wrong!
+                        RobotParams.Game.BLUE_PASSBACK_SCORETABLE_SIDE;
+            goalTrackingState.goalFieldPose = robot.adjustPoseByAlliance(alliance, blueGoalPose);
             goalTrackingState.shootParamsTable = passbackShootParamsTable;
             // Check for hub shadow zone and trench zone.
             if (fieldLengthZone == 1 || fieldLengthZone == 6 ||
@@ -908,12 +993,43 @@ public class Shooter extends TrcSubsystem
                 // We are in hub shadown zone or trench zone, don't passback there.
                 if (robot.autoShootTask != null && robot.autoShootTask.isActive())
                 {
-                    robot.autoShootTask.cancel();
+                    // robot.autoShootTask.cancel();
+                    // We want to hold the shooter to the correct location, pause shooting
+                    if (robot.leftTransfer != null && robot.leftTransfer.isActive()) {
+                        robot.leftTransfer.cancel();
+                        enteredShadowZoneLTransfer = robot.leftTransfer.getPower();
+                    }
+                    if (robot.rightTransfer != null && robot.rightTransfer.isActive()) {
+                        robot.rightTransfer.cancel();
+                        enteredShadowZoneRTransfer = robot.rightTransfer.getPower();
+                    }
+                    double feederPower = robot.feeder.getPower();
+                    if (robot.feeder != null && feederPower != 0.0) {
+                        robot.feeder.cancel();
+                        enteredShadowZoneFeeder = feederPower;
+                    }
+                    
+                }
+            }
+            else 
+            {
+                if (enteredShadowZoneFeeder != null) {
+                    robot.feeder.setPower(enteredShadowZoneFeeder);
+                    enteredShadowZoneFeeder = null;
+                }
+                if (enteredShadowZoneLTransfer != null) {
+                    robot.leftTransfer.setPower(enteredShadowZoneLTransfer);
+                    enteredShadowZoneLTransfer = null;
+                }
+                if (enteredShadowZoneRTransfer != null) {
+                    robot.rightTransfer.setPower(enteredShadowZoneRTransfer);
+                    enteredShadowZoneRTransfer = null;
                 }
             }
             tracer.traceInfo(
-                instanceName, "PassingBack: alliance=%s, fieldLengthZone=%d, fieldWidthZone=%d.",
-                alliance, fieldLengthZone, fieldWidthZone);
+                instanceName,
+                "PassingBack: alliance=%s, fieldLengthZone=%d, fieldWidthZone=%d, blueGoalPose= %s, goalFieldPose=%s.",
+                alliance, fieldLengthZone, fieldWidthZone, blueGoalPose, goalTrackingState.goalFieldPose);
         }
         goalTrackingState.rightShooterAimInfo = null;
 
@@ -930,6 +1046,9 @@ public class Shooter extends TrcSubsystem
      */
     public void enableGoalTracking(TrcShooter.GoalTrackingParams goalTrackingParams, boolean noPassback)
     {
+        tracer.traceInfo(
+            instanceName, "EnableGoalTracking: goalTrackingParams=%s, noPassback=%s",
+            goalTrackingParams, noPassback);
         synchronized (goalTrackingState)
         {
             goalTrackingState.goalTrackingParams = goalTrackingParams;
@@ -1009,11 +1128,14 @@ public class Shooter extends TrcSubsystem
                 // Do robot motion compensation if enabled (aka SOTM).
                 if (dashboard.getBoolean(
                         Dashboard.DBKEY_SHOOTER_USE_MOTION_COMPENSATION,
-                        RobotParams.Preferences.useMotionCompensation))
+                        RobotParams.Preferences.useMotionCompensation) &&
+                    robot.autoShootTask != null && robot.autoShootTask.isActive())
                 {
                     // Compensate for robot motion.
                     TargetInfo targetInfo = leftShooter.compensateRobotMotion(
-                        robot.robotBase.driveBase, this::getTargetInfo,
+                        robot.robotBase.driveBase,
+                        Params.TURRET_X_OFFSET, Params.TURRET_Y_OFFSET,
+                        this::getTargetInfo,
                         new TargetInfo(
                             targetPose,
                             new AimInfo(shootParams.outputs[0],
@@ -1021,7 +1143,17 @@ public class Shooter extends TrcSubsystem
                                         null,
                                         shootParams.outputs[1]),
                             shootParams.outputs[2]),
-                        0.0001, 5, Params.SHOOTER_EXIT_DELAY);
+                        0.0, 0.0001, 15, Params.SHOOTER_EXIT_DELAY);
+                    // TargetInfo targetInfo = compensateRobotMotion(
+                    //     robot.robotBase.driveBase, this::getTargetInfo,
+                    //     new TargetInfo(
+                    //         targetPose,
+                    //         new AimInfo(shootParams.outputs[0],
+                    //                     null,
+                    //                     null,
+                    //                     shootParams.outputs[1]),
+                    //         shootParams.outputs[2]),
+                    //     5, Params.SHOOTER_EXIT_DELAY);
                     targetPose = targetInfo.targetPose;
                     shootParams = goalTrackingState.shootParamsTable.get(
                         Math.hypot(targetPose.x, targetPose.y), interpolation);
@@ -1083,7 +1215,89 @@ public class Shooter extends TrcSubsystem
         }
     }   //getLeftShooterAimInfo
 
-     /**
+    // private static final boolean COMPENSATE_ROBOT_ROTATION = false;
+    // /**
+    //  * This method compensates the TargetInfo by the motion of the robot.
+    //  *
+    //  * @param driveBase specifies the drive base object.
+    //  * @param targetInfoSource specifies the method to call to recompute TargetInfo by current target pose.
+    //  * @param targetInfo specifies the original TargetInfo.
+    //  * @param tofErrorThreshold specifies the TimeOfFlight error threshold to terminate iterations.
+    //  * @param maxIterations specifies the maximum number of iterations.
+    //  * @param shooterExitDelay specifies the delay in seconds between when this method is called and the ball
+    //  *        exits the shooter. TOF only accounts after the ball exits the shooter.
+    //  * @return compensated Target Info.
+    //  */
+    // public TargetInfo compensateRobotMotion(
+    //     TrcDriveBase driveBase,
+    //     TargetInfoSource targetInfoSource,
+    //     TargetInfo targetInfo,
+    //     int maxIterations,
+    //     double shooterExitDelay)
+    // {
+    //     TargetInfo compensatedInfo = targetInfo;
+    //     TrcPose2D robotVel = driveBase.getRobotVelocity();
+    //     double vxRobot = robotVel.x;
+    //     double vyRobot = robotVel.y;
+    //     double omegaDeg = COMPENSATE_ROBOT_ROTATION ? driveBase.getTurnRate() : 0.0;
+    //     double tof = targetInfo.tof;
+    //     TrcPose2D originalTargetPose = targetInfo.targetPose;
+
+    //     for (int i = 0; i < maxIterations; i++)
+    //     {
+    //         double tofTotal = tof + shooterExitDelay;
+    //         TrcPose2D compensation = new TrcPose2D(
+    //             -vxRobot * tofTotal,
+    //             -vyRobot * tofTotal,
+    //             -omegaDeg * tofTotal
+    //         );
+    //         TrcPose2D adjustedPose = originalTargetPose.addRelativePose(compensation);
+    //         TargetInfo newInfo = targetInfoSource.getTargetInfo(adjustedPose);
+    //         double predictedTof = newInfo.tof;
+    //         double g = predictedTof - tof;
+    //         // From our original tof error threshold, will need to be tuned
+    //         /** Small step used to numerically approximate the derivative f'(t) by comparing tof at nearby time values.
+    //         Epsilon should be small enough for accurate slope estimation while avoiding floating point noise. */
+    //         // Will need to be tuned
+    //         double epsilon = 0.001;
+    //         double tofPerturbed = tof + epsilon;
+    //         double tofTotalPerturbed = tofPerturbed + shooterExitDelay;
+    //         TrcPose2D compensationPerturbed = new TrcPose2D(
+    //             -vxRobot * tofTotalPerturbed,
+    //             -vyRobot * tofTotalPerturbed,
+    //             -omegaDeg * tofTotalPerturbed
+    //         );
+
+    //         TrcPose2D adjustedPosePerturbed =
+    //             originalTargetPose.addRelativePose(compensationPerturbed);
+    //         TargetInfo perturbedInfo =
+    //             targetInfoSource.getTargetInfo(adjustedPosePerturbed);
+    //         double predictedTofPerturbed = perturbedInfo.tof;
+    //         double gPrime = (predictedTofPerturbed - predictedTof) / epsilon - 1.0;
+    //         /** Prevents instability when the derivative is too close to zero, which would cause the Newton 
+    //         update (g/gPrime) extremely large of undefined. */
+    //         // Will need to be tuned
+    //         if (Math.abs(gPrime) < 0.0001)
+    //         {
+    //             break;
+    //         }
+
+    //         double delta = g / gPrime;
+    //         tof = tof - delta;
+    //         compensatedInfo = newInfo;
+    //         /** Stops iteration when the Newton update becomes very small, meaning the solution has effectively converged. */
+    //         // Will need to be tuned
+    //         if (Math.abs(delta) < 0.002)
+    //         {
+    //             tracer.traceWarn(instanceName, "Stopping iteration because the Newton update is very small");
+    //             break;
+    //         }
+    //     }
+
+    //     return compensatedInfo;
+    // }
+
+    /**
      * This method is called by right shooter GoalTracking to get AimInfo for aiming at the target.
      *
      * @return AimInfo containing information to aim at the target.
@@ -1174,6 +1388,7 @@ public class Shooter extends TrcSubsystem
                     currFlywheelRPM - Params.SHOOTER_VEL_TRIGGER_THRESHOLD,
                     currFlywheelRPM + Params.SHOOTER_VEL_TRIGGER_THRESHOLD,
                     Params.SHOOTER_VEL_TRIGGER_SETTLING);
+                shooterContext.completionEvent = completionEvent;
                 velTrigger.enableTrigger(null, TriggerMode.OnInactive, shooterContext.velTriggerCallback);
                 shooterContext.timer.set(Params.SHOOTER_VEL_TRIGGER_TIMEOUT, this::velTriggerTimeout, shooterContext);
             }
@@ -1296,6 +1511,11 @@ public class Shooter extends TrcSubsystem
         shooterContext.shooter.cancel();
         shooterContext.transfer.cancel();
         if (feeder != null) feeder.cancel();
+        if (shooterContext.completionEvent != null)
+        {
+            shooterContext.completionEvent.signal();
+            shooterContext.completionEvent = null;
+        }
     }   //velTriggerTimeout
 
     //
@@ -1383,7 +1603,7 @@ public class Shooter extends TrcSubsystem
                         turretZeroCalibrated = true;
                         TrcRobot.RunMode runMode = TrcRobot.getRunMode();
                         FrcAuto.AutoStartPos startPos =
-                            runMode == TrcRobot.RunMode.AUTO_MODE ? FrcAuto.autoChoices.getStartPos() : null;
+                            runMode == TrcRobot.RunMode.AUTO_MODE ? FrcAuto.autoChoices.startPos : null;
                         double turretTargetPos =
                             startPos != null && startPos == AutoStartPos.START_POS_CENTER? 180.0: 0.0;
                         // Fire and forget.
@@ -1506,7 +1726,7 @@ public class Shooter extends TrcSubsystem
                 {
                     dashboard.putNumber(Dashboard.DBKEY_TURRET_POWER, turret.getPower());
                     dashboard.putNumber(Dashboard.DBKEY_TURRET_CURRENT, turret.getCurrent());
-                    dashboard.putNumber(Dashboard.DBKEY_TURRET_POS, turret.getPosition());
+                    dashboard.putNumber(Dashboard.DBKEY_TURRET_POS, getTurretPosition());
                     dashboard.putNumber(Dashboard.DBKEY_TURRET_TARGET, turret.getPidTarget());
                 }
 

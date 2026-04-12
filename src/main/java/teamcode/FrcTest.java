@@ -418,7 +418,7 @@ public class FrcTest extends FrcTeleOp
                 {
                     robot.robotBase.driveBase.resetOdometry();
                     testCommand = new CmdPidDrive(robot.robotBase.driveBase, robot.robotBase.pidDrive);
-                    ((CmdPidDrive) testCommand).start(
+                    ((CmdPidDrive) testCommand).startPath(
                         0.0, testChoices.getDrivePower(), null,
                         new TrcPose2D(
                             testChoices.getXTarget()*12.0, testChoices.getYTarget()*12.0,
@@ -457,6 +457,7 @@ public class FrcTest extends FrcTeleOp
         {
             case X_TIMED_DRIVE:
             case Y_TIMED_DRIVE:
+                // Cancel GyroAssist in case we turned it on for timed drive.
                 robot.robotBase.driveBase.setGyroAssistEnabled(null);
                 break;
 
@@ -531,7 +532,7 @@ public class FrcTest extends FrcTeleOp
                          subsystemName.equalsIgnoreCase(Shooter.Params.TURRET_MOTOR_NAME))
                 {
                     robot.dashboard.putNumber(
-                        Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, robot.turret.getPosition());
+                        Dashboard.DBKEY_TEST_SUBSYSTEM_INPUT, robot.shooterSubsystem.getTurretPosition());
                     robot.dashboard.putNumber(
                         Dashboard.DBKEY_TEST_SUBSYSTEM_TARGET, robot.turret.getPidTarget());
                 }

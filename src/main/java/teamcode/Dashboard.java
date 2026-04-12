@@ -125,6 +125,8 @@ public class Dashboard
     public static final String DBKEY_AUTO_CLIMB                     = "Auto/Climb";                 //Boolean
     public static final String DBKEY_AUTO_CLIMB_SIDE                = "Auto/ClimbSide";             //Choices
     public static final String DBKEY_AUTO_NEUTRAL_ZONE_CYCLES       = "Auto/NeutralZoneCycles";     //Number
+    public static final String DBKEY_AUTO_TYPE                      = "Auto/Type";                  //Choices
+    public static final String DBKEY_AUTO_SWEEP_DISTANCE            = "Auto/SweepDistance";         //Choices
 
     public static final String DBKEY_AUTO_PATHFILE                  = "Auto/PathFile";              //String
     public static final String DBKEY_AUTO_X_DRIVE_DISTANCE          = "Auto/XDriveDistance";        //Number
@@ -132,6 +134,8 @@ public class Dashboard
     public static final String DBKEY_AUTO_TURN_ANGLE                = "Auto/TurnAngle";             //Number
     public static final String DBKEY_AUTO_DRIVE_TIME                = "Auto/DriveTime";             //Number
     public static final String DBKEY_AUTO_DRIVE_POWER               = "Auto/DrivePower";            //Number
+
+    public static final String DBKEY_AUTO_CHOICES_SUBMIT            = "Auto/ChoicesSubmit";         //Boolean
 
     // TeleOp.
     public static final String DBKEY_TELEOP_DRIVE_MODE              = "TeleOp/DriveMode";           //Choices
@@ -142,6 +146,9 @@ public class Dashboard
     public static final String DBKEY_TELEOP_TURN_SLOW_SCALE         = "TeleOp/TurnSlowScale";       //Number
     public static final String DBKEY_TELEOP_SHOW_DRIVE_POWER        = "TeleOp/ShowDrivePower";      //Boolean
     public static final String DBKEY_TELEOP_DRIVE_POWER             = "TeleOp/DrivePower";          //String
+    public static final String DBKEY_TELEOP_RED_SHIFT               = "TeleOp/RedShift";            //Boolean
+    public static final String DBKEY_TELEOP_BLUE_SHIFT              = "TeleOp/BlueShift";           //Boolean
+    public static final String DBKEY_TELEOP_SHIFT_TIME_LEFT         = "TeleOp/ShiftTimeLeft";       //Number
 
     // Test choices.
     public static final String DBKEY_TEST_TESTS                     = "Test/Tests";
@@ -252,6 +259,7 @@ public class Dashboard
         dashboard.refreshKey(DBKEY_INTAKE_SHOW_STATUS, RobotParams.Preferences.showIntakeStatus);
         // Climber.
         dashboard.refreshKey(DBKEY_CLIMBER_SHOW_STATUS, RobotParams.Preferences.showClimberStatus);
+        dashboard.refreshKey(DBKEY_AUTO_CHOICES_SUBMIT, false);
         // TeleOp.
         dashboard.refreshKey(DBKEY_TELEOP_DRIVE_NORMAL_SCALE, FrcTeleOp.DEF_DRIVE_NORMAL_SCALE);
         dashboard.refreshKey(DBKEY_TELEOP_DRIVE_SLOW_SCALE, FrcTeleOp.DEF_DRIVE_SLOW_SCALE);
@@ -259,6 +267,9 @@ public class Dashboard
         dashboard.refreshKey(DBKEY_TELEOP_TURN_SLOW_SCALE, FrcTeleOp.DEF_TURN_SLOW_SCALE);
         dashboard.refreshKey(DBKEY_TELEOP_SHOW_DRIVE_POWER, RobotParams.Preferences.showDrivePower);
         dashboard.refreshKey(DBKEY_TELEOP_DRIVE_POWER, "");
+        dashboard.refreshKey(DBKEY_TELEOP_RED_SHIFT, false);
+        dashboard.refreshKey(DBKEY_TELEOP_BLUE_SHIFT, false);
+        dashboard.refreshKey(DBKEY_TELEOP_SHIFT_TIME_LEFT, "");
         // Test.
         dashboard.refreshKey(DBKEY_TEST_LSHOOTER_TARGET_RPM, 0.0);
         dashboard.refreshKey(DBKEY_TEST_LTILT_TARGET_POS, 0.0);

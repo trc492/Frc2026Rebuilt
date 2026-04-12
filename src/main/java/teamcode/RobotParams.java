@@ -56,12 +56,12 @@ public class RobotParams
         // Status Update: Dashboard Update may affect robot loop time, don't do it when in competition.
         public static final boolean updateDashboard             = !inCompetition;   // Start up default value.
         public static final boolean useLED                      = true;
-        public static final boolean useRumble                   = false;
+        public static final boolean useRumble                   = true;
         public static final boolean hasDriverGameController     = true;
         public static final boolean hasOperatorGameController   = robotType == RobotType.RebuiltRobot;
         // Vision
         public static final boolean useVision                   = true;
-        public static final boolean showVisionStatus            = true;
+        public static final boolean showVisionStatus            = !inCompetition;
         public static final boolean usePhotonVision             = true;
         public static final boolean useOpenCvVision             = false;
         public static final boolean useWebcamAprilTagVision     = false;
@@ -77,7 +77,7 @@ public class RobotParams
         public static final String testSubsystemName            = Shooter.Params.TURRET_MOTOR_NAME;
         // Drive Base Subsystem
         public static final boolean useDriveBase                = true;
-        public static final boolean showDriveBaseStatus         = true;
+        public static final boolean showDriveBaseStatus         = !inCompetition;
         public static final boolean debugDriveBase              = false;
         public static final boolean debugPidDrive               = false;
         public static final boolean showDrivePower              = false;
@@ -154,7 +154,7 @@ public class RobotParams
         // Digital Input/Output ports.
 
         // PWM channels.
-        public static final int NUM_LEDS                        = 150;
+        public static final int NUM_LEDS                        = 209;
         public static final int PWM_CHANNEL_LED                 = 0;
 
         // Relay channels.
@@ -196,14 +196,7 @@ public class RobotParams
         public static final double TELEOP_PERIOD                = 140.0;    // in seconds
         public static final double ENDGAME_THRESHOLD            = 30.0;     // in seconds
         public static final double SHIFT_THRESHOLD              = 2.0;
-        public static final double[] SHIFTS                     = new double[]
-        {
-            10 - SHIFT_THRESHOLD,       //Transition Shift ends
-            35 - SHIFT_THRESHOLD,       //Shift 1 ends
-            60 - SHIFT_THRESHOLD,       //Shift 2 ends
-            85 - SHIFT_THRESHOLD,       //Shift 3 ends
-            110 - SHIFT_THRESHOLD       //Shift 4 ends
-        };
+        public static final double[] SHIFTS                     = new double[] {10, 35, 60, 85, 110, 140};
         //
         // Field configuration and dimensions in inches.
         //
@@ -265,6 +258,10 @@ public class RobotParams
             new TrcPose2D(-fieldWidth*3.0/4.0, 78.305, 0.0);
         public static final TrcPose2D BLUE_PASSBACK_SCORETABLE_SIDE =       // (-79.4225,78.305.0,0.0)
             new TrcPose2D(-fieldWidth/4.0, 78.305, 0.0);
+        public static final TrcPose2D RED_PASSBACK_AUDIENCE_SIDE =          // (-238.2675,572.915,0.0)
+            new TrcPose2D(-fieldWidth*3.0/4.0, fieldLength - 78.305, 0.0);
+        public static final TrcPose2D RED_PASSBACK_SCORETABLE_SIDE =        // (-79.4225,572.915,0.0)
+            new TrcPose2D(-fieldWidth/4.0, fieldLength - 78.305, 0.0);
         public static final double HUB_WIDTH                    = 60.0;     // inches
         public static final double deadZoneAngleRad             =           // 19.761664387128421576707179475099 deg
             Math.atan2(fieldWidth/2.0 - Math.abs(BLUE_PASSBACK_SCORETABLE_SIDE.x) - HUB_WIDTH/2.0,  //49.4225
@@ -284,9 +281,9 @@ public class RobotParams
         public static final TrcPose2D BLUE_CLIMB_LOOKOUT_POSE   =
             new TrcPose2D(170.22, 65.0, -180.0); // TODO: Fine tune x and y
         public static final TrcPose2D BLUE_DEPOT_CLIMB_POSE     =
-            new TrcPose2D(-190.95, 44.29, -90.0); // TODO: Determine x and y
+            new TrcPose2D(-190.95, 42.29, -90.0); // TODO: Determine x and y
         public static final TrcPose2D BLUE_OUTPOST_CLIMB_POSE   =
-            new TrcPose2D(-98.61, 42.29, 90.0); // TODO: Determine x and y
+            new TrcPose2D(-105.95, 43.29, 90.0); // TODO: Determine x and y
 
         public static final double allianceAreaWidth            = 182.11;   // Distance from alliance wall to center of trench.
         public static final double[] fieldLengthTriggerPoints   = new double[]
@@ -304,6 +301,185 @@ public class RobotParams
             -halfFieldWidth - HUB_WIDTH/2.0, -halfFieldWidth, -halfFieldWidth + HUB_WIDTH/2.0
         };
 
+        // public static final TrcPose2D[] blueDoubleSweepMainDepotPath = new TrcPose2D[] {
+        //     new TrcPose2D(-295.80, 281.61, 90.00),
+        //     new TrcPose2D(-261.80, 301.61, 90.00),
+        //     new TrcPose2D(-166.80, 301.61, 90.00),
+        //     new TrcPose2D(-285.80, 301.61, 0.00),
+        //     new TrcPose2D(-292.80, 143.73, 0.00),
+        //     new TrcPose2D(-292.80, 257.41, 0.00),
+        //     new TrcPose2D(-187.68, 268.61, 90.00),
+        //     new TrcPose2D(-139.89, 246.89, 180.00),
+        //     new TrcPose2D(-190.62, 230.60, -90.00),
+        //     new TrcPose2D(-210.61, 227.88, -45.00),
+        //     new TrcPose2D(-210.61, 60.82, -45.00)
+        // };
+
+        // public static final TrcPose2D[] blueDoubleSweepMainOutpostPath = new TrcPose2D[] {
+        //     new TrcPose2D(-21.89, 281.61, -90.00),
+        //     new TrcPose2D(-55.89, 301.61, -90.00),
+        //     new TrcPose2D(-150.89, 301.61, -90.00),
+        //     new TrcPose2D(-31.89, 301.61, 0.00),
+        //     new TrcPose2D(-24.89, 143.73, 0.00),
+        //     new TrcPose2D(-24.89, 257.41, 0.00),
+        //     new TrcPose2D(-130.01, 268.61, -90.00),
+        //     new TrcPose2D(-177.80, 246.89, -180.00),
+        //     new TrcPose2D(-137.07, 230.60, 90.00),
+        //     new TrcPose2D(-107.08, 227.88, 135.00),
+        //     new TrcPose2D(-107.08, 119.82, 135.00)
+        // };
+
+        // public static final TrcPose2D[] blueDoubleSweepDepotTrenchPath = new TrcPose2D[] {
+        //     new TrcPose2D(-295.80, 281.61, 90.00),
+        //     new TrcPose2D(-261.80, 301.61, 90.00),
+        //     new TrcPose2D(-166.80, 301.61, 90.00),
+        //     new TrcPose2D(-285.80, 301.61, 0.00),
+        //     new TrcPose2D(-292.80, 147.73, 0.00),
+        //     new TrcPose2D(-292.80, 257.41, 0.00),
+        //     new TrcPose2D(-187.68, 268.61, 90.00),
+        //     new TrcPose2D(-139.89, 246.89, 180.00),
+        //     new TrcPose2D(-186.60, 232.34, -90.00),
+        //     new TrcPose2D(-235.47, 227.34, -90.00),
+        //     new TrcPose2D(-275.60, 270.81, -90.00),
+        //     new TrcPose2D(-290.20, 250.01, 0.00),
+        //     new TrcPose2D(-293.52, 147.73, 0.00)
+        // };
+
+        // public static final TrcPose2D[] blueDoubleSweepOutpostTrenchPath = new TrcPose2D[] {
+        //     new TrcPose2D(-21.89, 281.61, -90.00),
+        //     new TrcPose2D(-55.89, 301.61, -90.00),
+        //     new TrcPose2D(-150.89, 301.61, -90.00),
+        //     new TrcPose2D(-31.89, 301.61, 0.00),
+        //     new TrcPose2D(-24.89, 143.73, 0.00),
+        //     new TrcPose2D(-24.89, 257.41, 0.00),
+        //     new TrcPose2D(-130.01, 268.61, -90.00),
+        //     new TrcPose2D(-177.80, 246.89, -180.00),
+        //     new TrcPose2D(-131.09, 232.34, 90.00),
+        //     new TrcPose2D(-82.22, 227.34, 90.00),
+        //     new TrcPose2D(-42.09, 275.81, 90.00),
+        //     new TrcPose2D(-27.49, 250.01, 0.00),
+        //     new TrcPose2D(-24.17, 123.46, 0.00)
+        // };
+
+        public static final TrcPose2D[] blueDoubleSweepDepotTrenchPath = new TrcPose2D[] {
+            new TrcPose2D(-295.80, 281.61, 90.00),
+            new TrcPose2D(-261.80, 311.61, 110.00),
+            new TrcPose2D(-166.80, 311.61, 110.00),
+            new TrcPose2D(-278.80, 301.61, 0.00),
+            new TrcPose2D(-284.80, 151.73, 0.00),
+            new TrcPose2D(-293.58, 233.32, 0.00),
+            new TrcPose2D(-276.59, 231.80, 90.00),
+            new TrcPose2D(-184.12, 231.80, 90.00),
+            new TrcPose2D(-139.05, 251.24, -90.00),
+            new TrcPose2D(-182.93, 274.59, -90.00),
+            new TrcPose2D(-253.39, 280.56, -90.00),
+            new TrcPose2D(-280.84, 267.53, 0.00),
+            new TrcPose2D(-290.29, 151.73, 0.00)
+        };
+
+        public static final TrcPose2D[] blueDoubleSweepOutpostTrenchPath = new TrcPose2D[] {
+            new TrcPose2D(-21.89, 281.61, -90.00),
+            new TrcPose2D(-55.89, 311.61, -110.00),
+            new TrcPose2D(-150.89, 311.61, -110.00),
+            new TrcPose2D(-38.89, 301.61, 0.00),
+            new TrcPose2D(-32.89, 151.73, 0.00),
+            new TrcPose2D(-24.11, 233.32, 0.00),
+            new TrcPose2D(-41.10, 231.80, -90.00),
+            new TrcPose2D(-133.57, 231.80, -90.00),
+            new TrcPose2D(-178.64, 251.24, 90.00),
+            new TrcPose2D(-134.76, 274.59, 90.00),
+            new TrcPose2D(-64.30, 280.56, 90.00),
+            new TrcPose2D(-36.85, 267.53, 0.00),
+            new TrcPose2D(-27.40, 151.73, 0.00)
+        };
+
+        // public static final TrcPose2D[] blueDoubleSweepDepotShallowPath = new TrcPose2D[] {
+        //     new TrcPose2D(-295.01, 265.24, 90.00),
+        //     new TrcPose2D(-252.57, 279.38, 110.00),
+        //     new TrcPose2D(-172.06, 279.38, 110.00),
+        //     new TrcPose2D(-158.46, 237.42, -90.00),
+        //     new TrcPose2D(-250.94, 234.60, -90.00),
+        //     new TrcPose2D(-287.01, 255.22, 0.00),
+        //     new TrcPose2D(-291.01, 141.75, 0.00)
+        // };
+
+        // public static final TrcPose2D[] blueDoubleSweepOutpostShallowPath = new TrcPose2D[] {
+        //     new TrcPose2D(-22.68, 265.24, -90.00),
+        //     new TrcPose2D(-65.12, 279.38, -110.00),
+        //     new TrcPose2D(-145.63, 279.38, -110.00),
+        //     new TrcPose2D(-159.23, 237.42, 90.00),
+        //     new TrcPose2D(-66.75, 234.60, 90.00),
+        //     new TrcPose2D(-30.68, 255.22, 0.00),
+        //     new TrcPose2D(-26.68, 141.75, 0.00)
+        // };
+
+        public static final TrcPose2D[] blueDoubleSweepDepotShallowPath = new TrcPose2D[] {
+            new TrcPose2D(-298.27, 226.62, 90.00),
+            new TrcPose2D(-275.42, 302.23, 74.48),
+            new TrcPose2D(-242.78, 337.59, 74.00),
+            new TrcPose2D(-194.37, 343.57, 178.64),
+            new TrcPose2D(-230.81, 288.09, -124.22),
+            new TrcPose2D(-287.01, 255.22, 0.25),
+            new TrcPose2D(-291.01, 141.75, 0.00)
+        };
+
+        public static final TrcPose2D[] blueDoubleSweepOutpostShallowPath = new TrcPose2D[] {
+            new TrcPose2D(-19.42, 226.62, -90.00),
+            new TrcPose2D(-42.27, 302.23, -74.48),
+            new TrcPose2D(-74.91, 337.59, -74.00),
+            new TrcPose2D(-123.32, 343.57, -178.64),
+            new TrcPose2D(-86.88, 288.09, 124.22),
+            new TrcPose2D(-30.68, 255.22, -0.25),
+            new TrcPose2D(-26.68, 141.75, 0.00)
+        };
+
+        // public static final TrcPose2D[] blueDoubleSweepDepotBumpPath = new TrcPose2D[] {
+        //     new TrcPose2D(-295.80, 281.61, 90.00),
+        //     new TrcPose2D(-261.80, 301.61, 90.00),
+        //     new TrcPose2D(-166.80, 301.61, 90.00),
+        //     new TrcPose2D(-210.09, 225.17, 135.00),
+        //     new TrcPose2D(-210.09, 85.10, 135.00),
+        //     new TrcPose2D(-297.12, 85.10, 0.00),
+        //     new TrcPose2D(-297.12, 242.00, 0.00),
+        //     new TrcPose2D(-206.15, 275.07, 90.00),
+        //     new TrcPose2D(-147.50, 275.98, 180.00),
+        //     new TrcPose2D(-185.51, 229.51, -135.00),
+        //     new TrcPose2D(-210.09, 226.26, -135.00),
+        //     new TrcPose2D(-210.06, 87.94, -135.00)
+        // };
+
+        public static final TrcPose2D[] blueDoubleSweepDepotBumpPath = new TrcPose2D[] {
+            new TrcPose2D(-295.80, 281.61, 90.00),
+            new TrcPose2D(-261.80, 311.61, 110.00),
+            new TrcPose2D(-166.80, 311.61, 110.00),
+            new TrcPose2D(-278.80, 301.61, 0.00),
+            new TrcPose2D(-284.80, 151.73, 0.00),
+            new TrcPose2D(-287.58, 233.32, 0.00),
+            new TrcPose2D(-249.59, 235.80, 90.00),
+            new TrcPose2D(-164.12, 235.80, 90.00),
+            new TrcPose2D(-119.05, 251.24, 0.00),
+            new TrcPose2D(-162.93, 274.59, -90.00),
+            new TrcPose2D(-225.93, 274.59, -90.00),
+            new TrcPose2D(-225.18, 231.14, -45.00),
+            new TrcPose2D(-225.09, 75.70, -45.00)
+        };
+
+        public static final TrcPose2D[] blueDoubleSweepOutpostBumpPath = new TrcPose2D[] {
+            new TrcPose2D(-21.89, 281.61, -90.00),
+            new TrcPose2D(-55.89, 311.61, -110.00),
+            new TrcPose2D(-150.89, 311.61, -110.00),
+            new TrcPose2D(-38.89, 301.61, 0.00),
+            new TrcPose2D(-32.89, 151.73, 0.00),
+            new TrcPose2D(-30.11, 233.32, 0.00),
+            new TrcPose2D(-68.10, 235.80, -90.00),
+            new TrcPose2D(-153.57, 235.80, -90.00),
+            new TrcPose2D(-198.64, 251.24, 0.00),
+            new TrcPose2D(-154.76, 274.59, 90.00),
+            new TrcPose2D(-91.76, 274.59, 90.00),
+            new TrcPose2D(-92.51, 231.14, 45.00),
+            new TrcPose2D(-92.60, 75.70, 45.00)
+        };
+        
     }   //class Game
 
 }   //class RobotParams

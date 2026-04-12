@@ -23,11 +23,15 @@
 package teamcode;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcMatchInfo;
 import frclib.driverio.FrcUserChoices;
 import teamcode.autocommands.CmdRebuiltAuto;
+import teamcode.autocommands.CmdDcmpAuto;
+import teamcode.autocommands.CmdDisruptAuto;
 import teamcode.autotasks.TaskAutoClimb;
+import teamcode.autotasks.TaskAutoClimb.ClimbSide;
 import trclib.command.CmdPidDrive;
 import trclib.command.CmdPurePursuitDrive;
 import trclib.command.CmdTimedDrive;
@@ -51,6 +55,8 @@ public class FrcAuto implements TrcRobot.RobotMode
     public enum AutoStrategy
     {
         REBUILT_AUTO,
+        DCMP_AUTO,
+        DISRUPT_AUTO,
         PP_DRIVE,
         PID_DRIVE,
         TIMED_DRIVE,
@@ -87,6 +93,22 @@ public class FrcAuto implements TrcRobot.RobotMode
         PASS_BACK
     }   //enum PassBack
 
+    // Specifies what type of auto we want to run
+    public enum Type
+    {
+        TRENCH,
+        BUMP,
+        CENTER
+    }   //enum Type
+
+    // Specifies how far we want to sweep in the neutral zone
+    public enum SweepDistance
+    {
+        STANDARD,
+        PUSH_FUEL,
+        SHALLOW_SWEEP
+    }   //enum SweepDistance
+
     /**
      * This class encapsulates all user choices for autonomous mode from the smart dashboard.
      *
@@ -109,6 +131,30 @@ public class FrcAuto implements TrcRobot.RobotMode
         private final FrcChoiceMenu<MoveTo> moveToChoiceMenu;
         private final FrcChoiceMenu<PassBack> passBackChoiceMenu;
         private final FrcChoiceMenu<TaskAutoClimb.ClimbSide> climbSideChoiceMenu;
+        private final FrcChoiceMenu<Type> typeChoiceMenu;
+        private final FrcChoiceMenu<SweepDistance> sweepDistanceChoiceMenu;
+
+        public Alliance alliance;
+        public AutoStrategy strategy;
+        public AutoStartPos startPos;
+        public double startDelay;
+        public boolean depotPickup;
+        public boolean outpostPickup;
+        public boolean neutralZonePickup;
+        public MoveTo moveTo;
+        public PassBack passback;
+        public boolean doClimb;
+        public ClimbSide climbSide;
+        public double neutralZoneCycles;
+        public Type autoType;
+        public SweepDistance sweepDistance;
+
+        public String pathFile;
+        public double xDriveDistance;
+        public double yDriveDistance;
+        public double turnAngle;
+        public double driveTime;
+        public double drivePower;
 
         public AutoChoices()
         {
@@ -122,6 +168,8 @@ public class FrcAuto implements TrcRobot.RobotMode
             moveToChoiceMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_MOVE_TO);
             passBackChoiceMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_PASS_BACK);
             climbSideChoiceMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_CLIMB_SIDE);
+            typeChoiceMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_TYPE);
+            sweepDistanceChoiceMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_AUTO_SWEEP_DISTANCE);
             //
             // Populate autonomous mode choice menus.
             //
@@ -134,7 +182,9 @@ public class FrcAuto implements TrcRobot.RobotMode
             }
             else
             {
-                autoStrategyMenu.addChoice("Rebuilt Auto", AutoStrategy.REBUILT_AUTO, true, false);
+                autoStrategyMenu.addChoice("Rebuilt Auto", AutoStrategy.REBUILT_AUTO, false, false);
+                autoStrategyMenu.addChoice("DCMP Auto", AutoStrategy.DCMP_AUTO, true, false);
+                autoStrategyMenu.addChoice("Disrupt Auto", AutoStrategy.DISRUPT_AUTO);
                 autoStrategyMenu.addChoice("Pure Pursuit Drive", AutoStrategy.PP_DRIVE);
                 autoStrategyMenu.addChoice("PID Drive", AutoStrategy.PID_DRIVE);
                 autoStrategyMenu.addChoice("Timed Drive", AutoStrategy.TIMED_DRIVE);
@@ -155,6 +205,14 @@ public class FrcAuto implements TrcRobot.RobotMode
 
             climbSideChoiceMenu.addChoice("Depot Side", TaskAutoClimb.ClimbSide.DEPOT, true, false);
             climbSideChoiceMenu.addChoice("Outpost Side", TaskAutoClimb.ClimbSide.OUTPOST, false, true);
+
+            typeChoiceMenu.addChoice("Trench Auto", Type.TRENCH, true, false);
+            typeChoiceMenu.addChoice("Bump Auto", Type.BUMP, false, false);
+            typeChoiceMenu.addChoice("Center Auto", Type.CENTER, false, true);
+
+            sweepDistanceChoiceMenu.addChoice("Standard", SweepDistance.STANDARD, false, true);
+            sweepDistanceChoiceMenu.addChoice("Shallow Sweep", SweepDistance.SHALLOW_SWEEP, false, false);
+            sweepDistanceChoiceMenu.addChoice("Push Fuel", SweepDistance.PUSH_FUEL, true, false);
             //
             // Initialize dashboard with default choice values.
             //
@@ -170,6 +228,8 @@ public class FrcAuto implements TrcRobot.RobotMode
             userChoices.addChoiceMenu(Dashboard.DBKEY_AUTO_PASS_BACK, passBackChoiceMenu);
             userChoices.addBoolean(Dashboard.DBKEY_AUTO_CLIMB, false);
             userChoices.addNumber(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_CYCLES, 0.0);
+            userChoices.addChoiceMenu(Dashboard.DBKEY_AUTO_TYPE, typeChoiceMenu);
+            userChoices.addChoiceMenu(Dashboard.DBKEY_AUTO_SWEEP_DISTANCE, sweepDistanceChoiceMenu);
 
             userChoices.addString(Dashboard.DBKEY_AUTO_PATHFILE, "DrivePath.csv");
             userChoices.addNumber(Dashboard.DBKEY_AUTO_X_DRIVE_DISTANCE, 0.0);      // in feet
@@ -183,121 +243,160 @@ public class FrcAuto implements TrcRobot.RobotMode
         // Getters for autonomous mode choices.
         //
 
-        public DriverStation.Alliance getAlliance()
+        // public DriverStation.Alliance getAlliance()
+        // {
+        //     // Get alliance info from FMS if one is connected. If not, get it from dashboard.
+        //     FrcMatchInfo matchInfo = FrcMatchInfo.getMatchInfo();
+        //     return matchInfo.eventName != null? matchInfo.alliance: allianceMenu.getCurrentChoiceObject();
+        // }   //getAlliance
+
+        // public AutoStrategy getStrategy()
+        // {
+        //     return autoStrategyMenu.getCurrentChoiceObject();
+        // }   //getStrategy
+
+        // public AutoStartPos getStartPos()
+        // {
+        //     return autoStartPosMenu.getCurrentChoiceObject();
+        // }   //getStartPos
+
+        // public double getStartDelay()
+        // {
+        //     return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_START_DELAY);
+        // }   //getStartDelay
+
+        // public boolean depotPickup()
+        // {
+        //     return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_DEPOT_PICKUP);
+        // }   //depotPickup
+
+        // public boolean outpostPickup()
+        // {
+        //     return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_OUTPOST_PICKUP);
+        // }   //outpostPickup
+
+        // public boolean neutralZonePickup()
+        // {
+        //     return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_PICKUP);
+        // }   //neutralZonePickup
+
+        // public MoveTo getMoveTo()
+        // {
+        //     return moveToChoiceMenu.getCurrentChoiceObject();
+        // }   //getMoveTo
+
+        // public PassBack getPassBack()
+        // {
+        //     return passBackChoiceMenu.getCurrentChoiceObject();
+        // }   //getPassBack
+
+        // public boolean getClimb()
+        // {
+        //     return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_CLIMB);
+        // }   //getClimb
+
+        // public TaskAutoClimb.ClimbSide getClimbSide()
+        // {
+        //     return climbSideChoiceMenu.getCurrentChoiceObject();
+        // }   //getClimbSide
+
+        // public double getNeutralZoneCycles()
+        // {
+        //     return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_CYCLES);
+        // }   //getNeutralZoneCycles
+
+        // public Type getType()
+        // {
+        //     return typeChoiceMenu.getCurrentChoiceObject();
+        // }   //getType
+
+        // public SweepDistance getSweepDistance()
+        // {
+        //     return sweepDistanceChoiceMenu.getCurrentChoiceObject();
+        // }   //getSweepDistance
+
+        // public String getPathFile()
+        // {
+        //     return userChoices.getUserString(Dashboard.DBKEY_AUTO_PATHFILE);
+        // }   //getPathFile
+
+        // public double getXDriveDistance()
+        // {
+        //     return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_X_DRIVE_DISTANCE);
+        // }   //getXDriveDistance
+
+        // public double getYDriveDistance()
+        // {
+        //     return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_Y_DRIVE_DISTANCE);
+        // }   //getYDriveDistance
+
+        // public double getTurnAngle()
+        // {
+        //     return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_TURN_ANGLE);
+        // }   //getTurnAngle
+
+        // public double getDriveTime()
+        // {
+        //     return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_DRIVE_TIME);
+        // }   //getDriveTime
+
+        // public double getDrivePower()
+        // {
+        //     return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_DRIVE_POWER);
+        // }   //getDrivePower
+
+        public void fetchChoices()
         {
             // Get alliance info from FMS if one is connected. If not, get it from dashboard.
             FrcMatchInfo matchInfo = FrcMatchInfo.getMatchInfo();
-            return matchInfo.eventName != null? matchInfo.alliance: allianceMenu.getCurrentChoiceObject();
-        }   //getAlliance
+            alliance = matchInfo.eventName != null? matchInfo.alliance: allianceMenu.getCurrentChoiceObject();
+            strategy = autoStrategyMenu.getCurrentChoiceObject();
+            startPos = autoStartPosMenu.getCurrentChoiceObject();
+            startDelay = userChoices.getUserNumber(Dashboard.DBKEY_AUTO_START_DELAY);
+            depotPickup = userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_DEPOT_PICKUP);
+            outpostPickup = userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_OUTPOST_PICKUP);
+            neutralZonePickup = userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_PICKUP);
+            moveTo = moveToChoiceMenu.getCurrentChoiceObject();
+            passback = passBackChoiceMenu.getCurrentChoiceObject();
+            doClimb = userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_CLIMB);
+            climbSide = climbSideChoiceMenu.getCurrentChoiceObject();
+            neutralZoneCycles = userChoices.getUserNumber(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_CYCLES);
+            autoType = typeChoiceMenu.getCurrentChoiceObject();
+            sweepDistance = sweepDistanceChoiceMenu.getCurrentChoiceObject();
 
-        public AutoStrategy getStrategy()
-        {
-            return autoStrategyMenu.getCurrentChoiceObject();
-        }   //getStrategy
-
-        public AutoStartPos getStartPos()
-        {
-            return autoStartPosMenu.getCurrentChoiceObject();
-        }   //getStartPos
-
-        public double getStartDelay()
-        {
-            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_START_DELAY);
-        }   //getStartDelay
-
-        public boolean depotPickup()
-        {
-            return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_DEPOT_PICKUP);
-        }   //depotPickup
-
-        public boolean outpostPickup()
-        {
-            return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_OUTPOST_PICKUP);
-        }   //outpostPickup
-
-        public boolean neutralZonePickup()
-        {
-            return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_PICKUP);
-        }   //neutralZonePickup
-
-        public MoveTo getMoveTo()
-        {
-            return moveToChoiceMenu.getCurrentChoiceObject();
-        }   //getMoveTo
-
-        public PassBack getPassBack()
-        {
-            return passBackChoiceMenu.getCurrentChoiceObject();
-        }   //getPassBack
-
-        public boolean getClimb()
-        {
-            return userChoices.getUserBoolean(Dashboard.DBKEY_AUTO_CLIMB);
-        }   //getClimb
-
-        public TaskAutoClimb.ClimbSide getClimbSide()
-        {
-            return climbSideChoiceMenu.getCurrentChoiceObject();
-        }   //getClimbSide
-
-        public double getNeutralZoneCycles()
-        {
-            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_NEUTRAL_ZONE_CYCLES);
-        }   //getNeutralZoneCycles
-
-        public String getPathFile()
-        {
-            return userChoices.getUserString(Dashboard.DBKEY_AUTO_PATHFILE);
-        }   //getPathFile
-
-        public double getXDriveDistance()
-        {
-            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_X_DRIVE_DISTANCE);
-        }   //getXDriveDistance
-
-        public double getYDriveDistance()
-        {
-            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_Y_DRIVE_DISTANCE);
-        }   //getYDriveDistance
-
-        public double getTurnAngle()
-        {
-            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_TURN_ANGLE);
-        }   //getTurnAngle
-
-        public double getDriveTime()
-        {
-            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_DRIVE_TIME);
-        }   //getDriveTime
-
-        public double getDrivePower()
-        {
-            return userChoices.getUserNumber(Dashboard.DBKEY_AUTO_DRIVE_TIME);
-        }   //getDrivePower
+            pathFile = userChoices.getUserString(Dashboard.DBKEY_AUTO_PATHFILE);
+            xDriveDistance = userChoices.getUserNumber(Dashboard.DBKEY_AUTO_X_DRIVE_DISTANCE);
+            yDriveDistance = userChoices.getUserNumber(Dashboard.DBKEY_AUTO_Y_DRIVE_DISTANCE);
+            turnAngle = userChoices.getUserNumber(Dashboard.DBKEY_AUTO_TURN_ANGLE);
+            driveTime = userChoices.getUserNumber(Dashboard.DBKEY_AUTO_DRIVE_TIME);
+            drivePower = userChoices.getUserNumber(Dashboard.DBKEY_AUTO_DRIVE_POWER);
+        }   //fetchChoices
 
         @Override
         public String toString()
         {
-            return "alliance=\"" + getAlliance() + "\" " +
-                   "strategy=\"" + getStrategy() + "\" " +
-                   "startPos=\"" + getStartPos() + "\" " +
-                   "startDelay=" + getStartDelay() + " sec " +
+            return "alliance=\"" + alliance + "\" " +
+                   "strategy=\"" + strategy + "\" " +
+                   "startPos=\"" + startPos + "\" " +
+                   "startDelay=" + startDelay + " sec " +
 
-                   "depotPickup=\"" + depotPickup() + "\" " +
-                   "outpostPickup=\"" + outpostPickup() + "\" " +
-                   "neutralZonePickup=\"" + neutralZonePickup() + "\" " +
-                   "moveTo=\"" + getMoveTo() + "\" " +
-                   "passBack=\"" + getPassBack() + "\" " +
-                   "climb=\"" + getClimb() + "\" " +
-                   "climbSide=\"" + getClimbSide() + "\" " +
-                   "neutralZoneCycles=\"" + getNeutralZoneCycles() + "\" " +
+                   "depotPickup=\"" + depotPickup + "\" " +
+                   "outpostPickup=\"" + outpostPickup + "\" " +
+                   "neutralZonePickup=\"" + neutralZonePickup + "\" " +
+                   "moveTo=\"" + moveTo + "\" " +
+                   "passBack=\"" + passback + "\" " +
+                   "climb=\"" + doClimb + "\" " +
+                   "climbSide=\"" + climbSide + "\" " +
+                   "neutralZoneCycles=\"" + neutralZoneCycles + "\" " +
+                   "autoType=\"" + autoType + "\" " +
+                   "sweepDistance=\"" + sweepDistance + "\" " +
 
-                   "pathFile=\"" + getPathFile() + "\" " +
-                   "xDistance=" + getXDriveDistance() + " ft " +
-                   "yDistance=" + getYDriveDistance() + " ft " +
-                   "turnDegrees=" + getTurnAngle() + " deg " +
-                   "driveTime=" + getDriveTime() + " sec " +
-                   "drivePower=" + getDrivePower() + "\" ";
+                   "pathFile=\"" + pathFile + "\" " +
+                   "xDistance=" + xDriveDistance + " ft " +
+                   "yDistance=" + yDriveDistance + " ft " +
+                   "turnDegrees=" + turnAngle + " deg " +
+                   "driveTime=" + driveTime + " sec " +
+                   "drivePower=" + drivePower + "\" ";
         }   //toString
 
     }   //class AutoChoices
@@ -308,6 +407,9 @@ public class FrcAuto implements TrcRobot.RobotMode
 
     public static final AutoChoices autoChoices = new AutoChoices();
     private final Robot robot;
+    private final TrcRobot.RobotCommand rebuiltAuto;
+    private final TrcRobot.RobotCommand dcmpAuto;
+    private final TrcRobot.RobotCommand disruptAuto;
     private TrcRobot.RobotCommand autoCommand;
 
     /**
@@ -321,6 +423,9 @@ public class FrcAuto implements TrcRobot.RobotMode
         // Create and initialize global objects.
         //
         this.robot = robot;
+        rebuiltAuto = new CmdRebuiltAuto(robot, autoChoices);
+        dcmpAuto = new CmdDcmpAuto(robot, autoChoices);
+        disruptAuto = new CmdDisruptAuto(robot, autoChoices);
     }   //FrcAuto
 
     /**
@@ -336,14 +441,6 @@ public class FrcAuto implements TrcRobot.RobotMode
     /**
      * This method cancels the autonomous command if one is running.
      */
-    public void cancel()
-    {
-        if (autoCommand != null)
-        {
-            autoCommand.cancel();
-            autoCommand = null;
-        }
-    }   //cancel
 
     //
     // Implements TrcRobot.RunMode.
@@ -362,19 +459,28 @@ public class FrcAuto implements TrcRobot.RobotMode
     public void startMode(RunMode prevMode, RunMode nextMode)
     {
         //
-        // Retrieve Auto choices.
-        //
-        robot.globalTracer.logInfo(moduleName, "MatchInfo", FrcMatchInfo.getMatchInfo().toString());
-        robot.globalTracer.logInfo(moduleName, "AutoChoices", autoChoices.toString());
-        //
         // Create autonomous command.
         //
-        switch (autoChoices.getStrategy())
+        switch (autoChoices.strategy)
         {
             case REBUILT_AUTO:
                 if (robot.robotBase != null)
                 {
-                    autoCommand = new CmdRebuiltAuto(robot, autoChoices);
+                    autoCommand = rebuiltAuto;
+                }
+                break;
+            
+            case DCMP_AUTO:
+                if (robot.robotBase != null)
+                {
+                    autoCommand = dcmpAuto;
+                }
+                break;
+            
+            case DISRUPT_AUTO:
+                if (robot.robotBase != null)
+                {
+                    autoCommand = disruptAuto;
                 }
                 break;
 
@@ -385,12 +491,12 @@ public class FrcAuto implements TrcRobot.RobotMode
                         robot.robotBase.driveBase, robot.robotInfo.baseParams.xDrivePidCoeffs,
                         robot.robotInfo.baseParams.yDrivePidCoeffs, robot.robotInfo.baseParams.turnPidCoeffs,
                         robot.robotInfo.baseParams.velPidCoeffs);
-                    ((CmdPurePursuitDrive) autoCommand).start(
+                    ((CmdPurePursuitDrive) autoCommand).startPath(
                         0.0, false,
                         robot.robotInfo.baseParams.profiledMaxDriveVelocity,
                         robot.robotInfo.baseParams.profiledMaxDriveAcceleration,
                         robot.robotInfo.baseParams.profiledMaxDriveDeceleration,
-                        RobotParams.Robot.teamFolderPath + "/" + autoChoices.getPathFile(), false);
+                        RobotParams.Robot.teamFolderPath + "/" + autoChoices.pathFile, false);
                 }
                 break;
 
@@ -398,11 +504,11 @@ public class FrcAuto implements TrcRobot.RobotMode
                 if (robot.robotBase != null)
                 {
                     autoCommand = new CmdPidDrive(robot.robotBase.driveBase, robot.robotBase.pidDrive);
-                    ((CmdPidDrive) autoCommand).start(
-                        autoChoices.getStartDelay(), autoChoices.getDrivePower(), null,
-                        new TrcPose2D(autoChoices.getXDriveDistance()*12.0,
-                                      autoChoices.getYDriveDistance()*12.0,
-                                      autoChoices.getTurnAngle()));
+                    ((CmdPidDrive) autoCommand).startPath(
+                        autoChoices.startDelay, autoChoices.drivePower, null,
+                        new TrcPose2D(autoChoices.xDriveDistance*12.0,
+                                      autoChoices.yDriveDistance*12.0,
+                                      autoChoices.turnAngle));
                 }
                 break;
 
@@ -410,8 +516,8 @@ public class FrcAuto implements TrcRobot.RobotMode
                 if (robot.robotBase != null)
                 {
                     autoCommand = new CmdTimedDrive(
-                        robot.robotBase.driveBase, autoChoices.getStartDelay(), autoChoices.getDriveTime(), 0.0,
-                        autoChoices.getDrivePower(), 0.0);
+                        robot.robotBase.driveBase, autoChoices.startDelay, autoChoices.driveTime, 0.0,
+                        autoChoices.drivePower, 0.0);
                 }
                 break;
 
@@ -419,7 +525,14 @@ public class FrcAuto implements TrcRobot.RobotMode
             case DO_NOTHING:
             default:
                 autoCommand = null;
+                robot.globalTracer.logInfo(moduleName, "MatchInfo", FrcMatchInfo.getMatchInfo().toString());
+                robot.globalTracer.logInfo(moduleName, "AutoChoices", autoChoices.toString());
                 break;
+        }
+
+        if (autoCommand != null)
+        {
+            autoCommand.start();
         }
     }   //startMode
 

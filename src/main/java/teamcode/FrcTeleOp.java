@@ -22,19 +22,22 @@
 
 package teamcode;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcXboxController;
+import teamcode.autotasks.TaskAutoClimb.ClimbSide;
 import teamcode.subsystems.Climber;
 import teamcode.subsystems.Shooter;
+import trclib.controller.TrcPidController;
+import trclib.dataprocessor.TrcUtil;
+import trclib.dataprocessor.TrcWarpSpace;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
 import trclib.drivebase.TrcSwerveDrive;
 import trclib.driverio.TrcGameController.DriveMode;
 import trclib.robotcore.TrcRobot;
 import trclib.robotcore.TrcRobot.RunMode;
-import trclib.sensor.TrcTriggerThresholdZones;
-import trclib.sensor.TrcTrigger.TriggerMode;
-import trclib.timer.TrcTimer;
 
 /**
  * This class implements the code to run in TeleOp Mode.
@@ -45,7 +48,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     protected static final boolean traceButtonEvents = true;
 
     public static final double DEF_DRIVE_NORMAL_SCALE = 1.0;
-    public static final double DEF_DRIVE_SLOW_SCALE = 0.15;
+    public static final double DEF_DRIVE_SLOW_SCALE = 0.2;
     public static final double DEF_TURN_NORMAL_SCALE = 0.75;
     public static final double DEF_TURN_SLOW_SCALE = 0.2;
     //
@@ -56,7 +59,6 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     private final FrcChoiceMenu<DriveOrientation> driveOrientationMenu;
     private double driveSpeedScale;
     private double turnSpeedScale;
-    private TrcTriggerThresholdZones shiftsTrigger;
     private boolean controlsEnabled = false;
     protected boolean driverAltFunc = false;
     protected boolean operatorAltFunc = false;
@@ -64,6 +66,15 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     private double prevPanPower = 0.0;
     private Double prevTiltPower = 0.0;
     private double prevClimbPower = 0.0;
+    // Locked heading
+    private final TrcPidController turnPidCtrl;
+    private Double lockedHeading;
+    // Shift tracking.
+    private char allianceInactiveFirst;
+    private Alliance myAlliance;
+    private int shiftIndex;
+    private Alliance shiftAlliance;
+    private boolean rumbling;
 
     /**
      * Constructor: Create an instance of the object.
@@ -92,12 +103,9 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         turnSpeedScale = robot.dashboard.getNumber(
             Dashboard.DBKEY_TELEOP_TURN_NORMAL_SCALE, DEF_TURN_NORMAL_SCALE);
 
-        if ((robot.driverController != null || robot.operatorController != null) &&
-             robot.dashboard.getBoolean(Dashboard.DBKEY_PREFERENCE_USE_RUMBLE, RobotParams.Preferences.useRumble))
-        {
-            shiftsTrigger = new TrcTriggerThresholdZones(
-                "ShiftsTrigger", TrcTimer::getModeElapsedTime, RobotParams.Game.SHIFTS);
-        }
+        turnPidCtrl = robot.robotBase != null && robot.robotBase.purePursuitDrive != null?
+            robot.robotBase.purePursuitDrive.getTurnPidCtrl(): null;
+        lockedHeading = null;
     }   //FrcTeleOp
 
     //
@@ -114,6 +122,12 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     @Override
     public void startMode(RunMode prevMode, RunMode nextMode)
     {
+        String gameMessage = DriverStation.getGameSpecificMessage();
+        allianceInactiveFirst = gameMessage != null && gameMessage.length() > 0 ? gameMessage.charAt(0) : ' ';
+        myAlliance = FrcAuto.autoChoices.alliance;
+        shiftIndex = 0;
+        shiftAlliance = null;
+        rumbling = false;
         //
         // Enabling joysticks.
         //
@@ -125,31 +139,6 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         {
             // Set robot to FIELD by default but don't change the heading.
             robot.setDriveOrientation(driveOrientationMenu.getCurrentChoiceObject(), false);
-        }
-
-        if (shiftsTrigger != null)
-        {
-            shiftsTrigger.enableTrigger(
-                TriggerMode.OnActive,
-                (ctxt, canceled) ->
-                {
-                    if (!canceled)
-                    {
-                        TrcTriggerThresholdZones.CallbackContext context =
-                            (TrcTriggerThresholdZones.CallbackContext) ctxt;
-
-                        robot.globalTracer.traceInfo(moduleName, "End of shift " + context.prevZone);
-                        if (robot.driverController != null)
-                        {
-                            robot.driverController.setRumble(RumbleType.kBothRumble, 1.0, 0.5);
-                        }
-
-                        if (robot.operatorController != null)
-                        {
-                            robot.operatorController.setRumble(RumbleType.kBothRumble, 1.0, 0.5);
-                        }
-                    }
-                });
         }
 
         if (RobotParams.Preferences.hybridMode)
@@ -175,10 +164,6 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     @Override
     public void stopMode(RunMode prevMode, RunMode nextMode)
     {
-        if (shiftsTrigger != null)
-        {
-            shiftsTrigger.disableTrigger();
-        }
         //
         // Disabling joysticks.
         //
@@ -215,35 +200,69 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                         boolean showDriveBaseStatus = robot.dashboard.getBoolean(
                             Dashboard.DBKEY_TELEOP_SHOW_DRIVE_POWER, RobotParams.Preferences.showDrivePower);
                         double[] driveInputs = robot.driverController.getDriveInputs(
-                            driveModeMenu.getCurrentChoiceObject(), true, driveSpeedScale, turnSpeedScale);
-
+                            driveModeMenu.getCurrentChoiceObject(), true, driveSpeedScale, turnSpeedScale,
+                            lockedHeading != null);
+                        // driveInputs have changed or rotating to lockedHeading.
                         if (driveInputs != null)
                         {
-                            // driveInputs have changed.
+                            double turnPower = driveInputs[2];
+
+                            if (turnPidCtrl != null && lockedHeading != null)
+                            {
+                                if (turnPower == 0.0)
+                                {
+                                    double currHeading = robot.robotBase.driveBase.getHeading();
+                                    double targetHeading = TrcWarpSpace.getOptimizedTarget(lockedHeading, currHeading, 360.0);
+
+                                    if (Math.abs(targetHeading - currHeading) >
+                                        robot.robotInfo.baseParams.turnPidTolerance)
+                                    {
+                                        turnPower = TrcUtil.clipRange(
+                                            turnPidCtrl.calculate(currHeading, lockedHeading),
+                                            robot.robotInfo.baseParams.turnPowerLimit);
+                                        robot.globalTracer.traceDebug(
+                                            moduleName,
+                                            "currHeading=%f, lockedHeading=%f, targetHeading=%f, turnPower=%f",
+                                            currHeading, lockedHeading, targetHeading, turnPower);
+                                    }
+                                    else
+                                    {
+                                        // lockedHeading target reached, cancel.
+                                        lockedHeading = null;
+                                    }
+                                }
+                                else
+                                {
+                                    // Driver is rotating the robot, cancel lockedHeading.
+                                    lockedHeading = null;
+                                }
+                            }
+
                             if (robot.robotBase.driveBase.supportsHolonomicDrive())
                             {
-                                double gyroAngle = robot.robotBase.driveBase.getDriveGyroAngle();
+                                Double gyroAngle = robot.robotBase.driveBase.getDriveGyroAngle();
+
                                 robot.robotBase.driveBase.holonomicDrive(
-                                    null, driveInputs[0], driveInputs[1], driveInputs[2], gyroAngle);
+                                    null, driveInputs[0], driveInputs[1], turnPower, gyroAngle);
                                 if (showDriveBaseStatus)
                                 {
                                     robot.dashboard.putString(
                                         Dashboard.DBKEY_TELEOP_DRIVE_POWER,
                                         String.format(
                                             "Holonomic: x=%.2f, y=%.2f, rot=%.2f, gyroAngle=%.2f",
-                                            driveInputs[0], driveInputs[1], driveInputs[2], gyroAngle));
+                                            driveInputs[0], driveInputs[1], turnPower, gyroAngle));
                                 }
                             }
                             else
                             {
-                                robot.robotBase.driveBase.arcadeDrive(driveInputs[1], driveInputs[2]);
+                                robot.robotBase.driveBase.arcadeDrive(driveInputs[1], turnPower);
                                 if (showDriveBaseStatus)
                                 {
                                     robot.dashboard.putString(
                                         Dashboard.DBKEY_TELEOP_DRIVE_POWER,
                                         String.format(
                                             "Arcade: x=%.2f, y=%.2f, rot=%.2f",
-                                            driveInputs[0], driveInputs[1], driveInputs[2]));
+                                            driveInputs[0], driveInputs[1], turnPower));
                                 }
                             }
                         }
@@ -335,16 +354,80 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                             prevClimbPower = climbPower;
                         }
                     }
-                }
 
-                // if (RobotParams.Preferences.useRumble && robot.driverController != null)
-                // {
-                //     if (!rumbling && elapsedTime > RobotParams.Game.TELEOP_PERIOD - RobotParams.Game.ENDGAME_THRESHOLD)
-                //     {
-                //         robot.driverController.setRumble(RumbleType.kBothRumble, 1.0, 0.5);
-                //         rumbling = true;
-                //     }
-                // }
+                    if(robot.autoShootTask != null)
+                    {
+                        double lTrigger =  robot.driverController.getLeftTrigger(); 
+
+                        if (lTrigger >= 0.5 && !robot.intakeSubsystem.isIntakeOn())
+                        {
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Enable Intake.");
+                            robot.intakeSubsystem.setIntakeEnabled(true);
+                        } 
+                        else if (lTrigger < 0.5 && robot.intakeSubsystem.isIntakeOn())
+                        {
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> Disable Intake.");
+                            robot.intakeSubsystem.setIntakeEnabled(false);
+                        }
+                    }
+                }
+            }
+
+            if (elapsedTime < RobotParams.Game.TELEOP_PERIOD)
+            {
+                if (elapsedTime < RobotParams.Game.SHIFTS[shiftIndex])
+                {
+                    boolean myShift = shiftAlliance == null || shiftAlliance == myAlliance;
+                    // While in the current shift, update dashboard with shift time left and which alliance is active.
+                    if (allianceInactiveFirst == ' ')
+                    {
+                        String gameMessage = DriverStation.getGameSpecificMessage();
+                        allianceInactiveFirst =
+                            gameMessage != null && gameMessage.length() > 0 ? gameMessage.charAt(0) : ' ';
+                    }
+
+                    double shiftTimeLeft = RobotParams.Game.SHIFTS[shiftIndex] - elapsedTime;
+                    robot.dashboard.putString(
+                        Dashboard.DBKEY_TELEOP_SHIFT_TIME_LEFT,
+                        String.format("%s: %.3f", shiftIndex == 5? "EndGame": shiftIndex, shiftTimeLeft));
+                    robot.dashboard.putBoolean(
+                        Dashboard.DBKEY_TELEOP_RED_SHIFT, myShift && myAlliance == Alliance.Red);
+                    robot.dashboard.putBoolean(
+                        Dashboard.DBKEY_TELEOP_BLUE_SHIFT, myShift && myAlliance == Alliance.Blue);
+
+                    if (!rumbling && !myShift && RobotParams.Preferences.useRumble && robot.driverController != null)
+                    {
+                        if (elapsedTime > RobotParams.Game.SHIFTS[shiftIndex] - RobotParams.Game.SHIFT_THRESHOLD)
+                        {
+                            robot.driverController.setRumble(RumbleType.kBothRumble, 1.0, 0.5);
+                            robot.operatorController.setRumble(RumbleType.kBothRumble, 1.0, 0.5);
+                            rumbling = true;
+                        }
+                    }
+                }
+                else if (elapsedTime >= RobotParams.Game.SHIFTS[shiftIndex])
+                {
+                    // Move to the next shift.
+                    rumbling = false;
+                    shiftIndex++;
+                    if (shiftIndex < RobotParams.Game.SHIFTS.length)
+                    {
+                        if (shiftIndex == RobotParams.Game.SHIFTS.length - 1)
+                        {
+                            // End Game period, both alliances are active.
+                            shiftAlliance = null;
+                        }
+                        if (shiftIndex % 2 == 0)
+                        {
+                            shiftAlliance = allianceInactiveFirst == 'R'? Alliance.Red: Alliance.Blue;
+                        }
+                        else
+                        {
+                            shiftAlliance = allianceInactiveFirst == 'R'? Alliance.Blue: Alliance.Red;
+                        }
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Shift[" + shiftIndex + "]: " + shiftAlliance);
+                    }
+                }
             }
         }
     }   //periodic
@@ -393,33 +476,13 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         {
             case A:
                 // Toggle Intake
-                if (pressed) 
+                if (pressed)
                 {
                     toggleIntake();
                 }
                 break;
 
             case B:
-                // Turtle mode.
-                if (pressed)
-                {
-                    if (driverAltFunc)
-                    {
-                        if (robot.robotBase != null)
-                        {
-                            ((TrcSwerveDrive) (robot.robotBase.driveBase)).setXMode(null);
-                            robot.globalTracer.traceInfo(moduleName, ">>>>> X Mode");
-                        }
-                    }
-                    else
-                    {
-                        robot.turtle();
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> Turtle Mode.");
-                    }
-                }
-                break;
-
-            case X:
                 // Toggle between field or robot oriented driving.
                 if (robot.robotBase != null && pressed)
                 {
@@ -427,13 +490,13 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                     {
                         if (robot.robotBase.driveBase.getDriveOrientation() != DriveOrientation.FIELD)
                         {
-                            robot.setDriveOrientation(DriveOrientation.FIELD, true);
                             robot.globalTracer.traceInfo(moduleName, ">>>>> Setting Mode to: Field");
+                            robot.setDriveOrientation(DriveOrientation.FIELD, true);
                         }
                         else
                         {
-                            robot.setDriveOrientation(DriveOrientation.ROBOT, false);
                             robot.globalTracer.traceInfo(moduleName, ">>>>> Setting Mode to: Robot");
+                            robot.setDriveOrientation(DriveOrientation.ROBOT, false);
                         }
                     }
                     else
@@ -443,6 +506,26 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                             moduleName,
                             ">>>>> Reset field forward heading (heading=" + robot.robotBase.driveBase.getHeading() +
                             ")");
+                    }
+                }
+                break;
+
+            case X:
+                // X-Mode, alt func = Turtle mode.
+                if (pressed)
+                {
+                    if (driverAltFunc)
+                    {
+                        if (robot.robotBase != null)
+                        {
+                            robot.globalTracer.traceInfo(moduleName, ">>>>> X Mode");
+                            ((TrcSwerveDrive) (robot.robotBase.driveBase)).setXMode(null);
+                        }
+                    }
+                    else
+                    {
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Turtle Mode.");
+                        robot.turtle();
                     }
                 }
                 break;
@@ -459,34 +542,60 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             case RightBumper:
                 if (pressed)
                 {
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> Slow Drive");
                     driveSpeedScale = robot.dashboard.getNumber(
                         Dashboard.DBKEY_TELEOP_DRIVE_SLOW_SCALE, DEF_DRIVE_SLOW_SCALE);
                     turnSpeedScale = robot.dashboard.getNumber(
                         Dashboard.DBKEY_TELEOP_TURN_SLOW_SCALE, DEF_TURN_SLOW_SCALE);
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> Slow Drive");
                 }
                 else
                 {
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> Normal Drive");
                     driveSpeedScale = robot.dashboard.getNumber(
                         Dashboard.DBKEY_TELEOP_DRIVE_NORMAL_SCALE, DEF_DRIVE_NORMAL_SCALE);
                     turnSpeedScale = robot.dashboard.getNumber(
                         Dashboard.DBKEY_TELEOP_TURN_NORMAL_SCALE, DEF_TURN_NORMAL_SCALE);
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> Normal Drive");
                 }
                 break;
 
             case DpadUp:
+                if (robot.robotBase != null && pressed)
+                {
+                    lockedHeading = FrcAuto.autoChoices.alliance == Alliance.Blue? 0.0: 180.0;
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> Lock heading to " + lockedHeading);
+                }
+                break;
+
             case DpadDown:
+                if (robot.robotBase != null && pressed)
+                {
+                    lockedHeading = FrcAuto.autoChoices.alliance == Alliance.Blue? 180.0: 0.0;
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> Lock heading to " + lockedHeading);
+                }
+                break;
+
             case DpadLeft:
+                if (robot.robotBase != null && pressed)
+                {
+                    lockedHeading = FrcAuto.autoChoices.alliance == Alliance.Blue? -90.0: 90.0;
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> Lock heading to " + lockedHeading);
+                }
+                break;
+
             case DpadRight:
+                if (robot.robotBase != null && pressed)
+                {
+                    lockedHeading = FrcAuto.autoChoices.alliance == Alliance.Blue? 90.0: -90.0;
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> Lock heading to " + lockedHeading);
+                }
                 break;
 
             case Back:
                 if (pressed)
                 {
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> Cancel All and Zero Calibrate");
                     robot.cancelAll();
                     robot.zeroCalibrate(null, null);
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> Cancel All and Zero Calibrate");
                 }
                 break;
 
@@ -537,6 +646,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 break;
 
             case B:
+                // Pre-Spin Turret and Shooters.
                 if (robot.shooterSubsystem != null && pressed)
                 {
                     if (robot.shooterSubsystem.isGoalTrackingEnabled())
@@ -546,13 +656,14 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                     }
                     else
                     {
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> Enable GoalTracking.");
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Enable GoalTracking with pre-spin.");
                         robot.shooterSubsystem.enableGoalTracking(true, false, true, false);
                     }
                 }
                 break;
 
             case X:
+                // Reverse all.
                 if (pressed)
                 {
                     if (robot.leftShooter != null)
@@ -571,6 +682,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                     {
                         robot.feeder.setPower(-0.5);
                     }
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> Unjam shooters.");
                 }
                 else
                 {
@@ -605,69 +717,81 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             case RightBumper:
                 if (pressed)
                 {
-                    robot.turtle();
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Turtle Mode.");
+                    robot.turtle();
                 }
                 break;
 
             case DpadUp:
                 if (robot.climber != null && pressed)
                 {
-                    robot.climber.setPosition(Climber.Params.CLIMBER_EXTEND_POS, true, Climber.Params.CLIMBER_POWER_LIMIT);
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> Extend climber.");
+                    if (operatorAltFunc)
+                    {
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Auto climbing on depot side.");
+                        robot.autoClimbTask.autoClimb(
+                            null, null, FrcAuto.autoChoices.alliance, ClimbSide.DEPOT, 0.0);
+                    }
+                    else
+                    {
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Extend climber.");
+                        robot.climber.setPosition(
+                            Climber.Params.CLIMBER_EXTEND_POS, true, Climber.Params.CLIMBER_POWER_LIMIT);
+                    }
                 }
                 break;
 
             case DpadDown:
                 if (robot.climber != null && pressed)
                 {
-                    robot.climber.setPosition(Climber.Params.CLIMBER_RETRACT_POS, true, Climber.Params.CLIMBER_POWER_LIMIT);
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> Retract climber.");
+                    if (operatorAltFunc)
+                    {
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Auto climbing on outpost side.");
+                        robot.autoClimbTask.autoClimb(
+                            null, null, FrcAuto.autoChoices.alliance, ClimbSide.OUTPOST, 0.0);
+                    }
+                    else
+                    {
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Retract climber.");
+                        robot.climber.setPosition(
+                            Climber.Params.CLIMBER_RETRACT_POS, true, Climber.Params.CLIMBER_POWER_LIMIT);
+                    }
                 }
                 break;
 
             case DpadLeft:
-                // if (robot.climber != null && pressed)
-                // {
-                //     robot.autoClimbTask.autoClimb(null, null, FrcAuto.autoChoices.getAlliance(), ClimbSide.OUTPOST, 0.0);
-                //     robot.globalTracer.traceInfo(moduleName, ">>>>> Auto climbing on outpost side.");
-                // }
+                // Reverse Feeder, alt func = forward Feeder
                 if (robot.feeder != null)
                 {
                     if (pressed)
                     {
                         double feederPower =
-                            operatorAltFunc? Shooter.Params.FEEDER_REVERSE_POWER: Shooter.Params.FEEDER_FORWARD_POWER;
-                        robot.feeder.setPower(feederPower);
+                            operatorAltFunc? Shooter.Params.FEEDER_FORWARD_POWER: Shooter.Params.FEEDER_REVERSE_POWER;
                         robot.globalTracer.traceInfo(moduleName, ">>>>> Set feeder power to " + feederPower);
+                        robot.feeder.setPower(feederPower);
                     }
                     else
                     {
-                        robot.feeder.cancel();
                         robot.globalTracer.traceInfo(moduleName, ">>>>> Stop feeder.");
+                        robot.feeder.cancel();
                     }
                 }
                 break;
 
             case DpadRight:
-                // if (robot.climber != null && pressed)
-                // {
-                //     robot.autoClimbTask.autoClimb(null, null, FrcAuto.autoChoices.getAlliance(), ClimbSide.DEPOT, 0.0);
-                //     robot.globalTracer.traceInfo(moduleName, ">>>>> Auto climbing on depot side.");
-                // }
+                // Reverse Transfers, alt func = forward Transfers
                 if (pressed)
                 {
                     if (robot.leftTransfer != null)
                     {
                         if (!operatorAltFunc)
                         {
-                            robot.leftTransfer.intake(Shooter.Params.TRANSFER_INTAKE_POWER);
                             robot.globalTracer.traceInfo(moduleName, ">>>>> Left Transfer intake.");
+                            robot.leftTransfer.intake(Shooter.Params.TRANSFER_INTAKE_POWER);
                         }
                         else
                         {
-                            robot.leftTransfer.eject(Shooter.Params.TRANSFER_EJECT_POWER);
                             robot.globalTracer.traceInfo(moduleName, ">>>>> Left Transfer eject.");
+                            robot.leftTransfer.eject(Shooter.Params.TRANSFER_EJECT_POWER);
                         }
                     }
 
@@ -675,13 +799,13 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                     {
                         if (!operatorAltFunc)
                         {
-                            robot.rightTransfer.intake(Shooter.Params.TRANSFER_INTAKE_POWER);
                             robot.globalTracer.traceInfo(moduleName, ">>>>> Right Transfer intake.");
+                            robot.rightTransfer.intake(Shooter.Params.TRANSFER_INTAKE_POWER);
                         }
                         else
                         {
-                            robot.rightTransfer.eject(Shooter.Params.TRANSFER_EJECT_POWER);
                             robot.globalTracer.traceInfo(moduleName, ">>>>> Right Transfer eject.");
+                            robot.rightTransfer.eject(Shooter.Params.TRANSFER_EJECT_POWER);
                         }
                     }
                 }
@@ -695,17 +819,17 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             case Back:
                 if (pressed)
                 {
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> Cancel All and Zero Calibrate");
                     robot.cancelAll();
                     robot.zeroCalibrate(null, null);
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> Cancel All and Zero Calibrate");
                 }
                 break;
 
             case Start:
                 if (pressed)
                 {
-                    robot.cancelAll();
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Cancel All");
+                    robot.cancelAll();
                 }
                 break;
 
@@ -718,6 +842,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     {
         if (robot.intakeSubsystem != null)
         {
+            robot.globalTracer.traceInfo(moduleName, ">>>>> Toggle Intake.");
             // setIntakeEnabled does trace logging, don't need to do it here.
             robot.intakeSubsystem.setIntakeEnabled(!robot.intakeSubsystem.isIntakeOn());
         }
@@ -739,7 +864,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 else
                 {
                     robot.globalTracer.traceInfo(moduleName, ">>>>> Stop Auto Shoot.");
-                    //.robot.intakeSubsystem.setIntakeEnabled(false);
+                    //robot.intakeSubsystem.setIntakeEnabled(false);
                     robot.autoShootTask.cancel();
                     robot.shooterSubsystem.resetState();
                 }
