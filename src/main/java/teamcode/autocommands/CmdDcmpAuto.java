@@ -294,8 +294,8 @@ double[] timestamps = new double[8];
                 case AUTO_CLIMB:
                     if (robot.climberSubsystem != null)
                     {
-                        double climbDelay =
-                            RobotParams.Game.AUTONOMOUS_PERIOD - TrcTimer.getModeElapsedTime() - 3.5;
+                        // double climbDelay =
+                        //     RobotParams.Game.AUTONOMOUS_PERIOD - TrcTimer.getModeElapsedTime() - 3.5;
                         robot.autoClimbTask.autoClimb(
                             null, event, autoChoices.alliance, ClimbSide.DEPOT, 0.0);
                         sm.waitForSingleEvent(event, State.DONE);
