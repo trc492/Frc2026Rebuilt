@@ -22,11 +22,18 @@
 
 package teamcode.vision;
 
+import java.io.IOException;
 import java.util.Comparator;
 
+import org.photonvision.simulation.PhotonCameraSim;
+import org.photonvision.simulation.SimCameraProperties;
+import org.photonvision.simulation.VisionSystemSim;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -45,6 +52,7 @@ import trclib.pathdrive.TrcPose3D;
 import trclib.robotcore.TrcDbgTrace;
 import trclib.vision.TrcVision;
 import trclib.vision.TrcVision.CameraInfo;
+import edu.wpi.first.wpilibj.RobotBase;
 
 public class Vision //implements TrcVision.ObjectInfo
 {
@@ -53,12 +61,13 @@ public class Vision //implements TrcVision.ObjectInfo
     // Rebuilt Left Shooter camera info
     public static final TrcVision.CameraInfo leftShooterCamInfo = new TrcVision.CameraInfo()
         .setCameraInfo("OV9782_LeftShooter", 640, 480)
-        .setCameraPose(Shooter.Params.LTURRET_X_OFFSET, Shooter.Params.LTURRET_Y_OFFSET, 19.26, 0.0, 25.0, 0.0);
-    // Rebuilt Intake camera info
+        .setCameraPose(Shooter.Params.LTURRET_X_OFFSET, Shooter.Params.LTURRET_Y_OFFSET, 19.26, 0.0, 25.0, 0.0)
+        .setCameraFOV(70.0,47.2);
+    // Rebuilt Right Shooter camera info
     public static final TrcVision.CameraInfo rightShooterCamInfo = new TrcVision.CameraInfo()
         .setCameraInfo("OV9782_RightShooter", 640, 480)
-        .setCameraPose(Shooter.Params.RTURRET_X_OFFSET, Shooter.Params.RTURRET_Y_OFFSET, 19.26, 0.0, 25.0, 0.0);
-
+        .setCameraPose(Shooter.Params.RTURRET_X_OFFSET, Shooter.Params.RTURRET_Y_OFFSET, 19.26, 0.0, 25.0, 0.0)
+        .setCameraFOV(70.0,47.2);
     // Reefscape Front camera info
     public static final TrcVision.CameraInfo reefscapeFrontCamInfo = new TrcVision.CameraInfo()
         .setCameraInfo("FrontOV9782", 1280, 800)
@@ -105,6 +114,9 @@ public class Vision //implements TrcVision.ObjectInfo
     private PipelineType leftShooterPipeline = PipelineType.APRILTAG;
     private PipelineType rightShooterPipeline = PipelineType.APRILTAG;
     private PipelineType intakePipeline = PipelineType.YELLOW_FUEL;
+    public VisionSystemSim visionSim;
+    public PhotonCameraSim leftCameraSim;
+    public PhotonCameraSim rightCameraSim;
 
     /**
      * Constructor: Create an instance of the object.
@@ -116,7 +128,23 @@ public class Vision //implements TrcVision.ObjectInfo
         this.tracer = new TrcDbgTrace();
         this.dashboard = FrcDashboard.getInstance();
         this.robot = robot;
+        
+        /* https://docs.photonvision.org/en/latest/docs/simulation/simulation-java.html */
 
+        // if (RobotBase.isSimulation()) For some reason this is false at this point of calling???
+        // {
+            visionSim = new VisionSystemSim("main");
+            try
+            {
+                AprilTagFieldLayout tagLayout = AprilTagFieldLayout.loadFromResource(
+                    AprilTagFields.k2026RebuiltAndymark.m_resourceFile);
+                visionSim.addAprilTags(tagLayout);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        // }
         if (robot.robotInfo.camInfos.length > 0 && robot.robotInfo.camInfos[0] != null)
         {
             tracer.traceInfo(
@@ -133,6 +161,23 @@ public class Vision //implements TrcVision.ObjectInfo
                                -Units.degreesToRadians(robot.robotInfo.camInfos[0].camPose.yaw)));
             dashboard.refreshKey("Vision/" + robot.robotInfo.camInfos[0].camName, "");
             leftShooterVision.setPipelineIndex(leftShooterPipeline.pipelineIndex);
+
+            if (RobotBase.isSimulation())
+            {
+                
+                SimCameraProperties leftCameraProp = new SimCameraProperties();
+                Rotation2d leftCameraFov = Rotation2d.fromDegrees(diagonalFov(robot.robotInfo.camInfos[0].camHFov, robot.robotInfo.camInfos[0].camVFov));
+                leftCameraProp.setCalibration(robot.robotInfo.camInfos[0].camImageWidth, 
+                robot.robotInfo.camInfos[0].camImageHeight, 
+                leftCameraFov);
+                leftCameraProp.setCalibError(0.25, 0.08);
+                // The average and standard deviation in milliseconds of image data latency.
+                leftCameraProp.setAvgLatencyMs(35);
+                leftCameraProp.setLatencyStdDevMs(5);
+                leftCameraProp.setFPS(20);
+                leftCameraSim = new PhotonCameraSim(leftShooterVision, leftCameraProp);
+                visionSim.addCamera(leftCameraSim, leftShooterCamFromRobot);
+            }
         }
         else
         {
@@ -156,6 +201,21 @@ public class Vision //implements TrcVision.ObjectInfo
                                -Units.degreesToRadians(robot.robotInfo.camInfos[1].camPose.yaw)));
             dashboard.refreshKey("Vision/" + robot.robotInfo.camInfos[1].camName, "");
             rightShooterVision.setPipelineIndex(rightShooterPipeline.pipelineIndex);
+            if (RobotBase.isSimulation())
+            {
+                SimCameraProperties rightCameraProp = new SimCameraProperties();
+                Rotation2d rightCameraFov = Rotation2d.fromDegrees(diagonalFov(robot.robotInfo.camInfos[1].camHFov, robot.robotInfo.camInfos[1].camVFov));
+                rightCameraProp.setCalibration(robot.robotInfo.camInfos[1].camImageWidth, 
+                robot.robotInfo.camInfos[1].camImageHeight, 
+                rightCameraFov);
+                rightCameraProp.setCalibError(0.25, 0.08);
+                // The average and standard deviation in milliseconds of image data latency.
+                rightCameraProp.setAvgLatencyMs(35);
+                rightCameraProp.setLatencyStdDevMs(5);
+                rightCameraProp.setFPS(20);
+                rightCameraSim = new PhotonCameraSim(rightShooterVision, rightCameraProp);
+                visionSim.addCamera(rightCameraSim, rightShooterCamFromRobot);
+            }
         }
         else
         {
@@ -186,6 +246,16 @@ public class Vision //implements TrcVision.ObjectInfo
 
         FrcDashboard.getInstance().addStatusUpdate(moduleName, this::updateStatus);
     }   //Vision
+
+    public static double diagonalFov(double hfovDeg, double vfovDeg)
+    {
+        double h = Math.tan(Math.toRadians(hfovDeg / 2.0));
+        double v = Math.tan(Math.toRadians(vfovDeg / 2.0));
+
+        double diagonal = 2.0 * Math.atan(Math.sqrt(h * h + v * v));
+
+        return Math.toDegrees(diagonal);
+    }
 
     /**
      * This method returns the shooter camera position relative to robot center adjusted by turret angle.
@@ -221,7 +291,7 @@ public class Vision //implements TrcVision.ObjectInfo
      *
      * @return robot to camera transform.
      */
-    private Transform3d getLeftShooterRobotToCamera()
+    public Transform3d getLeftShooterRobotToCamera()
     {
         return getShooterRobotToCamera(leftShooterCamInfo);
     }   //getLeftShooterRobotToCamera
@@ -231,7 +301,7 @@ public class Vision //implements TrcVision.ObjectInfo
      *
      * @return robot to camera transform.
      */
-    private Transform3d getRightShooterRobotToCamera()
+    public Transform3d getRightShooterRobotToCamera()
     {
         return getShooterRobotToCamera(rightShooterCamInfo);
     }   //getRightShooterRobotToCamera
@@ -468,6 +538,10 @@ public class Vision //implements TrcVision.ObjectInfo
                         dashboard.putString("Vision/Intake", msg);
                         dashboard.displayPrintf(lineNum++, msg);
                     }
+                }
+                if (RobotBase.isSimulation() && visionSim != null)
+                {
+                    dashboard.putData("Vision/Sim", visionSim.getDebugField());
                 }
             }
         }

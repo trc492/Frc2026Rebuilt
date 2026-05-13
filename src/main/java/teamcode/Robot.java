@@ -22,6 +22,8 @@
 
 package teamcode;
 
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -31,8 +33,19 @@ import java.util.Locale;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
+import org.ironmaple.simulation.SimulatedArena;
+import org.ironmaple.simulation.drivesims.SwerveModuleSimulation;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -137,6 +150,13 @@ public class Robot extends FrcRobot
     private boolean zeroCalibrated = false;
     private RelocalizationMode relocalizationMode = RelocalizationMode.Continuous;
 
+    private static final String SWERVE_NT_PREFIX = "MapleSim/Swerve";
+    private FrcSwerveDrive swerveDriveForTelemetry = null;
+    private StructArrayPublisher<SwerveModuleState> swerveModuleStatesPublisher = null;
+    private StructArrayPublisher<SwerveModuleState> simModuleStatesPublisher = null;
+    private StructPublisher<ChassisSpeeds> chassisSpeedsPublisher = null;
+    private StructPublisher<Rotation2d> rotationPublisher = null;
+
     /**
      * Constructor: Create an instance of the object.
      */
@@ -199,6 +219,8 @@ public class Robot extends FrcRobot
         robotDriveBase = new DriveBase();
         robotInfo = robotDriveBase.getRobotInfo();
         robotBase = robotDriveBase.getRobotBase();
+        SimulatedArena.getInstance().resetFieldForAuto();
+    initSwerveTelemetryPublishers();
 
         // Create and initialize sensors and indicators.
         ledIndicator =
@@ -486,6 +508,8 @@ public class Robot extends FrcRobot
     @Override
     public void robotPeriodic(RunMode runMode, boolean slowPeriodicLoop)
     {
+        simulationPeriodic();
+        publishSwerveTelemetry();
         if (relocalizationMode != RelocalizationMode.Disabled)
         {
             if (relocalizeRobot() && relocalizationMode == RelocalizationMode.OneShot)
@@ -497,14 +521,13 @@ public class Robot extends FrcRobot
         Runtime runtime = Runtime.getRuntime();
         long usedMemoryMB = (runtime.totalMemory() - runtime.freeMemory()) / (1024 * 1024);
         dashboard.putNumber("Memory/UsedMB", usedMemoryMB);
-
         if (slowPeriodicLoop)
         {
             Dashboard.checkDashboardUpdateEnabled();
             if (dashboard.getBoolean(Dashboard.DBKEY_AUTO_CHOICES_SUBMIT, false))
             {
                 FrcAuto.autoChoices.fetchChoices();
-dashboard.displayPrintf(7, "%s", FrcAuto.autoChoices);
+                dashboard.displayPrintf(7, "%s", FrcAuto.autoChoices);
                 dashboard.putBoolean(Dashboard.DBKEY_AUTO_CHOICES_SUBMIT, false);
             }
         }
@@ -519,6 +542,83 @@ dashboard.displayPrintf(7, "%s", FrcAuto.autoChoices);
         }
     }   //robotPeriodic
 
+    // @Override
+    public void simulationPeriodic() 
+    {
+        SimulatedArena.getInstance().simulationPeriodic();
+        if (vision != null && vision.visionSim != null) {
+
+            if (vision.leftCameraSim != null) {
+                vision.visionSim.adjustCamera(vision.leftCameraSim, vision.getLeftShooterRobotToCamera());
+            }
+            if (vision.rightCameraSim != null) {
+                vision.visionSim.adjustCamera(vision.rightCameraSim, vision.getRightShooterRobotToCamera());
+            }
+
+            vision.visionSim.update(robotDriveBase.swerveDriveSimulation.getSimulatedDriveTrainPose());
+        }
+    }
+
+    private void initSwerveTelemetryPublishers()
+    {
+        if (robotBase == null || !(robotBase.driveBase instanceof FrcSwerveDrive))
+        {
+            return;
+        }
+
+        swerveDriveForTelemetry = (FrcSwerveDrive) robotBase.driveBase;
+        NetworkTableInstance ntInstance = NetworkTableInstance.getDefault();
+        swerveModuleStatesPublisher = ntInstance
+            .getStructArrayTopic(SWERVE_NT_PREFIX + "/ModuleStates", SwerveModuleState.struct)
+            .publish();
+        simModuleStatesPublisher = ntInstance
+            .getStructArrayTopic(SWERVE_NT_PREFIX + "/SimModuleStates", SwerveModuleState.struct)
+            .publish();
+        chassisSpeedsPublisher = ntInstance
+            .getStructTopic(SWERVE_NT_PREFIX + "/ChassisSpeeds", ChassisSpeeds.struct)
+            .publish();
+        rotationPublisher = ntInstance
+            .getStructTopic(SWERVE_NT_PREFIX + "/Rotation", Rotation2d.struct)
+            .publish();
+    }   //initSwerveTelemetryPublishers
+
+    private void publishSwerveTelemetry()
+    {
+        if (swerveDriveForTelemetry == null || swerveModuleStatesPublisher == null)
+        {
+            return;
+        }
+
+        swerveModuleStatesPublisher.set(swerveDriveForTelemetry.getCurrentModuleStates());
+        if (simModuleStatesPublisher != null && robotDriveBase != null && robotDriveBase.swerveDriveSimulation != null)
+        {
+            SwerveModuleSimulation[] simModules = robotDriveBase.swerveDriveSimulation.getModules();
+            SwerveModuleState[] simStates = new SwerveModuleState[simModules.length];
+            double wheelDiameterInches = robotDriveBase.getDriveWheelDiameterInches();
+            double wheelRadiusMeters = wheelDiameterInches > 0.0?
+                Units.inchesToMeters(wheelDiameterInches) / 2.0: 0.0;
+            for (int i = 0; i < simModules.length; i++)
+            {
+                double wheelOmegaRadPerSec =
+                    simModules[i].getDriveWheelFinalSpeed().in(RadiansPerSecond);
+                double wheelSpeedMps = wheelOmegaRadPerSec * wheelRadiusMeters;
+                double steerRadians = MathUtil.angleModulus(
+                    simModules[i].getSteerAbsoluteFacing().getRotations() * 2.0 * Math.PI);
+                simStates[i] = new SwerveModuleState(
+                    wheelSpeedMps,
+                    Rotation2d.fromRadians(steerRadians));
+            }
+            simModuleStatesPublisher.set(simStates);
+        }
+        if (chassisSpeedsPublisher != null)
+        {
+            chassisSpeedsPublisher.set(swerveDriveForTelemetry.getCurrentChassisSpeeds());
+        }
+        if (rotationPublisher != null)
+        {
+            rotationPublisher.set(swerveDriveForTelemetry.getCurrentRotation());
+        }
+    }   //publishSwerveTelemetry
     /**
      * This method is called to cancel all pending operations and release the ownership of all subsystems.
      */

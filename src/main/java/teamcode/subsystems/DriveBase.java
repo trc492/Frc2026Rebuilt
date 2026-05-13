@@ -22,10 +22,21 @@
 
 package teamcode.subsystems;
 
+import static edu.wpi.first.units.Units.Inches;
+
+import org.ironmaple.simulation.SimulatedArena;
+import org.ironmaple.simulation.drivesims.COTS;
+import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
+import org.ironmaple.simulation.drivesims.SwerveModuleSimulation;
+import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
+
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.studica.frc.AHRS.NavXComType;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.system.plant.DCMotor;
 import frclib.drivebase.FrcRobotBase;
 import frclib.drivebase.FrcRobotBase.LEDInfo;
 import frclib.drivebase.FrcSwerveBase.SteerEncoderMode;
@@ -38,6 +49,9 @@ import frclib.sensor.FrcEncoder.EncoderType;
 import teamcode.Dashboard;
 import teamcode.RobotParams;
 import teamcode.RobotParams.HwConfig;
+import teamcode.simulation.TrcMapleSimMotor;
+import teamcode.simulation.SimFrcSwerveBase;
+import teamcode.simulation.TrcSimGyro;
 import teamcode.vision.Vision;
 import trclib.controller.TrcPidController;
 import trclib.drivebase.TrcDriveBase;
@@ -54,6 +68,7 @@ import trclib.subsystem.TrcSubsystem;
  */
 public class DriveBase extends TrcSubsystem
 {
+    public SwerveDriveSimulation swerveDriveSimulation;
     private static final String moduleName = DriveBase.class.getSimpleName();
 
     /**
@@ -67,7 +82,8 @@ public class DriveBase extends TrcSubsystem
         RebuiltRobot,
         ReefscapeRobot,
         MaestroRobot,
-        VisionOnly
+        VisionOnly,
+        RebuiltSim
     }   //enum RobotType
 
     /**
@@ -84,7 +100,7 @@ public class DriveBase extends TrcSubsystem
         public final static double WHEEL_BASE_LENGTH            = 22.249;
         //0.368615
         private static final TrcPidController.PidCoefficients driveMotorVelPidCoeffs =
-            new TrcPidController.PidCoefficients(0.18, 0.0, 0.0, 0.0, 0.0);
+            new TrcPidController.PidCoefficients(0.18/100, 0.0, 0.0, 0.0, 0.0);
         private static final TrcPidController.FFCoefficients driveMotorVelFFCoeffs =
             new TrcPidController.FFCoefficients(0.25, 0.11, 0.0);
         private static final TrcPidController.PidCoefficients drivePidCoeffs =
@@ -94,7 +110,7 @@ public class DriveBase extends TrcSubsystem
         private static final TrcPidController.PidCoefficients velPidCoeffs =
             new TrcPidController.PidCoefficients(0.0005, 0.0, 0.0, 0.09, 0.0);
         private static final TrcPidController.PidCoefficients steerPidCoeffs =
-            new TrcPidController.PidCoefficients(52.87825, 0.0, 0.0, 0.0, 0.0);
+            new TrcPidController.PidCoefficients(52.87825/100000, 0.0, 0.0, 0.0, 0.0);
         private static final TrcPidController.FFCoefficients steerFFCoeffs =
             new TrcPidController.FFCoefficients(0.0, 0.82872, 0.0);
 
@@ -382,12 +398,61 @@ public class DriveBase extends TrcSubsystem
                 robotInfo = new MaestroRobotInfo();
                 robotBase = RobotParams.Preferences.useDriveBase? new FrcSwerveBase((MaestroRobotInfo) robotInfo): null;
                 break;
+            case RebuiltSim:
+                robotInfo = new RebuiltRobotInfo();
+                
+                /* https://shenzhen-robotics-alliance.github.io/maple-sim/swerve-sim-hardware-abstraction/ */
+
+                final DriveTrainSimulationConfig driveTrainSimulationConfig = DriveTrainSimulationConfig.Default()
+                    // Specify gyro type (for realistic gyro drifting and error simulation)
+                    .withGyro(COTS.ofPigeon2())
+                    // Specify swerve module (for realistic swerve dynamics)
+                    .withSwerveModule(COTS.ofSwerveX(
+                            DCMotor.getKrakenX60Foc(1), // Drive motor is a Kraken X60
+                            DCMotor.getKrakenX60Foc(1), // Steer motor is a Kraken X60
+                            COTS.WHEELS.BLUE_NITRILE_TREAD.cof, // Use the COF for the blue nitrile tread wheels
+                            3, 10)) // L3 Gear ratio
+                    // Configures the track length and track width (spacing between swerve modules)
+                    .withTrackLengthTrackWidth(Inches.of(robotInfo.wheelBaseWidth), Inches.of(robotInfo.wheelBaseLength))
+                    // Configures the bumper size (dimensions of the robot bumper)
+                    .withBumperSize(Inches.of(robotInfo.robotWidth), Inches.of(robotInfo.robotLength));
+                swerveDriveSimulation = new SwerveDriveSimulation(driveTrainSimulationConfig, new Pose2d(3, 3, new Rotation2d()));
+                SimulatedArena.getInstance().addDriveTrainSimulation(swerveDriveSimulation);
+                SwerveModuleSimulation[] modules = swerveDriveSimulation.getModules();
+                // MapleSim module order is assumed FL, FR, BL, BR. Adjust if MapleSim returns a different order.
+                final int[] mapleSimModuleOrder = {0, 1, 2, 3};
+
+                robotInfo
+                    .setDriveMotorFactory((name, id, inverted) -> {
+                        int idx = indexFromName(name); // map name to module index
+                        TrcMapleSimMotor m = new TrcMapleSimMotor(name, modules[mapleSimModuleOrder[idx]], true);
+                        // m.setTraceLevel(TrcDbgTrace.MsgLevel.DEBUG, true, false, null);
+                        m.setMotorInverted(inverted);
+                        if (robotInfo.driveMotorPosScale != null)
+                        {
+                            m.setPositionSensorScaleAndOffset(robotInfo.driveMotorPosScale, 0.0);
+                        }
+                        if (robotInfo.baseParams.driveMotorVelPidCoeffs != null)
+                        {
+                            m.setVelocityPidParameters(
+                                new TrcMotor.PidParams()
+                                    .setPidCoefficients(robotInfo.baseParams.driveMotorVelPidCoeffs)
+                                    .setFFCoefficients(robotInfo.baseParams.driveMotorVelFFCoeffs)
+                                    .setPidControlParams(robotInfo.baseParams.drivePidTolerance, true),
+                                null);
+                        }
+                        return m;
+                    })
+                    .setImuFactory(info -> new TrcSimGyro(swerveDriveSimulation.getGyroSimulation()));
+
+                // FrcSwerveBase constructor now uses factories if set
+                robotBase = SimFrcSwerveBase.create((RebuiltRobotInfo) robotInfo, swerveDriveSimulation);
+                break;
 
             case VisionOnly:
                 robotInfo = new VisionOnlyInfo();
                 robotBase = null;
                 break;
-
             default:
                 robotInfo = null;
                 robotBase = null;
@@ -396,6 +461,12 @@ public class DriveBase extends TrcSubsystem
         configureRobotDrive();
     }   //RobotBase
 
+    private int indexFromName(String name) {
+        for (int i = 0; i < robotInfo.driveMotorNames.length; i++) {
+            if (robotInfo.driveMotorNames[i].equals(name)) return i;
+        }
+        throw new IllegalArgumentException("Unknown motor name: " + name);
+    }
     /**
      * This method returns the created RobotInfo object.
      *
@@ -415,6 +486,29 @@ public class DriveBase extends TrcSubsystem
     {
         return robotBase;
     }   //getRobotBase
+
+    /**
+     * This method returns the drive wheel diameter in inches for the current robot type.
+     *
+     * @return drive wheel diameter in inches, or 0.0 if unknown.
+     */
+    public double getDriveWheelDiameterInches()
+    {
+        if (robotInfo instanceof RebuiltRobotInfo)
+        {
+            return RebuiltRobotInfo.DRIVE_WHEEL_DIAMETER;
+        }
+        if (robotInfo instanceof ReefscapeRobotInfo)
+        {
+            return ReefscapeRobotInfo.DRIVE_WHEEL_DIAMETER;
+        }
+        if (robotInfo instanceof MaestroRobotInfo)
+        {
+            return MaestroRobotInfo.DRIVE_WHEEL_DIAMETER;
+        }
+
+        return 0.0;
+    }   //getDriveWheelDiameterInches
 
     /**
      * This method configures robotDrive with implementation details.

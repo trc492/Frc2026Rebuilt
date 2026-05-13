@@ -399,8 +399,8 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                     {
                         if (elapsedTime > RobotParams.Game.SHIFTS[shiftIndex] - RobotParams.Game.SHIFT_THRESHOLD)
                         {
-                            robot.driverController.setRumble(RumbleType.kBothRumble, 1.0, 0.5);
-                            robot.operatorController.setRumble(RumbleType.kBothRumble, 1.0, 0.5);
+                            if (robot.driverController != null) robot.driverController.setRumble(RumbleType.kBothRumble, 1.0, 0.5);
+                            if (robot.operatorController != null) robot.operatorController.setRumble(RumbleType.kBothRumble, 1.0, 0.5);
                             rumbling = true;
                         }
                     }
