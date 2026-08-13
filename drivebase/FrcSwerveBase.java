@@ -225,7 +225,7 @@ public class FrcSwerveBase extends FrcRobotBase
      *
      * @return an array of created steer encoder.
      */
-    private TrcEncoder[] createSteerEncoders()
+    protected TrcEncoder[] createSteerEncoders()
     {
         TrcEncoder[] encoders = new TrcEncoder[swerveInfo.steerEncoderNames.length];
 
@@ -247,7 +247,7 @@ public class FrcSwerveBase extends FrcRobotBase
      *
      * @return created array of motors.
      */
-    private TrcMotor[] createSteerMotors()
+    protected TrcMotor[] createSteerMotors()
     {
         TrcMotor[] motors = new TrcMotor[swerveInfo.steerMotorNames.length];
 

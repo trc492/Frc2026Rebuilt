@@ -121,7 +121,7 @@ public class FrcSwerveDrive extends TrcSwerveDrive implements TrcDriveBaseOdomet
         this.photonCameras = photonCameras;
         this.poseEstimator = new SwerveDrivePoseEstimator(
             kinematics, getGyroRotation(), getModulePositions(),
-            new Pose2d(),
+            currentPose,
             // ---- State Std Devs (Odometry Trust) ----
             VecBuilder.fill(
                 0.05,   // x meters
@@ -513,6 +513,45 @@ public class FrcSwerveDrive extends TrcSwerveDrive implements TrcDriveBaseOdomet
     {
         return kinematics;
     }   //getKinematics
+
+    /**
+     * Returns the current odometry pose using WPILib field coordinates (meters, CCW-positive).
+     */
+    public Pose2d getCurrentPose()
+    {
+        return currentPose;
+    }   //getCurrentPose
+
+    /**
+     * Returns the measured module states in WPILib units and module order (FL, FR, BL, BR).
+     */
+    public SwerveModuleState[] getCurrentModuleStates()
+    {
+        SwerveModuleState[] states = new SwerveModuleState[swerveModules.length];
+        for (int i = 0; i < states.length; i++)
+        {
+            states[i] = new SwerveModuleState(
+                Units.inchesToMeters(swerveModules[i].driveMotor.getVelocity()),
+                Rotation2d.fromDegrees(swerveModules[i].getSteerAngle()));
+        }
+        return states;
+    }   //getCurrentModuleStates
+
+    /**
+     * Returns the measured robot-relative chassis speeds in WPILib units.
+     */
+    public ChassisSpeeds getCurrentChassisSpeeds()
+    {
+        return kinematics.toChassisSpeeds(getCurrentModuleStates());
+    }   //getCurrentChassisSpeeds
+
+    /**
+     * Returns the current odometry rotation using WPILib's CCW-positive convention.
+     */
+    public Rotation2d getCurrentRotation()
+    {
+        return currentPose.getRotation();
+    }   //getCurrentRotation
 
     /**
      * This method returns the current Gyro rotation.

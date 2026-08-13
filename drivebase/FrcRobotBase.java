@@ -74,6 +74,18 @@ public class FrcRobotBase extends SubsystemBase
      */
     public static class RobotInfo
     {
+        @FunctionalInterface
+        public interface DriveMotorFactory
+        {
+            TrcMotor create(String name, int id, boolean inverted);
+        }
+
+        @FunctionalInterface
+        public interface ImuFactory
+        {
+            TrcGyro create(RobotInfo robotInfo);
+        }
+
         public String robotName = null;
         // Robot Characteristics.
         public double robotWidth = 0.0, robotLength = 0.0;
@@ -139,6 +151,20 @@ public class FrcRobotBase extends SubsystemBase
         public TrcVision.CameraInfo[] camInfos = null;
         // Miscellaneous
         public LEDInfo[] ledInfos = null;
+        public DriveMotorFactory driveMotorFactory = null;
+        public ImuFactory imuFactory = null;
+
+        public RobotInfo setDriveMotorFactory(DriveMotorFactory factory)
+        {
+            driveMotorFactory = factory;
+            return this;
+        }
+
+        public RobotInfo setImuFactory(ImuFactory factory)
+        {
+            imuFactory = factory;
+            return this;
+        }
 
         /**
          * This method sets basic robot info.
@@ -504,24 +530,36 @@ public class FrcRobotBase extends SubsystemBase
     {
         super();
         this.robotInfo = robotInfo;
-        imu = robotInfo.imuName != null? createIMU(robotInfo) : null;
+        imu = robotInfo.imuFactory != null? robotInfo.imuFactory.create(robotInfo):
+              robotInfo.imuName != null? createIMU(robotInfo): null;
         driveMotors = new TrcMotor[robotInfo.driveMotorNames.length];
         for (int i = 0; i < driveMotors.length; i++)
         {
-            FrcMotorActuator.Params motorParams= new FrcMotorActuator.Params()
-                .setPrimaryMotor(
-                    robotInfo.driveMotorNames[i], robotInfo.driveMotorType, robotInfo.driveMotorInverted[i], true,
-                    true, robotInfo.driveMotorIds[i], robotInfo.driveMotorCanBusName,
-                    robotInfo.driveMotorSparkMaxParams);
-            driveMotors[i] = new FrcMotorActuator(motorParams).getMotor();
+            if (robotInfo.driveMotorFactory != null)
+            {
+                driveMotors[i] = robotInfo.driveMotorFactory.create(
+                    robotInfo.driveMotorNames[i], robotInfo.driveMotorIds[i], robotInfo.driveMotorInverted[i]);
+            }
+            else
+            {
+                FrcMotorActuator.Params motorParams= new FrcMotorActuator.Params()
+                    .setPrimaryMotor(
+                        robotInfo.driveMotorNames[i], robotInfo.driveMotorType, robotInfo.driveMotorInverted[i], true,
+                        true, robotInfo.driveMotorIds[i], robotInfo.driveMotorCanBusName,
+                        robotInfo.driveMotorSparkMaxParams);
+                driveMotors[i] = new FrcMotorActuator(motorParams).getMotor();
+            }
 
-            if (robotInfo.driveMotorPosScale != null)
+            // A custom motor factory is responsible for configuring its sensor units and control loops. This is
+            // important for physics simulations, where the simulated sensor may report wheel rotations instead of
+            // the real controller's motor-rotor rotations.
+            if (robotInfo.driveMotorFactory == null && robotInfo.driveMotorPosScale != null)
             {
                 // Only set it if provided. For example, WpiOdometry needs this.
                 driveMotors[i].setPositionSensorScaleAndOffset(robotInfo.driveMotorPosScale, 0.0);
             }
 
-            if (robotInfo.baseParams.driveMotorVelPidCoeffs != null)
+            if (robotInfo.driveMotorFactory == null && robotInfo.baseParams.driveMotorVelPidCoeffs != null)
             {
                 driveMotors[i].setVelocityPidParameters(
                     new PidParams()
