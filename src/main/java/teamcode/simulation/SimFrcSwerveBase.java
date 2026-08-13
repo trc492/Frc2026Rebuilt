@@ -41,8 +41,7 @@ public class SimFrcSwerveBase extends FrcSwerveBase {
         @Override
         public double getRawPosition() {
             double rotations = moduleSimulation.getSteerAbsoluteFacing().getRotations();
-            // MapleSim uses WPILib CCW+; TrcLib expects CW+.
-            rotations = TrcUtil.modulo(-rotations, 1.0);
+            rotations = TrcUtil.modulo(rotations, 1.0);
             return inverted ? -rotations : rotations;
         }
 
@@ -54,8 +53,6 @@ public class SimFrcSwerveBase extends FrcSwerveBase {
         @Override
         public double getRawVelocity() {
             double velocity = moduleSimulation.getSteerAbsoluteEncoderSpeed().in(RotationsPerSecond);
-            // MapleSim uses WPILib CCW+; TrcLib expects CW+.
-            velocity = -velocity;
             return inverted ? -velocity : velocity;
         }
 
@@ -129,11 +126,10 @@ public class SimFrcSwerveBase extends FrcSwerveBase {
             motors[i].setPositionSensorScaleAndOffset(swerveInfo.steerMotorPosScale, 0.0);
             if (swerveInfo.swerveParams != null && swerveInfo.swerveParams.steerMotorPidParams != null)
             {
-                TrcMotor.PidParams baseParams = swerveInfo.swerveParams.steerMotorPidParams;
                 TrcMotor.PidParams simParams = new TrcMotor.PidParams()
-                    .setPidCoefficients(baseParams.pidCoeffs)
-                    .setFFCoefficients(baseParams.ffCoeffs)
-                    .setPidControlParams(baseParams.pidTolerance, baseParams.pidSettling, true, baseParams.enableSquid);
+                    .setPidCoefficients(swerveInfo.swerveParams.steerMotorPidParams.pidCoeffs)
+                    // TrcMapleSimMotor implements the controller natively so MapleSim can update it every sub-tick.
+                    .setPidControlParams(1.0, 0.0, false, false);
                 motors[i].setPositionPidParameters(simParams, null);
             }
         }

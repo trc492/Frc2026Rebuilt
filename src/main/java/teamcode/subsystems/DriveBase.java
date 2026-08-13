@@ -23,12 +23,15 @@
 package teamcode.subsystems;
 
 import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.KilogramSquareMeters;
+import static edu.wpi.first.units.Units.Volts;
 
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.COTS;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.ironmaple.simulation.drivesims.SwerveModuleSimulation;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
+import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -68,6 +71,7 @@ import trclib.subsystem.TrcSubsystem;
  */
 public class DriveBase extends TrcSubsystem
 {
+    public static final Pose2d SIM_INITIAL_POSE = new Pose2d(3.0, 3.0, new Rotation2d());
     public SwerveDriveSimulation swerveDriveSimulation;
     private static final String moduleName = DriveBase.class.getSimpleName();
 
@@ -92,8 +96,10 @@ public class DriveBase extends TrcSubsystem
     public static class RebuiltRobotInfo extends FrcSwerveBase.SwerveInfo
     {
         public final static double DRIVE_WHEEL_DIAMETER         = 3.885547663;  // inches
-        public final static double DRIVE_MOTOR_GEAR_RATIO       = 5.51;
-        public final static double STEER_MOTOR_GEAR_RATIO       = 468.0/35.1;
+        // WCP Swerve X, flipped/gears-below, X3 ratio set with the middle (11T) drive pinion.
+        // Drive: (42/11) * (14/32) * (45/15) = 5.01136:1. Steer: 468/35 = 13.37143:1.
+        public final static double DRIVE_MOTOR_GEAR_RATIO       = (42.0/11.0) * (14.0/32.0) * (45.0/15.0);
+        public final static double STEER_MOTOR_GEAR_RATIO       = 468.0/35.0;
         public final static double ROBOT_WIDTH                  = RobotParams.Robot.ROBOT_WIDTH;
         public final static double ROBOT_LENGTH                 = RobotParams.Robot.ROBOT_LENGTH;
         public final static double WHEEL_BASE_WIDTH             = 22.249;
@@ -407,16 +413,21 @@ public class DriveBase extends TrcSubsystem
                     // Specify gyro type (for realistic gyro drifting and error simulation)
                     .withGyro(COTS.ofPigeon2())
                     // Specify swerve module (for realistic swerve dynamics)
-                    .withSwerveModule(COTS.ofSwerveX(
+                    .withSwerveModule(new SwerveModuleSimulationConfig(
                             DCMotor.getKrakenX60Foc(1), // Drive motor is a Kraken X60
                             DCMotor.getKrakenX60Foc(1), // Steer motor is a Kraken X60
-                            COTS.WHEELS.BLUE_NITRILE_TREAD.cof, // Use the COF for the blue nitrile tread wheels
-                            3, 10)) // L3 Gear ratio
+                            RebuiltRobotInfo.DRIVE_MOTOR_GEAR_RATIO,
+                            RebuiltRobotInfo.STEER_MOTOR_GEAR_RATIO,
+                            Volts.of(0.1),
+                            Volts.of(0.2),
+                            Inches.of(RebuiltRobotInfo.DRIVE_WHEEL_DIAMETER / 2.0),
+                            KilogramSquareMeters.of(0.03),
+                            COTS.WHEELS.BLUE_NITRILE_TREAD.cof))
                     // Configures the track length and track width (spacing between swerve modules)
                     .withTrackLengthTrackWidth(Inches.of(robotInfo.wheelBaseWidth), Inches.of(robotInfo.wheelBaseLength))
                     // Configures the bumper size (dimensions of the robot bumper)
                     .withBumperSize(Inches.of(robotInfo.robotWidth), Inches.of(robotInfo.robotLength));
-                swerveDriveSimulation = new SwerveDriveSimulation(driveTrainSimulationConfig, new Pose2d(3, 3, new Rotation2d()));
+                swerveDriveSimulation = new SwerveDriveSimulation(driveTrainSimulationConfig, SIM_INITIAL_POSE);
                 SimulatedArena.getInstance().addDriveTrainSimulation(swerveDriveSimulation);
                 SwerveModuleSimulation[] modules = swerveDriveSimulation.getModules();
                 // MapleSim module order is assumed FL, FR, BL, BR. Adjust if MapleSim returns a different order.
@@ -427,18 +438,17 @@ public class DriveBase extends TrcSubsystem
                         int idx = indexFromName(name); // map name to module index
                         TrcMapleSimMotor m = new TrcMapleSimMotor(name, modules[mapleSimModuleOrder[idx]], true);
                         // m.setTraceLevel(TrcDbgTrace.MsgLevel.DEBUG, true, false, null);
-                        m.setMotorInverted(inverted);
-                        if (robotInfo.driveMotorPosScale != null)
-                        {
-                            m.setPositionSensorScaleAndOffset(robotInfo.driveMotorPosScale, 0.0);
-                        }
+                        // MapleSim's generic module always uses positive voltage for wheel-forward, so do not apply
+                        // the real motor-mounting inversion. Its un-geared encoder matches the real rotor sensor.
+                        m.setPositionSensorScaleAndOffset(robotInfo.driveMotorPosScale, 0.0);
+                        m.setMaxMotorVelocity(robotInfo.maxDriveVelocity / robotInfo.driveMotorPosScale);
                         if (robotInfo.baseParams.driveMotorVelPidCoeffs != null)
                         {
                             m.setVelocityPidParameters(
                                 new TrcMotor.PidParams()
                                     .setPidCoefficients(robotInfo.baseParams.driveMotorVelPidCoeffs)
                                     .setFFCoefficients(robotInfo.baseParams.driveMotorVelFFCoeffs)
-                                    .setPidControlParams(robotInfo.baseParams.drivePidTolerance, true),
+                                    .setPidControlParams(robotInfo.baseParams.drivePidTolerance, false),
                                 null);
                         }
                         return m;

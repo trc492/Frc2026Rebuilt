@@ -22,6 +22,7 @@
 
 package teamcode;
 
+import static edu.wpi.first.units.Units.Milliseconds;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 
 import java.io.File;
@@ -39,6 +40,8 @@ import org.ironmaple.simulation.drivesims.SwerveModuleSimulation;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.MathUtil;
@@ -82,6 +85,7 @@ import trclib.robotcore.TrcBuildInfo;
 import trclib.robotcore.TrcDbgTrace;
 import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcRobot.RunMode;
+import trclib.robotcore.TrcTaskMgr;
 import trclib.sensor.TrcRobotBattery;
 import trclib.subsystem.TrcRollerIntake;
 import trclib.subsystem.TrcShooter;
@@ -156,6 +160,10 @@ public class Robot extends FrcRobot
     private StructArrayPublisher<SwerveModuleState> simModuleStatesPublisher = null;
     private StructPublisher<ChassisSpeeds> chassisSpeedsPublisher = null;
     private StructPublisher<Rotation2d> rotationPublisher = null;
+    private StructPublisher<Pose2d> odometryPosePublisher = null;
+    private StructPublisher<Pose2d> simulationPosePublisher = null;
+    private StructPublisher<Pose3d> odometryPose3dPublisher = null;
+    private StructPublisher<Pose3d> simulationPose3dPublisher = null;
 
     /**
      * Constructor: Create an instance of the object.
@@ -163,6 +171,14 @@ public class Robot extends FrcRobot
     public Robot()
     {
         super(RobotParams.Robot.ROBOT_CODEBASE);
+        // The TRC loop normally defaults to "as fast as possible". Keep the simulation and MapleSim time steps
+        // synchronized at 10 ms so telemetry and drive control run at 100 Hz without accelerating simulated time.
+        if (RobotParams.Preferences.robotType == DriveBase.RobotType.RebuiltSim)
+        {
+            TrcTaskMgr.PERIODIC_INTERVAL_MS = 10;
+            // Three sub-ticks give MapleSim a 300 Hz physics rate, above its recommended 200 Hz minimum.
+            SimulatedArena.overrideSimulationTimings(Milliseconds.of(10.0), 3);
+        }
     }   //Robot
 
     /**
@@ -219,6 +235,18 @@ public class Robot extends FrcRobot
         robotDriveBase = new DriveBase();
         robotInfo = robotDriveBase.getRobotInfo();
         robotBase = robotDriveBase.getRobotBase();
+        if (robotBase != null && robotDriveBase.swerveDriveSimulation != null)
+        {
+            Pose2d initialPose = DriveBase.SIM_INITIAL_POSE;
+            robotBase.driveBase.setFieldPosition(
+                new TrcPose2D(
+                    -Units.metersToInches(initialPose.getY()),
+                    Units.metersToInches(initialPose.getX()),
+                    -initialPose.getRotation().getDegrees()));
+            // Keep drivetrain validation deterministic. Simulated vision remains available for visualization, but is
+            // not fused until explicitly enabled after the drivetrain and camera transforms are validated.
+            relocalizationMode = RelocalizationMode.Disabled;
+        }
         SimulatedArena.getInstance().resetFieldForAuto();
     initSwerveTelemetryPublishers();
 
@@ -580,6 +608,18 @@ public class Robot extends FrcRobot
         rotationPublisher = ntInstance
             .getStructTopic(SWERVE_NT_PREFIX + "/Rotation", Rotation2d.struct)
             .publish();
+        odometryPosePublisher = ntInstance
+            .getStructTopic(SWERVE_NT_PREFIX + "/OdometryPose", Pose2d.struct)
+            .publish();
+        simulationPosePublisher = ntInstance
+            .getStructTopic(SWERVE_NT_PREFIX + "/SimulationPose", Pose2d.struct)
+            .publish();
+        odometryPose3dPublisher = ntInstance
+            .getStructTopic(SWERVE_NT_PREFIX + "/OdometryPose3d", Pose3d.struct)
+            .publish();
+        simulationPose3dPublisher = ntInstance
+            .getStructTopic(SWERVE_NT_PREFIX + "/SimulationPose3d", Pose3d.struct)
+            .publish();
     }   //initSwerveTelemetryPublishers
 
     private void publishSwerveTelemetry()
@@ -617,6 +657,24 @@ public class Robot extends FrcRobot
         if (rotationPublisher != null)
         {
             rotationPublisher.set(swerveDriveForTelemetry.getCurrentRotation());
+        }
+        if (odometryPosePublisher != null)
+        {
+            odometryPosePublisher.set(swerveDriveForTelemetry.getCurrentPose());
+        }
+        if (odometryPose3dPublisher != null)
+        {
+            odometryPose3dPublisher.set(new Pose3d(swerveDriveForTelemetry.getCurrentPose()));
+        }
+        if (simulationPosePublisher != null && robotDriveBase != null &&
+            robotDriveBase.swerveDriveSimulation != null)
+        {
+            Pose2d simulationPose = robotDriveBase.swerveDriveSimulation.getSimulatedDriveTrainPose();
+            simulationPosePublisher.set(simulationPose);
+            if (simulationPose3dPublisher != null)
+            {
+                simulationPose3dPublisher.set(new Pose3d(simulationPose));
+            }
         }
     }   //publishSwerveTelemetry
     /**

@@ -47,9 +47,10 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     private static final String moduleName = FrcTeleOp.class.getSimpleName();
     protected static final boolean traceButtonEvents = true;
 
-    public static final double DEF_DRIVE_NORMAL_SCALE = 1.0;
+    // X3 gearing is intentionally fast. Keep the drivetrain model accurate and tame it at the driver-input layer.
+    public static final double DEF_DRIVE_NORMAL_SCALE = 0.75;
     public static final double DEF_DRIVE_SLOW_SCALE = 0.2;
-    public static final double DEF_TURN_NORMAL_SCALE = 0.75;
+    public static final double DEF_TURN_NORMAL_SCALE = 0.55;
     public static final double DEF_TURN_SLOW_SCALE = 0.2;
     //
     // Global objects.
@@ -186,10 +187,9 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     @Override
     public void periodic(double elapsedTime, boolean slowPeriodicLoop)
     {
-        if (slowPeriodicLoop)
+        // Sample and apply drivetrain commands on every fast robot loop (100 Hz in simulation).
+        if (controlsEnabled)
         {
-            if (controlsEnabled)
-            {
                 //
                 // DriveBase subsystem.
                 //
@@ -271,7 +271,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 //
                 // Other subsystems.
                 //
-                if (RobotParams.Preferences.useSubsystems)
+                if (slowPeriodicLoop && RobotParams.Preferences.useSubsystems)
                 {
                     // Analog control of subsystems.
                     if (robot.turret != null)
@@ -371,8 +371,11 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                         }
                     }
                 }
-            }
+        }
 
+        // Dashboard/shift bookkeeping stays on the slower loop.
+        if (slowPeriodicLoop)
+        {
             if (elapsedTime < RobotParams.Game.TELEOP_PERIOD)
             {
                 if (elapsedTime < RobotParams.Game.SHIFTS[shiftIndex])
