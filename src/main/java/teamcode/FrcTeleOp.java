@@ -532,6 +532,20 @@ public class FrcTeleOp implements TrcRobot.RobotMode
 
             case Y:
                 shoot(pressed, false);
+                if (pressed)
+                {
+                    driveSpeedScale = robot.dashboard.getNumber(
+                        Dashboard.DBKEY_TELEOP_DRIVE_SLOW_SCALE, DEF_DRIVE_SLOW_SCALE);
+                    turnSpeedScale = robot.dashboard.getNumber(
+                        Dashboard.DBKEY_TELEOP_TURN_SLOW_SCALE, DEF_TURN_SLOW_SCALE);
+                }
+                else
+                {
+                    driveSpeedScale = robot.dashboard.getNumber(
+                        Dashboard.DBKEY_TELEOP_DRIVE_NORMAL_SCALE, DEF_DRIVE_NORMAL_SCALE);
+                    turnSpeedScale = robot.dashboard.getNumber(
+                        Dashboard.DBKEY_TELEOP_TURN_NORMAL_SCALE, DEF_TURN_NORMAL_SCALE);
+                }
                 break;
 
             case LeftBumper:
