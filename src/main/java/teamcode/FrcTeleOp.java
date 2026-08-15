@@ -30,6 +30,7 @@ import frclib.driverio.FrcXboxController;
 import teamcode.autotasks.TaskAutoClimb.ClimbSide;
 import teamcode.subsystems.Climber;
 import teamcode.subsystems.Shooter;
+import teamcode.subsystems.Shooter.Params;
 import trclib.controller.TrcPidController;
 import trclib.dataprocessor.TrcUtil;
 import trclib.dataprocessor.TrcWarpSpace;
@@ -66,6 +67,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     private double prevPanPower = 0.0;
     private Double prevTiltPower = 0.0;
     private double prevClimbPower = 0.0;
+    private boolean rTriggerShootPressed = false;
     // Locked heading
     private final TrcPidController turnPidCtrl;
     private Double lockedHeading;
@@ -355,9 +357,9 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                         }
                     }
 
-                    if(robot.autoShootTask != null)
+                    if (robot.intakeSubsystem != null)
                     {
-                        double lTrigger =  robot.driverController.getLeftTrigger(); 
+                        double lTrigger = robot.driverController.getLeftTrigger(); 
 
                         if (lTrigger >= 0.5 && !robot.intakeSubsystem.isIntakeOn())
                         {
@@ -368,6 +370,33 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                         {
                             robot.globalTracer.traceInfo(moduleName, ">>>>> Disable Intake.");
                             robot.intakeSubsystem.setIntakeEnabled(false);
+                        }
+                    }
+
+                    if (robot.autoShootTask != null)
+                    {
+                        boolean rTriggerPressed = robot.driverController.getRightTrigger() >= 0.5;
+                        if (rTriggerPressed != rTriggerShootPressed)
+                        {
+                            robot.globalTracer.traceInfo(moduleName, rTriggerPressed ? ">>>>> Starting Auto Shoot" : ">>>>> Canceling Auto Shoot");
+                            shoot(rTriggerPressed, driverAltFunc);
+                            if (rTriggerPressed)
+                            {
+                                robot.globalTracer.traceInfo(moduleName, ">>>>> Slow Drive");
+                                driveSpeedScale = robot.dashboard.getNumber(
+                                    Dashboard.DBKEY_TELEOP_DRIVE_SLOW_SCALE, DEF_DRIVE_SLOW_SCALE);
+                                turnSpeedScale = robot.dashboard.getNumber(
+                                    Dashboard.DBKEY_TELEOP_TURN_SLOW_SCALE, DEF_TURN_SLOW_SCALE);
+                            }
+                            else
+                            {
+                                robot.globalTracer.traceInfo(moduleName, ">>>>> Normal Drive");
+                                driveSpeedScale = robot.dashboard.getNumber(
+                                    Dashboard.DBKEY_TELEOP_DRIVE_NORMAL_SCALE, DEF_DRIVE_NORMAL_SCALE);
+                                turnSpeedScale = robot.dashboard.getNumber(
+                                    Dashboard.DBKEY_TELEOP_TURN_NORMAL_SCALE, DEF_TURN_NORMAL_SCALE);
+                            }
+                            rTriggerShootPressed = rTriggerPressed;
                         }
                     }
                 }
@@ -476,10 +505,10 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         {
             case A:
                 // Toggle Intake
-                if (pressed)
-                {
-                    toggleIntake();
-                }
+                // if (pressed)
+                // {
+                //     toggleIntake();
+                // }
                 break;
 
             case B:
@@ -531,20 +560,26 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 break;
 
             case Y:
-                shoot(pressed, false);
+                // shoot(pressed, false);
+                // if (pressed)
+                // {
+                //     driveSpeedScale = robot.dashboard.getNumber(
+                //         Dashboard.DBKEY_TELEOP_DRIVE_SLOW_SCALE, DEF_DRIVE_SLOW_SCALE);
+                //     turnSpeedScale = robot.dashboard.getNumber(
+                //         Dashboard.DBKEY_TELEOP_TURN_SLOW_SCALE, DEF_TURN_SLOW_SCALE);
+                // }
+                // else
+                // {
+                //     driveSpeedScale = robot.dashboard.getNumber(
+                //         Dashboard.DBKEY_TELEOP_DRIVE_NORMAL_SCALE, DEF_DRIVE_NORMAL_SCALE);
+                //     turnSpeedScale = robot.dashboard.getNumber(
+                //         Dashboard.DBKEY_TELEOP_TURN_NORMAL_SCALE, DEF_TURN_NORMAL_SCALE);
+                // }
                 if (pressed)
                 {
-                    driveSpeedScale = robot.dashboard.getNumber(
-                        Dashboard.DBKEY_TELEOP_DRIVE_SLOW_SCALE, DEF_DRIVE_SLOW_SCALE);
-                    turnSpeedScale = robot.dashboard.getNumber(
-                        Dashboard.DBKEY_TELEOP_TURN_SLOW_SCALE, DEF_TURN_SLOW_SCALE);
-                }
-                else
-                {
-                    driveSpeedScale = robot.dashboard.getNumber(
-                        Dashboard.DBKEY_TELEOP_DRIVE_NORMAL_SCALE, DEF_DRIVE_NORMAL_SCALE);
-                    turnSpeedScale = robot.dashboard.getNumber(
-                        Dashboard.DBKEY_TELEOP_TURN_NORMAL_SCALE, DEF_TURN_NORMAL_SCALE);
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> Retracting hoods");
+                    robot.leftShooter.tiltMotor.setPosition(0.0, Params.TILT_MIN_POS, true, Params.TILT_POWER_LIMIT);
+                    robot.rightShooter.tiltMotor.setPosition(0.0, Params.TILT_MIN_POS, true, Params.TILT_POWER_LIMIT);
                 }
                 break;
 
@@ -623,8 +658,8 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                     }
                     else
                     {
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> Enable GoalTracking.");
-                        robot.shooterSubsystem.enableGoalTracking(false, false, true, false);
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Enable GoalTracking with pre-spin.");
+                        robot.shooterSubsystem.enableGoalTracking(true, false, true, false);
                     }
                 }
                 break;
