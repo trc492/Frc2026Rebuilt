@@ -30,7 +30,6 @@ import frclib.driverio.FrcXboxController;
 import teamcode.autotasks.TaskAutoClimb.ClimbSide;
 import teamcode.subsystems.Climber;
 import teamcode.subsystems.Shooter;
-import teamcode.subsystems.Shooter.Params;
 import trclib.controller.TrcPidController;
 import trclib.dataprocessor.TrcUtil;
 import trclib.dataprocessor.TrcWarpSpace;
@@ -575,12 +574,6 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                 //     turnSpeedScale = robot.dashboard.getNumber(
                 //         Dashboard.DBKEY_TELEOP_TURN_NORMAL_SCALE, DEF_TURN_NORMAL_SCALE);
                 // }
-                if (pressed)
-                {
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> Retracting hoods");
-                    robot.leftShooter.tiltMotor.setPosition(0.0, Params.TILT_MIN_POS, true, Params.TILT_POWER_LIMIT);
-                    robot.rightShooter.tiltMotor.setPosition(0.0, Params.TILT_MIN_POS, true, Params.TILT_POWER_LIMIT);
-                }
                 break;
 
             case LeftBumper:
