@@ -36,5 +36,4 @@ speeds, heading, and 3D robot poses remain available under `/MapleSim/Swerve`.
 
 The simulator needs small construction and telemetry hooks that are not available in upstream `trc492/frclib`.
 Because simulation contributors cannot push that commit there, this branch points the `frclib` submodule at the
-`sim-frclib` branch in `trc492/Frc2026Rebuilt`. This keeps every required commit in the code repository while leaving
-the upstream `frclib` and `trclib` repositories untouched.
+`sim` branch in `Wlute112/frclib`. The upstream `trc492/frclib` and `trc492/trclib` repositories remain untouched.
