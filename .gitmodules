@@ -3,4 +3,8 @@
 	url = https://github.com/trc492/trclib
 [submodule "src/main/java/frclib"]
 	path = src/main/java/frclib
-	url = https://github.com/trc492/frclib
+	# The sim branch carries its frclib-only simulation API on an orphaned
+	# sim-frclib branch in this repository because contributors cannot push it
+	# to the upstream frclib repository.
+	url = https://github.com/trc492/Frc2026Rebuilt.git
+	branch = sim-frclib

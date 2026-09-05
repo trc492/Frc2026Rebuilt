@@ -1836,7 +1836,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Test/DrivePower",
+              "topic": "/SmartDashboard/Auto/DrivePower",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": true
@@ -1850,7 +1850,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Test/DriveTime",
+              "topic": "/SmartDashboard/Auto/DriveTime",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": true
@@ -2029,6 +2029,45 @@
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": true
+            }
+          },
+          {
+            "title": "Type",
+            "x": 128.0,
+            "y": 384.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Auto/Type",
+              "period": 0.06,
+              "sort_options": false
+            }
+          },
+          {
+            "title": "SweepDistance",
+            "x": 384.0,
+            "y": 384.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Auto/SweepDistance",
+              "period": 0.06,
+              "sort_options": false
+            }
+          },
+          {
+            "title": "Preview Choices",
+            "x": 640.0,
+            "y": 384.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Auto/ChoicesSubmit",
+              "period": 0.06,
+              "data_type": "boolean"
             }
           }
         ]

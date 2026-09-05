@@ -30,6 +30,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.stream.Stream;
@@ -46,7 +48,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.BooleanPublisher;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -79,7 +83,9 @@ import teamcode.subsystems.Shooter;
 import teamcode.vision.Vision;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
 import trclib.motor.TrcMotor;
+import trclib.pathdrive.TrcPath;
 import trclib.pathdrive.TrcPose2D;
+import trclib.pathdrive.TrcWaypoint;
 import trclib.robotcore.TrcAutoTask;
 import trclib.robotcore.TrcBuildInfo;
 import trclib.robotcore.TrcDbgTrace;
@@ -155,6 +161,8 @@ public class Robot extends FrcRobot
     private RelocalizationMode relocalizationMode = RelocalizationMode.Continuous;
 
     private static final String SWERVE_NT_PREFIX = "MapleSim/Swerve";
+    private static final String AUTO_NT_PREFIX = "MapleSim/Auto";
+    private static final String FIELD_NT_PREFIX = "MapleSim/Field";
     private FrcSwerveDrive swerveDriveForTelemetry = null;
     private StructArrayPublisher<SwerveModuleState> swerveModuleStatesPublisher = null;
     private StructArrayPublisher<SwerveModuleState> simModuleStatesPublisher = null;
@@ -164,6 +172,14 @@ public class Robot extends FrcRobot
     private StructPublisher<Pose2d> simulationPosePublisher = null;
     private StructPublisher<Pose3d> odometryPose3dPublisher = null;
     private StructPublisher<Pose3d> simulationPose3dPublisher = null;
+    private StructPublisher<Pose2d> selectedStartPosePublisher = null;
+    private StructArrayPublisher<Pose2d> activePathPublisher = null;
+    private StructArrayPublisher<Pose2d> targetPosePublisher = null;
+    private StructArrayPublisher<Pose2d> actualTrajectoryPublisher = null;
+    private StructArrayPublisher<Pose3d> fuelPosesPublisher = null;
+    private StringPublisher selectedAutoPublisher = null;
+    private BooleanPublisher autoActivePublisher = null;
+    private final List<Pose2d> actualAutoTrajectory = new ArrayList<>();
 
     /**
      * Constructor: Create an instance of the object.
@@ -247,8 +263,11 @@ public class Robot extends FrcRobot
             // not fused until explicitly enabled after the drivetrain and camera transforms are validated.
             relocalizationMode = RelocalizationMode.Disabled;
         }
-        SimulatedArena.getInstance().resetFieldForAuto();
-    initSwerveTelemetryPublishers();
+        if (robotDriveBase.swerveDriveSimulation != null)
+        {
+            SimulatedArena.getInstance().resetFieldForAuto();
+        }
+        initSwerveTelemetryPublishers();
 
         // Create and initialize sensors and indicators.
         ledIndicator =
@@ -537,7 +556,7 @@ public class Robot extends FrcRobot
     public void robotPeriodic(RunMode runMode, boolean slowPeriodicLoop)
     {
         simulationPeriodic();
-        publishSwerveTelemetry();
+        publishSwerveTelemetry(runMode, slowPeriodicLoop);
         if (relocalizationMode != RelocalizationMode.Disabled)
         {
             if (relocalizeRobot() && relocalizationMode == RelocalizationMode.OneShot)
@@ -570,22 +589,28 @@ public class Robot extends FrcRobot
         }
     }   //robotPeriodic
 
-    // @Override
-    public void simulationPeriodic() 
+    public void simulationPeriodic()
     {
-        SimulatedArena.getInstance().simulationPeriodic();
-        if (vision != null && vision.visionSim != null) {
+        if (robotDriveBase == null || robotDriveBase.swerveDriveSimulation == null)
+        {
+            return;
+        }
 
-            if (vision.leftCameraSim != null) {
+        SimulatedArena.getInstance().simulationPeriodic();
+        if (vision != null && vision.visionSim != null)
+        {
+            if (vision.leftCameraSim != null)
+            {
                 vision.visionSim.adjustCamera(vision.leftCameraSim, vision.getLeftShooterRobotToCamera());
             }
-            if (vision.rightCameraSim != null) {
+            if (vision.rightCameraSim != null)
+            {
                 vision.visionSim.adjustCamera(vision.rightCameraSim, vision.getRightShooterRobotToCamera());
             }
 
             vision.visionSim.update(robotDriveBase.swerveDriveSimulation.getSimulatedDriveTrainPose());
         }
-    }
+    }   //simulationPeriodic
 
     private void initSwerveTelemetryPublishers()
     {
@@ -620,9 +645,35 @@ public class Robot extends FrcRobot
         simulationPose3dPublisher = ntInstance
             .getStructTopic(SWERVE_NT_PREFIX + "/SimulationPose3d", Pose3d.struct)
             .publish();
+        selectedStartPosePublisher = ntInstance
+            .getStructTopic(AUTO_NT_PREFIX + "/SelectedStartPose", Pose2d.struct)
+            .publish();
+        activePathPublisher = ntInstance
+            .getStructArrayTopic(AUTO_NT_PREFIX + "/ActivePath", Pose2d.struct)
+            .publish();
+        targetPosePublisher = ntInstance
+            .getStructArrayTopic(AUTO_NT_PREFIX + "/TargetPose", Pose2d.struct)
+            .publish();
+        actualTrajectoryPublisher = ntInstance
+            .getStructArrayTopic(AUTO_NT_PREFIX + "/ActualTrajectory", Pose2d.struct)
+            .publish();
+        fuelPosesPublisher = ntInstance
+            .getStructArrayTopic(FIELD_NT_PREFIX + "/Fuel", Pose3d.struct)
+            .publish();
+        selectedAutoPublisher = ntInstance
+            .getStringTopic(AUTO_NT_PREFIX + "/SelectedConfiguration")
+            .publish();
+        autoActivePublisher = ntInstance
+            .getBooleanTopic(AUTO_NT_PREFIX + "/Active")
+            .publish();
+
+        activePathPublisher.set(new Pose2d[0]);
+        targetPosePublisher.set(new Pose2d[0]);
+        actualTrajectoryPublisher.set(new Pose2d[0]);
+        autoActivePublisher.set(false);
     }   //initSwerveTelemetryPublishers
 
-    private void publishSwerveTelemetry()
+    private void publishSwerveTelemetry(RunMode runMode, boolean slowPeriodicLoop)
     {
         if (swerveDriveForTelemetry == null || swerveModuleStatesPublisher == null)
         {
@@ -675,8 +726,81 @@ public class Robot extends FrcRobot
             {
                 simulationPose3dPublisher.set(new Pose3d(simulationPose));
             }
+
+            if (slowPeriodicLoop)
+            {
+                boolean autoActive = runMode == RunMode.AUTO_MODE;
+                autoActivePublisher.set(autoActive);
+                if (autoActive)
+                {
+                    actualAutoTrajectory.add(simulationPose);
+                    actualTrajectoryPublisher.set(actualAutoTrajectory.toArray(Pose2d[]::new));
+                }
+                publishActivePath();
+                fuelPosesPublisher.set(SimulatedArena.getInstance().getGamePiecesArrayByType("Fuel"));
+            }
         }
     }   //publishSwerveTelemetry
+
+    /** Publishes the currently executing Pure Pursuit segment in field coordinates for AdvantageScope. */
+    private void publishActivePath()
+    {
+        TrcPath path = robotBase.purePursuitDrive != null? robotBase.purePursuitDrive.getPath(): null;
+        TrcPose2D targetPose =
+            robotBase.purePursuitDrive != null? robotBase.purePursuitDrive.getTargetFieldPosition(): null;
+        if (path == null || targetPose == null)
+        {
+            activePathPublisher.set(new Pose2d[0]);
+            targetPosePublisher.set(new Pose2d[0]);
+            return;
+        }
+
+        TrcPath degreePath = path.toDegrees();
+        TrcPose2D referencePose = targetPose.addRelativePose(degreePath.getLastWaypoint().pose.invert());
+        TrcWaypoint[] waypoints = degreePath.getAllWaypoints();
+        Pose2d[] fieldPath = new Pose2d[waypoints.length];
+        for (int i = 0; i < waypoints.length; i++)
+        {
+            fieldPath[i] = toWpilibPose(referencePose.addRelativePose(waypoints[i].pose));
+        }
+        activePathPublisher.set(fieldPath);
+        targetPosePublisher.set(new Pose2d[] {toWpilibPose(targetPose)});
+    }   //publishActivePath
+
+    /**
+     * Applies the latest Elastic autonomous selection to MapleSim before the autonomous command is started.
+     *
+     * @param autoChoices specifies the freshly fetched autonomous configuration.
+     */
+    public void prepareSimulationAuto(FrcAuto.AutoChoices autoChoices)
+    {
+        if (robotDriveBase == null || robotDriveBase.swerveDriveSimulation == null)
+        {
+            return;
+        }
+
+        SimulatedArena.getInstance().resetFieldForAuto();
+        setRobotStartPosition(autoChoices);
+        Pose2d startPose = toWpilibPose(robotBase.driveBase.getFieldPosition());
+        robotDriveBase.swerveDriveSimulation.setSimulationWorldPose(startPose);
+        actualAutoTrajectory.clear();
+        actualAutoTrajectory.add(startPose);
+        selectedStartPosePublisher.set(startPose);
+        actualTrajectoryPublisher.set(new Pose2d[] {startPose});
+        activePathPublisher.set(new Pose2d[0]);
+        targetPosePublisher.set(new Pose2d[0]);
+        selectedAutoPublisher.set(autoChoices.toString());
+        autoActivePublisher.set(true);
+    }   //prepareSimulationAuto
+
+    /** Converts TRC field coordinates (inches, clockwise-positive) to WPILib field coordinates. */
+    private static Pose2d toWpilibPose(TrcPose2D pose)
+    {
+        return new Pose2d(
+            Units.inchesToMeters(pose.y),
+            -Units.inchesToMeters(pose.x),
+            Rotation2d.fromDegrees(-pose.angle));
+    }   //toWpilibPose
     /**
      * This method is called to cancel all pending operations and release the ownership of all subsystems.
      */
@@ -874,9 +998,9 @@ public class Robot extends FrcRobot
      */
     public void setRobotStartPosition(FrcAuto.AutoChoices autoChoices)
     {
-        int startPosIndex = FrcAuto.autoChoices.startPos.value;
+        int startPosIndex = autoChoices.startPos.value;
         TrcPose2D robotPose = adjustPoseByAlliance(
-            FrcAuto.autoChoices.alliance, RobotParams.Game.blueStartPoses[startPosIndex]);
+            autoChoices.alliance, RobotParams.Game.blueStartPoses[startPosIndex]);
         setFieldPosition(robotPose, false);
     }   //setRobotStartPosition
 

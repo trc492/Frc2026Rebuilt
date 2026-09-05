@@ -458,6 +458,13 @@ public class FrcAuto implements TrcRobot.RobotMode
     @Override
     public void startMode(RunMode prevMode, RunMode nextMode)
     {
+        // Always take a fresh snapshot of the Elastic/SmartDashboard selections when autonomous is enabled. The
+        // ChoicesSubmit button remains useful for previewing the configuration while disabled, but it is no longer a
+        // prerequisite for running the choices that are visible in Elastic.
+        autoChoices.fetchChoices();
+        robot.dashboard.displayPrintf(7, "%s", autoChoices);
+        robot.prepareSimulationAuto(autoChoices);
+
         //
         // Create autonomous command.
         //
