@@ -265,7 +265,10 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                             }
                         },
                         robot.adjustPathByAlliance(autoChoices.alliance, intermediatePose, pickupPose, endPose));
-                    robot.shooterSubsystem.enableGoalTracking(true, false, true, true);
+                    if (robot.shooterSubsystem != null)
+                    {
+                        robot.shooterSubsystem.enableGoalTracking(true, false, true, true);
+                    }
                     sm.waitForSingleEvent(event, State.FINISH_PICKUP);
                     break;
 
@@ -294,7 +297,10 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                             }
                         },
                         robot.adjustPathByAlliance(autoChoices.alliance, intermediatePose, pickupPose));
-                    robot.shooterSubsystem.enableGoalTracking(true, false, true, true);    
+                    if (robot.shooterSubsystem != null)
+                    {
+                        robot.shooterSubsystem.enableGoalTracking(true, false, true, true);
+                    }
                     sm.waitForSingleEvent(event, State.OUTPOST_DELAY);
                     break;
 
@@ -313,7 +319,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                 
                 case SHOOT_FUEL:
                     nextState = autoChoices.doClimb? State.GO_TO_CLIMB_POS: State.DONE;
-                    if (robot.shooterSubsystem != null)
+                    if (robot.shooterSubsystem != null && robot.autoShootTask != null)
                     {
                         robot.autoShootTask.autoShoot(null, event, true, true, false);
                         sm.waitForSingleEvent(event, nextState);
@@ -377,7 +383,10 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                 case CYCLE_NEUTRAL_ZONE:
                     if (currentNeutralZoneCycles > 0)
                     {
-                        robot.autoShootTask.cancel();
+                        if (robot.autoShootTask != null)
+                        {
+                            robot.autoShootTask.cancel();
+                        }
                         neutralZonePath[0].angle = 0.0;
                     }
 
@@ -420,7 +429,10 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                             }
                         },
                         robot.adjustPathByAlliance(autoChoices.alliance, neutralZonePath));
-                    robot.shooterSubsystem.enableGoalTracking(true, false, true, true);
+                    if (robot.shooterSubsystem != null)
+                    {
+                        robot.shooterSubsystem.enableGoalTracking(true, false, true, true);
+                    }
                     sm.waitForSingleEvent(event, State.RETURN_TO_SCORE_POS);
                     break;
 
@@ -447,8 +459,14 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                             if (wpCtxt.index == 4 || wpCtxt.index == -1)
                             {
                                 //robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
-                                robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
-                                robot.autoShootTask.autoShoot(null, null, false, true, false);
+                                if (robot.intakeSubsystem != null)
+                                {
+                                    robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
+                                }
+                                if (robot.autoShootTask != null)
+                                {
+                                    robot.autoShootTask.autoShoot(null, null, false, true, false);
+                                }
                             } 
                             else if ((wpCtxt.index == 5 || wpCtxt.index == -1) && atDepot)
                             {
@@ -496,7 +514,7 @@ public class CmdRebuiltAuto implements TrcRobot.RobotCommand
                     break;
 
                 case CLIMB:
-                    if (robot.climberSubsystem != null)
+                    if (robot.climberSubsystem != null && robot.autoClimbTask != null)
                     {
                         double climbDelay =
                             RobotParams.Game.AUTONOMOUS_PERIOD - TrcTimer.getModeElapsedTime() - 3.5;

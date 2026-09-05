@@ -241,7 +241,10 @@ double[] timestamps = new double[8];
                     TrcPose2D[] depotPickupPath = new TrcPose2D[] {depotPickupPose, depotEndPose};
 
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
-                    robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
+                    if (robot.intakeSubsystem != null)
+                    {
+                        robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
+                    }
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
                         (ctxt, canceled) ->
@@ -256,7 +259,10 @@ double[] timestamps = new double[8];
                             } 
                         },
                         robot.adjustPathByAlliance(autoChoices.alliance, depotPickupPath));
-                    robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
+                    if (robot.shooterSubsystem != null)
+                    {
+                        robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
+                    }
                     sm.waitForSingleEvent(event, State.SHOOT_DEPOT);
                     break;
             
@@ -292,7 +298,7 @@ double[] timestamps = new double[8];
                     break;
                 
                 case AUTO_CLIMB:
-                    if (robot.climberSubsystem != null)
+                    if (robot.climberSubsystem != null && robot.autoClimbTask != null)
                     {
                         // double climbDelay =
                         //     RobotParams.Game.AUTONOMOUS_PERIOD - TrcTimer.getModeElapsedTime() - 3.5;
@@ -444,7 +450,10 @@ timestamps[2] = TrcTimer.getModeElapsedTime();
                             // Main auto
                             if (wpCtxt.index == 1)
                             {
-                                robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
+                                if (robot.shooterSubsystem != null)
+                                {
+                                    robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
+                                }
                             }
                             if (wpCtxt.index == 2)
                             {

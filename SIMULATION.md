@@ -13,6 +13,9 @@ render directly.
    captured configuration on dashboard line 07.
 5. In the Simulation Driver Station, select **Autonomous**, enable, and run the routine.
 
+The simulation profile leaves the physical shooter, intake, and climber disabled. Custom autonomous routines treat
+those mechanism actions as no-ops and continue through their drive states, allowing their paths to be reviewed safely.
+
 ## AdvantageScope field setup
 
 Connect AdvantageScope live to NetworkTables at `localhost`, add a 2D or 3D field, and drag these topics onto it:

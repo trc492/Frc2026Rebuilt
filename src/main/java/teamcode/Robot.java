@@ -755,7 +755,7 @@ public class Robot extends FrcRobot
             return;
         }
 
-        TrcPath degreePath = path.toDegrees();
+        TrcPath degreePath = path.isInDegrees()? path: path.toDegrees();
         TrcPose2D referencePose = targetPose.addRelativePose(degreePath.getLastWaypoint().pose.invert());
         TrcWaypoint[] waypoints = degreePath.getAllWaypoints();
         Pose2d[] fieldPath = new Pose2d[waypoints.length];
@@ -782,7 +782,6 @@ public class Robot extends FrcRobot
         SimulatedArena.getInstance().resetFieldForAuto();
         setRobotStartPosition(autoChoices);
         Pose2d startPose = toWpilibPose(robotBase.driveBase.getFieldPosition());
-        robotDriveBase.swerveDriveSimulation.setSimulationWorldPose(startPose);
         actualAutoTrajectory.clear();
         actualAutoTrajectory.add(startPose);
         selectedStartPosePublisher.set(startPose);
@@ -1001,6 +1000,14 @@ public class Robot extends FrcRobot
         int startPosIndex = autoChoices.startPos.value;
         TrcPose2D robotPose = adjustPoseByAlliance(
             autoChoices.alliance, RobotParams.Game.blueStartPoses[startPosIndex]);
+        if (robotDriveBase != null && robotDriveBase.swerveDriveSimulation != null)
+        {
+            // Reset both the physics body and gyro before resetting odometry so all three coordinate sources begin
+            // autonomous with the selected Elastic pose and heading.
+            Pose2d simulationPose = toWpilibPose(robotPose);
+            robotDriveBase.swerveDriveSimulation.setSimulationWorldPose(simulationPose);
+            robotDriveBase.swerveDriveSimulation.getGyroSimulation().setRotation(simulationPose.getRotation());
+        }
         setFieldPosition(robotPose, false);
     }   //setRobotStartPosition
 
