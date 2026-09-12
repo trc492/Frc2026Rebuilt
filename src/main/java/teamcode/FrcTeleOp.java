@@ -60,6 +60,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     private double driveSpeedScale;
     private double turnSpeedScale;
     private boolean controlsEnabled = false;
+    private boolean xModeActive = false;
     protected boolean driverAltFunc = false;
     protected boolean operatorAltFunc = false;
     // private boolean rumbling = false;
@@ -140,6 +141,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         {
             // Set robot to FIELD by default but don't change the heading.
             robot.setDriveOrientation(driveOrientationMenu.getCurrentChoiceObject(), false);
+            xModeActive = false;
         }
 
         if (RobotParams.Preferences.hybridMode)
@@ -200,12 +202,20 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                     {
                         boolean showDriveBaseStatus = robot.dashboard.getBoolean(
                             Dashboard.DBKEY_TELEOP_SHOW_DRIVE_POWER, RobotParams.Preferences.showDrivePower);
+                        DriveOrientation driveOrientation = robot.robotBase.driveBase.getDriveOrientation();
+                        // Field-relative module states depend on the current heading, so they must be recalculated
+                        // while the robot rotates even when the joystick values have not changed. X-mode is the one
+                        // intentional exception: it should remain active until the driver changes an input.
+                        boolean forceDriveUpdate =
+                            lockedHeading != null ||
+                            (driveOrientation == DriveOrientation.FIELD && !xModeActive);
                         double[] driveInputs = robot.driverController.getDriveInputs(
                             driveModeMenu.getCurrentChoiceObject(), true, driveSpeedScale, turnSpeedScale,
-                            lockedHeading != null);
-                        // driveInputs have changed or rotating to lockedHeading.
+                            forceDriveUpdate);
+                        // driveInputs have changed or require a fresh heading-dependent calculation.
                         if (driveInputs != null)
                         {
+                            xModeActive = false;
                             double turnPower = driveInputs[2];
 
                             if (turnPidCtrl != null && lockedHeading != null)
@@ -547,6 +557,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                         if (robot.robotBase != null)
                         {
                             robot.globalTracer.traceInfo(moduleName, ">>>>> X Mode");
+                            xModeActive = true;
                             ((TrcSwerveDrive) (robot.robotBase.driveBase)).setXMode(null);
                         }
                     }
