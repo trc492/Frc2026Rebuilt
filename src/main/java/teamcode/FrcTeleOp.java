@@ -61,6 +61,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     private double turnSpeedScale;
     private boolean controlsEnabled = false;
     private boolean xModeActive = false;
+    private DriveOrientation prevDriveOrientation = null;
     protected boolean driverAltFunc = false;
     protected boolean operatorAltFunc = false;
     // private boolean rumbling = false;
@@ -141,6 +142,8 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         {
             // Set robot to FIELD by default but don't change the heading.
             robot.setDriveOrientation(driveOrientationMenu.getCurrentChoiceObject(), false);
+            // Force the first drive command to use the selected orientation even if the sticks have not moved.
+            prevDriveOrientation = null;
             xModeActive = false;
         }
 
@@ -203,15 +206,17 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                         boolean showDriveBaseStatus = robot.dashboard.getBoolean(
                             Dashboard.DBKEY_TELEOP_SHOW_DRIVE_POWER, RobotParams.Preferences.showDrivePower);
                         DriveOrientation driveOrientation = robot.robotBase.driveBase.getDriveOrientation();
+                        boolean driveOrientationChanged = driveOrientation != prevDriveOrientation;
                         // Field-relative module states depend on the current heading, so they must be recalculated
                         // while the robot rotates even when the joystick values have not changed. X-mode is the one
                         // intentional exception: it should remain active until the driver changes an input.
                         boolean forceDriveUpdate =
-                            lockedHeading != null ||
+                            driveOrientationChanged || lockedHeading != null ||
                             (driveOrientation == DriveOrientation.FIELD && !xModeActive);
                         double[] driveInputs = robot.driverController.getDriveInputs(
                             driveModeMenu.getCurrentChoiceObject(), true, driveSpeedScale, turnSpeedScale,
                             forceDriveUpdate);
+                        prevDriveOrientation = driveOrientation;
                         // driveInputs have changed or require a fresh heading-dependent calculation.
                         if (driveInputs != null)
                         {

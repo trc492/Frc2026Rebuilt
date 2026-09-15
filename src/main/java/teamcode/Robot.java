@@ -446,7 +446,9 @@ public class Robot extends FrcRobot
                                 aprilTagObj.timestamp, aprilTagObj.robotPose, robotPose):
                             aprilTagObj.robotPose;
 
-                    robotBase.driveBase.setFieldPosition(relocalizedPose);
+                    // AprilTags correct field translation only. Preserve the gyro/driver heading so vision cannot
+                    // change the field-forward reference or make robot-oriented driving behave field-oriented.
+                    robotBase.driveBase.setFieldPosition(relocalizedPose.clone(), true);
                     globalTracer.traceDebug(
                         moduleName,
                         "VisionRelocalize: Time=%.6f, Relocalize %s->%s, VisionPose[%d](time=%.6f, pose=%s)",
@@ -774,7 +776,8 @@ dashboard.displayPrintf(7, "%s", FrcAuto.autoChoices);
                     ">>>>> VisionRelocalize: Before=%s, After=%s",
                     robotBase.driveBase.getFieldPosition(), aprilTagObj.robotPose);
             }
-            robotBase.driveBase.setFieldPosition(relocalizedPose);
+            // AprilTags correct field translation only; heading remains under gyro/driver control.
+            robotBase.driveBase.setFieldPosition(relocalizedPose.clone(), true);
             success = true;
         }
         else
