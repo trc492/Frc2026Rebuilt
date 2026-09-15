@@ -458,6 +458,10 @@ public class FrcAuto implements TrcRobot.RobotMode
     @Override
     public void startMode(RunMode prevMode, RunMode nextMode)
     {
+        // Autonomous and vision use global field headings. Establish the matching alliance-relative driver-forward
+        // reference now so it remains correct through the transition into TeleOp.
+        robot.setGlobalFieldOrientedDrive(autoChoices.alliance);
+
         //
         // Create autonomous command.
         //

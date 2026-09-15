@@ -140,8 +140,9 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         //
         if (robot.robotBase != null)
         {
-            // Set robot to FIELD by default but don't change the heading.
-            robot.setDriveOrientation(driveOrientationMenu.getCurrentChoiceObject(), false);
+            // Reassert the global field reference established in Auto. This also makes TeleOp field-oriented if the
+            // robot was disabled between modes, without treating its current facing as the new forward direction.
+            robot.setGlobalFieldOrientedDrive(myAlliance);
             // Force the first drive command to use the selected orientation even if the sticks have not moved.
             prevDriveOrientation = null;
             xModeActive = false;

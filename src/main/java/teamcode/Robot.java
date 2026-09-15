@@ -105,18 +105,22 @@ public class Robot extends FrcRobot
     public TrcRobotBattery battery;
     public AnalogInput pressureSensor;
     // Robot Drive.
+    private static final double AUTO_POSE_HANDOFF_TIMEOUT = 45.0;
     public DriveBase robotDriveBase;
     public FrcRobotBase.RobotInfo robotInfo;
     public FrcRobotBase robotBase;
     private TrcPose2D endOfAutoRobotPose = null;
+    private double endOfAutoRobotPoseTimestamp = 0.0;
     // Miscellaneous hardware.
     public LEDIndicator ledIndicator;
     // Vision.
     public Vision vision;
     public boolean hasVisionPoseEstimator = false;
     public TrcVisionRelocalize trcVisionRelocalize = null;
-    // Vision may establish/correct global heading after startup. This is latched false by the first manual driver
-    // heading reset and remains false until the robot program is initialized again.
+    // Manual heading selection remains authoritative until program restart. A valid Auto-to-TeleOp handoff can also
+    // make Auto heading authoritative, but only for that TeleOp session.
+    private boolean manualFieldHeadingSet = false;
+    private boolean autoHeadingOverrideEnabled = false;
     private boolean visionHeadingCorrectionEnabled = true;
     // Hybrid mode objects.
     public Command m_autonomousCommand;
@@ -312,6 +316,43 @@ public class Robot extends FrcRobot
     {
         // Read FMS Match info and Build info.
         matchInfo = FrcMatchInfo.getMatchInfo();
+        TrcPose2D autoPoseToRestore = null;
+        if (runMode == RunMode.TELEOP_MODE)
+        {
+            double autoPoseAge = Timer.getFPGATimestamp() - endOfAutoRobotPoseTimestamp;
+            if (prevMode == RunMode.DISABLED_MODE && endOfAutoRobotPose != null &&
+                autoPoseAge >= 0.0 && autoPoseAge <= AUTO_POSE_HANDOFF_TIMEOUT)
+            {
+                autoPoseToRestore = endOfAutoRobotPose;
+                globalTracer.traceInfo(
+                    moduleName, "Accepting Auto pose for TeleOp handoff: age=%.1fs, pose=%s",
+                    autoPoseAge, autoPoseToRestore);
+            }
+            else if (endOfAutoRobotPose != null)
+            {
+                globalTracer.traceInfo(
+                    moduleName,
+                    "Discarding Auto pose for TeleOp handoff: prevMode=%s, age=%.1fs, timeout=%.1fs",
+                    prevMode, autoPoseAge, AUTO_POSE_HANDOFF_TIMEOUT);
+            }
+
+            // A saved pose is single-use even when it is rejected, so a later TeleOp enable cannot revive stale Auto
+            // alignment.
+            endOfAutoRobotPose = null;
+            endOfAutoRobotPoseTimestamp = 0.0;
+        }
+        else if (runMode != RunMode.DISABLED_MODE && endOfAutoRobotPose != null)
+        {
+            // Any enabled mode between Auto and TeleOp breaks the required Auto -> Disabled -> TeleOp sequence.
+            globalTracer.traceInfo(moduleName, "Discarding Auto pose: intervening enabled mode=%s", runMode);
+            endOfAutoRobotPose = null;
+            endOfAutoRobotPoseTimestamp = 0.0;
+        }
+
+        // A valid Auto handoff owns heading for this TeleOp session. Otherwise, vision heading correction returns to
+        // its normal state unless the driver has manually established field-forward since program initialization.
+        setAutoHeadingOverrideEnabled(runMode == RunMode.TELEOP_MODE && autoPoseToRestore != null);
+
         if (runMode == RunMode.DISABLED_MODE)
         {
             if (RobotParams.Preferences.useTraceLog)
@@ -341,10 +382,11 @@ public class Robot extends FrcRobot
 
                 if (runMode != RunMode.AUTO_MODE)
                 {
-                    if (runMode == RunMode.TELEOP_MODE && endOfAutoRobotPose != null)
+                    if (autoPoseToRestore != null)
                     {
-                        robotBase.driveBase.setFieldPosition(endOfAutoRobotPose);
-                        endOfAutoRobotPose = null;
+                        // Auto is intentionally authoritative at this handoff: overwrite any vision pose accepted
+                        // while Disabled. Revisit this priority if TeleOp vision localization should win in the future.
+                        robotBase.driveBase.setFieldPosition(autoPoseToRestore);
                     }
 
                     if (RobotParams.Preferences.useGyroAssist)
@@ -386,9 +428,18 @@ public class Robot extends FrcRobot
         cancelAll();
         if (runMode != RunMode.DISABLED_MODE && robotBase != null)
         {
-            if (runMode == RunMode.AUTO_MODE)
+            if (runMode == RunMode.AUTO_MODE && nextMode == RunMode.DISABLED_MODE)
             {
                 endOfAutoRobotPose = robotBase.driveBase.getFieldPosition();
+                endOfAutoRobotPoseTimestamp = Timer.getFPGATimestamp();
+                globalTracer.traceInfo(
+                    moduleName, "Saved Auto pose for Disabled-to-TeleOp handoff: pose=%s", endOfAutoRobotPose);
+            }
+            else if (runMode == RunMode.AUTO_MODE)
+            {
+                // Only Auto -> Disabled may begin a pose handoff.
+                endOfAutoRobotPose = null;
+                endOfAutoRobotPoseTimestamp = 0.0;
             }
             robotBase.driveBase.setOdometryEnabled(false);
             //robotDrive.pidDrive.pidDriveTaskProfiler.printPerformanceMetrics(robotDrive.pidDrive.tracer);
@@ -749,6 +800,26 @@ dashboard.displayPrintf(7, "%s", FrcAuto.autoChoices);
     }   //setDriveOrientation
 
     /**
+     * Configures field-oriented driving from the global field heading established by autonomous odometry or vision.
+     * Driver-forward points away from the alliance wall: global 0 degrees for Blue and 180 degrees for Red.
+     *
+     * @param alliance specifies the driver's alliance.
+     */
+    public void setGlobalFieldOrientedDrive(Alliance alliance)
+    {
+        if (robotBase != null)
+        {
+            double fieldForwardHeading = alliance == Alliance.Red? 180.0: 0.0;
+
+            setDriveOrientation(DriveOrientation.FIELD, false);
+            robotBase.driveBase.setFieldForwardHeading(fieldForwardHeading);
+            globalTracer.traceInfo(
+                moduleName, "Global field-oriented drive: alliance=%s, forward=%.1f, robotHeading=%.1f",
+                alliance, fieldForwardHeading, robotBase.driveBase.getHeading());
+        }
+    }   //setGlobalFieldOrientedDrive
+
+    /**
      * This method manually sets the current robot heading as field-forward and prevents subsequent AprilTag
      * detections from changing the global heading until the robot program is initialized again.
      */
@@ -767,17 +838,45 @@ dashboard.displayPrintf(7, "%s", FrcAuto.autoChoices);
      */
     private void disableVisionHeadingCorrection()
     {
-        if (visionHeadingCorrectionEnabled)
+        if (!manualFieldHeadingSet)
         {
-            visionHeadingCorrectionEnabled = false;
-            if (hasVisionPoseEstimator)
-            {
-                ((FrcSwerveDrive) robotBase.driveBase).setVisionHeadingCorrectionEnabled(false);
-            }
+            manualFieldHeadingSet = true;
+            updateVisionHeadingCorrectionState();
             globalTracer.traceInfo(
                 moduleName, "Manual field heading set: AprilTag heading correction disabled until initialization.");
         }
     }   //disableVisionHeadingCorrection
+
+    /**
+     * Enables/disables Auto heading priority for the current TeleOp session. Auto heading currently overrides vision
+     * heading after a valid handoff; revisit this policy if vision should become authoritative after TeleOp starts.
+     *
+     * @param enabled specifies true to preserve the handed-off Auto heading, false to allow normal vision behavior.
+     */
+    private void setAutoHeadingOverrideEnabled(boolean enabled)
+    {
+        if (autoHeadingOverrideEnabled != enabled)
+        {
+            autoHeadingOverrideEnabled = enabled;
+            updateVisionHeadingCorrectionState();
+            globalTracer.traceInfo(moduleName, "Auto heading override enabled=%s", enabled);
+        }
+    }   //setAutoHeadingOverrideEnabled
+
+    /** Updates whether vision may correct heading while always retaining vision X/Y correction. */
+    private void updateVisionHeadingCorrectionState()
+    {
+        boolean enabled = !manualFieldHeadingSet && !autoHeadingOverrideEnabled;
+
+        if (visionHeadingCorrectionEnabled != enabled)
+        {
+            visionHeadingCorrectionEnabled = enabled;
+            if (hasVisionPoseEstimator)
+            {
+                ((FrcSwerveDrive) robotBase.driveBase).setVisionHeadingCorrectionEnabled(enabled);
+            }
+        }
+    }   //updateVisionHeadingCorrectionState
 
     /**
      * This method uses the detect AprilTag to relocalize the robot's position.
