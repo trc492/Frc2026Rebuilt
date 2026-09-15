@@ -115,6 +115,9 @@ public class Robot extends FrcRobot
     public Vision vision;
     public boolean hasVisionPoseEstimator = false;
     public TrcVisionRelocalize trcVisionRelocalize = null;
+    // Vision may establish/correct global heading after startup. This is latched false by the first manual driver
+    // heading reset and remains false until the robot program is initialized again.
+    private boolean visionHeadingCorrectionEnabled = true;
     // Hybrid mode objects.
     public Command m_autonomousCommand;
     // Other subsystems.
@@ -446,9 +449,8 @@ public class Robot extends FrcRobot
                                 aprilTagObj.timestamp, aprilTagObj.robotPose, robotPose):
                             aprilTagObj.robotPose;
 
-                    // AprilTags correct field translation only. Preserve the gyro/driver heading so vision cannot
-                    // change the field-forward reference or make robot-oriented driving behave field-oriented.
-                    robotBase.driveBase.setFieldPosition(relocalizedPose.clone(), true);
+                    robotBase.driveBase.setFieldPosition(
+                        relocalizedPose.clone(), !visionHeadingCorrectionEnabled);
                     globalTracer.traceDebug(
                         moduleName,
                         "VisionRelocalize: Time=%.6f, Relocalize %s->%s, VisionPose[%d](time=%.6f, pose=%s)",
@@ -734,6 +736,10 @@ dashboard.displayPrintf(7, "%s", FrcAuto.autoChoices);
     {
         if (robotBase != null)
         {
+            if (orientation == DriveOrientation.FIELD && resetHeading)
+            {
+                disableVisionHeadingCorrection();
+            }
             robotBase.driveBase.setDriveOrientation(orientation, resetHeading);
             if (ledIndicator != null)
             {
@@ -741,6 +747,37 @@ dashboard.displayPrintf(7, "%s", FrcAuto.autoChoices);
             }
         }
     }   //setDriveOrientation
+
+    /**
+     * This method manually sets the current robot heading as field-forward and prevents subsequent AprilTag
+     * detections from changing the global heading until the robot program is initialized again.
+     */
+    public void resetFieldForwardHeading()
+    {
+        if (robotBase != null && robotBase.driveBase.getDriveOrientation() == DriveOrientation.FIELD)
+        {
+            disableVisionHeadingCorrection();
+            robotBase.driveBase.resetFieldForwardHeading();
+        }
+    }   //resetFieldForwardHeading
+
+    /**
+     * This method latches off vision heading correction after the driver manually establishes a heading. Vision
+     * continues correcting X/Y position.
+     */
+    private void disableVisionHeadingCorrection()
+    {
+        if (visionHeadingCorrectionEnabled)
+        {
+            visionHeadingCorrectionEnabled = false;
+            if (hasVisionPoseEstimator)
+            {
+                ((FrcSwerveDrive) robotBase.driveBase).setVisionHeadingCorrectionEnabled(false);
+            }
+            globalTracer.traceInfo(
+                moduleName, "Manual field heading set: AprilTag heading correction disabled until initialization.");
+        }
+    }   //disableVisionHeadingCorrection
 
     /**
      * This method uses the detect AprilTag to relocalize the robot's position.
@@ -776,8 +813,8 @@ dashboard.displayPrintf(7, "%s", FrcAuto.autoChoices);
                     ">>>>> VisionRelocalize: Before=%s, After=%s",
                     robotBase.driveBase.getFieldPosition(), aprilTagObj.robotPose);
             }
-            // AprilTags correct field translation only; heading remains under gyro/driver control.
-            robotBase.driveBase.setFieldPosition(relocalizedPose.clone(), true);
+            robotBase.driveBase.setFieldPosition(
+                relocalizedPose.clone(), !visionHeadingCorrectionEnabled);
             success = true;
         }
         else

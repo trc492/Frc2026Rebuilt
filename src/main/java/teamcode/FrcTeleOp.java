@@ -544,7 +544,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                     }
                     else
                     {
-                        robot.robotBase.driveBase.resetFieldForwardHeading();
+                        robot.resetFieldForwardHeading();
                         robot.globalTracer.traceInfo(
                             moduleName,
                             ">>>>> Reset field forward heading (heading=" + robot.robotBase.driveBase.getHeading() +
