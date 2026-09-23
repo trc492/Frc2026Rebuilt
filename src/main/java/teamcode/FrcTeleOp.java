@@ -27,6 +27,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcXboxController;
+import teamcode.DriverProfile.IntakeControlMode;
+import teamcode.DriverProfile.JoystickResponseCurve;
 import teamcode.autotasks.TaskAutoClimb.ClimbSide;
 import teamcode.subsystems.Climber;
 import teamcode.subsystems.Shooter;
@@ -55,8 +57,9 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     // Global objects.
     //
     protected final Robot robot;
+    private final FrcChoiceMenu<DriverProfile> driverProfileMenu;
     private final FrcChoiceMenu<DriveMode> driveModeMenu;
-    private final FrcChoiceMenu<DriveOrientation> driveOrientationMenu;
+    private DriverProfile driverProfile = DriverProfiles.WYNSTON;
     private double driveSpeedScale;
     private double turnSpeedScale;
     private boolean controlsEnabled = false;
@@ -68,6 +71,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     private Double prevTiltPower = 0.0;
     private double prevClimbPower = 0.0;
     private boolean rTriggerShootPressed = false;
+    private boolean leftTriggerIntakePressed = false;
     // Locked heading
     private final TrcPidController turnPidCtrl;
     private Double lockedHeading;
@@ -90,15 +94,21 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         //
         this.robot = robot;
 
+        DriverProfiles.initializePreferences();
+        driverProfileMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_TELEOP_DRIVER_PROFILE);
+        for (int i = 0; i < DriverProfiles.ALL.size(); i++)
+        {
+            DriverProfile profile = DriverProfiles.ALL.get(i);
+            DriverProfile configuredProfile = DriverProfiles.loadConfiguredProfile(profile);
+            driverProfileMenu.addChoice(
+                configuredProfile.getName(), profile, profile == DriverProfiles.WYNSTON,
+                i == DriverProfiles.ALL.size() - 1);
+        }
+
         driveModeMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_TELEOP_DRIVE_MODE);
         driveModeMenu.addChoice("Tank", DriveMode.TankMode);
         driveModeMenu.addChoice("Holonomic", DriveMode.HolonomicMode);
         driveModeMenu.addChoice("Arcade", DriveMode.ArcadeMode, true, true);
-
-        driveOrientationMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_TELEOP_DRIVE_ORIENTATION);
-        driveOrientationMenu.addChoice("Inverted", DriveOrientation.INVERTED);
-        driveOrientationMenu.addChoice("Robot", DriveOrientation.ROBOT);
-        driveOrientationMenu.addChoice("Field", DriveOrientation.FIELD, true, true);
 
         driveSpeedScale = robot.dashboard.getNumber(
             Dashboard.DBKEY_TELEOP_DRIVE_NORMAL_SCALE, DEF_DRIVE_NORMAL_SCALE);
@@ -130,6 +140,15 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         shiftIndex = 0;
         shiftAlliance = null;
         rumbling = false;
+        DriverProfile selectedProfile = driverProfileMenu.getCurrentChoiceObject();
+        if (selectedProfile == null)
+        {
+            selectedProfile = DriverProfiles.WYNSTON;
+        }
+        driverProfile = DriverProfiles.loadConfiguredProfile(selectedProfile);
+        applyDriverProfile();
+        leftTriggerIntakePressed =
+            robot.driverController != null && robot.driverController.getLeftTrigger() >= 0.5;
         //
         // Enabling joysticks.
         //
@@ -139,8 +158,8 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         //
         if (robot.robotBase != null)
         {
-            // Set robot to FIELD by default but don't change the heading.
-            robot.setDriveOrientation(driveOrientationMenu.getCurrentChoiceObject(), false);
+            // Force the first drive command to use the selected orientation even if the sticks have not moved.
+            prevDriveOrientation = null;
             xModeActive = false;
         }
 
@@ -210,8 +229,10 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                             lockedHeading != null ||
                             (driveOrientation == DriveOrientation.FIELD && !xModeActive);
                         double[] driveInputs = robot.driverController.getDriveInputs(
-                            driveModeMenu.getCurrentChoiceObject(), true, driveSpeedScale, turnSpeedScale,
-                            forceDriveUpdate);
+                            driveModeMenu.getCurrentChoiceObject(),
+                            driverProfile.getJoystickResponseCurve().isExponential(),
+                            driveSpeedScale, turnSpeedScale, forceDriveUpdate);
+                        prevDriveOrientation = driveOrientation;
                         // driveInputs have changed or require a fresh heading-dependent calculation.
                         if (driveInputs != null)
                         {
@@ -368,18 +389,22 @@ public class FrcTeleOp implements TrcRobot.RobotMode
 
                     if (robot.intakeSubsystem != null)
                     {
-                        double lTrigger = robot.driverController.getLeftTrigger(); 
+                        boolean intakePressed = robot.driverController.getLeftTrigger() >= 0.5;
 
-                        if (lTrigger >= 0.5 && !robot.intakeSubsystem.isIntakeOn())
+                        if (driverProfile.getIntakeControlMode() == IntakeControlMode.HOLD)
                         {
-                            robot.globalTracer.traceInfo(moduleName, ">>>>> Enable Intake.");
-                            robot.intakeSubsystem.setIntakeEnabled(true);
-                        } 
-                        else if (lTrigger < 0.5 && robot.intakeSubsystem.isIntakeOn())
-                        {
-                            robot.globalTracer.traceInfo(moduleName, ">>>>> Disable Intake.");
-                            robot.intakeSubsystem.setIntakeEnabled(false);
+                            if (intakePressed != robot.intakeSubsystem.isIntakeOn())
+                            {
+                                robot.globalTracer.traceInfo(
+                                    moduleName, intakePressed? ">>>>> Enable Intake.": ">>>>> Disable Intake.");
+                                robot.intakeSubsystem.setIntakeEnabled(intakePressed);
+                            }
                         }
+                        else if (intakePressed && !leftTriggerIntakePressed)
+                        {
+                            toggleIntake();
+                        }
+                        leftTriggerIntakePressed = intakePressed;
                     }
 
                     if (robot.autoShootTask != null)
@@ -469,6 +494,44 @@ public class FrcTeleOp implements TrcRobot.RobotMode
             }
         }
     }   //periodic
+
+    /** Applies the selected driver's preferences at the beginning of TeleOp. */
+    private void applyDriverProfile()
+    {
+        JoystickResponseCurve responseCurve = driverProfile.getJoystickResponseCurve();
+        if (robot.driverController != null)
+        {
+            robot.driverController.setExponent(responseCurve.getExponent());
+        }
+
+        if (robot.robotBase != null)
+        {
+            if (driverProfile.getDefaultDriveOrientation() == DriveOrientation.FIELD)
+            {
+                // Preserve the global field reference established by Auto or vision instead of redefining forward.
+                robot.setGlobalFieldOrientedDrive(myAlliance);
+            }
+            else
+            {
+                robot.setDriveOrientation(driverProfile.getDefaultDriveOrientation(), false);
+            }
+        }
+
+        robot.dashboard.putString(Dashboard.DBKEY_TELEOP_ACTIVE_DRIVER_PROFILE, driverProfile.getName());
+        robot.dashboard.putString(
+            Dashboard.DBKEY_TELEOP_ACTIVE_DRIVE_ORIENTATION,
+            driverProfile.getDefaultDriveOrientation().name());
+        robot.dashboard.putString(
+            Dashboard.DBKEY_TELEOP_ACTIVE_INTAKE_MODE, driverProfile.getIntakeControlMode().name());
+        robot.dashboard.putString(
+            Dashboard.DBKEY_TELEOP_ACTIVE_MOTION_PROFILE, driverProfile.getMotionProfileShape().name());
+        robot.dashboard.putString(
+            Dashboard.DBKEY_TELEOP_ACTIVE_JOYSTICK_CURVE, responseCurve.name());
+        robot.globalTracer.traceInfo(
+            moduleName, "DriverProfile=%s, orientation=%s, intake=%s, motionProfile=%s, joystickCurve=%s",
+            driverProfile.getName(), driverProfile.getDefaultDriveOrientation(), driverProfile.getIntakeControlMode(),
+            driverProfile.getMotionProfileShape(), responseCurve);
+    }   //applyDriverProfile
 
     /**
      * This method enables/disables joystick controls.
