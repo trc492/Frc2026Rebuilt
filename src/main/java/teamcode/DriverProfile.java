@@ -39,15 +39,6 @@ public final class DriverProfile
         TOGGLE
     }   //enum IntakeControlMode
 
-    /**
-     * Describes the velocity profile used by the drive system. TRAPEZOIDAL represents the existing drive behavior.
-     * Keeping this in the driver profile gives future profile consumers one place to select other profile shapes.
-     */
-    public enum MotionProfileShape
-    {
-        TRAPEZOIDAL
-    }   //enum MotionProfileShape
-
     /** Describes how raw joystick values are translated into drive commands. */
     public enum JoystickResponseCurve
     {
@@ -77,7 +68,6 @@ public final class DriverProfile
     private final String name;
     private final DriveOrientation defaultDriveOrientation;
     private final IntakeControlMode intakeControlMode;
-    private final MotionProfileShape motionProfileShape;
     private final JoystickResponseCurve joystickResponseCurve;
 
     private DriverProfile(Builder builder)
@@ -85,7 +75,6 @@ public final class DriverProfile
         name = builder.name;
         defaultDriveOrientation = builder.defaultDriveOrientation;
         intakeControlMode = builder.intakeControlMode;
-        motionProfileShape = builder.motionProfileShape;
         joystickResponseCurve = builder.joystickResponseCurve;
     }   //DriverProfile
 
@@ -103,11 +92,6 @@ public final class DriverProfile
     {
         return intakeControlMode;
     }   //getIntakeControlMode
-
-    public MotionProfileShape getMotionProfileShape()
-    {
-        return motionProfileShape;
-    }   //getMotionProfileShape
 
     public JoystickResponseCurve getJoystickResponseCurve()
     {
@@ -131,7 +115,6 @@ public final class DriverProfile
         private final String name;
         private DriveOrientation defaultDriveOrientation = DriveOrientation.FIELD;
         private IntakeControlMode intakeControlMode = IntakeControlMode.HOLD;
-        private MotionProfileShape motionProfileShape = MotionProfileShape.TRAPEZOIDAL;
         private JoystickResponseCurve joystickResponseCurve = JoystickResponseCurve.S_CURVE;
 
         private Builder(String name)
@@ -154,12 +137,6 @@ public final class DriverProfile
             this.intakeControlMode = Objects.requireNonNull(intakeControlMode);
             return this;
         }   //setIntakeControlMode
-
-        public Builder setMotionProfileShape(MotionProfileShape motionProfileShape)
-        {
-            this.motionProfileShape = Objects.requireNonNull(motionProfileShape);
-            return this;
-        }   //setMotionProfileShape
 
         public Builder setJoystickResponseCurve(JoystickResponseCurve joystickResponseCurve)
         {

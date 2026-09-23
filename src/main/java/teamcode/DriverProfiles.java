@@ -27,7 +27,6 @@ import java.util.List;
 import edu.wpi.first.wpilibj.Preferences;
 import teamcode.DriverProfile.IntakeControlMode;
 import teamcode.DriverProfile.JoystickResponseCurve;
-import teamcode.DriverProfile.MotionProfileShape;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
 
 /** Central registry of selectable driver profiles. */
@@ -39,7 +38,6 @@ public final class DriverProfiles
         DriverProfile.builder("Wynston")
             .setDefaultDriveOrientation(DriveOrientation.FIELD)
             .setIntakeControlMode(IntakeControlMode.HOLD)
-            .setMotionProfileShape(MotionProfileShape.TRAPEZOIDAL)
             .setJoystickResponseCurve(JoystickResponseCurve.S_CURVE)
             .build();
 
@@ -47,8 +45,7 @@ public final class DriverProfiles
         DriverProfile.builder("Andrew")
             .setDefaultDriveOrientation(DriveOrientation.ROBOT)
             .setIntakeControlMode(IntakeControlMode.TOGGLE)
-            .setMotionProfileShape(MotionProfileShape.TRAPEZOIDAL)
-            .setJoystickResponseCurve(JoystickResponseCurve.S_CURVE)
+            .setJoystickResponseCurve(JoystickResponseCurve.LINEAR)
             .build();
 
     public static final List<DriverProfile> ALL = List.of(WYNSTON, ANDREW);
@@ -63,7 +60,6 @@ public final class DriverProfiles
             Preferences.initString(
                 prefix + "DefaultDriveOrientation", profile.getDefaultDriveOrientation().name());
             Preferences.initString(prefix + "IntakeControlMode", profile.getIntakeControlMode().name());
-            Preferences.initString(prefix + "MotionProfileShape", profile.getMotionProfileShape().name());
             Preferences.initString(prefix + "JoystickResponseCurve", profile.getJoystickResponseCurve().name());
         }
     }   //initializePreferences
@@ -92,10 +88,6 @@ public final class DriverProfiles
             .setIntakeControlMode(
                 getEnumPreference(
                     prefix + "IntakeControlMode", IntakeControlMode.class, defaultProfile.getIntakeControlMode()))
-            .setMotionProfileShape(
-                getEnumPreference(
-                    prefix + "MotionProfileShape", MotionProfileShape.class,
-                    defaultProfile.getMotionProfileShape()))
             .setJoystickResponseCurve(
                 getEnumPreference(
                     prefix + "JoystickResponseCurve", JoystickResponseCurve.class,

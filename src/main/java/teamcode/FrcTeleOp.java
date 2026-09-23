@@ -158,8 +158,6 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         //
         if (robot.robotBase != null)
         {
-            // Force the first drive command to use the selected orientation even if the sticks have not moved.
-            prevDriveOrientation = null;
             xModeActive = false;
         }
 
@@ -232,7 +230,6 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                             driveModeMenu.getCurrentChoiceObject(),
                             driverProfile.getJoystickResponseCurve().isExponential(),
                             driveSpeedScale, turnSpeedScale, forceDriveUpdate);
-                        prevDriveOrientation = driveOrientation;
                         // driveInputs have changed or require a fresh heading-dependent calculation.
                         if (driveInputs != null)
                         {
@@ -506,15 +503,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
 
         if (robot.robotBase != null)
         {
-            if (driverProfile.getDefaultDriveOrientation() == DriveOrientation.FIELD)
-            {
-                // Preserve the global field reference established by Auto or vision instead of redefining forward.
-                robot.setGlobalFieldOrientedDrive(myAlliance);
-            }
-            else
-            {
-                robot.setDriveOrientation(driverProfile.getDefaultDriveOrientation(), false);
-            }
+            robot.setDriveOrientation(driverProfile.getDefaultDriveOrientation(), false);
         }
 
         robot.dashboard.putString(Dashboard.DBKEY_TELEOP_ACTIVE_DRIVER_PROFILE, driverProfile.getName());
@@ -524,13 +513,11 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         robot.dashboard.putString(
             Dashboard.DBKEY_TELEOP_ACTIVE_INTAKE_MODE, driverProfile.getIntakeControlMode().name());
         robot.dashboard.putString(
-            Dashboard.DBKEY_TELEOP_ACTIVE_MOTION_PROFILE, driverProfile.getMotionProfileShape().name());
-        robot.dashboard.putString(
             Dashboard.DBKEY_TELEOP_ACTIVE_JOYSTICK_CURVE, responseCurve.name());
         robot.globalTracer.traceInfo(
-            moduleName, "DriverProfile=%s, orientation=%s, intake=%s, motionProfile=%s, joystickCurve=%s",
+            moduleName, "DriverProfile=%s, orientation=%s, intake=%s, joystickCurve=%s",
             driverProfile.getName(), driverProfile.getDefaultDriveOrientation(), driverProfile.getIntakeControlMode(),
-            driverProfile.getMotionProfileShape(), responseCurve);
+            responseCurve);
     }   //applyDriverProfile
 
     /**

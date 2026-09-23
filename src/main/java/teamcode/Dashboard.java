@@ -143,7 +143,6 @@ public class Dashboard
     public static final String DBKEY_TELEOP_ACTIVE_DRIVE_ORIENTATION =
                                                                     "TeleOp/ActiveDriveOrientation"; //String
     public static final String DBKEY_TELEOP_ACTIVE_INTAKE_MODE      = "TeleOp/ActiveIntakeMode";    //String
-    public static final String DBKEY_TELEOP_ACTIVE_MOTION_PROFILE   = "TeleOp/ActiveMotionProfile"; //String
     public static final String DBKEY_TELEOP_ACTIVE_JOYSTICK_CURVE   = "TeleOp/ActiveJoystickCurve"; //String
     public static final String DBKEY_TELEOP_DRIVE_MODE              = "TeleOp/DriveMode";           //Choices
     public static final String DBKEY_TELEOP_DRIVE_ORIENTATION       = "TeleOp/DriveOrientation";    //Choices
