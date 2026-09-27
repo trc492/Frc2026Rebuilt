@@ -269,7 +269,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
 
                             if (robot.robotBase.driveBase.supportsHolonomicDrive())
                             {
-                                Double gyroAngle = robot.robotBase.driveBase.getDriveGyroAngle();
+                                Double gyroAngle = robot.robotDriveBase.getTeleopDriveGyroAngle();
 
                                 robot.robotBase.driveBase.holonomicDrive(
                                     null, driveInputs[0], driveInputs[1], turnPower, gyroAngle);
@@ -589,11 +589,12 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                     }
                     else
                     {
-                        robot.robotBase.driveBase.resetFieldForwardHeading();
+                        robot.robotDriveBase.resetFieldForwardHeading();
                         robot.globalTracer.traceInfo(
                             moduleName,
-                            ">>>>> Reset field forward heading (heading=" + robot.robotBase.driveBase.getHeading() +
-                            ")");
+                            ">>>>> Reset field forward heading (poseHeading=" + robot.robotBase.driveBase.getHeading() +
+                            ", gyroHeading=" + robot.robotBase.getGyroYaw() +
+                            ", driveAngle=" + robot.robotDriveBase.getTeleopDriveGyroAngle() + ")");
                     }
                 }
                 break;

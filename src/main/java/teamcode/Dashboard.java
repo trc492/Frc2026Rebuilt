@@ -44,6 +44,7 @@ public class Dashboard
 
     // Drive Base.
     public static final String DBKEY_ROBOT_POSE                     = "DriveBase/RobotPose";
+    public static final String DBKEY_GYRO_YAW                       = "DriveBase/GyroYaw";
     public static final String DBKEY_ROBOT_VEL                      = "DriveBase/RobotVel";
     public static final String DBKEY_DRIVE_ENC                      = "DriveBase/DriveEnc";
     public static final String DBKEY_STEER_FRONT                    = "DriveBase/SteerFront";
@@ -231,6 +232,7 @@ public class Dashboard
         dashboard.refreshKey(DBKEY_PREFERENCE_USE_RUMBLE, RobotParams.Preferences.useRumble);
         // Drive Base.
         dashboard.refreshKey(DBKEY_ROBOT_POSE, "");
+        dashboard.refreshKey(DBKEY_GYRO_YAW, 0.0);
         dashboard.refreshKey(DBKEY_ROBOT_VEL, "");
         dashboard.refreshKey(DBKEY_DRIVE_ENC, "");
         dashboard.refreshKey(DBKEY_STEER_FRONT, "");

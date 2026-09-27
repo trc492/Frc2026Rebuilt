@@ -41,6 +41,7 @@ import teamcode.RobotParams.HwConfig;
 import teamcode.vision.Vision;
 import trclib.controller.TrcPidController;
 import trclib.drivebase.TrcDriveBase;
+import trclib.drivebase.TrcDriveBase.DriveOrientation;
 import trclib.drivebase.TrcDriveBase.MotorIndex;
 import trclib.drivebase.TrcSwerveDrive;
 import trclib.motor.TrcMotor;
@@ -356,6 +357,46 @@ public class DriveBase extends TrcSubsystem
     private final FrcDashboard dashboard;
     private final FrcRobotBase.RobotInfo robotInfo;
     private final FrcRobotBase robotBase;
+    private Double fieldForwardGyroHeading = null;
+
+    /** Keeps driver field orientation tied to the IMU while vision corrects the estimated field pose. */
+    public void setDriveOrientation(DriveOrientation orientation, boolean resetHeading)
+    {
+        robotBase.driveBase.setDriveOrientation(orientation, resetHeading);
+        if (orientation == DriveOrientation.FIELD && robotBase.imu != null)
+        {
+            double gyroHeading = robotBase.imu.getZHeading().value;
+            fieldForwardGyroHeading = resetHeading?
+                gyroHeading: gyroHeading - robotBase.driveBase.getDriveGyroAngle();
+        }
+    }
+
+    public void resetFieldForwardHeading()
+    {
+        if (robotBase.driveBase.getDriveOrientation() == DriveOrientation.FIELD)
+        {
+            robotBase.driveBase.resetFieldForwardHeading();
+            if (robotBase.imu != null)
+            {
+                fieldForwardGyroHeading = robotBase.imu.getZHeading().value;
+            }
+        }
+    }
+
+    public Double getTeleopDriveGyroAngle()
+    {
+        Double angle = robotBase.driveBase.getDriveGyroAngle();
+        if (robotBase.driveBase.getDriveOrientation() == DriveOrientation.FIELD && robotBase.imu != null)
+        {
+            double gyroHeading = robotBase.imu.getZHeading().value;
+            if (fieldForwardGyroHeading == null)
+            {
+                fieldForwardGyroHeading = gyroHeading - angle;
+            }
+            angle = gyroHeading - fieldForwardGyroHeading;
+        }
+        return angle;
+    }
 
     /**
      * Constructor: Create an instance of the object.
@@ -566,6 +607,10 @@ public class DriveBase extends TrcSubsystem
         if (slowLoop)
         {
             dashboard.putString(Dashboard.DBKEY_ROBOT_POSE, robotBase.driveBase.getFieldPosition().toString());
+            if (robotBase.imu != null)
+            {
+                dashboard.putNumber(Dashboard.DBKEY_GYRO_YAW, robotBase.getGyroYaw());
+            }
             dashboard.putString(Dashboard.DBKEY_ROBOT_VEL, robotBase.driveBase.getRobotVelocity().toString());
             if (dashboard.getBoolean(
                     Dashboard.DBKEY_PREFERENCE_DEBUG_DRIVEBASE, RobotParams.Preferences.debugDriveBase))

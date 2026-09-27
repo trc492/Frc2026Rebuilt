@@ -285,15 +285,19 @@ public class RobotParams
         public static final TrcPose2D BLUE_OUTPOST_CLIMB_POSE   =
             new TrcPose2D(-105.95, 43.29, 90.0); // TODO: Determine x and y
 
-        public static final double allianceAreaWidth            = 182.11;   // Distance from alliance wall to center of trench.
+        // Alliance zone ends at the far edge of the 2-inch robot starting line (156.61 + 2.0 inches).
+        // A robot may shoot while its bumpers overlap the alliance zone. The robot is 34 inches square, so
+        // its bumpers still overlap the line with its center up to half a robot length beyond it.
+        public static final double allianceZoneBoundaryY       = 156.61 + 2.0;
+        public static final double allianceShootingLimitY      = allianceZoneBoundaryY + Robot.ROBOT_LENGTH/2.0;
         public static final double[] fieldLengthTriggerPoints   = new double[]
         {
-            // 152.11, 215.87, 299.373465, 325.61
-            allianceAreaWidth-30.0, BLUE_HUB_BACK_CENTER_POSE.y, BLUE_HUB_DEAD_ZONE_CENTER_POSE.y, halfFieldLength,
+            // 175.61, 215.87, 299.373465, 325.61
+            allianceShootingLimitY, BLUE_HUB_BACK_CENTER_POSE.y, BLUE_HUB_DEAD_ZONE_CENTER_POSE.y, halfFieldLength,
             // 351.846535, 435.35
             fieldLength - BLUE_HUB_DEAD_ZONE_CENTER_POSE.y, fieldLength - BLUE_HUB_BACK_CENTER_POSE.y,
-            // 499.11
-            fieldLength - (allianceAreaWidth-30.0)
+            // 475.61
+            fieldLength - allianceShootingLimitY
         };
         public static final double[] fieldWidthTriggerPoints    = new double[]
         {

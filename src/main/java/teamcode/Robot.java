@@ -732,7 +732,7 @@ dashboard.displayPrintf(7, "%s", FrcAuto.autoChoices);
     {
         if (robotBase != null)
         {
-            robotBase.driveBase.setDriveOrientation(orientation, resetHeading);
+            robotDriveBase.setDriveOrientation(orientation, resetHeading);
             if (ledIndicator != null)
             {
                 ledIndicator.setDriveOrientation(orientation);

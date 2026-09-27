@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TRC Drive Team Controls</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <header><div><p class="eyebrow">TITAN ROBOTICS CLUB · OFFSEASON</p><h1>Drive team controls</h1><p>2026 teleop · Xbox controllers</p></div><div id="connection"><i></i><span>Connect controllers to show live input</span></div></header>
+  <section class="cards">
+    <article class="card" data-slot="driver">
+      <div class="card-head"><div><small>USB PORT 0</small><h2>Driver</h2></div><label>Live input<select id="driverSelect"><option value="">Auto · first controller</option></select></label></div>
+      <div class="gamepad">
+        <div class="shoulders"><div class="key" data-input="lb"><b>LB</b><span>Hold for alternate actions</span></div><div class="key" data-input="rb"><b>RB</b><span>Slow drive</span></div></div>
+        <div class="face">
+          <div class="stick" data-stick="left"><div class="cap"></div><b>LEFT STICK</b><span>Drive</span></div>
+          <div class="dpad-wrap"><div class="dpad"><i data-input="dpadUp">▲</i><i data-input="dpadLeft">◀</i><i class="center"></i><i data-input="dpadRight">▶</i><i data-input="dpadDown">▼</i></div><span>D-pad · heading lock</span></div>
+          <div class="buttons">
+            <div class="button y" data-input="y"><b>Y</b><span>No action</span></div>
+            <div class="button x" data-input="x"><b>X</b><span class="default-action">Turtle mode</span><span class="alt-action">X-mode</span></div>
+            <div class="button b" data-input="b"><b>B</b><span class="default-action">Reset field heading</span><span class="alt-action">Toggle field / robot</span></div>
+            <div class="button a" data-input="a"><b>A</b><span>No action</span></div>
+          </div>
+          <div class="stick right" data-stick="right"><div class="cap"></div><b>RIGHT STICK</b><span>Turn*</span></div>
+        </div>
+        <div class="triggers"><div class="key" data-input="lt"><b>LT</b><span>Intake*</span></div><div class="key" data-input="rt"><b>RT</b><span class="default-action">Shoot · slow drive</span><span class="alt-action">Manual shoot · slow drive</span></div></div>
+        <div class="menu"><div class="key" data-input="back"><b>BACK</b><span>Cancel all + zero calibrate</span></div><div class="key" data-input="start"><b>START</b><span>Toggle goal tracking</span></div></div>
+      </div>
+      <div class="status"><span id="driverState">Waiting for controller</span><span class="alt-state">LB held · alternate actions</span><span>*Drive mode may change this input</span></div>
+    </article>
+
+    <article class="card" data-slot="operator">
+      <div class="card-head"><div><small>USB PORT 1</small><h2>Operator</h2></div><label>Live input<select id="operatorSelect"><option value="">Auto · second controller</option></select></label></div>
+      <div class="gamepad">
+        <div class="shoulders"><div class="key" data-input="lb"><b>LB</b><span>Hold for alternate actions</span></div><div class="key" data-input="rb"><b>RB</b><span>Turtle mode</span></div></div>
+        <div class="face">
+          <div class="stick" data-stick="left"><div class="cap"></div><b>LEFT STICK</b><span>Shooter tilt</span></div>
+          <div class="dpad-wrap"><div class="dpad"><i data-input="dpadUp"><span class="default-action">▲</span><span class="alt-action">▲</span></i><i data-input="dpadLeft"><span class="default-action">◀</span><span class="alt-action">◀</span></i><i class="center"></i><i data-input="dpadRight"><span class="default-action">▶</span><span class="alt-action">▶</span></i><i data-input="dpadDown"><span class="default-action">▼</span><span class="alt-action">▼</span></i></div><div class="dpad-labels"><span class="default-action">Extend / retract · feeder reverse · transfers intake</span><span class="alt-action">Auto climb · feeder forward · transfers eject</span></div></div>
+          <div class="buttons">
+            <div class="button y" data-input="y"><b>Y</b><span class="default-action">Hold · auto shoot</span><span class="alt-action">Hold · manual shoot</span></div>
+            <div class="button x" data-input="x"><b>X</b><span>Unjam shooters</span></div>
+            <div class="button b" data-input="b"><b>B</b><span>Goal tracking</span></div>
+            <div class="button a" data-input="a"><b>A</b><span>Toggle intake</span></div>
+          </div>
+          <div class="stick right" data-stick="right"><div class="cap"></div><b>RIGHT STICK</b><span>Turret</span></div>
+        </div>
+        <div class="triggers"><div class="key" data-input="lt"><b>LT</b><span>Climber power*</span></div><div class="key" data-input="rt"><b>RT</b><span>Climber power*</span></div></div>
+        <div class="menu"><div class="key" data-input="back"><b>BACK</b><span>Cancel all + zero calibrate</span></div><div class="key" data-input="start"><b>START</b><span>Cancel all</span></div></div>
+      </div>
+      <div class="status"><span id="operatorState">Waiting for controller</span><span class="alt-state">LB held · alternate actions</span><span>*Right trigger extends; left retracts</span></div>
+    </article>
+  </section>
+  <section class="notes"><h2>Drive mode &amp; heading</h2><p><b>Driver drive mode is selected on the robot dashboard.</b> Arcade uses left stick to drive and right stick X to turn. Holonomic uses left stick Y and right stick X to translate, with triggers controlling rotation. Tank uses both stick Y axes.</p><p>Driver D-pad locks heading: up/down select 0°/180° and left/right select ±90°; target angles swap by alliance. Operator D-pad up/down extends/retracts the climber; left/right controls feeder and transfers. Hold LB to see alternate actions above.</p><p class="footnote">Live highlighting reads browser Gamepad input only. It does not connect to or control the robot. Browser gamepad indexes may differ from robot USB ports; select the correct device in each card.</p></section>
+  <footer>TRC · LOCAL CONTROLLER REFERENCE <span>LIVE GAMEPAD DISPLAY</span></footer>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
