@@ -428,7 +428,7 @@ timestamps[0] = TrcTimer.getModeElapsedTime();
 timestamps[1] = TrcTimer.getModeElapsedTime();
                     if (robot.intakeSubsystem != null)
                     {
-                        robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
+                        robot.intake.setPower(0.0, Params.INTAKE_AUTO_POWER, 0.5);
                     }
 timestamps[2] = TrcTimer.getModeElapsedTime();
 
@@ -444,6 +444,10 @@ timestamps[2] = TrcTimer.getModeElapsedTime();
                             // Main auto
                             if (wpCtxt.index == 1)
                             {
+                                if (robot.intakeSubsystem != null)
+                                {
+                                    robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
+                                }
                                 robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
                             }
                             if (wpCtxt.index == 2)
