@@ -44,9 +44,9 @@ import trclib.timer.TrcTimer;
 /**
  * This class implements an autonomous strategy.
  */
-public class CmdDcmpAuto implements TrcRobot.RobotCommand
+public class CmdBordieAuto implements TrcRobot.RobotCommand
 {
-    private static final String moduleName = CmdDcmpAuto.class.getSimpleName();
+    private static final String moduleName = CmdBordieAuto.class.getSimpleName();
 
     private enum State
     {
@@ -75,10 +75,10 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
     private TrcPose2D[] hubPath = null;
     // private TrcPose2D[] hubReturnPath = null;
 
-    private TrcPose2D[] depotTrenchSweep = RobotParams.Game.blueDoubleSweepDepotTrenchPath;
-    private TrcPose2D[] outpostTrenchSweep = RobotParams.Game.blueDoubleSweepOutpostTrenchPath;
-    private TrcPose2D[] depotBumpSweep = RobotParams.Game.blueDoubleSweepDepotBumpPath;
-    private TrcPose2D[] outpostBumpSweep = RobotParams.Game.blueDoubleSweepOutpostBumpPath;
+    // private TrcPose2D[] depotTrenchSweep = RobotParams.Game.blueDoubleSweepDepotTrenchPath;
+    // private TrcPose2D[] outpostTrenchSweep = RobotParams.Game.blueDoubleSweepOutpostTrenchPath;
+    // private TrcPose2D[] depotBumpSweep = RobotParams.Game.blueDoubleSweepDepotBumpPath;
+    // private TrcPose2D[] outpostBumpSweep = RobotParams.Game.blueDoubleSweepOutpostBumpPath;
 
     boolean atDepot = false;
     boolean isTrench = false;
@@ -111,7 +111,7 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
      * @param robot specifies the robot object for providing access to various global objects.
      * @param autoChoices specifies the autoChoices object.
      */
-    public CmdDcmpAuto(Robot robot, FrcAuto.AutoChoices autoChoices)
+    public CmdBordieAuto(Robot robot, FrcAuto.AutoChoices autoChoices)
     {
         this.robot = robot;
         this.autoChoices = autoChoices;
@@ -119,7 +119,7 @@ public class CmdDcmpAuto implements TrcRobot.RobotCommand
         timer = new TrcTimer(moduleName);
         event = new TrcEvent(moduleName);
         sm = new TrcStateMachine<>(moduleName);
-    }   //CmdDcmpAuto
+    }   //CmdBordieAuto
 
     //
     // Implements the TrcRobot.RobotCommand interface.
@@ -241,7 +241,10 @@ double[] timestamps = new double[8];
                     TrcPose2D[] depotPickupPath = new TrcPose2D[] {depotPickupPose, depotEndPose};
 
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.5);
-                    robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
+                    if (robot.intakeSubsystem != null)
+                    {
+                        robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
+                    }
                     robot.robotBase.purePursuitDrive.start(
                         null, event, 0.0, false,
                         (ctxt, canceled) ->
@@ -253,10 +256,13 @@ double[] timestamps = new double[8];
                             {
                                 robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.8);
                                // robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
-                            } 
+                            }
                         },
                         robot.adjustPathByAlliance(autoChoices.alliance, depotPickupPath));
-                    robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
+                    if (robot.shooterSubsystem != null)
+                    {
+                        robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
+                    }
                     sm.waitForSingleEvent(event, State.SHOOT_DEPOT);
                     break;
             
@@ -392,24 +398,27 @@ timestamps[0] = TrcTimer.getModeElapsedTime();
                     atDepot = autoChoices.startPos == AutoStartPos.START_POS_DEPOT;
                     isTrench = autoChoices.autoType == Type.TRENCH;
 
-                    TrcPose2D[] fullPath;
-                    if (atDepot)
-                    {
-                        fullPath = isTrench ? RobotParams.Game.blueDoubleSweepDepotShallowPath : RobotParams.Game.blueDoubleSweepDepotShallowPath; //TODO: Fix this line when cleaning up
-                    }
-                    else
-                    {
-                        fullPath = isTrench ? RobotParams.Game.blueDoubleSweepOutpostShallowPath : RobotParams.Game.blueDoubleSweepOutpostShallowPath; //TODO: Fix this line when cleaning up
-                    }
-
-                    // TrcPose2D[] adjustedFullPath = getAdjustedSweepPath(fullPath, sweepDistance);
-                    TrcPose2D neutralExtraPoint = fullPath[6].clone();
-                    neutralExtraPoint.y -= 13.0;
-                    // if (sweepDistance == SweepDistance.SHALLOW_SWEEP)
+                    // TrcPose2D[] fullPath;
+                    // if (atDepot)
                     // {
-                    //     adjustedFullPath[3].y = 276.61;
+                    //     fullPath = isTrench ? RobotParams.Game.blueDoubleSweepDepotShallowPath : RobotParams.Game.blueDoubleSweepDepotShallowPath;
                     // }
-                    neutralZonePath = new TrcPose2D[] {fullPath[0], fullPath[1], fullPath[2], fullPath[3], fullPath[4], fullPath[5], fullPath[6], neutralExtraPoint};
+                    // else
+                    // {
+                    //     fullPath = isTrench ? RobotParams.Game.blueDoubleSweepOutpostShallowPath : RobotParams.Game.blueDoubleSweepOutpostShallowPath;
+                    // }
+                    // TrcPose2D neutralExtraPoint = fullPath[6].clone();
+                    // neutralExtraPoint.y -= 13.0;
+                    // neutralZonePath = new TrcPose2D[] {fullPath[0], fullPath[1], fullPath[2], fullPath[3], fullPath[4], fullPath[5], fullPath[6], neutralExtraPoint};
+
+                    TrcPose2D[] mainFullPath =
+                        atDepot? RobotParams.Game.blueMainDepotFullPath: RobotParams.Game.blueMainOutpostFullPath;
+                    TrcPose2D[] neutralBase = Arrays.copyOfRange(
+                        mainFullPath, 0, RobotParams.Game.MAIN_AUTO_NEUTRAL_END_INDEX + 1);
+                    TrcPose2D neutralExtraPoint = neutralBase[neutralBase.length - 1].clone();
+                    neutralExtraPoint.y -= 13.0;
+                    neutralZonePath = Arrays.copyOf(neutralBase, neutralBase.length + 1);
+                    neutralZonePath[neutralBase.length] = neutralExtraPoint;
 
                     // if (atDepot)
                     // {
@@ -426,9 +435,9 @@ timestamps[0] = TrcTimer.getModeElapsedTime();
                     // }
 
 timestamps[1] = TrcTimer.getModeElapsedTime();
-                    if (robot.intakeSubsystem != null)
+                    if (robot.intake != null)
                     {
-                        robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
+                        robot.intake.setPower(0.0, Params.INTAKE_AUTO_POWER, 0.5);
                     }
 timestamps[2] = TrcTimer.getModeElapsedTime();
 
@@ -444,7 +453,14 @@ timestamps[2] = TrcTimer.getModeElapsedTime();
                             // Main auto
                             if (wpCtxt.index == 1)
                             {
-                                robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
+                                if (robot.intakeSubsystem != null)
+                                {
+                                    robot.intakeSubsystem.setIntakeEnabled(true, Params.INTAKE_AUTO_POWER);
+                                }
+                                if (robot.shooterSubsystem != null)
+                                {
+                                    robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
+                                }
                             }
                             if (wpCtxt.index == 2)
                             {
@@ -554,22 +570,31 @@ robot.globalTracer.traceInfo("DEBUG_PERF", "NeutralZonePickupTimestamps=" + Arra
                         robot.autoShootTask.cancel();
                     }
 
-                    if (atDepot)
-                    {
-                        TrcPose2D hubDepotExtraPose = isTrench ? depotTrenchSweep[12].clone(): depotBumpSweep[12].clone();
-                        hubDepotExtraPose.y -= 13.0;
-                        hubPath = isTrench ?
-                            new TrcPose2D[] {depotTrenchSweep[5], depotTrenchSweep[6], depotTrenchSweep[7], depotTrenchSweep[8], depotTrenchSweep[9], depotTrenchSweep[10], depotTrenchSweep[11], depotTrenchSweep[12], hubDepotExtraPose}:
-                            new TrcPose2D[] {depotBumpSweep[5], depotBumpSweep[6], depotBumpSweep[7], depotBumpSweep[8], depotBumpSweep[9], depotBumpSweep[10], depotBumpSweep[11], depotBumpSweep[12], hubDepotExtraPose};
-                    }
-                    else
-                    {
-                        TrcPose2D hubOutpostExtraPose = isTrench ? outpostTrenchSweep[12].clone() : outpostBumpSweep[12].clone();
-                        hubOutpostExtraPose.y -= 13.0;
-                        hubPath = isTrench ?
-                            new TrcPose2D[] {outpostTrenchSweep[5], outpostTrenchSweep[6], outpostTrenchSweep[7], outpostTrenchSweep[8], outpostTrenchSweep[9], outpostTrenchSweep[10], outpostTrenchSweep[11], outpostTrenchSweep[12], hubOutpostExtraPose}:
-                            new TrcPose2D[] {outpostBumpSweep[5], outpostBumpSweep[6], outpostBumpSweep[7], outpostBumpSweep[8], outpostBumpSweep[9], outpostBumpSweep[10], outpostBumpSweep[11], outpostBumpSweep[12], hubOutpostExtraPose};
-                    }
+                    // if (atDepot)
+                    // {
+                    //     TrcPose2D hubDepotExtraPose = isTrench ? depotTrenchSweep[12].clone(): depotBumpSweep[12].clone();
+                    //     hubDepotExtraPose.y -= 13.0;
+                    //     hubPath = isTrench ?
+                    //         new TrcPose2D[] {depotTrenchSweep[5], depotTrenchSweep[6], depotTrenchSweep[7], depotTrenchSweep[8], depotTrenchSweep[9], depotTrenchSweep[10], depotTrenchSweep[11], depotTrenchSweep[12], hubDepotExtraPose}:
+                    //         new TrcPose2D[] {depotBumpSweep[5], depotBumpSweep[6], depotBumpSweep[7], depotBumpSweep[8], depotBumpSweep[9], depotBumpSweep[10], depotBumpSweep[11], depotBumpSweep[12], hubDepotExtraPose};
+                    // }
+                    // else
+                    // {
+                    //     TrcPose2D hubOutpostExtraPose = isTrench ? outpostTrenchSweep[12].clone() : outpostBumpSweep[12].clone();
+                    //     hubOutpostExtraPose.y -= 13.0;
+                    //     hubPath = isTrench ?
+                    //         new TrcPose2D[] {outpostTrenchSweep[5], outpostTrenchSweep[6], outpostTrenchSweep[7], outpostTrenchSweep[8], outpostTrenchSweep[9], outpostTrenchSweep[10], outpostTrenchSweep[11], outpostTrenchSweep[12], hubOutpostExtraPose}:
+                    //         new TrcPose2D[] {outpostBumpSweep[5], outpostBumpSweep[6], outpostBumpSweep[7], outpostBumpSweep[8], outpostBumpSweep[9], outpostBumpSweep[10], outpostBumpSweep[11], outpostBumpSweep[12], hubOutpostExtraPose};
+                    // }
+
+                    TrcPose2D[] hubFullPath =
+                        atDepot? RobotParams.Game.blueMainDepotFullPath: RobotParams.Game.blueMainOutpostFullPath;
+                    TrcPose2D[] hubBase = Arrays.copyOfRange(
+                        hubFullPath, RobotParams.Game.MAIN_AUTO_NEUTRAL_END_INDEX + 1, hubFullPath.length);
+                    TrcPose2D hubExtraPoint = hubBase[hubBase.length - 1].clone();
+                    hubExtraPoint.y -= 13.0;
+                    hubPath = Arrays.copyOf(hubBase, hubBase.length + 1);
+                    hubPath[hubBase.length] = hubExtraPoint;
                     robot.robotBase.purePursuitDrive.setRotOutputLimit(0.85);
                     robot.robotBase.purePursuitDrive.setMoveOutputLimit(0.8);
                     robot.robotBase.purePursuitDrive.start(
@@ -586,13 +611,13 @@ robot.globalTracer.traceInfo("DEBUG_PERF", "NeutralZonePickupTimestamps=" + Arra
                                     robot.shooterSubsystem.enableGoalTracking(false, false, true, true);
                                 }
                             }
-                            if (!isTrench)
-                            {
-                                if (wpCtxt.index == 5)
-                                {
-                                    robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
-                                }
-                            }
+                            // if (!isTrench)
+                            // {
+                            //     if (wpCtxt.index == 5)
+                            //     {
+                            //         robot.robotBase.purePursuitDrive.setMoveOutputLimit(1.0);
+                            //     }
+                            // }
                             if (wpCtxt.index == 7)
                             {
                                 //robot.intakeSubsystem.setIntakeEnabled(false);
@@ -664,4 +689,4 @@ robot.globalTracer.traceInfo("DEBUG_PERF", "NeutralZonePickupTimestamps=" + Arra
         return !sm.isEnabled();
     }   //cmdPeriodic
 
-}   //class CmdDcmpAuto
+}   //class CmdBordieAuto
