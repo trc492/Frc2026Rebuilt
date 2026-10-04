@@ -28,6 +28,7 @@ import frclib.driverio.FrcChoiceMenu;
 import frclib.driverio.FrcMatchInfo;
 import frclib.driverio.FrcUserChoices;
 import teamcode.autocommands.CmdRebuiltAuto;
+import teamcode.autocommands.CmdBordieAuto;
 import teamcode.autocommands.CmdDcmpAuto;
 import teamcode.autocommands.CmdDisruptAuto;
 import teamcode.autotasks.TaskAutoClimb;
@@ -56,6 +57,7 @@ public class FrcAuto implements TrcRobot.RobotMode
     {
         REBUILT_AUTO,
         DCMP_AUTO,
+        BORDIE_AUTO,
         DISRUPT_AUTO,
         PP_DRIVE,
         PID_DRIVE,
@@ -183,7 +185,8 @@ public class FrcAuto implements TrcRobot.RobotMode
             else
             {
                 autoStrategyMenu.addChoice("Rebuilt Auto", AutoStrategy.REBUILT_AUTO, false, false);
-                autoStrategyMenu.addChoice("DCMP Auto", AutoStrategy.DCMP_AUTO, true, false);
+                autoStrategyMenu.addChoice("DCMP Auto", AutoStrategy.DCMP_AUTO);
+                autoStrategyMenu.addChoice("Bordie Auto", AutoStrategy.BORDIE_AUTO, true, false);
                 autoStrategyMenu.addChoice("Disrupt Auto", AutoStrategy.DISRUPT_AUTO);
                 autoStrategyMenu.addChoice("Pure Pursuit Drive", AutoStrategy.PP_DRIVE);
                 autoStrategyMenu.addChoice("PID Drive", AutoStrategy.PID_DRIVE);
@@ -409,6 +412,7 @@ public class FrcAuto implements TrcRobot.RobotMode
     private final Robot robot;
     private final TrcRobot.RobotCommand rebuiltAuto;
     private final TrcRobot.RobotCommand dcmpAuto;
+    private final TrcRobot.RobotCommand bordieAuto;
     private final TrcRobot.RobotCommand disruptAuto;
     private TrcRobot.RobotCommand autoCommand;
 
@@ -425,6 +429,7 @@ public class FrcAuto implements TrcRobot.RobotMode
         this.robot = robot;
         rebuiltAuto = new CmdRebuiltAuto(robot, autoChoices);
         dcmpAuto = new CmdDcmpAuto(robot, autoChoices);
+        bordieAuto = new CmdBordieAuto(robot, autoChoices);
         disruptAuto = new CmdDisruptAuto(robot, autoChoices);
     }   //FrcAuto
 
@@ -481,6 +486,13 @@ public class FrcAuto implements TrcRobot.RobotMode
                 if (robot.robotBase != null)
                 {
                     autoCommand = dcmpAuto;
+                }
+                break;
+            
+            case BORDIE_AUTO:
+                if (robot.robotBase != null)
+                {
+                    autoCommand = bordieAuto;
                 }
                 break;
             
