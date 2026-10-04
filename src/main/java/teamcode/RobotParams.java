@@ -420,18 +420,18 @@ public class RobotParams
         public static final TrcPose2D[] blueMainDepotFullPath = new TrcPose2D[] {
             // Neutral zone pickup
             new TrcPose2D(-295.01, 265.24, 90.00),
-            new TrcPose2D(-252.57, 279.38, 110.00),
-            new TrcPose2D(-172.06, 279.38, 110.00),
-            new TrcPose2D(-158.46, 237.42, -90.00),
-            new TrcPose2D(-250.94, 234.60, -90.00),
+            new TrcPose2D(-252.57, 315.00, 110.00),
+            new TrcPose2D(-172.06, 315.00, 110.00),
+            new TrcPose2D(-158.46, 257.42, -90.00),
+            new TrcPose2D(-250.94, 249.60, -90.00),
             new TrcPose2D(-287.01, 255.22, 0.00),
             new TrcPose2D(-291.01, 141.75, 0.00),
             // Hub pickup
             new TrcPose2D(-293.58, 233.32, 0.00),
-            new TrcPose2D(-276.59, 231.80, 90.00),
-            new TrcPose2D(-184.12, 231.80, 90.00),
-            new TrcPose2D(-139.05, 251.24, -90.00),
-            new TrcPose2D(-182.93, 274.59, -90.00),
+            new TrcPose2D(-276.59, 244.80, 90.00),
+            new TrcPose2D(-184.12, 244.80, 90.00),
+            new TrcPose2D(-139.05, 264.24, -90.00),
+            new TrcPose2D(-182.93, 280.59, -90.00),
             new TrcPose2D(-253.39, 280.56, -90.00),
             new TrcPose2D(-280.84, 267.53, 0.00),
             new TrcPose2D(-290.29, 151.73, 0.00)
@@ -440,18 +440,18 @@ public class RobotParams
         public static final TrcPose2D[] blueMainOutpostFullPath = new TrcPose2D[] {
             // Neutral zone pickup
             new TrcPose2D(-22.68, 265.24, -90.00),
-            new TrcPose2D(-65.12, 279.38, -110.00),
-            new TrcPose2D(-145.63, 279.38, -110.00),
-            new TrcPose2D(-159.23, 237.42, 90.00),
-            new TrcPose2D(-66.75, 234.60, 90.00),
+            new TrcPose2D(-65.12, 315.00, -110.00),
+            new TrcPose2D(-145.63, 315.00, -110.00),
+            new TrcPose2D(-159.23, 257.42, 90.00),
+            new TrcPose2D(-66.75, 249.60, 90.00),
             new TrcPose2D(-30.68, 255.22, 0.00),
             new TrcPose2D(-26.68, 141.75, 0.00),
             // Hub pickup
             new TrcPose2D(-24.11, 233.32, 0.00),
-            new TrcPose2D(-41.10, 231.80, -90.00),
-            new TrcPose2D(-133.57, 231.80, -90.00),
-            new TrcPose2D(-178.64, 251.24, 90.00),
-            new TrcPose2D(-134.76, 274.59, 90.00),
+            new TrcPose2D(-41.10, 244.80, -90.00),
+            new TrcPose2D(-133.57, 244.80, -90.00),
+            new TrcPose2D(-178.64, 264.24, 90.00),
+            new TrcPose2D(-134.76, 280.59, 90.00),
             new TrcPose2D(-64.30, 280.56, 90.00),
             new TrcPose2D(-36.85, 267.53, 0.00),
             new TrcPose2D(-27.40, 151.73, 0.00)
