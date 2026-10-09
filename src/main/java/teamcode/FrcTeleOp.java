@@ -75,6 +75,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     private Double prevTiltPower = 0.0;
     private double prevClimbPower = 0.0;
     private boolean rTriggerShootPressed = false;
+    private boolean lTriggerIntakePressed = false;
     // Locked heading
     private final TrcPidController turnPidCtrl;
     private Double lockedHeading;
@@ -380,20 +381,30 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                         }
                     }
 
-                    if (robot.intakeSubsystem != null && driverMenu.getCurrentChoiceObject() == Driver.WYNSTON)
+                    if (robot.intakeSubsystem != null)
                     {
-                        double lTrigger = robot.driverController.getLeftTrigger(); 
+                        double lTrigger = robot.driverController.getLeftTrigger();
+                        boolean lTriggerPressed = lTrigger >= 0.5;
 
-                        if (lTrigger >= 0.5 && !robot.intakeSubsystem.isIntakeOn())
+                        if (driverMenu.getCurrentChoiceObject() == Driver.ANDREW)
+                        {
+                            // Each trigger press toggles the intake.
+                            if (lTriggerPressed && !lTriggerIntakePressed)
+                            {
+                                toggleIntake();
+                            }
+                        }
+                        else if (lTriggerPressed && !robot.intakeSubsystem.isIntakeOn())
                         {
                             robot.globalTracer.traceInfo(moduleName, ">>>>> Enable Intake.");
                             robot.intakeSubsystem.setIntakeEnabled(true);
-                        } 
-                        else if (lTrigger < 0.5 && robot.intakeSubsystem.isIntakeOn())
+                        }
+                        else if (!lTriggerPressed && robot.intakeSubsystem.isIntakeOn())
                         {
                             robot.globalTracer.traceInfo(moduleName, ">>>>> Disable Intake.");
                             robot.intakeSubsystem.setIntakeEnabled(false);
                         }
+                        lTriggerIntakePressed = lTriggerPressed;
                     }
 
                     if (robot.autoShootTask != null)
@@ -526,11 +537,6 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         switch (button)
         {
             case A:
-                // Toggle Intake
-                if (pressed && driverMenu.getCurrentChoiceObject() == Driver.ANDREW)
-                {
-                    toggleIntake();
-                }
                 break;
 
             case B:
