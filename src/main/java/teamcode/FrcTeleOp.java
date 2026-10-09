@@ -55,6 +55,13 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     // Global objects.
     //
     protected final Robot robot;
+    private enum Driver
+    {
+        ANDREW,
+        WYNSTON
+    }   //enum Driver
+
+    private static FrcChoiceMenu<Driver> driverMenu;
     private final FrcChoiceMenu<DriveMode> driveModeMenu;
     private final FrcChoiceMenu<DriveOrientation> driveOrientationMenu;
     private double driveSpeedScale;
@@ -94,6 +101,13 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         driveModeMenu.addChoice("Tank", DriveMode.TankMode);
         driveModeMenu.addChoice("Holonomic", DriveMode.HolonomicMode);
         driveModeMenu.addChoice("Arcade", DriveMode.ArcadeMode, true, true);
+
+        if (driverMenu == null)
+        {
+            driverMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_TELEOP_DRIVER);
+            driverMenu.addChoice("Andrew", Driver.ANDREW);
+            driverMenu.addChoice("Wynston", Driver.WYNSTON, true, true);
+        }
 
         driveOrientationMenu = new FrcChoiceMenu<>(Dashboard.DBKEY_TELEOP_DRIVE_ORIENTATION);
         driveOrientationMenu.addChoice("Inverted", DriveOrientation.INVERTED);
@@ -366,7 +380,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                         }
                     }
 
-                    if (robot.intakeSubsystem != null)
+                    if (robot.intakeSubsystem != null && driverMenu.getCurrentChoiceObject() == Driver.WYNSTON)
                     {
                         double lTrigger = robot.driverController.getLeftTrigger(); 
 
@@ -513,10 +527,10 @@ public class FrcTeleOp implements TrcRobot.RobotMode
         {
             case A:
                 // Toggle Intake
-                // if (pressed)
-                // {
-                //     toggleIntake();
-                // }
+                if (pressed && driverMenu.getCurrentChoiceObject() == Driver.ANDREW)
+                {
+                    toggleIntake();
+                }
                 break;
 
             case B:
