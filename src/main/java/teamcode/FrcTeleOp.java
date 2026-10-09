@@ -429,9 +429,8 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                         Dashboard.DBKEY_TELEOP_SHIFT_TIME_LEFT,
                         String.format("%s: %.3f", shiftIndex == 5? "EndGame": shiftIndex, shiftTimeLeft));
                     robot.dashboard.putBoolean(
-                        Dashboard.DBKEY_TELEOP_RED_SHIFT, myShift && myAlliance == Alliance.Red);
-                    robot.dashboard.putBoolean(
-                        Dashboard.DBKEY_TELEOP_BLUE_SHIFT, myShift && myAlliance == Alliance.Blue);
+                        Dashboard.DBKEY_TELEOP_CURRENT_SHIFT,
+                        (shiftAlliance != null? shiftAlliance: myAlliance) == Alliance.Red);
 
                     if (!rumbling && !myShift && RobotParams.Preferences.useRumble && robot.driverController != null)
                     {
@@ -455,7 +454,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                             // End Game period, both alliances are active.
                             shiftAlliance = null;
                         }
-                        if (shiftIndex % 2 == 0)
+                        else if (shiftIndex % 2 == 0)
                         {
                             shiftAlliance = allianceInactiveFirst == 'R'? Alliance.Red: Alliance.Blue;
                         }
