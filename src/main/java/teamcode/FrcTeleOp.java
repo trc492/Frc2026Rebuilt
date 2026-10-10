@@ -69,6 +69,7 @@ public class FrcTeleOp implements TrcRobot.RobotMode
     private boolean controlsEnabled = false;
     private boolean xModeActive = false;
     protected boolean driverAltFunc = false;
+    private boolean shootAltFunc = false;
     protected boolean operatorAltFunc = false;
     // private boolean rumbling = false;
     private double prevPanPower = 0.0;
@@ -413,7 +414,11 @@ public class FrcTeleOp implements TrcRobot.RobotMode
                         if (rTriggerPressed != rTriggerShootPressed)
                         {
                             robot.globalTracer.traceInfo(moduleName, rTriggerPressed ? ">>>>> Starting Auto Shoot" : ">>>>> Canceling Auto Shoot");
-                            shoot(rTriggerPressed, driverAltFunc);
+                            if (rTriggerPressed)
+                            {
+                                shootAltFunc = driverAltFunc;
+                            }
+                            shoot(rTriggerPressed, shootAltFunc);
                             if (rTriggerPressed)
                             {
                                 robot.globalTracer.traceInfo(moduleName, ">>>>> Slow Drive");
